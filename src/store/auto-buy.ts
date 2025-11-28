@@ -2,10 +2,12 @@
 // Store for Auto-Buy settings and state management
 
 const STORAGE_KEY = "mg_autobuy_settings";
+const DEFAULT_QUANTITY = 20;
 
 export interface AutoBuyItemConfig {
   enabled: boolean;
   quantity: number;
+  buyMax: boolean;
 }
 
 export interface AutoBuySettings {
@@ -36,14 +38,32 @@ export function loadAutoBuySettings(): AutoBuySettings {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       const parsed = JSON.parse(saved);
+      
+      // Migration: add buyMax=false for old configs and new default quantity
+      const migrateConfig = (config: any): AutoBuyItemConfig => ({
+        enabled: config.enabled ?? false,
+        quantity: config.quantity ?? DEFAULT_QUANTITY,
+        buyMax: config.buyMax ?? false,
+      });
+      
       return {
         enabled: typeof parsed.enabled === "boolean" ? parsed.enabled : false,
         playSound: typeof parsed.playSound === "boolean" ? parsed.playSound : true,
         selectedSeeds: parsed.selectedSeeds && typeof parsed.selectedSeeds === "object"
-          ? parsed.selectedSeeds
+          ? Object.fromEntries(
+              Object.entries(parsed.selectedSeeds).map(([id, cfg]) => [
+                id,
+                migrateConfig(cfg),
+              ])
+            )
           : {},
         selectedEggs: parsed.selectedEggs && typeof parsed.selectedEggs === "object"
-          ? parsed.selectedEggs
+          ? Object.fromEntries(
+              Object.entries(parsed.selectedEggs).map(([id, cfg]) => [
+                id,
+                migrateConfig(cfg),
+              ])
+            )
           : {},
       };
     }
