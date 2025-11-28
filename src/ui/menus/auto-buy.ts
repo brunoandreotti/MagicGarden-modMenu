@@ -19,6 +19,147 @@ import {
 import { ShopService } from "../../services/shop";
 import { NotifierService, type ShopsSnapshot } from "../../services/notifier";
 import { audio } from "../../utils/audio";
+import { createShopSprite } from "../../utils/shopSprites";
+import { plantCatalog, eggCatalog } from "../../data/hardcoded-data.clean";
+
+// === Rarity Helper Functions ===
+
+const RARITY_ORDER = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythical", "Divine", "Celestial"];
+
+function normalizeRarity(rarity: string | undefined): string {
+  const k = String(rarity || "").toLowerCase();
+  if (k === "mythical") return "Mythical";
+  if (k === "celestial") return "Celestial";
+  if (k === "divine") return "Divine";
+  if (k === "legendary") return "Legendary";
+  if (k === "rare") return "Rare";
+  if (k === "uncommon") return "Uncommon";
+  if (k === "common") return "Common";
+  if (k === "epic") return "Epic";
+  return "Common";
+}
+
+function getSeedRarity(speciesId: string): string {
+  const entry = (plantCatalog as Record<string, any>)?.[speciesId];
+  return normalizeRarity(entry?.seed?.rarity || entry?.plant?.rarity);
+}
+
+function getEggRarity(eggId: string): string {
+  const entry = (eggCatalog as Record<string, any>)?.[eggId];
+  return normalizeRarity(entry?.rarity);
+}
+
+function sortByRarityOrder(rarities: string[]): string[] {
+  return rarities.sort((a, b) => RARITY_ORDER.indexOf(a) - RARITY_ORDER.indexOf(b));
+}
+
+interface ItemWithRarity {
+  id: string;
+  name: string;
+  rarity: string;
+  config: AutoBuyItemConfig;
+}
+
+function groupSeedsByRarity(settings: AutoBuySettings): Map<string, ItemWithRarity[]> {
+  const grouped = new Map<string, ItemWithRarity[]>();
+  
+  for (const seedId of AVAILABLE_SEEDS) {
+    const rarity = getSeedRarity(seedId);
+    const config = settings.selectedSeeds[seedId] || { enabled: false, quantity: 999 };
+    
+    if (!grouped.has(rarity)) {
+      grouped.set(rarity, []);
+    }
+    
+    grouped.get(rarity)!.push({
+      id: seedId,
+      name: seedId,
+      rarity,
+      config,
+    });
+  }
+  
+  return grouped;
+}
+
+function groupEggsByRarity(settings: AutoBuySettings): Map<string, ItemWithRarity[]> {
+  const grouped = new Map<string, ItemWithRarity[]>();
+  
+  for (const eggId of AVAILABLE_EGGS) {
+    const rarity = getEggRarity(eggId);
+    const config = settings.selectedEggs[eggId] || { enabled: false, quantity: 999 };
+    
+    if (!grouped.has(rarity)) {
+      grouped.set(rarity, []);
+    }
+    
+    grouped.get(rarity)!.push({
+      id: eggId,
+      name: getEggDisplayName(eggId),
+      rarity,
+      config,
+    });
+  }
+  
+  return grouped;
+}
+
+// === Rarity Badge Creator ===
+
+function createRarityBadge(rarity: string): HTMLElement {
+  const normalized = normalizeRarity(rarity);
+  
+  const COLORS: Record<string, string | null> = {
+    Common: "#E7E7E7",
+    Uncommon: "#67BD4D",
+    Rare: "#0071C6",
+    Epic: "#9944A7",
+    Legendary: "#FFC734",
+    Mythical: "#9944A7",
+    Divine: "#FF7835",
+    Celestial: null,
+  };
+
+  const darkText = new Set(["Common", "Uncommon", "Legendary", "Divine"]);
+
+  const badge = document.createElement("span");
+  badge.textContent = normalized;
+  Object.assign(badge.style, {
+    display: "inline-flex",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: "3px 8px",
+    borderRadius: "4px",
+    fontSize: "11px",
+    fontWeight: "700",
+    color: darkText.has(normalized) ? "#0b0b0b" : "#ffffff",
+    boxShadow: "0 0 0 1px #0006 inset",
+    lineHeight: "1.1",
+    whiteSpace: "nowrap",
+  } as CSSStyleDeclaration);
+
+  if (normalized === "Celestial") {
+    // Ensure celestial animation keyframes exist
+    if (!document.getElementById("qws-celestial-kf")) {
+      const style = document.createElement("style");
+      style.id = "qws-celestial-kf";
+      style.textContent = `
+@keyframes qwsCelestialShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}`;
+      document.head.appendChild(style);
+    }
+    badge.style.background = `linear-gradient(130deg, rgb(0,180,216) 0%, rgb(124,42,232) 40%, rgb(160,0,126) 60%, rgb(255,215,0) 100%)`;
+    badge.style.backgroundSize = "200% 200%";
+    badge.style.animation = "qwsCelestialShift 4s linear infinite";
+  } else {
+    badge.style.background = COLORS[normalized] || "#444";
+  }
+
+  return badge;
+}
 
 // Initialize auto-buy listener for restock detection
 let restockListenerInitialized = false;
@@ -134,37 +275,80 @@ function createItemRow(
   displayName: string,
   config: AutoBuyItemConfig | undefined,
   onConfigChange: (config: AutoBuyItemConfig) => void,
-  ui: Menu
+  ui: Menu,
+  itemType: 'seed' | 'egg' = 'seed'
 ) {
   const currentConfig = config || { enabled: false, quantity: 999 };
 
   const row = document.createElement("div");
   row.style.display = "grid";
-  row.style.gridTemplateColumns = "auto 1fr auto";
+  row.style.gridTemplateColumns = "36px 1fr auto auto";
   row.style.alignItems = "center";
   row.style.gap = "10px";
-  row.style.padding = "8px 12px";
+  row.style.padding = "8px 10px";
   row.style.borderRadius = "8px";
   row.style.background = currentConfig.enabled 
     ? "rgba(122, 162, 255, 0.1)" 
-    : "rgba(255, 255, 255, 0.03)";
+    : "rgba(0, 0, 0, 0.15)";
   row.style.border = currentConfig.enabled 
     ? "1px solid rgba(122, 162, 255, 0.3)" 
-    : "1px solid rgba(255, 255, 255, 0.08)";
+    : "1px solid rgba(255, 255, 255, 0.06)";
   row.style.transition = "background 0.2s ease, border-color 0.2s ease";
+
+  // Hover effect
+  row.addEventListener("mouseenter", () => {
+    if (!currentConfig.enabled) {
+      row.style.background = "rgba(0, 0, 0, 0.25)";
+    }
+  });
+  row.addEventListener("mouseleave", () => {
+    row.style.background = currentConfig.enabled 
+      ? "rgba(122, 162, 255, 0.1)" 
+      : "rgba(0, 0, 0, 0.15)";
+  });
+
+  // Icon container
+  const iconContainer = document.createElement("div");
+  Object.assign(iconContainer.style, {
+    width: "32px",
+    height: "32px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: "6px",
+    background: "#101820",
+    border: "1px solid #ffffff12",
+    flexShrink: "0",
+  });
+
+  const sprite = createShopSprite(
+    itemType === 'seed' ? 'Seed' : 'Egg',
+    itemId,
+    {
+      size: 28,
+      fallback: itemType === 'seed' ? '🌱' : '🥚',
+      alt: displayName,
+    }
+  );
+  iconContainer.appendChild(sprite);
+
+  // Name label
+  const label = document.createElement("label");
+  label.textContent = displayName;
+  label.style.fontWeight = "600";
+  label.style.fontSize = "14px";
+  label.style.cursor = "pointer";
+  label.style.userSelect = "none";
+  label.style.color = currentConfig.enabled ? "#e7eef7" : "#b9c3cf";
+  label.htmlFor = `autobuy-${itemType}-${itemId}`;
 
   // Checkbox
   const checkbox = document.createElement("input");
   checkbox.type = "checkbox";
+  checkbox.id = `autobuy-${itemType}-${itemId}`;
   checkbox.checked = currentConfig.enabled;
-  checkbox.className = "qmm-check";
-  checkbox.style.transform = "scale(1.2)";
-
-  // Label
-  const label = document.createElement("span");
-  label.textContent = displayName;
-  label.style.fontWeight = "500";
-  label.style.color = currentConfig.enabled ? "#e7eef7" : "#b9c3cf";
+  checkbox.className = "qmm-switch";
+  checkbox.style.cursor = "pointer";
 
   // Quantity wrapper
   const qtyWrap = document.createElement("div");
@@ -173,12 +357,15 @@ function createItemRow(
   qtyWrap.style.gap = "6px";
 
   const qtyLabel = document.createElement("span");
-  qtyLabel.textContent = "Qty:";
-  qtyLabel.style.opacity = "0.7";
-  qtyLabel.style.fontSize = "12px";
+  qtyLabel.textContent = "Qtd:";
+  qtyLabel.style.fontSize = "13px";
+  qtyLabel.style.opacity = "0.8";
+  qtyLabel.style.fontWeight = "600";
 
   const qtyInput = ui.inputNumber(1, 9999, 1, currentConfig.quantity);
   qtyInput.style.width = "70px";
+  qtyInput.style.padding = "4px 8px";
+  qtyInput.style.fontSize = "13px";
   qtyInput.disabled = !currentConfig.enabled;
 
   qtyWrap.append(qtyLabel, getInputWrapper(qtyInput));
@@ -194,19 +381,47 @@ function createItemRow(
     // Update visual state
     row.style.background = newConfig.enabled 
       ? "rgba(122, 162, 255, 0.1)" 
-      : "rgba(255, 255, 255, 0.03)";
+      : "rgba(0, 0, 0, 0.15)";
     row.style.border = newConfig.enabled 
       ? "1px solid rgba(122, 162, 255, 0.3)" 
-      : "1px solid rgba(255, 255, 255, 0.08)";
+      : "1px solid rgba(255, 255, 255, 0.06)";
     label.style.color = newConfig.enabled ? "#e7eef7" : "#b9c3cf";
     qtyInput.disabled = !newConfig.enabled;
   };
 
   checkbox.addEventListener("change", updateConfig);
   qtyInput.addEventListener("change", updateConfig);
+  label.addEventListener("click", () => {
+    checkbox.checked = !checkbox.checked;
+    updateConfig();
+  });
 
-  row.append(checkbox, label, qtyWrap);
+  row.append(iconContainer, label, checkbox, qtyWrap);
   container.appendChild(row);
+}
+
+// Function to create rarity section header
+function createRaritySectionHeader(rarity: string, itemCount: number): HTMLElement {
+  const header = document.createElement("div");
+  header.style.display = "flex";
+  header.style.alignItems = "center";
+  header.style.gap = "8px";
+  header.style.marginBottom = "8px";
+  header.style.padding = "6px 10px";
+  header.style.background = "rgba(0, 0, 0, 0.2)";
+  header.style.borderRadius = "6px";
+  header.style.fontWeight = "700";
+  header.style.fontSize = "13px";
+  
+  const rarityBadge = createRarityBadge(rarity);
+  
+  const countSpan = document.createElement("span");
+  countSpan.textContent = `(${itemCount})`;
+  countSpan.style.opacity = "0.7";
+  countSpan.style.fontSize = "12px";
+  
+  header.append(rarityBadge, countSpan);
+  return header;
 }
 
 export function renderAutoBuyMenu(root: HTMLElement) {
@@ -286,17 +501,44 @@ export function renderAutoBuyMenu(root: HTMLElement) {
     const seedsCard = ui.card("🌱 Sementes", { tone: "muted" });
     seedsCard.body.style.display = "flex";
     seedsCard.body.style.flexDirection = "column";
-    seedsCard.body.style.gap = "8px";
+    seedsCard.body.style.gap = "12px";
 
-    for (const seedId of AVAILABLE_SEEDS) {
-      createItemRow(
-        seedsCard.body,
-        seedId,
-        seedId,
-        settings.selectedSeeds[seedId],
-        (config) => setSeedConfig(seedId, config),
-        ui
-      );
+    // Group seeds by rarity
+    const seedsByRarity = groupSeedsByRarity(settings);
+    const seedRarities = sortByRarityOrder(Array.from(seedsByRarity.keys()));
+    
+    for (const rarity of seedRarities) {
+      const items = seedsByRarity.get(rarity)!;
+      
+      // Create rarity section container
+      const raritySection = document.createElement("div");
+      raritySection.style.marginBottom = "4px";
+      
+      // Add rarity header
+      const header = createRaritySectionHeader(rarity, items.length);
+      raritySection.appendChild(header);
+      
+      // Add items list
+      const itemsList = document.createElement("div");
+      itemsList.style.display = "flex";
+      itemsList.style.flexDirection = "column";
+      itemsList.style.gap = "6px";
+      itemsList.style.paddingLeft = "4px";
+      
+      for (const item of items) {
+        createItemRow(
+          itemsList,
+          item.id,
+          item.name,
+          item.config,
+          (config) => setSeedConfig(item.id, config),
+          ui,
+          'seed'
+        );
+      }
+      
+      raritySection.appendChild(itemsList);
+      seedsCard.body.appendChild(raritySection);
     }
 
     container.appendChild(seedsCard.root);
@@ -305,17 +547,44 @@ export function renderAutoBuyMenu(root: HTMLElement) {
     const eggsCard = ui.card("🥚 Ovos", { tone: "muted" });
     eggsCard.body.style.display = "flex";
     eggsCard.body.style.flexDirection = "column";
-    eggsCard.body.style.gap = "8px";
+    eggsCard.body.style.gap = "12px";
 
-    for (const eggId of AVAILABLE_EGGS) {
-      createItemRow(
-        eggsCard.body,
-        eggId,
-        getEggDisplayName(eggId),
-        settings.selectedEggs[eggId],
-        (config) => setEggConfig(eggId, config),
-        ui
-      );
+    // Group eggs by rarity
+    const eggsByRarity = groupEggsByRarity(settings);
+    const eggRarities = sortByRarityOrder(Array.from(eggsByRarity.keys()));
+    
+    for (const rarity of eggRarities) {
+      const items = eggsByRarity.get(rarity)!;
+      
+      // Create rarity section container
+      const raritySection = document.createElement("div");
+      raritySection.style.marginBottom = "4px";
+      
+      // Add rarity header
+      const header = createRaritySectionHeader(rarity, items.length);
+      raritySection.appendChild(header);
+      
+      // Add items list
+      const itemsList = document.createElement("div");
+      itemsList.style.display = "flex";
+      itemsList.style.flexDirection = "column";
+      itemsList.style.gap = "6px";
+      itemsList.style.paddingLeft = "4px";
+      
+      for (const item of items) {
+        createItemRow(
+          itemsList,
+          item.id,
+          item.name,
+          item.config,
+          (config) => setEggConfig(item.id, config),
+          ui,
+          'egg'
+        );
+      }
+      
+      raritySection.appendChild(itemsList);
+      eggsCard.body.appendChild(raritySection);
     }
 
     container.appendChild(eggsCard.root);
