@@ -77,43 +77,38 @@ function detectRestock(prev: any, next: any): boolean {
   if (!next) return false;
 
   // Check if shop items have been restocked
-  // This can be detected by changes in stock quantities or restockTime
   try {
-    const prevStr = JSON.stringify(prev);
-    const nextStr = JSON.stringify(next);
-    
-    // Simple change detection - if the shop state changed significantly
-    if (prevStr !== nextStr) {
-      // Look for specific restock indicators
-      // Check for restockTime changes or stock quantity increases
-      const prevSeeds = prev?.seed || {};
-      const nextSeeds = next?.seed || {};
-      const prevEggs = prev?.egg || {};
-      const nextEggs = next?.egg || {};
+    // Look for specific restock indicators
+    // Check for restockTime changes or stock quantity increases
+    const prevSeeds = prev?.seed || {};
+    const nextSeeds = next?.seed || {};
+    const prevEggs = prev?.egg || {};
+    const nextEggs = next?.egg || {};
 
-      // Check if any seed or egg quantities increased (indicating restock)
-      for (const key of Object.keys(nextSeeds)) {
-        const prevQty = prevSeeds[key]?.quantity ?? prevSeeds[key]?.stock ?? 0;
-        const nextQty = nextSeeds[key]?.quantity ?? nextSeeds[key]?.stock ?? 0;
-        if (nextQty > prevQty && prevQty === 0) {
-          return true; // Item was out of stock and is now available
-        }
-      }
-
-      for (const key of Object.keys(nextEggs)) {
-        const prevQty = prevEggs[key]?.quantity ?? prevEggs[key]?.stock ?? 0;
-        const nextQty = nextEggs[key]?.quantity ?? nextEggs[key]?.stock ?? 0;
-        if (nextQty > prevQty && prevQty === 0) {
-          return true;
-        }
-      }
-
-      // Also check for restockTime field changes
-      const prevRestockTime = prev?.restockTime ?? prev?.nextRestock;
-      const nextRestockTime = next?.restockTime ?? next?.nextRestock;
-      if (prevRestockTime && nextRestockTime && prevRestockTime !== nextRestockTime) {
+    // Check if any seed or egg quantities increased (indicating restock)
+    for (const key of Object.keys(nextSeeds)) {
+      const prevQty = prevSeeds[key]?.quantity ?? prevSeeds[key]?.stock ?? 0;
+      const nextQty = nextSeeds[key]?.quantity ?? nextSeeds[key]?.stock ?? 0;
+      // Detect any quantity increase (not just from 0)
+      if (nextQty > prevQty) {
         return true;
       }
+    }
+
+    for (const key of Object.keys(nextEggs)) {
+      const prevQty = prevEggs[key]?.quantity ?? prevEggs[key]?.stock ?? 0;
+      const nextQty = nextEggs[key]?.quantity ?? nextEggs[key]?.stock ?? 0;
+      // Detect any quantity increase (not just from 0)
+      if (nextQty > prevQty) {
+        return true;
+      }
+    }
+
+    // Also check for restockTime field changes
+    const prevRestockTime = prev?.restockTime ?? prev?.nextRestock;
+    const nextRestockTime = next?.restockTime ?? next?.nextRestock;
+    if (prevRestockTime && nextRestockTime && prevRestockTime !== nextRestockTime) {
+      return true;
     }
   } catch (error) {
     console.error("[AutoBuy] Error detecting restock:", error);
@@ -141,6 +136,12 @@ function createSwitch(initialChecked: boolean, onToggle?: (checked: boolean) => 
   wrap.appendChild(input);
   
   return { wrap, input };
+}
+
+// Helper to get the wrapper element from an input (Menu.inputNumber returns an input with a .wrap property)
+function getInputWrapper(input: HTMLInputElement): HTMLElement {
+  const inputWithWrap = input as HTMLInputElement & { wrap?: HTMLElement };
+  return inputWithWrap.wrap ?? input;
 }
 
 function createItemRow(
@@ -196,7 +197,7 @@ function createItemRow(
   qtyInput.style.width = "70px";
   qtyInput.disabled = !currentConfig.enabled;
 
-  qtyWrap.append(qtyLabel, (qtyInput as any).wrap || qtyInput);
+  qtyWrap.append(qtyLabel, getInputWrapper(qtyInput));
 
   // Event handlers
   const updateConfig = () => {
@@ -505,7 +506,7 @@ export function renderAutoBuyMenu(root: HTMLElement) {
 
     const qtyInput = ui.inputNumber(1, 9999, 1, 10);
 
-    qtyRow.append(qtyLabel, (qtyInput as any).wrap || qtyInput);
+    qtyRow.append(qtyLabel, getInputWrapper(qtyInput));
     quickCard.body.appendChild(qtyRow);
 
     // Quick buy button
