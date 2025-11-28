@@ -40883,70 +40883,50 @@ next: ${next}`;
 
   // src/ui/menus/auto-buy.ts
   var restockListenerInitialized = false;
-  var lastShopsState = null;
-  function initRestockListener() {
-    if (restockListenerInitialized) return;
-    restockListenerInitialized = true;
-    Atoms.shop.shops.onChange(async (next) => {
-      if (!next) return;
-      const settings = getAutoBuySettings();
-      if (!settings.enabled) {
-        lastShopsState = next;
-        return;
-      }
-      const isRestock = detectRestock(lastShopsState, next);
-      lastShopsState = next;
-      if (isRestock) {
-        console.log("[AutoBuy] Restock detected, executing auto-buy...");
-        const result = await ShopService.executeAutoBuy(settings);
-        const totalPurchased = Object.values(result.seedsPurchased).reduce((a, b) => a + b, 0) + Object.values(result.eggsPurchased).reduce((a, b) => a + b, 0);
-        if (totalPurchased > 0 && settings.playSound) {
+  var lastShopsSnapshot = null;
+  function detectRestockFromSnapshots(prev, next) {
+    if (!prev || !next) return false;
+    return !!((prev.seed?.secondsUntilRestock ?? 0) < (next.seed?.secondsUntilRestock ?? 0) || (prev.tool?.secondsUntilRestock ?? 0) < (next.tool?.secondsUntilRestock ?? 0) || (prev.egg?.secondsUntilRestock ?? 0) < (next.egg?.secondsUntilRestock ?? 0) || (prev.decor?.secondsUntilRestock ?? 0) < (next.decor?.secondsUntilRestock ?? 0));
+  }
+  async function executeAutoBuy(settings) {
+    try {
+      const result = await ShopService.executeAutoBuy(settings);
+      const totalPurchased = Object.values(result.seedsPurchased).reduce((a, b) => a + b, 0) + Object.values(result.eggsPurchased).reduce((a, b) => a + b, 0);
+      if (totalPurchased > 0) {
+        console.log(`[AutoBuy] Successfully purchased ${totalPurchased} items`);
+        if (settings.playSound) {
           try {
             await audio.notify("shops");
           } catch (error) {
             console.error("[AutoBuy] Failed to play sound:", error);
           }
         }
-        if (totalPurchased > 0) {
-          console.log(`[AutoBuy] Purchased ${totalPurchased} items`);
-        }
-      }
-    });
-    Atoms.shop.shops.get().then((state2) => {
-      lastShopsState = state2;
-    });
-  }
-  function detectRestock(prev, next) {
-    if (!prev) return false;
-    if (!next) return false;
-    try {
-      const prevSeeds = prev?.seed || {};
-      const nextSeeds = next?.seed || {};
-      const prevEggs = prev?.egg || {};
-      const nextEggs = next?.egg || {};
-      for (const key2 of Object.keys(nextSeeds)) {
-        const prevQty = prevSeeds[key2]?.quantity ?? prevSeeds[key2]?.stock ?? 0;
-        const nextQty = nextSeeds[key2]?.quantity ?? nextSeeds[key2]?.stock ?? 0;
-        if (nextQty > prevQty) {
-          return true;
-        }
-      }
-      for (const key2 of Object.keys(nextEggs)) {
-        const prevQty = prevEggs[key2]?.quantity ?? prevEggs[key2]?.stock ?? 0;
-        const nextQty = nextEggs[key2]?.quantity ?? nextEggs[key2]?.stock ?? 0;
-        if (nextQty > prevQty) {
-          return true;
-        }
-      }
-      const prevRestockTime = prev?.restockTime ?? prev?.nextRestock;
-      const nextRestockTime = next?.restockTime ?? next?.nextRestock;
-      if (prevRestockTime && nextRestockTime && prevRestockTime !== nextRestockTime) {
-        return true;
+      } else {
+        console.log("[AutoBuy] Restock detected but no items were purchased (check configuration)");
       }
     } catch (error) {
-      console.error("[AutoBuy] Error detecting restock:", error);
+      console.error("[AutoBuy] Error during auto-buy execution:", error);
     }
-    return false;
+  }
+  function initRestockListener() {
+    if (restockListenerInitialized) return;
+    restockListenerInitialized = true;
+    console.log("[AutoBuy] Initializing restock listener with NotifierService");
+    NotifierService.onShopsChange((shopsSnapshot) => {
+      const prev = lastShopsSnapshot;
+      lastShopsSnapshot = shopsSnapshot;
+      const isRestock = detectRestockFromSnapshots(prev, shopsSnapshot);
+      if (!isRestock) return;
+      const settings = getAutoBuySettings();
+      if (!settings.enabled) {
+        console.log("[AutoBuy] Restock detected but auto-buy is disabled");
+        return;
+      }
+      console.log("[AutoBuy] \u{1F389} Restock detected, executing auto-buy...");
+      executeAutoBuy(settings).catch((error) => {
+        console.error("[AutoBuy] Unhandled error during auto-buy:", error);
+      });
+    });
   }
   function createSwitch2(initialChecked, onToggle) {
     const wrap = document.createElement("label");

@@ -17,104 +17,88 @@ import {
   type AutoBuyItemConfig,
 } from "../../store/auto-buy";
 import { ShopService } from "../../services/shop";
-import { Atoms } from "../../store/atoms";
+import { NotifierService, type ShopsSnapshot } from "../../services/notifier";
 import { audio } from "../../utils/audio";
 
 // Initialize auto-buy listener for restock detection
 let restockListenerInitialized = false;
-let lastShopsState: any = null;
+let lastShopsSnapshot: ShopsSnapshot | null = null;
 
-function initRestockListener() {
-  if (restockListenerInitialized) return;
-  restockListenerInitialized = true;
+/**
+ * Detects restock by checking if secondsUntilRestock increased in any shop section.
+ * Uses the same proven logic from notificationOverlay.ts.
+ */
+function detectRestockFromSnapshots(prev: ShopsSnapshot | null, next: ShopsSnapshot): boolean {
+  if (!prev || !next) return false;
+  
+  // Restock is detected when secondsUntilRestock INCREASES (timer resets)
+  // e.g., timer goes from 5 seconds to 600 seconds (new 10 minute countdown)
+  return !!(
+    (prev.seed?.secondsUntilRestock  ?? 0) < (next.seed?.secondsUntilRestock  ?? 0) ||
+    (prev.tool?.secondsUntilRestock  ?? 0) < (next.tool?.secondsUntilRestock  ?? 0) ||
+    (prev.egg?.secondsUntilRestock   ?? 0) < (next.egg?.secondsUntilRestock   ?? 0) ||
+    (prev.decor?.secondsUntilRestock ?? 0) < (next.decor?.secondsUntilRestock ?? 0)
+  );
+}
 
-  // Listen for shop changes
-  Atoms.shop.shops.onChange(async (next) => {
-    if (!next) return;
-
-    const settings = getAutoBuySettings();
-    if (!settings.enabled) {
-      lastShopsState = next;
-      return;
-    }
-
-    // Detect if this is a restock (shop data changed significantly)
-    const isRestock = detectRestock(lastShopsState, next);
-    lastShopsState = next;
-
-    if (isRestock) {
-      console.log("[AutoBuy] Restock detected, executing auto-buy...");
+/**
+ * Execute auto-buy purchases and handle notifications
+ */
+async function executeAutoBuy(settings: AutoBuySettings): Promise<void> {
+  try {
+    const result = await ShopService.executeAutoBuy(settings);
+    
+    const totalPurchased = 
+      Object.values(result.seedsPurchased).reduce((a, b) => a + b, 0) +
+      Object.values(result.eggsPurchased).reduce((a, b) => a + b, 0);
+    
+    if (totalPurchased > 0) {
+      console.log(`[AutoBuy] Successfully purchased ${totalPurchased} items`);
       
-      const result = await ShopService.executeAutoBuy(settings);
-      
-      const totalPurchased = 
-        Object.values(result.seedsPurchased).reduce((a, b) => a + b, 0) +
-        Object.values(result.eggsPurchased).reduce((a, b) => a + b, 0);
-      
-      if (totalPurchased > 0 && settings.playSound) {
+      if (settings.playSound) {
         try {
           await audio.notify("shops");
         } catch (error) {
           console.error("[AutoBuy] Failed to play sound:", error);
         }
       }
-      
-      if (totalPurchased > 0) {
-        console.log(`[AutoBuy] Purchased ${totalPurchased} items`);
-      }
-    }
-  });
-
-  // Get initial shop state
-  Atoms.shop.shops.get().then((state) => {
-    lastShopsState = state;
-  });
-}
-
-function detectRestock(prev: any, next: any): boolean {
-  // If no previous state, don't trigger (initial load)
-  if (!prev) return false;
-  if (!next) return false;
-
-  // Check if shop items have been restocked
-  try {
-    // Look for specific restock indicators
-    // Check for restockTime changes or stock quantity increases
-    const prevSeeds = prev?.seed || {};
-    const nextSeeds = next?.seed || {};
-    const prevEggs = prev?.egg || {};
-    const nextEggs = next?.egg || {};
-
-    // Check if any seed or egg quantities increased (indicating restock)
-    for (const key of Object.keys(nextSeeds)) {
-      const prevQty = prevSeeds[key]?.quantity ?? prevSeeds[key]?.stock ?? 0;
-      const nextQty = nextSeeds[key]?.quantity ?? nextSeeds[key]?.stock ?? 0;
-      // Detect any quantity increase (not just from 0)
-      if (nextQty > prevQty) {
-        return true;
-      }
-    }
-
-    for (const key of Object.keys(nextEggs)) {
-      const prevQty = prevEggs[key]?.quantity ?? prevEggs[key]?.stock ?? 0;
-      const nextQty = nextEggs[key]?.quantity ?? nextEggs[key]?.stock ?? 0;
-      // Detect any quantity increase (not just from 0)
-      if (nextQty > prevQty) {
-        return true;
-      }
-    }
-
-    // Also check for restockTime field changes
-    const prevRestockTime = prev?.restockTime ?? prev?.nextRestock;
-    const nextRestockTime = next?.restockTime ?? next?.nextRestock;
-    if (prevRestockTime && nextRestockTime && prevRestockTime !== nextRestockTime) {
-      return true;
+    } else {
+      console.log("[AutoBuy] Restock detected but no items were purchased (check configuration)");
     }
   } catch (error) {
-    console.error("[AutoBuy] Error detecting restock:", error);
+    console.error("[AutoBuy] Error during auto-buy execution:", error);
   }
-  
-  return false;
+}
+
+function initRestockListener() {
+  if (restockListenerInitialized) return;
+  restockListenerInitialized = true;
+
+  console.log("[AutoBuy] Initializing restock listener with NotifierService");
+
+  // Use NotifierService which already has reliable shop change detection
+  NotifierService.onShopsChange((shopsSnapshot: ShopsSnapshot) => {
+    const prev = lastShopsSnapshot;
+    lastShopsSnapshot = shopsSnapshot;
+
+    // Check if this is a restock using the same logic as NotificationOverlay
+    const isRestock = detectRestockFromSnapshots(prev, shopsSnapshot);
+    
+    if (!isRestock) return;
+
+    const settings = getAutoBuySettings();
+    if (!settings.enabled) {
+      console.log("[AutoBuy] Restock detected but auto-buy is disabled");
+      return;
+    }
+
+    console.log("[AutoBuy] 🎉 Restock detected, executing auto-buy...");
+    
+    // Execute auto-buy asynchronously, handling errors properly
+    executeAutoBuy(settings).catch((error) => {
+      console.error("[AutoBuy] Unhandled error during auto-buy:", error);
+    });
+  });
 }
 
 function createSwitch(initialChecked: boolean, onToggle?: (checked: boolean) => void) {
