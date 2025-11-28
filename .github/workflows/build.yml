@@ -1,0 +1,68 @@
+name: Build Userscript
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: ${{ github.head_ref }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build userscript
+        run: |
+          npm run build
+          if [ ! -f dist/quinoa-ws.min.user.js ]; then
+            echo "❌ Build failed: quinoa-ws.min.user.js not generated"
+            exit 1
+          fi
+
+      - name: Copy built file to root
+        run: cp dist/quinoa-ws.min.user.js quinoa-ws.min.user.js
+
+      - name: Check for changes
+        id: verify_diff
+        run: |
+          git diff --quiet quinoa-ws.min.user.js || echo "changed=true" >> $GITHUB_OUTPUT
+
+      - name: Configure Git
+        if: steps.verify_diff.outputs.changed == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
+      - name: Commit built file
+        if: steps.verify_diff.outputs.changed == 'true'
+        run: |
+          git add quinoa-ws.min.user.js
+          git commit -m "🤖 Auto-build: Update quinoa-ws.min.user.js"
+
+      - name: Push changes
+        if: steps.verify_diff.outputs.changed == 'true'
+        run: |
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
