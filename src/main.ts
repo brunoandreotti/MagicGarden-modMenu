@@ -1,4 +1,4 @@
-// src/main.ts
+// src/main.ts - teste
 import { installPageWebSocketHook } from "./hooks/ws-hook";
 import { mountHUD, initWatchers } from "./ui/hud";
 
