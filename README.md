@@ -1,3 +1,4 @@
+#THIS FORK IS FOR STUDY PURPOSES ONLY. ITS SOLE PURPOSE IS TO TEST MY PROGRAMMING KNOWLEDGE. I KNOW THAT AUTOMATION FUNCTIONS ARE PROHIBITED IN THE GAME MAGIC GARDEN. I HAVE NO INTENTION OF DISTRIBUTING THIS TOOL.
 # MagicGarden Mod Menu, first rough cut
 
 > "It works, I promise." This is the very first release of my Magic Garden mod menu. It is rough, it is messy, it is absolutely not optimised… but it does what I need for now.
