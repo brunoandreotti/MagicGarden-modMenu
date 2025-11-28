@@ -26,17 +26,20 @@ import { plantCatalog, eggCatalog } from "../../data/hardcoded-data.clean";
 
 const RARITY_ORDER = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythical", "Divine", "Celestial"];
 
+const RARITY_MAP: Record<string, string> = {
+  mythical: "Mythical",
+  celestial: "Celestial",
+  divine: "Divine",
+  legendary: "Legendary",
+  rare: "Rare",
+  uncommon: "Uncommon",
+  common: "Common",
+  epic: "Epic",
+};
+
 function normalizeRarity(rarity: string | undefined): string {
-  const k = String(rarity || "").toLowerCase();
-  if (k === "mythical") return "Mythical";
-  if (k === "celestial") return "Celestial";
-  if (k === "divine") return "Divine";
-  if (k === "legendary") return "Legendary";
-  if (k === "rare") return "Rare";
-  if (k === "uncommon") return "Uncommon";
-  if (k === "common") return "Common";
-  if (k === "epic") return "Epic";
-  return "Common";
+  const key = String(rarity || "").toLowerCase();
+  return RARITY_MAP[key] || "Common";
 }
 
 function getSeedRarity(speciesId: string): string {
