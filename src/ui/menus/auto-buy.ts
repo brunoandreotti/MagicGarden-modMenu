@@ -94,7 +94,10 @@ function initRestockListener() {
 
     console.log("[AutoBuy] 🎉 Restock detected, executing auto-buy...");
     
-    executeAutoBuy(settings);
+    // Execute auto-buy asynchronously, handling errors properly
+    executeAutoBuy(settings).catch((error) => {
+      console.error("[AutoBuy] Unhandled error during auto-buy:", error);
+    });
   });
 }
 
