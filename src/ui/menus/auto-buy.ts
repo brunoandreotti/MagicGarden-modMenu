@@ -47,20 +47,8 @@ interface ItemWithRarity {
   config: AutoBuyItemConfig;
 }
 
-// Fetch available items from NotifierService (single method for both seeds and eggs)
-async function getNotifierState(): Promise<NotifierState> {
-  await NotifierService.start();
-  return new Promise<NotifierState>((resolve) => {
-    const unsub = NotifierService.onChangeNow((s) => {
-      resolve(s);
-      unsub?.then((fn) => fn?.());
-    });
-  });
-}
-
-// Get available seeds from NotifierService
-async function getAvailableSeeds(): Promise<ItemWithRarity[]> {
-  const state = await getNotifierState();
+// Get available seeds from NotifierService state
+function extractSeedsFromState(state: NotifierState): ItemWithRarity[] {
   const seeds: ItemWithRarity[] = [];
   
   for (const row of state.rows) {
@@ -75,13 +63,11 @@ async function getAvailableSeeds(): Promise<ItemWithRarity[]> {
     }
   }
   
-  console.log(`[AutoBuy] Loaded ${seeds.length} seeds from NotifierService`);
   return seeds;
 }
 
-// Get available eggs from NotifierService
-async function getAvailableEggs(): Promise<ItemWithRarity[]> {
-  const state = await getNotifierState();
+// Get available eggs from NotifierService state
+function extractEggsFromState(state: NotifierState): ItemWithRarity[] {
   const eggs: ItemWithRarity[] = [];
   
   for (const row of state.rows) {
@@ -96,15 +82,39 @@ async function getAvailableEggs(): Promise<ItemWithRarity[]> {
     }
   }
   
+  return eggs;
+}
+
+// Get available seeds from NotifierService (for external use)
+async function getAvailableSeeds(): Promise<ItemWithRarity[]> {
+  const state = await NotifierService.get();
+  const seeds = extractSeedsFromState(state);
+  console.log(`[AutoBuy] Loaded ${seeds.length} seeds from NotifierService`);
+  return seeds;
+}
+
+// Get available eggs from NotifierService (for external use)
+async function getAvailableEggs(): Promise<ItemWithRarity[]> {
+  const state = await NotifierService.get();
+  const eggs = extractEggsFromState(state);
   console.log(`[AutoBuy] Loaded ${eggs.length} eggs from NotifierService`);
   return eggs;
 }
 
-async function groupSeedsByRarity(settings: AutoBuySettings): Promise<Map<string, ItemWithRarity[]>> {
+// Get both seeds and eggs in a single fetch for efficiency
+async function getAvailableItems(): Promise<{ seeds: ItemWithRarity[]; eggs: ItemWithRarity[] }> {
+  const state = await NotifierService.get();
+  const seeds = extractSeedsFromState(state);
+  const eggs = extractEggsFromState(state);
+  console.log(`[AutoBuy] Loaded ${seeds.length} seeds and ${eggs.length} eggs from NotifierService`);
+  return { seeds, eggs };
+}
+
+async function groupSeedsByRarity(settings: AutoBuySettings, availableSeeds?: ItemWithRarity[]): Promise<Map<string, ItemWithRarity[]>> {
   const grouped = new Map<string, ItemWithRarity[]>();
-  const availableSeeds = await getAvailableSeeds();
+  const seeds = availableSeeds ?? await getAvailableSeeds();
   
-  for (const seed of availableSeeds) {
+  for (const seed of seeds) {
     const config = settings.selectedSeeds[seed.id] || { enabled: false, quantity: 999 };
     seed.config = config;
     
@@ -118,11 +128,11 @@ async function groupSeedsByRarity(settings: AutoBuySettings): Promise<Map<string
   return grouped;
 }
 
-async function groupEggsByRarity(settings: AutoBuySettings): Promise<Map<string, ItemWithRarity[]>> {
+async function groupEggsByRarity(settings: AutoBuySettings, availableEggs?: ItemWithRarity[]): Promise<Map<string, ItemWithRarity[]>> {
   const grouped = new Map<string, ItemWithRarity[]>();
-  const availableEggs = await getAvailableEggs();
+  const eggs = availableEggs ?? await getAvailableEggs();
   
-  for (const egg of availableEggs) {
+  for (const egg of eggs) {
     const config = settings.selectedEggs[egg.id] || { enabled: false, quantity: 999 };
     egg.config = config;
     
@@ -583,8 +593,11 @@ export function renderAutoBuyMenu(root: HTMLElement) {
     // Load seeds and eggs asynchronously from NotifierService
     (async () => {
       try {
+        // Fetch both seeds and eggs in a single call for efficiency
+        const { seeds, eggs } = await getAvailableItems();
+        
         // Load seeds
-        const seedsByRarity = await groupSeedsByRarity(settings);
+        const seedsByRarity = await groupSeedsByRarity(settings, seeds);
         seedsCard.body.innerHTML = "";
         seedsCard.body.style.display = "flex";
         seedsCard.body.style.flexDirection = "column";
@@ -636,7 +649,7 @@ export function renderAutoBuyMenu(root: HTMLElement) {
         }
 
         // Load eggs
-        const eggsByRarity = await groupEggsByRarity(settings);
+        const eggsByRarity = await groupEggsByRarity(settings, eggs);
         eggsCard.body.innerHTML = "";
         eggsCard.body.style.display = "flex";
         eggsCard.body.style.flexDirection = "column";
