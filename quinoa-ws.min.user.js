@@ -40663,54 +40663,6 @@ next: ${next}`;
 
   // src/store/auto-buy.ts
   var STORAGE_KEY = "mg_autobuy_settings";
-  var AVAILABLE_SEEDS = [
-    "Carrot",
-    "Sunflower",
-    "Wheat",
-    "Corn",
-    "Pepper",
-    "Lychee",
-    "Starweaver",
-    "Moonbinder",
-    "Dawnbinder",
-    "Strawberry",
-    "Tomato",
-    "Pumpkin",
-    "Watermelon",
-    "Blueberry",
-    "Tulip",
-    "Marigold",
-    "Coconut",
-    "Banana",
-    "Sakura",
-    "Mushroom",
-    "Cactus",
-    "Bamboo",
-    "Grape",
-    "Lemon",
-    "Mango",
-    "Dragonfruit",
-    "Cherry"
-  ];
-  var AVAILABLE_EGGS = [
-    "CommonEgg",
-    "UncommonEgg",
-    "RareEgg",
-    "EpicEgg",
-    "LegendaryEgg",
-    "MythicalEgg"
-  ];
-  var EGG_DISPLAY_NAMES = {
-    CommonEgg: "Common Egg",
-    UncommonEgg: "Uncommon Egg",
-    RareEgg: "Rare Egg",
-    EpicEgg: "Epic Egg",
-    LegendaryEgg: "Legendary Egg",
-    MythicalEgg: "Mythical Egg"
-  };
-  function getEggDisplayName(eggId) {
-    return EGG_DISPLAY_NAMES[eggId] || eggId;
-  }
   function getDefaultSettings() {
     return {
       enabled: false,
@@ -40897,48 +40849,81 @@ next: ${next}`;
     const key2 = String(rarity2 || "").toLowerCase();
     return RARITY_MAP[key2] || "Common";
   }
-  function getSeedRarity(speciesId) {
-    const entry = plantCatalog?.[speciesId];
-    return normalizeRarity(entry?.seed?.rarity || entry?.plant?.rarity);
-  }
-  function getEggRarity(eggId) {
-    const entry = eggCatalog?.[eggId];
-    return normalizeRarity(entry?.rarity);
-  }
   function sortByRarityOrder(rarities) {
     return rarities.sort((a, b) => RARITY_ORDER3.indexOf(a) - RARITY_ORDER3.indexOf(b));
   }
-  function groupSeedsByRarity(settings) {
-    const grouped = /* @__PURE__ */ new Map();
-    for (const seedId of AVAILABLE_SEEDS) {
-      const rarity2 = getSeedRarity(seedId);
-      const config = settings.selectedSeeds[seedId] || { enabled: false, quantity: 999 };
-      if (!grouped.has(rarity2)) {
-        grouped.set(rarity2, []);
+  function extractSeedsFromState(state2) {
+    const seeds = [];
+    for (const row of state2.rows) {
+      if (row.type === "Seed") {
+        const speciesId = row.id.split(":")[1];
+        seeds.push({
+          id: speciesId,
+          name: row.name,
+          rarity: normalizeRarity(row.rarity || "Common"),
+          config: { enabled: false, quantity: 999 }
+        });
       }
-      grouped.get(rarity2).push({
-        id: seedId,
-        name: seedId,
-        rarity: rarity2,
-        config
-      });
+    }
+    return seeds;
+  }
+  function extractEggsFromState(state2) {
+    const eggs = [];
+    for (const row of state2.rows) {
+      if (row.type === "Egg") {
+        const eggId = row.id.split(":")[1];
+        eggs.push({
+          id: eggId,
+          name: row.name,
+          rarity: normalizeRarity(row.rarity || "Common"),
+          config: { enabled: false, quantity: 999 }
+        });
+      }
+    }
+    return eggs;
+  }
+  async function getAvailableSeeds() {
+    const state2 = await NotifierService.get();
+    const seeds = extractSeedsFromState(state2);
+    console.log(`[AutoBuy] Loaded ${seeds.length} seeds from NotifierService`);
+    return seeds;
+  }
+  async function getAvailableEggs() {
+    const state2 = await NotifierService.get();
+    const eggs = extractEggsFromState(state2);
+    console.log(`[AutoBuy] Loaded ${eggs.length} eggs from NotifierService`);
+    return eggs;
+  }
+  async function getAvailableItems() {
+    const state2 = await NotifierService.get();
+    const seeds = extractSeedsFromState(state2);
+    const eggs = extractEggsFromState(state2);
+    console.log(`[AutoBuy] Loaded ${seeds.length} seeds and ${eggs.length} eggs from NotifierService`);
+    return { seeds, eggs };
+  }
+  async function groupSeedsByRarity(settings, availableSeeds) {
+    const grouped = /* @__PURE__ */ new Map();
+    const seeds = availableSeeds ?? await getAvailableSeeds();
+    for (const seed of seeds) {
+      const config = settings.selectedSeeds[seed.id] || { enabled: false, quantity: 999 };
+      seed.config = config;
+      if (!grouped.has(seed.rarity)) {
+        grouped.set(seed.rarity, []);
+      }
+      grouped.get(seed.rarity).push(seed);
     }
     return grouped;
   }
-  function groupEggsByRarity(settings) {
+  async function groupEggsByRarity(settings, availableEggs) {
     const grouped = /* @__PURE__ */ new Map();
-    for (const eggId of AVAILABLE_EGGS) {
-      const rarity2 = getEggRarity(eggId);
-      const config = settings.selectedEggs[eggId] || { enabled: false, quantity: 999 };
-      if (!grouped.has(rarity2)) {
-        grouped.set(rarity2, []);
+    const eggs = availableEggs ?? await getAvailableEggs();
+    for (const egg of eggs) {
+      const config = settings.selectedEggs[egg.id] || { enabled: false, quantity: 999 };
+      egg.config = config;
+      if (!grouped.has(egg.rarity)) {
+        grouped.set(egg.rarity, []);
       }
-      grouped.get(rarity2).push({
-        id: eggId,
-        name: getEggDisplayName(eggId),
-        rarity: rarity2,
-        config
-      });
+      grouped.get(egg.rarity).push(egg);
     }
     return grouped;
   }
@@ -41224,65 +41209,23 @@ next: ${next}`;
       seedsCard.body.style.display = "flex";
       seedsCard.body.style.flexDirection = "column";
       seedsCard.body.style.gap = "12px";
-      const seedsByRarity = groupSeedsByRarity(settings);
-      const seedRarities = sortByRarityOrder(Array.from(seedsByRarity.keys()));
-      for (const rarity2 of seedRarities) {
-        const items = seedsByRarity.get(rarity2);
-        const raritySection = document.createElement("div");
-        raritySection.style.marginBottom = "4px";
-        const header = createRaritySectionHeader(rarity2, items.length);
-        raritySection.appendChild(header);
-        const itemsList = document.createElement("div");
-        itemsList.style.display = "flex";
-        itemsList.style.flexDirection = "column";
-        itemsList.style.gap = "6px";
-        itemsList.style.paddingLeft = "4px";
-        for (const item of items) {
-          createItemRow(
-            itemsList,
-            item.id,
-            item.name,
-            item.config,
-            (config) => setSeedConfig(item.id, config),
-            ui,
-            "seed"
-          );
-        }
-        raritySection.appendChild(itemsList);
-        seedsCard.body.appendChild(raritySection);
-      }
+      const seedsLoading = document.createElement("div");
+      seedsLoading.textContent = "Carregando sementes...";
+      seedsLoading.style.opacity = "0.7";
+      seedsLoading.style.textAlign = "center";
+      seedsLoading.style.padding = "12px";
+      seedsCard.body.appendChild(seedsLoading);
       container.appendChild(seedsCard.root);
       const eggsCard = ui.card("\u{1F95A} Ovos", { tone: "muted" });
       eggsCard.body.style.display = "flex";
       eggsCard.body.style.flexDirection = "column";
       eggsCard.body.style.gap = "12px";
-      const eggsByRarity = groupEggsByRarity(settings);
-      const eggRarities = sortByRarityOrder(Array.from(eggsByRarity.keys()));
-      for (const rarity2 of eggRarities) {
-        const items = eggsByRarity.get(rarity2);
-        const raritySection = document.createElement("div");
-        raritySection.style.marginBottom = "4px";
-        const header = createRaritySectionHeader(rarity2, items.length);
-        raritySection.appendChild(header);
-        const itemsList = document.createElement("div");
-        itemsList.style.display = "flex";
-        itemsList.style.flexDirection = "column";
-        itemsList.style.gap = "6px";
-        itemsList.style.paddingLeft = "4px";
-        for (const item of items) {
-          createItemRow(
-            itemsList,
-            item.id,
-            item.name,
-            item.config,
-            (config) => setEggConfig(item.id, config),
-            ui,
-            "egg"
-          );
-        }
-        raritySection.appendChild(itemsList);
-        eggsCard.body.appendChild(raritySection);
-      }
+      const eggsLoading = document.createElement("div");
+      eggsLoading.textContent = "Carregando ovos...";
+      eggsLoading.style.opacity = "0.7";
+      eggsLoading.style.textAlign = "center";
+      eggsLoading.style.padding = "12px";
+      eggsCard.body.appendChild(eggsLoading);
       container.appendChild(eggsCard.root);
       const infoCard = ui.card("\u2139\uFE0F Informa\xE7\xF5es", { tone: "muted" });
       infoCard.body.style.fontSize = "13px";
@@ -41299,6 +41242,102 @@ next: ${next}`;
     `;
       container.appendChild(infoCard.root);
       view.appendChild(container);
+      (async () => {
+        try {
+          const { seeds, eggs } = await getAvailableItems();
+          const seedsByRarity = await groupSeedsByRarity(settings, seeds);
+          seedsCard.body.innerHTML = "";
+          seedsCard.body.style.display = "flex";
+          seedsCard.body.style.flexDirection = "column";
+          seedsCard.body.style.gap = "12px";
+          const seedRarities = sortByRarityOrder(Array.from(seedsByRarity.keys()));
+          if (seedRarities.length === 0) {
+            const noSeeds = document.createElement("div");
+            noSeeds.textContent = "Nenhuma semente dispon\xEDvel na loja.";
+            noSeeds.style.opacity = "0.7";
+            noSeeds.style.textAlign = "center";
+            noSeeds.style.padding = "12px";
+            seedsCard.body.appendChild(noSeeds);
+          } else {
+            for (const rarity2 of seedRarities) {
+              const items = seedsByRarity.get(rarity2);
+              const raritySection = document.createElement("div");
+              raritySection.style.marginBottom = "4px";
+              const header = createRaritySectionHeader(rarity2, items.length);
+              raritySection.appendChild(header);
+              const itemsList = document.createElement("div");
+              itemsList.style.display = "flex";
+              itemsList.style.flexDirection = "column";
+              itemsList.style.gap = "6px";
+              itemsList.style.paddingLeft = "4px";
+              for (const item of items) {
+                createItemRow(
+                  itemsList,
+                  item.id,
+                  item.name,
+                  item.config,
+                  (config) => setSeedConfig(item.id, config),
+                  ui,
+                  "seed"
+                );
+              }
+              raritySection.appendChild(itemsList);
+              seedsCard.body.appendChild(raritySection);
+            }
+          }
+          const eggsByRarity = await groupEggsByRarity(settings, eggs);
+          eggsCard.body.innerHTML = "";
+          eggsCard.body.style.display = "flex";
+          eggsCard.body.style.flexDirection = "column";
+          eggsCard.body.style.gap = "12px";
+          const eggRarities = sortByRarityOrder(Array.from(eggsByRarity.keys()));
+          if (eggRarities.length === 0) {
+            const noEggs = document.createElement("div");
+            noEggs.textContent = "Nenhum ovo dispon\xEDvel na loja.";
+            noEggs.style.opacity = "0.7";
+            noEggs.style.textAlign = "center";
+            noEggs.style.padding = "12px";
+            eggsCard.body.appendChild(noEggs);
+          } else {
+            for (const rarity2 of eggRarities) {
+              const items = eggsByRarity.get(rarity2);
+              const raritySection = document.createElement("div");
+              raritySection.style.marginBottom = "4px";
+              const header = createRaritySectionHeader(rarity2, items.length);
+              raritySection.appendChild(header);
+              const itemsList = document.createElement("div");
+              itemsList.style.display = "flex";
+              itemsList.style.flexDirection = "column";
+              itemsList.style.gap = "6px";
+              itemsList.style.paddingLeft = "4px";
+              for (const item of items) {
+                createItemRow(
+                  itemsList,
+                  item.id,
+                  item.name,
+                  item.config,
+                  (config) => setEggConfig(item.id, config),
+                  ui,
+                  "egg"
+                );
+              }
+              raritySection.appendChild(itemsList);
+              eggsCard.body.appendChild(raritySection);
+            }
+          }
+        } catch (error) {
+          console.error("[AutoBuy] Error loading items from NotifierService:", error);
+          seedsCard.body.innerHTML = "";
+          eggsCard.body.innerHTML = "";
+          const errorMsg = document.createElement("div");
+          errorMsg.textContent = "Erro ao carregar itens. Tente novamente.";
+          errorMsg.style.color = "#f87171";
+          errorMsg.style.textAlign = "center";
+          errorMsg.style.padding = "12px";
+          seedsCard.body.appendChild(errorMsg.cloneNode(true));
+          eggsCard.body.appendChild(errorMsg);
+        }
+      })();
     });
     ui.addTab("manual", "\u{1F6CD}\uFE0F Compra Manual", (view) => {
       view.innerHTML = "";
@@ -41393,18 +41432,60 @@ next: ${next}`;
       itemLabel.textContent = "Item:";
       itemLabel.style.fontWeight = "600";
       const itemSelect = ui.select({ width: "160px" });
-      const updateItemOptions = () => {
+      let cachedSeeds = [];
+      let cachedEggs = [];
+      const updateItemOptions = async () => {
         itemSelect.innerHTML = "";
-        const items = typeSelect.value === "seed" ? AVAILABLE_SEEDS : AVAILABLE_EGGS;
-        for (const item of items) {
-          const opt = document.createElement("option");
-          opt.value = item;
-          opt.textContent = typeSelect.value === "egg" ? getEggDisplayName(item) : item;
-          itemSelect.appendChild(opt);
+        const loadingOpt = document.createElement("option");
+        loadingOpt.value = "";
+        loadingOpt.textContent = "Carregando...";
+        loadingOpt.disabled = true;
+        itemSelect.appendChild(loadingOpt);
+        try {
+          if (typeSelect.value === "seed") {
+            if (cachedSeeds.length === 0) {
+              cachedSeeds = await getAvailableSeeds();
+            }
+            itemSelect.innerHTML = "";
+            for (const seed of cachedSeeds) {
+              const opt = document.createElement("option");
+              opt.value = seed.id;
+              opt.textContent = seed.name;
+              itemSelect.appendChild(opt);
+            }
+          } else {
+            if (cachedEggs.length === 0) {
+              cachedEggs = await getAvailableEggs();
+            }
+            itemSelect.innerHTML = "";
+            for (const egg of cachedEggs) {
+              const opt = document.createElement("option");
+              opt.value = egg.id;
+              opt.textContent = egg.name;
+              itemSelect.appendChild(opt);
+            }
+          }
+          if (itemSelect.options.length === 0) {
+            const emptyOpt = document.createElement("option");
+            emptyOpt.value = "";
+            emptyOpt.textContent = "Nenhum item dispon\xEDvel";
+            emptyOpt.disabled = true;
+            itemSelect.appendChild(emptyOpt);
+          }
+        } catch (error) {
+          console.error("[AutoBuy] Error loading items for quick buy:", error);
+          itemSelect.innerHTML = "";
+          const errorOpt = document.createElement("option");
+          errorOpt.value = "";
+          errorOpt.textContent = "Erro ao carregar";
+          errorOpt.disabled = true;
+          itemSelect.appendChild(errorOpt);
         }
       };
-      typeSelect.addEventListener("change", updateItemOptions);
-      updateItemOptions();
+      typeSelect.addEventListener("change", () => {
+        updateItemOptions().catch(console.error);
+      });
+      updateItemOptions().catch(console.error);
       itemRow.append(itemLabel, itemSelect);
       quickCard.body.appendChild(itemRow);
       const qtyRow = document.createElement("div");

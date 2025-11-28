@@ -15,60 +15,12 @@ export interface AutoBuySettings {
   selectedEggs: Record<string, AutoBuyItemConfig>;
 }
 
-export const AVAILABLE_SEEDS = [
-  "Carrot",
-  "Sunflower",
-  "Wheat",
-  "Corn",
-  "Pepper",
-  "Lychee",
-  "Starweaver",
-  "Moonbinder",
-  "Dawnbinder",
-  "Strawberry",
-  "Tomato",
-  "Pumpkin",
-  "Watermelon",
-  "Blueberry",
-  "Tulip",
-  "Marigold",
-  "Coconut",
-  "Banana",
-  "Sakura",
-  "Mushroom",
-  "Cactus",
-  "Bamboo",
-  "Grape",
-  "Lemon",
-  "Mango",
-  "Dragonfruit",
-  "Cherry",
-] as const;
-
-export const AVAILABLE_EGGS = [
-  "CommonEgg",
-  "UncommonEgg",
-  "RareEgg",
-  "EpicEgg",
-  "LegendaryEgg",
-  "MythicalEgg",
-] as const;
-
-export type SeedType = typeof AVAILABLE_SEEDS[number] | string;
-export type EggType = typeof AVAILABLE_EGGS[number] | string;
-
-const EGG_DISPLAY_NAMES: Record<string, string> = {
-  CommonEgg: "Common Egg",
-  UncommonEgg: "Uncommon Egg",
-  RareEgg: "Rare Egg",
-  EpicEgg: "Epic Egg",
-  LegendaryEgg: "Legendary Egg",
-  MythicalEgg: "Mythical Egg",
-};
-
-export function getEggDisplayName(eggId: string): string {
-  return EGG_DISPLAY_NAMES[eggId] || eggId;
-}
+// Note: AVAILABLE_SEEDS and AVAILABLE_EGGS have been removed.
+// Items are now fetched dynamically from NotifierService which reads
+// from the game's shop data (Atoms.shop.shops). This ensures:
+// - No hardcoded items that don't exist in the game
+// - No missing items that exist in the game
+// - Automatic updates when new items are added
 
 function getDefaultSettings(): AutoBuySettings {
   return {
