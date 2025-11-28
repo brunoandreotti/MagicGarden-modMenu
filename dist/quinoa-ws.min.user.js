@@ -5687,9 +5687,9 @@
     let selectedIdx = null;
     let lastInfo = emptySlotInfo();
     let curSig = gardenObjectSignature(cur);
-    const listeners4 = /* @__PURE__ */ new Set();
+    const listeners5 = /* @__PURE__ */ new Set();
     const notify = () => {
-      for (const fn of listeners4) {
+      for (const fn of listeners5) {
         try {
           fn(lastInfo);
         } catch {
@@ -5925,11 +5925,11 @@
         return lastInfo;
       },
       onChange(cb) {
-        listeners4.add(cb);
-        return () => listeners4.delete(cb);
+        listeners5.add(cb);
+        return () => listeners5.delete(cb);
       },
       stop() {
-        listeners4.clear();
+        listeners5.clear();
       },
       recompute() {
         recomputeAndNotify();
@@ -19301,9 +19301,9 @@ try{importScripts("${abs}")}catch(e){}
     let sortedIdx = null;
     let selectedIdx = null;
     let lastPrice = null;
-    const listeners4 = /* @__PURE__ */ new Set();
+    const listeners5 = /* @__PURE__ */ new Set();
     const notify = () => {
-      for (const fn of listeners4) try {
+      for (const fn of listeners5) try {
         fn();
       } catch {
       }
@@ -19402,11 +19402,11 @@ try{importScripts("${abs}")}catch(e){}
         return lastPrice;
       },
       onChange(cb) {
-        listeners4.add(cb);
-        return () => listeners4.delete(cb);
+        listeners5.add(cb);
+        return () => listeners5.delete(cb);
       },
       stop() {
-        listeners4.clear();
+        listeners5.clear();
       }
     };
   }
@@ -40661,10 +40661,630 @@ next: ${next}`;
     view.appendChild(wrapper);
   }
 
+  // src/store/auto-buy.ts
+  var STORAGE_KEY = "mg_autobuy_settings";
+  var AVAILABLE_SEEDS = [
+    "Carrot",
+    "Sunflower",
+    "Wheat",
+    "Corn",
+    "Pepper",
+    "Lychee",
+    "Starweaver",
+    "Moonbinder",
+    "Dawnbinder",
+    "Strawberry",
+    "Tomato",
+    "Pumpkin",
+    "Watermelon",
+    "Blueberry",
+    "Tulip",
+    "Marigold",
+    "Coconut",
+    "Banana",
+    "Sakura",
+    "Mushroom",
+    "Cactus",
+    "Bamboo",
+    "Grape",
+    "Lemon",
+    "Mango",
+    "Dragonfruit",
+    "Cherry"
+  ];
+  var AVAILABLE_EGGS = [
+    "CommonEgg",
+    "UncommonEgg",
+    "RareEgg",
+    "EpicEgg",
+    "LegendaryEgg",
+    "MythicalEgg"
+  ];
+  var EGG_DISPLAY_NAMES = {
+    CommonEgg: "Common Egg",
+    UncommonEgg: "Uncommon Egg",
+    RareEgg: "Rare Egg",
+    EpicEgg: "Epic Egg",
+    LegendaryEgg: "Legendary Egg",
+    MythicalEgg: "Mythical Egg"
+  };
+  function getEggDisplayName(eggId) {
+    return EGG_DISPLAY_NAMES[eggId] || eggId;
+  }
+  function getDefaultSettings() {
+    return {
+      enabled: false,
+      playSound: true,
+      selectedSeeds: {},
+      selectedEggs: {}
+    };
+  }
+  function loadAutoBuySettings() {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return {
+          enabled: typeof parsed.enabled === "boolean" ? parsed.enabled : false,
+          playSound: typeof parsed.playSound === "boolean" ? parsed.playSound : true,
+          selectedSeeds: parsed.selectedSeeds && typeof parsed.selectedSeeds === "object" ? parsed.selectedSeeds : {},
+          selectedEggs: parsed.selectedEggs && typeof parsed.selectedEggs === "object" ? parsed.selectedEggs : {}
+        };
+      }
+    } catch (error) {
+      console.error("[AutoBuy] Failed to load settings:", error);
+    }
+    return getDefaultSettings();
+  }
+  function saveAutoBuySettings(settings) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+    } catch (error) {
+      console.error("[AutoBuy] Failed to save settings:", error);
+    }
+  }
+  var listeners4 = /* @__PURE__ */ new Set();
+  var currentSettings = loadAutoBuySettings();
+  function getAutoBuySettings() {
+    return currentSettings;
+  }
+  function updateAutoBuySettings(partial) {
+    currentSettings = { ...currentSettings, ...partial };
+    saveAutoBuySettings(currentSettings);
+    notifyListeners2();
+  }
+  function setSeedConfig(seedId, config) {
+    currentSettings = {
+      ...currentSettings,
+      selectedSeeds: {
+        ...currentSettings.selectedSeeds,
+        [seedId]: config
+      }
+    };
+    saveAutoBuySettings(currentSettings);
+    notifyListeners2();
+  }
+  function setEggConfig(eggId, config) {
+    currentSettings = {
+      ...currentSettings,
+      selectedEggs: {
+        ...currentSettings.selectedEggs,
+        [eggId]: config
+      }
+    };
+    saveAutoBuySettings(currentSettings);
+    notifyListeners2();
+  }
+  function notifyListeners2() {
+    for (const listener of listeners4) {
+      try {
+        listener(currentSettings);
+      } catch (error) {
+        console.error("[AutoBuy] Listener error:", error);
+      }
+    }
+  }
+
+  // src/services/shop.ts
+  var PURCHASE_DELAY_MS = 100;
+  function sleep2(ms) {
+    return new Promise((resolve2) => setTimeout(resolve2, ms));
+  }
+  var ShopService = {
+    /**
+     * Purchase a single seed
+     */
+    async purchaseSeed(species) {
+      try {
+        sendToGame({ type: "PurchaseSeed", species });
+        return true;
+      } catch (error) {
+        console.error("[ShopService] Failed to purchase seed:", error);
+        return false;
+      }
+    },
+    /**
+     * Purchase a single egg
+     */
+    async purchaseEgg(eggId) {
+      try {
+        sendToGame({ type: "PurchaseEgg", eggId });
+        return true;
+      } catch (error) {
+        console.error("[ShopService] Failed to purchase egg:", error);
+        return false;
+      }
+    },
+    /**
+     * Purchase multiple seeds with delay between each
+     */
+    async purchaseMultipleSeeds(species, quantity) {
+      let purchased = 0;
+      for (let i = 0; i < quantity; i++) {
+        const success = await this.purchaseSeed(species);
+        if (success) {
+          purchased++;
+        }
+        if (i < quantity - 1) {
+          await sleep2(PURCHASE_DELAY_MS);
+        }
+      }
+      return purchased;
+    },
+    /**
+     * Purchase multiple eggs with delay between each
+     */
+    async purchaseMultipleEggs(eggId, quantity) {
+      let purchased = 0;
+      for (let i = 0; i < quantity; i++) {
+        const success = await this.purchaseEgg(eggId);
+        if (success) {
+          purchased++;
+        }
+        if (i < quantity - 1) {
+          await sleep2(PURCHASE_DELAY_MS);
+        }
+      }
+      return purchased;
+    },
+    /**
+     * Execute auto-buy based on current settings
+     * Called when restock is detected
+     */
+    async executeAutoBuy(settings) {
+      const autoBuySettings = settings ?? getAutoBuySettings();
+      if (!autoBuySettings.enabled) {
+        return { seedsPurchased: {}, eggsPurchased: {} };
+      }
+      const seedsPurchased = {};
+      const eggsPurchased = {};
+      for (const [seedId, config] of Object.entries(autoBuySettings.selectedSeeds)) {
+        if (config.enabled && config.quantity > 0) {
+          const purchased = await this.purchaseMultipleSeeds(seedId, config.quantity);
+          if (purchased > 0) {
+            seedsPurchased[seedId] = purchased;
+          }
+          await sleep2(PURCHASE_DELAY_MS);
+        }
+      }
+      for (const [eggId, config] of Object.entries(autoBuySettings.selectedEggs)) {
+        if (config.enabled && config.quantity > 0) {
+          const purchased = await this.purchaseMultipleEggs(eggId, config.quantity);
+          if (purchased > 0) {
+            eggsPurchased[eggId] = purchased;
+          }
+          await sleep2(PURCHASE_DELAY_MS);
+        }
+      }
+      console.log("[AutoBuy] Purchase complete:", { seedsPurchased, eggsPurchased });
+      return { seedsPurchased, eggsPurchased };
+    }
+  };
+
+  // src/ui/menus/auto-buy.ts
+  var restockListenerInitialized = false;
+  var lastShopsState = null;
+  function initRestockListener() {
+    if (restockListenerInitialized) return;
+    restockListenerInitialized = true;
+    Atoms.shop.shops.onChange(async (next) => {
+      if (!next) return;
+      const settings = getAutoBuySettings();
+      if (!settings.enabled) {
+        lastShopsState = next;
+        return;
+      }
+      const isRestock = detectRestock(lastShopsState, next);
+      lastShopsState = next;
+      if (isRestock) {
+        console.log("[AutoBuy] Restock detected, executing auto-buy...");
+        const result = await ShopService.executeAutoBuy(settings);
+        const totalPurchased = Object.values(result.seedsPurchased).reduce((a, b) => a + b, 0) + Object.values(result.eggsPurchased).reduce((a, b) => a + b, 0);
+        if (totalPurchased > 0 && settings.playSound) {
+          try {
+            await audio.notify("shops");
+          } catch (error) {
+            console.error("[AutoBuy] Failed to play sound:", error);
+          }
+        }
+        if (totalPurchased > 0) {
+          console.log(`[AutoBuy] Purchased ${totalPurchased} items`);
+        }
+      }
+    });
+    Atoms.shop.shops.get().then((state2) => {
+      lastShopsState = state2;
+    });
+  }
+  function detectRestock(prev, next) {
+    if (!prev) return false;
+    if (!next) return false;
+    try {
+      const prevStr = JSON.stringify(prev);
+      const nextStr = JSON.stringify(next);
+      if (prevStr !== nextStr) {
+        const prevSeeds = prev?.seed || {};
+        const nextSeeds = next?.seed || {};
+        const prevEggs = prev?.egg || {};
+        const nextEggs = next?.egg || {};
+        for (const key2 of Object.keys(nextSeeds)) {
+          const prevQty = prevSeeds[key2]?.quantity ?? prevSeeds[key2]?.stock ?? 0;
+          const nextQty = nextSeeds[key2]?.quantity ?? nextSeeds[key2]?.stock ?? 0;
+          if (nextQty > prevQty && prevQty === 0) {
+            return true;
+          }
+        }
+        for (const key2 of Object.keys(nextEggs)) {
+          const prevQty = prevEggs[key2]?.quantity ?? prevEggs[key2]?.stock ?? 0;
+          const nextQty = nextEggs[key2]?.quantity ?? nextEggs[key2]?.stock ?? 0;
+          if (nextQty > prevQty && prevQty === 0) {
+            return true;
+          }
+        }
+        const prevRestockTime = prev?.restockTime ?? prev?.nextRestock;
+        const nextRestockTime = next?.restockTime ?? next?.nextRestock;
+        if (prevRestockTime && nextRestockTime && prevRestockTime !== nextRestockTime) {
+          return true;
+        }
+      }
+    } catch (error) {
+      console.error("[AutoBuy] Error detecting restock:", error);
+    }
+    return false;
+  }
+  function createSwitch2(initialChecked, onToggle) {
+    const wrap = document.createElement("label");
+    wrap.style.display = "inline-flex";
+    wrap.style.alignItems = "center";
+    wrap.style.cursor = "pointer";
+    wrap.style.userSelect = "none";
+    const input = document.createElement("input");
+    input.type = "checkbox";
+    input.checked = initialChecked;
+    input.className = "qmm-switch";
+    input.addEventListener("change", () => {
+      onToggle?.(input.checked);
+    });
+    wrap.appendChild(input);
+    return { wrap, input };
+  }
+  function createItemRow(container, itemId, displayName, config, onConfigChange, ui) {
+    const currentConfig = config || { enabled: false, quantity: 999 };
+    const row = document.createElement("div");
+    row.style.display = "grid";
+    row.style.gridTemplateColumns = "auto 1fr auto";
+    row.style.alignItems = "center";
+    row.style.gap = "10px";
+    row.style.padding = "8px 12px";
+    row.style.borderRadius = "8px";
+    row.style.background = currentConfig.enabled ? "rgba(122, 162, 255, 0.1)" : "rgba(255, 255, 255, 0.03)";
+    row.style.border = currentConfig.enabled ? "1px solid rgba(122, 162, 255, 0.3)" : "1px solid rgba(255, 255, 255, 0.08)";
+    row.style.transition = "background 0.2s ease, border-color 0.2s ease";
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = currentConfig.enabled;
+    checkbox.className = "qmm-check";
+    checkbox.style.transform = "scale(1.2)";
+    const label2 = document.createElement("span");
+    label2.textContent = displayName;
+    label2.style.fontWeight = "500";
+    label2.style.color = currentConfig.enabled ? "#e7eef7" : "#b9c3cf";
+    const qtyWrap = document.createElement("div");
+    qtyWrap.style.display = "flex";
+    qtyWrap.style.alignItems = "center";
+    qtyWrap.style.gap = "6px";
+    const qtyLabel = document.createElement("span");
+    qtyLabel.textContent = "Qty:";
+    qtyLabel.style.opacity = "0.7";
+    qtyLabel.style.fontSize = "12px";
+    const qtyInput = ui.inputNumber(1, 9999, 1, currentConfig.quantity);
+    qtyInput.style.width = "70px";
+    qtyInput.disabled = !currentConfig.enabled;
+    qtyWrap.append(qtyLabel, qtyInput.wrap || qtyInput);
+    const updateConfig = () => {
+      const newConfig = {
+        enabled: checkbox.checked,
+        quantity: parseInt(qtyInput.value, 10) || 999
+      };
+      onConfigChange(newConfig);
+      row.style.background = newConfig.enabled ? "rgba(122, 162, 255, 0.1)" : "rgba(255, 255, 255, 0.03)";
+      row.style.border = newConfig.enabled ? "1px solid rgba(122, 162, 255, 0.3)" : "1px solid rgba(255, 255, 255, 0.08)";
+      label2.style.color = newConfig.enabled ? "#e7eef7" : "#b9c3cf";
+      qtyInput.disabled = !newConfig.enabled;
+    };
+    checkbox.addEventListener("change", updateConfig);
+    qtyInput.addEventListener("change", updateConfig);
+    row.append(checkbox, label2, qtyWrap);
+    container.appendChild(row);
+  }
+  function renderAutoBuyMenu(root) {
+    const ui = new Menu({ id: "auto-buy", compact: true, windowSelector: ".qws-win" });
+    initRestockListener();
+    ui.addTab("config", "\u2699\uFE0F Configuration", (view) => {
+      view.innerHTML = "";
+      const settings = loadAutoBuySettings();
+      const container = document.createElement("div");
+      container.style.display = "flex";
+      container.style.flexDirection = "column";
+      container.style.gap = "16px";
+      container.style.maxHeight = "54vh";
+      container.style.overflowY = "auto";
+      container.style.padding = "4px";
+      const mainCard = ui.card("\u{1F6D2} Auto-Buy Settings", { tone: "muted" });
+      mainCard.body.style.display = "flex";
+      mainCard.body.style.flexDirection = "column";
+      mainCard.body.style.gap = "12px";
+      const enableRow = document.createElement("div");
+      enableRow.style.display = "flex";
+      enableRow.style.alignItems = "center";
+      enableRow.style.justifyContent = "space-between";
+      enableRow.style.padding = "10px 12px";
+      enableRow.style.borderRadius = "10px";
+      enableRow.style.background = "rgba(255, 255, 255, 0.05)";
+      enableRow.style.border = "1px solid rgba(255, 255, 255, 0.1)";
+      const enableLabel = document.createElement("div");
+      enableLabel.innerHTML = `
+      <div style="font-weight: 600;">Auto-compra no Restock</div>
+      <div style="font-size: 12px; opacity: 0.7;">Compra automaticamente quando a loja atualizar</div>
+    `;
+      const enableSwitch = createSwitch2(settings.enabled, (checked) => {
+        updateAutoBuySettings({ enabled: checked });
+      });
+      enableRow.append(enableLabel, enableSwitch.wrap);
+      mainCard.body.appendChild(enableRow);
+      const soundRow = document.createElement("div");
+      soundRow.style.display = "flex";
+      soundRow.style.alignItems = "center";
+      soundRow.style.justifyContent = "space-between";
+      soundRow.style.padding = "10px 12px";
+      soundRow.style.borderRadius = "10px";
+      soundRow.style.background = "rgba(255, 255, 255, 0.05)";
+      soundRow.style.border = "1px solid rgba(255, 255, 255, 0.1)";
+      const soundLabel = document.createElement("div");
+      soundLabel.innerHTML = `
+      <div style="font-weight: 600;">\u{1F514} Tocar som ao comprar</div>
+      <div style="font-size: 12px; opacity: 0.7;">Notifica\xE7\xE3o sonora quando compras s\xE3o feitas</div>
+    `;
+      const soundSwitch = createSwitch2(settings.playSound, (checked) => {
+        updateAutoBuySettings({ playSound: checked });
+      });
+      soundRow.append(soundLabel, soundSwitch.wrap);
+      mainCard.body.appendChild(soundRow);
+      container.appendChild(mainCard.root);
+      const seedsCard = ui.card("\u{1F331} Sementes", { tone: "muted" });
+      seedsCard.body.style.display = "flex";
+      seedsCard.body.style.flexDirection = "column";
+      seedsCard.body.style.gap = "8px";
+      for (const seedId of AVAILABLE_SEEDS) {
+        createItemRow(
+          seedsCard.body,
+          seedId,
+          seedId,
+          settings.selectedSeeds[seedId],
+          (config) => setSeedConfig(seedId, config),
+          ui
+        );
+      }
+      container.appendChild(seedsCard.root);
+      const eggsCard = ui.card("\u{1F95A} Ovos", { tone: "muted" });
+      eggsCard.body.style.display = "flex";
+      eggsCard.body.style.flexDirection = "column";
+      eggsCard.body.style.gap = "8px";
+      for (const eggId of AVAILABLE_EGGS) {
+        createItemRow(
+          eggsCard.body,
+          eggId,
+          getEggDisplayName(eggId),
+          settings.selectedEggs[eggId],
+          (config) => setEggConfig(eggId, config),
+          ui
+        );
+      }
+      container.appendChild(eggsCard.root);
+      const infoCard = ui.card("\u2139\uFE0F Informa\xE7\xF5es", { tone: "muted" });
+      infoCard.body.style.fontSize = "13px";
+      infoCard.body.style.opacity = "0.8";
+      infoCard.body.style.lineHeight = "1.5";
+      infoCard.body.innerHTML = `
+      <ul style="margin: 0; padding-left: 20px;">
+        <li>O Auto-Buy detecta quando a loja faz restock</li>
+        <li>Compra automaticamente os itens selecionados</li>
+        <li>Define a quantidade m\xE1xima que deseja comprar</li>
+        <li>Se n\xE3o houver estoque suficiente, compra o dispon\xEDvel</li>
+        <li>As configura\xE7\xF5es s\xE3o salvas automaticamente</li>
+      </ul>
+    `;
+      container.appendChild(infoCard.root);
+      view.appendChild(container);
+    });
+    ui.addTab("manual", "\u{1F6CD}\uFE0F Compra Manual", (view) => {
+      view.innerHTML = "";
+      const container = document.createElement("div");
+      container.style.display = "flex";
+      container.style.flexDirection = "column";
+      container.style.gap = "16px";
+      container.style.maxHeight = "54vh";
+      container.style.overflowY = "auto";
+      container.style.padding = "4px";
+      const manualCard = ui.card("\u{1F6CD}\uFE0F Compra Manual", { tone: "muted" });
+      manualCard.body.style.display = "flex";
+      manualCard.body.style.flexDirection = "column";
+      manualCard.body.style.gap = "12px";
+      const description = document.createElement("div");
+      description.textContent = "Compre itens manualmente sem esperar pelo restock.";
+      description.style.opacity = "0.8";
+      description.style.marginBottom = "8px";
+      manualCard.body.appendChild(description);
+      const buyConfigBtn = ui.btn("\u{1F6D2} Comprar itens configurados", {
+        variant: "primary",
+        fullWidth: true,
+        onClick: async () => {
+          buyConfigBtn.disabled = true;
+          buyConfigBtn.textContent = "Comprando...";
+          try {
+            const settings = getAutoBuySettings();
+            const result = await ShopService.executeAutoBuy({
+              ...settings,
+              enabled: true
+              // Force enabled for manual buy
+            });
+            const totalPurchased = Object.values(result.seedsPurchased).reduce((a, b) => a + b, 0) + Object.values(result.eggsPurchased).reduce((a, b) => a + b, 0);
+            if (totalPurchased > 0) {
+              statusText.textContent = `\u2705 Comprados ${totalPurchased} itens!`;
+              statusText.style.color = "#4ade80";
+              if (settings.playSound) {
+                try {
+                  await audio.notify("shops");
+                } catch {
+                }
+              }
+            } else {
+              statusText.textContent = "\u26A0\uFE0F Nenhum item configurado para comprar";
+              statusText.style.color = "#fbbf24";
+            }
+          } catch (error) {
+            statusText.textContent = "\u274C Erro ao comprar";
+            statusText.style.color = "#f87171";
+            console.error("[AutoBuy] Manual buy error:", error);
+          }
+          buyConfigBtn.disabled = false;
+          buyConfigBtn.textContent = "\u{1F6D2} Comprar itens configurados";
+          setTimeout(() => {
+            statusText.textContent = "";
+          }, 3e3);
+        }
+      });
+      manualCard.body.appendChild(buyConfigBtn);
+      const statusText = document.createElement("div");
+      statusText.style.textAlign = "center";
+      statusText.style.fontWeight = "600";
+      statusText.style.minHeight = "20px";
+      manualCard.body.appendChild(statusText);
+      container.appendChild(manualCard.root);
+      const quickCard = ui.card("\u26A1 Compra R\xE1pida", { tone: "muted" });
+      quickCard.body.style.display = "flex";
+      quickCard.body.style.flexDirection = "column";
+      quickCard.body.style.gap = "12px";
+      const typeRow = document.createElement("div");
+      typeRow.style.display = "flex";
+      typeRow.style.alignItems = "center";
+      typeRow.style.gap = "10px";
+      const typeLabel = document.createElement("span");
+      typeLabel.textContent = "Tipo:";
+      typeLabel.style.fontWeight = "600";
+      const typeSelect = ui.select({ width: "120px" });
+      const optSeed = document.createElement("option");
+      optSeed.value = "seed";
+      optSeed.textContent = "Semente";
+      const optEgg = document.createElement("option");
+      optEgg.value = "egg";
+      optEgg.textContent = "Ovo";
+      typeSelect.append(optSeed, optEgg);
+      typeRow.append(typeLabel, typeSelect);
+      quickCard.body.appendChild(typeRow);
+      const itemRow = document.createElement("div");
+      itemRow.style.display = "flex";
+      itemRow.style.alignItems = "center";
+      itemRow.style.gap = "10px";
+      const itemLabel = document.createElement("span");
+      itemLabel.textContent = "Item:";
+      itemLabel.style.fontWeight = "600";
+      const itemSelect = ui.select({ width: "160px" });
+      const updateItemOptions = () => {
+        itemSelect.innerHTML = "";
+        const items = typeSelect.value === "seed" ? AVAILABLE_SEEDS : AVAILABLE_EGGS;
+        for (const item of items) {
+          const opt = document.createElement("option");
+          opt.value = item;
+          opt.textContent = typeSelect.value === "egg" ? getEggDisplayName(item) : item;
+          itemSelect.appendChild(opt);
+        }
+      };
+      typeSelect.addEventListener("change", updateItemOptions);
+      updateItemOptions();
+      itemRow.append(itemLabel, itemSelect);
+      quickCard.body.appendChild(itemRow);
+      const qtyRow = document.createElement("div");
+      qtyRow.style.display = "flex";
+      qtyRow.style.alignItems = "center";
+      qtyRow.style.gap = "10px";
+      const qtyLabel = document.createElement("span");
+      qtyLabel.textContent = "Quantidade:";
+      qtyLabel.style.fontWeight = "600";
+      const qtyInput = ui.inputNumber(1, 9999, 1, 10);
+      qtyRow.append(qtyLabel, qtyInput.wrap || qtyInput);
+      quickCard.body.appendChild(qtyRow);
+      const quickBuyBtn = ui.btn("\u26A1 Comprar Agora", {
+        variant: "primary",
+        fullWidth: true,
+        onClick: async () => {
+          const type = typeSelect.value;
+          const item = itemSelect.value;
+          const quantity = parseInt(qtyInput.value, 10) || 1;
+          quickBuyBtn.disabled = true;
+          quickBuyBtn.textContent = "Comprando...";
+          try {
+            let purchased = 0;
+            if (type === "seed") {
+              purchased = await ShopService.purchaseMultipleSeeds(item, quantity);
+            } else {
+              purchased = await ShopService.purchaseMultipleEggs(item, quantity);
+            }
+            if (purchased > 0) {
+              quickStatusText.textContent = `\u2705 Comprados ${purchased} ${type === "seed" ? "sementes" : "ovos"}!`;
+              quickStatusText.style.color = "#4ade80";
+            } else {
+              quickStatusText.textContent = "\u26A0\uFE0F N\xE3o foi poss\xEDvel comprar";
+              quickStatusText.style.color = "#fbbf24";
+            }
+          } catch (error) {
+            quickStatusText.textContent = "\u274C Erro ao comprar";
+            quickStatusText.style.color = "#f87171";
+            console.error("[AutoBuy] Quick buy error:", error);
+          }
+          quickBuyBtn.disabled = false;
+          quickBuyBtn.textContent = "\u26A1 Comprar Agora";
+          setTimeout(() => {
+            quickStatusText.textContent = "";
+          }, 3e3);
+        }
+      });
+      quickCard.body.appendChild(quickBuyBtn);
+      const quickStatusText = document.createElement("div");
+      quickStatusText.style.textAlign = "center";
+      quickStatusText.style.fontWeight = "600";
+      quickStatusText.style.minHeight = "20px";
+      quickCard.body.appendChild(quickStatusText);
+      container.appendChild(quickCard.root);
+      view.appendChild(container);
+    });
+    ui.mount(root);
+  }
+
   // src/utils/antiafk.ts
   function createAntiAfkController(deps) {
     const STOP_EVENTS = ["visibilitychange", "blur", "focus", "focusout", "pagehide", "freeze", "resume"];
-    const listeners4 = [];
+    const listeners5 = [];
     function swallowAll() {
       const add = (target, t) => {
         const h = (e) => {
@@ -40672,7 +41292,7 @@ next: ${next}`;
           e.preventDefault?.();
         };
         target.addEventListener(t, h, { capture: true });
-        listeners4.push({ t, h, target });
+        listeners5.push({ t, h, target });
       };
       STOP_EVENTS.forEach((t) => {
         add(document, t);
@@ -40680,11 +41300,11 @@ next: ${next}`;
       });
     }
     function unswallowAll() {
-      for (const { t, h, target } of listeners4) try {
+      for (const { t, h, target } of listeners5) try {
         target.removeEventListener(t, h, { capture: true });
       } catch {
       }
-      listeners4.length = 0;
+      listeners5.length = 0;
     }
     const docProto = Object.getPrototypeOf(document);
     const saved = {
@@ -40840,6 +41460,7 @@ next: ${next}`;
         register("pets", "\u{1F43E} Pets", renderPetsMenu);
         register("room", "\u{1F3E0} Room", renderRoomMenu);
         register("locker", "\u{1F512} Locker", renderLockerMenu);
+        register("auto-buy", "\u{1F6D2} Auto-Buy", renderAutoBuyMenu);
         register("alerts", "\u{1F514} Alerts", renderNotifierMenu);
         register("calculator", "\u{1F913} Calculator", renderCalculatorMenu);
         register("stats", "\u{1F4CA} Stats", renderStatsMenu);

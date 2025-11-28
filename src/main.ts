@@ -13,6 +13,7 @@ import { renderNotifierMenu } from "./ui/menus/notifier";
 import { renderToolsMenu } from "./ui/menus/tools";
 import { renderRoomMenu } from "./ui/menus/room";
 import { renderKeybindsMenu } from "./ui/menus/keybinds";
+import { renderAutoBuyMenu } from "./ui/menus/auto-buy";
 
 import { PlayerService } from "./services/player";
 import { createAntiAfkController } from "./utils/antiafk";
@@ -45,6 +46,7 @@ import { ensureSpritesReady } from "./core/spriteBootstrap";
       register('pets', '🐾 Pets', renderPetsMenu);
       register('room', '🏠 Room', renderRoomMenu);
       register('locker', '🔒 Locker', renderLockerMenu);
+      register('auto-buy', '🛒 Auto-Buy', renderAutoBuyMenu);
       register('alerts',  '🔔 Alerts', renderNotifierMenu)
       register('calculator', '🤓 Calculator', renderCalculatorMenu);
       register('stats', '📊 Stats', renderStatsMenu);
