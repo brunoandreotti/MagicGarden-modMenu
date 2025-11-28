@@ -40696,6 +40696,7 @@ next: ${next}`;
 
   // src/store/auto-buy.ts
   var STORAGE_KEY = "mg_autobuy_settings";
+  var DEFAULT_QUANTITY = 20;
   function getDefaultSettings() {
     return {
       enabled: false,
@@ -40709,11 +40710,26 @@ next: ${next}`;
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
+        const migrateConfig = (config) => ({
+          enabled: config.enabled ?? false,
+          quantity: config.quantity ?? DEFAULT_QUANTITY,
+          buyMax: config.buyMax ?? false
+        });
         return {
           enabled: typeof parsed.enabled === "boolean" ? parsed.enabled : false,
           playSound: typeof parsed.playSound === "boolean" ? parsed.playSound : true,
-          selectedSeeds: parsed.selectedSeeds && typeof parsed.selectedSeeds === "object" ? parsed.selectedSeeds : {},
-          selectedEggs: parsed.selectedEggs && typeof parsed.selectedEggs === "object" ? parsed.selectedEggs : {}
+          selectedSeeds: parsed.selectedSeeds && typeof parsed.selectedSeeds === "object" ? Object.fromEntries(
+            Object.entries(parsed.selectedSeeds).map(([id, cfg]) => [
+              id,
+              migrateConfig(cfg)
+            ])
+          ) : {},
+          selectedEggs: parsed.selectedEggs && typeof parsed.selectedEggs === "object" ? Object.fromEntries(
+            Object.entries(parsed.selectedEggs).map(([id, cfg]) => [
+              id,
+              migrateConfig(cfg)
+            ])
+          ) : {}
         };
       }
     } catch (error) {
@@ -40772,8 +40788,36 @@ next: ${next}`;
 
   // src/services/shop.ts
   var PURCHASE_DELAY_MS = 100;
+  var DEFAULT_STOCK_FALLBACK = 999;
   function sleep2(ms) {
     return new Promise((resolve2) => setTimeout(resolve2, ms));
+  }
+  async function getShopStock() {
+    try {
+      const shopsData = await Atoms.shop.shops.get();
+      const seeds = {};
+      const eggs = {};
+      if (shopsData?.seed?.inventory && Array.isArray(shopsData.seed.inventory)) {
+        for (const item of shopsData.seed.inventory) {
+          if (item?.species) {
+            const stock = item.initialStock ?? item.stock ?? DEFAULT_STOCK_FALLBACK;
+            seeds[item.species] = stock;
+          }
+        }
+      }
+      if (shopsData?.egg?.inventory && Array.isArray(shopsData.egg.inventory)) {
+        for (const item of shopsData.egg.inventory) {
+          if (item?.eggId) {
+            const stock = item.initialStock ?? item.stock ?? DEFAULT_STOCK_FALLBACK;
+            eggs[item.eggId] = stock;
+          }
+        }
+      }
+      return { seeds, eggs };
+    } catch (error) {
+      console.error("[ShopService] Failed to get shop stock:", error);
+      return { seeds: {}, eggs: {} };
+    }
   }
   var ShopService = {
     /**
@@ -40843,9 +40887,23 @@ next: ${next}`;
       }
       const seedsPurchased = {};
       const eggsPurchased = {};
+      const shopStock = await getShopStock();
       for (const [seedId, config] of Object.entries(autoBuySettings.selectedSeeds)) {
-        if (config.enabled && config.quantity > 0) {
-          const purchased = await this.purchaseMultipleSeeds(seedId, config.quantity);
+        if (!config.enabled) continue;
+        let quantityToBuy = config.quantity;
+        if (config.buyMax) {
+          const stockAvailable = shopStock.seeds[seedId] ?? 0;
+          if (stockAvailable === 0) {
+            console.log(`[AutoBuy] ${seedId} has buyMax enabled but no stock available`);
+            continue;
+          }
+          quantityToBuy = stockAvailable;
+          console.log(`[AutoBuy] ${seedId} buyMax enabled, purchasing ${quantityToBuy} units (max stock)`);
+        } else {
+          console.log(`[AutoBuy] ${seedId} purchasing fixed quantity: ${quantityToBuy} units`);
+        }
+        if (quantityToBuy > 0) {
+          const purchased = await this.purchaseMultipleSeeds(seedId, quantityToBuy);
           if (purchased > 0) {
             seedsPurchased[seedId] = purchased;
           }
@@ -40853,8 +40911,21 @@ next: ${next}`;
         }
       }
       for (const [eggId, config] of Object.entries(autoBuySettings.selectedEggs)) {
-        if (config.enabled && config.quantity > 0) {
-          const purchased = await this.purchaseMultipleEggs(eggId, config.quantity);
+        if (!config.enabled) continue;
+        let quantityToBuy = config.quantity;
+        if (config.buyMax) {
+          const stockAvailable = shopStock.eggs[eggId] ?? 0;
+          if (stockAvailable === 0) {
+            console.log(`[AutoBuy] ${eggId} has buyMax enabled but no stock available`);
+            continue;
+          }
+          quantityToBuy = stockAvailable;
+          console.log(`[AutoBuy] ${eggId} buyMax enabled, purchasing ${quantityToBuy} units (max stock)`);
+        } else {
+          console.log(`[AutoBuy] ${eggId} purchasing fixed quantity: ${quantityToBuy} units`);
+        }
+        if (quantityToBuy > 0) {
+          const purchased = await this.purchaseMultipleEggs(eggId, quantityToBuy);
           if (purchased > 0) {
             eggsPurchased[eggId] = purchased;
           }
@@ -40867,6 +40938,7 @@ next: ${next}`;
   };
 
   // src/ui/menus/auto-buy.ts
+  var DEFAULT_QUANTITY2 = 20;
   var RARITY_ORDER3 = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythical", "Divine", "Celestial"];
   var RARITY_MAP = {
     mythical: "Mythical",
@@ -40894,7 +40966,7 @@ next: ${next}`;
           id: speciesId,
           name: row.name,
           rarity: normalizeRarity(row.rarity || "Common"),
-          config: { enabled: false, quantity: 999 }
+          config: { enabled: false, quantity: DEFAULT_QUANTITY2, buyMax: false }
         });
       }
     }
@@ -40909,7 +40981,7 @@ next: ${next}`;
           id: eggId,
           name: row.name,
           rarity: normalizeRarity(row.rarity || "Common"),
-          config: { enabled: false, quantity: 999 }
+          config: { enabled: false, quantity: DEFAULT_QUANTITY2, buyMax: false }
         });
       }
     }
@@ -40938,7 +41010,7 @@ next: ${next}`;
     const grouped = /* @__PURE__ */ new Map();
     const seeds = availableSeeds ?? await getAvailableSeeds();
     for (const seed of seeds) {
-      const config = settings.selectedSeeds[seed.id] || { enabled: false, quantity: 999 };
+      const config = settings.selectedSeeds[seed.id] || { enabled: false, quantity: DEFAULT_QUANTITY2, buyMax: false };
       seed.config = config;
       if (!grouped.has(seed.rarity)) {
         grouped.set(seed.rarity, []);
@@ -40951,7 +41023,7 @@ next: ${next}`;
     const grouped = /* @__PURE__ */ new Map();
     const eggs = availableEggs ?? await getAvailableEggs();
     for (const egg of eggs) {
-      const config = settings.selectedEggs[egg.id] || { enabled: false, quantity: 999 };
+      const config = settings.selectedEggs[egg.id] || { enabled: false, quantity: DEFAULT_QUANTITY2, buyMax: false };
       egg.config = config;
       if (!grouped.has(egg.rarity)) {
         grouped.set(egg.rarity, []);
@@ -41074,11 +41146,16 @@ next: ${next}`;
     const inputWithWrap = input;
     return inputWithWrap.wrap ?? input;
   }
+  function setInputDisabledState(input, disabled) {
+    input.disabled = disabled;
+    input.style.opacity = disabled ? "0.5" : "1";
+    input.style.cursor = disabled ? "not-allowed" : "text";
+  }
   function createItemRow(container, itemId, displayName, config, onConfigChange, ui, itemType = "seed") {
-    const currentConfig = config || { enabled: false, quantity: 999 };
+    const currentConfig = config || { enabled: false, quantity: DEFAULT_QUANTITY2, buyMax: false };
     const row = document.createElement("div");
     row.style.display = "grid";
-    row.style.gridTemplateColumns = "36px 1fr auto auto";
+    row.style.gridTemplateColumns = "36px 1fr auto auto auto";
     row.style.alignItems = "center";
     row.style.gap = "10px";
     row.style.padding = "8px 10px";
@@ -41130,6 +41207,24 @@ next: ${next}`;
     checkbox.checked = currentConfig.enabled;
     checkbox.className = "qmm-switch";
     checkbox.style.cursor = "pointer";
+    const maxContainer = document.createElement("div");
+    maxContainer.style.display = "flex";
+    maxContainer.style.alignItems = "center";
+    maxContainer.style.gap = "4px";
+    const maxCheckbox = document.createElement("input");
+    maxCheckbox.type = "checkbox";
+    maxCheckbox.id = `autobuy-max-${itemType}-${itemId}`;
+    maxCheckbox.checked = currentConfig.buyMax || false;
+    maxCheckbox.style.cursor = "pointer";
+    const maxLabel = document.createElement("label");
+    maxLabel.textContent = "Max";
+    maxLabel.htmlFor = `autobuy-max-${itemType}-${itemId}`;
+    maxLabel.style.fontSize = "12px";
+    maxLabel.style.fontWeight = "600";
+    maxLabel.style.cursor = "pointer";
+    maxLabel.style.userSelect = "none";
+    maxLabel.style.opacity = "0.8";
+    maxContainer.append(maxCheckbox, maxLabel);
     const qtyWrap = document.createElement("div");
     qtyWrap.style.display = "flex";
     qtyWrap.style.alignItems = "center";
@@ -41139,16 +41234,20 @@ next: ${next}`;
     qtyLabel.style.fontSize = "13px";
     qtyLabel.style.opacity = "0.8";
     qtyLabel.style.fontWeight = "600";
-    const qtyInput = ui.inputNumber(1, 9999, 1, currentConfig.quantity);
+    const qtyInput = ui.inputNumber(1, 9999, 1, currentConfig.quantity || DEFAULT_QUANTITY2);
     qtyInput.style.width = "70px";
     qtyInput.style.padding = "4px 8px";
     qtyInput.style.fontSize = "13px";
     qtyInput.disabled = !currentConfig.enabled;
+    if (currentConfig.buyMax) {
+      setInputDisabledState(qtyInput, true);
+    }
     qtyWrap.append(qtyLabel, getInputWrapper(qtyInput));
     const updateConfig = () => {
       const newConfig = {
         enabled: checkbox.checked,
-        quantity: parseInt(qtyInput.value, 10) || 999
+        quantity: parseInt(qtyInput.value, 10) || DEFAULT_QUANTITY2,
+        buyMax: maxCheckbox.checked
       };
       onConfigChange(newConfig);
       row.style.background = newConfig.enabled ? "rgba(122, 162, 255, 0.1)" : "rgba(0, 0, 0, 0.15)";
@@ -41157,12 +41256,17 @@ next: ${next}`;
       qtyInput.disabled = !newConfig.enabled;
     };
     checkbox.addEventListener("change", updateConfig);
+    maxCheckbox.addEventListener("change", () => {
+      const shouldDisable = maxCheckbox.checked || !checkbox.checked;
+      setInputDisabledState(qtyInput, shouldDisable);
+      updateConfig();
+    });
     qtyInput.addEventListener("change", updateConfig);
     label2.addEventListener("click", () => {
       checkbox.checked = !checkbox.checked;
       updateConfig();
     });
-    row.append(iconContainer, label2, checkbox, qtyWrap);
+    row.append(iconContainer, label2, checkbox, maxContainer, qtyWrap);
     container.appendChild(row);
   }
   function createRaritySectionHeader(rarity2, itemCount) {
