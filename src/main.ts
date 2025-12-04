@@ -11,19 +11,40 @@ import { renderPetsMenu } from "./ui/menus/pets";
 import { renderMiscMenu } from "./ui/menus/misc";
 import { renderNotifierMenu } from "./ui/menus/notifier";
 import { renderToolsMenu } from "./ui/menus/tools";
+import { renderEditorMenu } from "./ui/menus/editor";
 import { renderRoomMenu } from "./ui/menus/room";
 import { renderKeybindsMenu } from "./ui/menus/keybinds";
 import { renderAutoBuyMenu } from "./ui/menus/auto-buy";
 
+import { ensureSpritesReady } from "./services/assetManifest";
+import { prefetchManifest, recordAssetUrlHint } from "./services/assetManifest";
+
 import { PlayerService } from "./services/player";
 import { createAntiAfkController } from "./utils/antiafk";
-import { initSprites, Sprites  } from "./core/sprite";
-import { ensureSpritesReady } from "./core/spriteBootstrap";
+import { initSprites  } from "./core/sprite";
+import { EditorService } from "./services/editor";
+
+import { initGameVersion } from "./utils/gameVersion";
+import { warmUpAllSprites } from "./utils/sprites";
+import { loadTileSheet } from "./utils/tileSheet";
+
+const TILE_SHEETS_TO_PRELOAD = ["plants", "mutations", "pets", "animations", "items", "decor"] as const;
+
+async function preloadAllTiles(): Promise<void> {
+  const tasks = TILE_SHEETS_TO_PRELOAD.map(async (base) => {
+    const result = await loadTileSheet(base);
+    return result;
+  });
+
+  await Promise.all(tasks);
+}
 
 (async function () {
   "use strict";
 
   installPageWebSocketHook();
+  initGameVersion();
+  void prefetchManifest({ registerSprites: true, waitForVersionMs: 3_000 });
 
   initSprites({
     config: {
@@ -31,14 +52,17 @@ import { ensureSpritesReady } from "./core/spriteBootstrap";
       skipAlphaBelow: 1,
       tolerance: 0.005,
     },
-    onAsset: (url, kind) => {
-      window.dispatchEvent(new CustomEvent("mg:sprite-detected", { detail: { url, kind } }));
-      // ex: logger / store
-      // console.log(`[Sprites] ${kind}:`, url);
+    onAsset: (url) => {
+      recordAssetUrlHint(url);
+      void prefetchManifest({ registerSprites: true });
     },
   });
 
   await ensureSpritesReady();
+  await preloadAllTiles();
+  await warmUpAllSprites();
+
+  EditorService.init();
 
   mountHUD({
     onRegister(register) {
@@ -49,6 +73,7 @@ import { ensureSpritesReady } from "./core/spriteBootstrap";
       register('auto-buy', '🛒 Auto-Buy', renderAutoBuyMenu);
       register('alerts',  '🔔 Alerts', renderNotifierMenu)
       register('calculator', '🤓 Calculator', renderCalculatorMenu);
+      register('editor', '📝 Editor', renderEditorMenu);
       register('stats', '📊 Stats', renderStatsMenu);
       register('misc', '🧩 Misc', renderMiscMenu);
       register('keybinds', '⌨️ Keybinds', renderKeybindsMenu);
@@ -67,3 +92,4 @@ import { ensureSpritesReady } from "./core/spriteBootstrap";
   antiAfk.start();
 
 })();
+

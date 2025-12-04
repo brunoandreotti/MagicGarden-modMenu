@@ -482,6 +482,14 @@ function installHarvestCropInterceptor() {
     StatsService.incrementShopStat("toolsBought");
   });
 
+  registerMessageInterceptor("PickupDecor", () => {
+    const decorLocked = lockerRestrictionsService.isDecorPickupLocked();
+    if (decorLocked) {
+      console.log("[PickupDecor] Blocked by decor picker");
+      return { kind: "drop" };
+    }
+  });
+
   registerMessageInterceptor("HatchEgg", () => {
     const locked = lockerRestrictionsService.isEggLocked(latestEggId);
     if (locked) {
