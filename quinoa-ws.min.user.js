@@ -47253,7 +47253,7 @@ next: ${next}`;
   }
 
   // src/store/auto-buy.ts
-  var STORAGE_KEY = "mg_autobuy_settings";
+  var STORAGE_KEY2 = "mg_autobuy_settings";
   var DEFAULT_QUANTITY = 20;
   function getDefaultSettings() {
     return {
@@ -47265,7 +47265,7 @@ next: ${next}`;
   }
   function loadAutoBuySettings() {
     try {
-      const saved = localStorage.getItem(STORAGE_KEY);
+      const saved = localStorage.getItem(STORAGE_KEY2);
       if (saved) {
         const parsed = JSON.parse(saved);
         const migrateConfig = (config) => ({
@@ -47297,7 +47297,7 @@ next: ${next}`;
   }
   function saveAutoBuySettings(settings) {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+      localStorage.setItem(STORAGE_KEY2, JSON.stringify(settings));
     } catch (error) {
       console.error("[AutoBuy] Failed to save settings:", error);
     }
