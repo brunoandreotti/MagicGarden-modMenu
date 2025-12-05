@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Arie's Mod
 // @namespace    Quinoa
-// @version      2.7.30
+// @version      2.7.31
 // @match        https://1227719606223765687.discordsays.com/*
 // @match        https://magiccircle.gg/r/*
 // @match        https://magicgarden.gg/r/*
@@ -5693,9 +5693,9 @@
     let selectedIdx = null;
     let lastInfo = emptySlotInfo();
     let curSig = gardenObjectSignature(cur);
-    const listeners5 = /* @__PURE__ */ new Set();
+    const listeners6 = /* @__PURE__ */ new Set();
     const notify2 = () => {
-      for (const fn of listeners5) {
+      for (const fn of listeners6) {
         try {
           fn(lastInfo);
         } catch {
@@ -5920,11 +5920,11 @@
         return lastInfo;
       },
       onChange(cb) {
-        listeners5.add(cb);
-        return () => listeners5.delete(cb);
+        listeners6.add(cb);
+        return () => listeners6.delete(cb);
       },
       stop() {
-        listeners5.clear();
+        listeners6.clear();
       },
       recompute() {
         recomputeAndNotify();
@@ -21710,9 +21710,9 @@
     let sortedIdx = null;
     let selectedIdx = null;
     let lastPrice = null;
-    const listeners5 = /* @__PURE__ */ new Set();
+    const listeners6 = /* @__PURE__ */ new Set();
     const notify2 = () => {
-      for (const fn of listeners5) try {
+      for (const fn of listeners6) try {
         fn();
       } catch {
       }
@@ -21811,11 +21811,11 @@
         return lastPrice;
       },
       onChange(cb) {
-        listeners5.add(cb);
-        return () => listeners5.delete(cb);
+        listeners6.add(cb);
+        return () => listeners6.delete(cb);
       },
       stop() {
-        listeners5.clear();
+        listeners6.clear();
       }
     };
   }
@@ -46287,7 +46287,7 @@ next: ${next}`;
       console.error("[AutoBuy] Failed to save settings:", error);
     }
   }
-  var listeners4 = /* @__PURE__ */ new Set();
+  var listeners5 = /* @__PURE__ */ new Set();
   var currentSettings = loadAutoBuySettings();
   function getAutoBuySettings() {
     return currentSettings;
@@ -46320,7 +46320,7 @@ next: ${next}`;
     notifyListeners2();
   }
   function notifyListeners2() {
-    for (const listener of listeners4) {
+    for (const listener of listeners5) {
       try {
         listener(currentSettings);
       } catch (error) {
@@ -46332,7 +46332,7 @@ next: ${next}`;
   // src/services/shop.ts
   var PURCHASE_DELAY_MS = 100;
   var DEFAULT_STOCK_FALLBACK = 999;
-  function sleep2(ms) {
+  function sleep3(ms) {
     return new Promise((resolve2) => setTimeout(resolve2, ms));
   }
   async function getShopStock() {
@@ -46398,7 +46398,7 @@ next: ${next}`;
           purchased++;
         }
         if (i < quantity - 1) {
-          await sleep2(PURCHASE_DELAY_MS);
+          await sleep3(PURCHASE_DELAY_MS);
         }
       }
       return purchased;
@@ -46414,7 +46414,7 @@ next: ${next}`;
           purchased++;
         }
         if (i < quantity - 1) {
-          await sleep2(PURCHASE_DELAY_MS);
+          await sleep3(PURCHASE_DELAY_MS);
         }
       }
       return purchased;
@@ -46450,7 +46450,7 @@ next: ${next}`;
           if (purchased > 0) {
             seedsPurchased[seedId] = purchased;
           }
-          await sleep2(PURCHASE_DELAY_MS);
+          await sleep3(PURCHASE_DELAY_MS);
         }
       }
       for (const [eggId, config] of Object.entries(autoBuySettings.selectedEggs)) {
@@ -46472,7 +46472,7 @@ next: ${next}`;
           if (purchased > 0) {
             eggsPurchased[eggId] = purchased;
           }
-          await sleep2(PURCHASE_DELAY_MS);
+          await sleep3(PURCHASE_DELAY_MS);
         }
       }
       console.log("[AutoBuy] Purchase complete:", { seedsPurchased, eggsPurchased });
@@ -47228,7 +47228,7 @@ next: ${next}`;
   // src/utils/antiafk.ts
   function createAntiAfkController(deps) {
     const STOP_EVENTS = ["visibilitychange", "blur", "focus", "focusout", "pagehide", "freeze", "resume"];
-    const listeners5 = [];
+    const listeners6 = [];
     function swallowAll() {
       const add = (target, t) => {
         const h = (e) => {
@@ -47236,7 +47236,7 @@ next: ${next}`;
           e.preventDefault?.();
         };
         target.addEventListener(t, h, { capture: true });
-        listeners5.push({ t, h, target });
+        listeners6.push({ t, h, target });
       };
       STOP_EVENTS.forEach((t) => {
         add(document, t);
@@ -47244,11 +47244,11 @@ next: ${next}`;
       });
     }
     function unswallowAll() {
-      for (const { t, h, target } of listeners5) try {
+      for (const { t, h, target } of listeners6) try {
         target.removeEventListener(t, h, { capture: true });
       } catch {
       }
-      listeners5.length = 0;
+      listeners6.length = 0;
     }
     const docProto = Object.getPrototypeOf(document);
     const saved = {
