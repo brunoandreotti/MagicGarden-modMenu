@@ -1,12 +1,13 @@
 // src/ui/menus/locker.ts
 import { Menu } from "../menu";
 import { Sprites } from "../../core/sprite";
-import { ensureSpritesReady } from "../../core/spriteBootstrap";
+import { ensureSpritesReady } from "../../services/assetManifest";
 import {
   plantCatalog,
   tileRefsMutations,
   tileRefsMutationLabels,
 } from "../../data/hardcoded-data.clean";
+import { loadTileSheet } from "../../utils/tileSheet";
 import {
   lockerService,
   type LockerSettingsPersisted,
@@ -23,7 +24,7 @@ import {
   percentToRequiredFriendCount,
 } from "../../services/lockerRestrictions";
 import { Atoms } from "../../store/atoms";
-import { createShopSprite } from "../../utils/shopSprites";
+import { createShopSprite } from "../../utils/sprites";
 
 // Reuse tag definitions from garden menu for consistency
 type VisualTag = "Gold" | "Rainbow";
@@ -399,8 +400,10 @@ async function fetchPlantSprite(seedKey: string): Promise<string | null> {
 
   for (const base of bases) {
     try {
-      const tile = await Sprites.getTile(base, index, "canvas");
-      const canvas = tile?.data as HTMLCanvasElement | undefined;
+      const tiles = await loadTileSheet(base);
+      const tile = tiles.find(t => t.index === index);
+      if (!tile) continue;
+      const canvas = Sprites.toCanvas(tile);
       if (canvas && canvas.width > 0 && canvas.height > 0) {
         const copy = document.createElement("canvas");
         copy.width = canvas.width;
@@ -569,8 +572,10 @@ async function fetchMutationSprite(tag: WeatherTag): Promise<string | null> {
   if (index == null || !base) return null;
 
   try {
-    const tile = await Sprites.getTile(base, index, "canvas");
-    const canvas = tile?.data as HTMLCanvasElement | undefined;
+    const tiles = await loadTileSheet(base);
+    const tile = tiles.find(t => t.index === index);
+    if (!tile) return null;
+    const canvas = Sprites.toCanvas(tile);
     if (canvas && canvas.width > 0 && canvas.height > 0) {
       const copy = document.createElement("canvas");
       copy.width = canvas.width;
@@ -686,7 +691,7 @@ function createDefaultSettings(): LockerSettingsState {
     minScalePct: 50,
     maxScalePct: 100,
     scaleLockMode: "RANGE",
-    lockMode: "BLOCK",
+    lockMode: "LOCK",
     minInventory: 91,
     avoidNormal: false,
     visualMutations: new Set<VisualTag>(),
@@ -741,7 +746,7 @@ function hydrateSettingsFromPersisted(
   target.minScalePct = minScale;
   target.maxScalePct = maxScale;
   target.scaleLockMode = mode;
-  target.lockMode = src.lockMode === "ALLOW" ? "ALLOW" : "BLOCK";
+  target.lockMode = src.lockMode === "ALLOW" ? "ALLOW" : "LOCK";
   target.minInventory = Math.max(0, Math.min(999, Math.round(src.minInventory ?? 91)));
   target.avoidNormal = src.avoidNormal === true || src.includeNormal === false;
   target.visualMutations.clear();
@@ -799,7 +804,7 @@ function serializeSettingsState(state: LockerSettingsState): LockerSettingsPersi
     minScalePct: minScale,
     maxScalePct: maxScale,
     scaleLockMode: mode,
-    lockMode: state.lockMode === "ALLOW" ? "ALLOW" : "BLOCK",
+    lockMode: state.lockMode === "ALLOW" ? "ALLOW" : "LOCK",
     minInventory: Math.max(0, Math.min(999, Math.round(state.minInventory || 91))),
     avoidNormal: !!state.avoidNormal,
     includeNormal: !state.avoidNormal,
@@ -1133,6 +1138,14 @@ function createLockerSettingsCard(
   card.style.minHeight = "0";
   card.style.width = "min(760px, 100%)";
 
+  let recipesTitleElement: HTMLDivElement | null = null;
+
+  const updateRecipeTitleText = () => {
+    if (!recipesTitleElement) return;
+    const prefix = state.lockMode === "ALLOW" ? "Allow" : "Lock";
+    recipesTitleElement.textContent = `${prefix} when any recipe row matches (OR between rows)`;
+  };
+
   const makeSection = (titleText: string, content: HTMLElement) => {
     const section = document.createElement("div");
     section.style.display = "grid";
@@ -1165,11 +1178,11 @@ function createLockerSettingsCard(
     return row;
   };
 
-  type LockModeValue = "block" | "allow";
+  type LockModeValue = "lock" | "allow";
   const toLockMode = (value: LockModeValue): LockerLockMode =>
-    value === "allow" ? "ALLOW" : "BLOCK";
+    value === "allow" ? "ALLOW" : "LOCK";
   const fromLockMode = (mode: LockerLockMode): LockModeValue =>
-    mode === "ALLOW" ? "allow" : "block";
+    mode === "ALLOW" ? "allow" : "lock";
 
   const lockModeRow = centerRow();
   lockModeRow.style.flexDirection = "column";
@@ -1184,7 +1197,7 @@ function createLockerSettingsCard(
   let isProgrammaticLockMode = false;
   const lockModeSegmented = ui.segmented<LockModeValue>(
     [
-      { value: "block", label: "Block" },
+      { value: "lock", label: "Lock" },
       { value: "allow", label: "Allow" },
     ],
     fromLockMode(state.lockMode),
@@ -1213,6 +1226,7 @@ function createLockerSettingsCard(
       value === "allow"
         ? "Harvest only when every active filter category matches"
         : "Harvest is locked whenever any active filter matches";
+    updateRecipeTitleText();
   };
 
   const scaleRow = centerRow();
@@ -1616,7 +1630,8 @@ function createLockerSettingsCard(
   recipesHeader.style.width = "100%";
   recipesHeader.style.justifyContent = "space-between";
   const recipesTitle = document.createElement("div");
-  recipesTitle.textContent = "Lock when any recipe row matches (OR between rows)";
+  recipesTitleElement = recipesTitle;
+  updateRecipeTitleText();
   recipesTitle.style.fontWeight = "600";
   recipesTitle.style.opacity = "0.9";
   const btnAddRecipe = document.createElement("button");
@@ -2095,6 +2110,39 @@ function createRestrictionsTabRenderer(ui: Menu): LockerTabRenderer {
   card.body.append(sliderWrap, statusText);
   layout.append(card.root);
 
+  /* Decor picker locker */
+  const decorCard = ui.card("Decor pick locker", { align: "stretch" });
+  decorCard.root.style.width = "100%";
+
+  const decorRow = applyStyles(document.createElement("div"), {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: "12px",
+  });
+
+  const decorText = applyStyles(document.createElement("div"), {
+    display: "flex",
+    flexDirection: "column",
+    gap: "4px",
+  });
+  const decorSubtitle = document.createElement("div");
+  decorSubtitle.textContent = "Prevents placed decors from being picked up";
+  decorSubtitle.style.fontSize = "12.5px";
+  decorSubtitle.style.opacity = "0.85";
+  decorText.append(decorSubtitle);
+
+  const decorToggle = ui.switch(state.decorPickupLocked);
+  decorToggle.addEventListener("change", () => {
+    const locked = !!decorToggle.checked;
+    state.decorPickupLocked = locked;
+    lockerRestrictionsService.setDecorPickupLocked(locked);
+  });
+
+  decorRow.append(decorText, decorToggle);
+  decorCard.body.append(decorRow);
+  layout.append(decorCard.root);
+
   /* Egg hatch locker */
   const eggCard = ui.card("Egg hatch locker", { align: "stretch" });
   eggCard.root.style.width = "100%";
@@ -2106,59 +2154,101 @@ function createRestrictionsTabRenderer(ui: Menu): LockerTabRenderer {
   eggCard.body.append(eggList);
   layout.append(eggCard.root);
 
-  const renderEggList = () => {
+  const LOCKED_ICON = "🔒";
+  const UNLOCKED_ICON = "🔓";
+  const eggRowCache = new Map<
+    string,
+    {
+      row: HTMLDivElement;
+      toggle: HTMLButtonElement;
+      name: HTMLDivElement;
+    }
+  >();
+  const emptyEggPlaceholder = applyStyles(document.createElement("div"), {
+    opacity: "0.7",
+    fontSize: "12px",
+  });
+  emptyEggPlaceholder.textContent = "No eggs detected in shop.";
+
+  const updateEggToggleAppearance = (toggle: HTMLButtonElement, locked: boolean): void => {
+    toggle.textContent = locked ? LOCKED_ICON : UNLOCKED_ICON;
+    toggle.style.background = locked ? "#331616" : "#12301d";
+    toggle.style.color = locked ? "#fca5a5" : "#9ef7c3";
+  };
+
+  let renderEggList: () => void;
+
+  const createEggRow = (opt: { id: string; name: string }): {
+    row: HTMLDivElement;
+    toggle: HTMLButtonElement;
+    name: HTMLDivElement;
+  } => {
+    const row = applyStyles(document.createElement("div"), {
+      display: "grid",
+      gridTemplateColumns: "auto auto 1fr",
+      alignItems: "center",
+      gap: "10px",
+      padding: "8px 10px",
+      border: "1px solid #4445",
+      borderRadius: "10px",
+      background: "#0f1318",
+    });
+    const toggle = document.createElement("button");
+    toggle.type = "button";
+    toggle.style.border = "1px solid #4445";
+    toggle.style.borderRadius = "10px";
+    toggle.style.padding = "6px 10px";
+    toggle.style.fontSize = "14px";
+    toggle.style.fontWeight = "700";
+    toggle.addEventListener("click", () => {
+      const next = !Boolean(state.eggLocks?.[opt.id]);
+      state.eggLocks = { ...(state.eggLocks || {}), [opt.id]: next };
+      lockerRestrictionsService.setEggLock(opt.id, next);
+      renderEggList();
+    });
+
+    const sprite = createShopSprite("Egg", opt.id, { size: 32, fallback: "🥚" });
+    sprite.style.filter = "drop-shadow(0 1px 1px rgba(0,0,0,0.45))";
+
+    const name = document.createElement("div");
+    name.style.fontWeight = "600";
+    name.style.color = "#e7eef7";
+    row.append(toggle, sprite, name);
+
+    return { row, toggle, name };
+  };
+
+  renderEggList = () => {
     eggList.innerHTML = "";
     if (!eggOptions.length) {
-      const empty = document.createElement("div");
-      empty.textContent = "No eggs detected in shop.";
-      empty.style.opacity = "0.7";
-      empty.style.fontSize = "12px";
-      eggList.appendChild(empty);
+      eggList.appendChild(emptyEggPlaceholder);
       return;
     }
 
     const fragment = document.createDocumentFragment();
+    const seen = new Set<string>();
     eggOptions.forEach(opt => {
-      const row = applyStyles(document.createElement("div"), {
-        display: "grid",
-        gridTemplateColumns: "auto auto 1fr",
-        alignItems: "center",
-        gap: "10px",
-        padding: "8px 10px",
-        border: "1px solid #4445",
-        borderRadius: "10px",
-        background: "#0f1318",
-      });
-
-      const locked = !!state.eggLocks?.[opt.id];
-      const toggle = document.createElement("button");
-      toggle.type = "button";
-      toggle.textContent = locked ? "🔒" : "🔓";
-      toggle.style.border = "1px solid #4445";
-      toggle.style.borderRadius = "10px";
-      toggle.style.padding = "6px 10px";
-      toggle.style.fontSize = "14px";
-      toggle.style.fontWeight = "700";
-      toggle.style.background = locked ? "#331616" : "#12301d";
-      toggle.style.color = locked ? "#fca5a5" : "#9ef7c3";
-      toggle.onclick = () => {
-        const next = !locked;
-        state.eggLocks = { ...(state.eggLocks || {}), [opt.id]: next };
-        lockerRestrictionsService.setEggLock(opt.id, next);
-        renderEggList();
-      };
-
-      const sprite = createShopSprite("Egg", opt.id, { size: 32, fallback: "🥚" });
-      sprite.style.filter = "drop-shadow(0 1px 1px rgba(0,0,0,0.45))";
-
-      const name = document.createElement("div");
-      name.textContent = opt.name || opt.id;
-      name.style.fontWeight = "600";
-      name.style.color = "#e7eef7";
-
-      row.append(toggle, sprite, name);
-      fragment.appendChild(row);
+      const id = opt.id;
+      seen.add(id);
+      let entry = eggRowCache.get(id);
+      if (!entry) {
+        entry = createEggRow(opt);
+        eggRowCache.set(id, entry);
+      }
+      entry.name.textContent = opt.name || id;
+      const locked = !!state.eggLocks?.[id];
+      updateEggToggleAppearance(entry.toggle, locked);
+      fragment.appendChild(entry.row);
     });
+
+    for (const id of Array.from(eggRowCache.keys())) {
+      if (seen.has(id)) continue;
+      const entry = eggRowCache.get(id);
+      if (entry) {
+        entry.row.remove();
+      }
+      eggRowCache.delete(id);
+    }
 
     eggList.appendChild(fragment);
   };
@@ -2196,7 +2286,7 @@ function createRestrictionsTabRenderer(ui: Menu): LockerTabRenderer {
       return;
     }
 
-    statusBadge.textContent = allowed ? "Sale allowed" : "Sale blocked";
+    statusBadge.textContent = allowed ? "Sale allowed" : "Sale locked";
     setStatusTone(allowed ? "success" : "warn");
     statusText.textContent = allowed
       ? `Current bonus ${currentPct}% (${currentPlayers} players) meets the requirement (${requiredPct}%).`
@@ -2219,6 +2309,7 @@ function createRestrictionsTabRenderer(ui: Menu): LockerTabRenderer {
 
   const syncFromService = (next: typeof state) => {
     state = { ...next };
+    setCheck(decorToggle, state.decorPickupLocked);
     updateSliderValue(friendBonusPercentFromPlayers(state.minRequiredPlayers) ?? 0);
     updateStatus();
     renderEggList();

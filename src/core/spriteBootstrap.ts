@@ -1,3 +1,4 @@
+import { pageWindow } from "../utils/page-context";
 import { Sprites } from "./sprite";
 
 const INITIAL_TIMEOUT_MS = 12_000;
@@ -5,17 +6,12 @@ const POLL_INTERVAL_MS = 100;
 const LOG_PREFIX = "[SpritesBootstrap]";
 
 let bootPromise: Promise<void> | null = null;
-let listening = false;
-let refreshScheduled = false;
 let ready = false;
 
 export function ensureSpritesReady(): Promise<void> {
   if (typeof window === "undefined") {
     return Promise.resolve();
   }
-
-  startListening();
-
   if (!bootPromise) {
     enqueueBootstrap("initial");
   }
@@ -25,21 +21,6 @@ export function ensureSpritesReady(): Promise<void> {
 
 export function areSpritesReady(): boolean {
   return ready;
-}
-
-function startListening(): void {
-  if (listening || typeof window === "undefined") return;
-  listening = true;
-  window.addEventListener("mg:sprite-detected", handleSpriteDetected);
-}
-
-function handleSpriteDetected(): void {
-  if (refreshScheduled || typeof window === "undefined") return;
-  refreshScheduled = true;
-  window.setTimeout(() => {
-    refreshScheduled = false;
-    enqueueBootstrap("update");
-  }, 150);
 }
 
 function enqueueBootstrap(reason: string): void {
@@ -67,9 +48,15 @@ async function runBootstrap(reason: string): Promise<void> {
 
   const tasks: Promise<unknown>[] = [];
   try {
-    tasks.push(Sprites.loadTiles({ mode: "canvas" }));
+    tasks.push(
+      Sprites.preloadTilesGradually({
+        mode: "canvas",
+        batchSize: 1,
+        delayMs: 30,
+      }),
+    );
   } catch (error) {
-    console.warn(LOG_PREFIX, "loadTiles threw synchronously", { reason, error });
+    console.warn(LOG_PREFIX, "preloadTilesGradually threw synchronously", { reason, error });
   }
 
   try {
@@ -79,13 +66,6 @@ async function runBootstrap(reason: string): Promise<void> {
   }
 
   if (!tasks.length) return;
-
-  const results = await Promise.allSettled(tasks);
-  results.forEach((result) => {
-    if (result.status === "rejected") {
-      console.warn(LOG_PREFIX, "preload task failed", { reason, error: result.reason });
-    }
-  });
 }
 
 function hasTileSources(): boolean {
