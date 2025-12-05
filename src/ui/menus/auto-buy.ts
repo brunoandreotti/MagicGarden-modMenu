@@ -14,7 +14,7 @@ import {
 import { ShopService } from "../../services/shop";
 import { NotifierService, type ShopsSnapshot, type NotifierState } from "../../services/notifier";
 import { audio } from "../../utils/audio";
-import { createShopSprite } from "../../utils/shopSprites";
+import { createShopSprite } from "../../utils/sprites";
 
 // === Constants ===
 const DEFAULT_QUANTITY = 20;
