@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Arie's Mod
 // @namespace    Quinoa
-// @version      2.8.15
+// @version      2.8.11
 // @match        https://1227719606223765687.discordsays.com/*
 // @match        https://magiccircle.gg/r/*
 // @match        https://magicgarden.gg/r/*
@@ -24188,7 +24188,6 @@
     }
     return src.startsWith("data:") ? src : `data:image/png;base64,${src}`;
   })();
-  var VALUE_SUMMARY_ICON_BACKGROUND = VALUE_SUMMARY_ICON_SRC ? `url("${VALUE_SUMMARY_ICON_SRC}")` : "";
   function createDomSnapshot(entries) {
     return entries.map((entry) => entry.wrapper);
   }
@@ -24671,32 +24670,24 @@
     if (!summary.style.gap) {
       summary.style.gap = "0.25rem";
     }
-    if (VALUE_SUMMARY_ICON_BACKGROUND) {
+    if (VALUE_SUMMARY_ICON_SRC) {
       let iconEl = summary.querySelector(`.${VALUE_SUMMARY_ICON_CLASS}`);
-      if (iconEl && iconEl.tagName !== "SPAN") {
-        iconEl.remove();
-        iconEl = null;
-      }
       if (!iconEl) {
-        iconEl = document.createElement("span");
+        iconEl = document.createElement("img");
         iconEl.className = VALUE_SUMMARY_ICON_CLASS;
-        iconEl.setAttribute("aria-hidden", "true");
-        iconEl.style.width = "1.2rem";
-        iconEl.style.height = "1.2rem";
-        iconEl.style.flexShrink = "0";
-        iconEl.style.display = "inline-block";
-        iconEl.style.backgroundSize = "contain";
-        iconEl.style.backgroundRepeat = "no-repeat";
-        iconEl.style.backgroundPosition = "center";
-        iconEl.style.pointerEvents = "none";
-        iconEl.style.userSelect = "none";
+        iconEl.alt = "";
+        iconEl.decoding = "async";
+        iconEl.src = VALUE_SUMMARY_ICON_SRC;
+        Object.assign(iconEl.style, {
+          width: "1.2rem",
+          height: "1.2rem",
+          flexShrink: "0",
+          objectFit: "contain"
+        });
         summary.insertBefore(iconEl, summary.firstChild);
+      } else if (iconEl.src !== VALUE_SUMMARY_ICON_SRC) {
+        iconEl.src = VALUE_SUMMARY_ICON_SRC;
       }
-      if (iconEl && iconEl.style.backgroundImage !== VALUE_SUMMARY_ICON_BACKGROUND) {
-        iconEl.style.backgroundImage = VALUE_SUMMARY_ICON_BACKGROUND;
-      }
-    } else {
-      summary.querySelector(`.${VALUE_SUMMARY_ICON_CLASS}`)?.remove();
     }
     let textEl = summary.querySelector(`.${VALUE_SUMMARY_TEXT_CLASS}`);
     if (!textEl) {
@@ -45769,10 +45760,7 @@ next: ${next}`;
     };
   }
   var DEFAULT_SUPABASE_ROOM_CAPACITY = 6;
-  var DISCORD_ROOM_ID_REGEX = /^I-\d{17,19}-[A-Z]{2,3}-\d{17,19}(?:-\d{17,19})?$/;
-  function getPublicRoomCategory(roomId) {
-    return DISCORD_ROOM_ID_REGEX.test(roomId) ? "Discord" : "Web";
-  }
+  var SUPABASE_ROOM_CATEGORY = "Supabase";
   function transformSupabaseRoom(room) {
     const rawCount = Number.isFinite(room.playersCount) ? Math.floor(room.playersCount) : 0;
     const players = Math.max(0, rawCount);
@@ -45790,7 +45778,7 @@ next: ${next}`;
     return {
       name: room.id,
       idRoom: room.id,
-      category: getPublicRoomCategory(room.id),
+      category: SUPABASE_ROOM_CATEGORY,
       players: Math.min(players, capacity),
       capacity,
       isFull: players >= capacity,
@@ -46103,13 +46091,6 @@ next: ${next}`;
       return match[1];
     }
   }
-  var DISCORD_ROOM_DISPLAY_MAX_LENGTH = 12;
-  function formatRoomNameForDisplay(room) {
-    if (room.category === "Discord" && room.name.length > DISCORD_ROOM_DISPLAY_MAX_LENGTH) {
-      return `${room.name.slice(0, DISCORD_ROOM_DISPLAY_MAX_LENGTH)}\u2026`;
-    }
-    return room.name;
-  }
   function createRoomEntry(room, ui, options) {
     const isDiscord = RoomService.isDiscordActivity();
     const currentRoomCode = getCurrentRoomCode();
@@ -46268,8 +46249,7 @@ next: ${next}`;
     nameRow.style.alignItems = "center";
     nameRow.style.gap = "10px";
     const name = document.createElement("div");
-    name.textContent = formatRoomNameForDisplay(room);
-    name.title = room.name;
+    name.textContent = room.name;
     name.style.fontWeight = "600";
     name.style.fontSize = "16px";
     name.style.letterSpacing = "0.01em";
@@ -48176,41 +48156,41 @@ next: ${next}`;
     }
   }
   var listeners5 = /* @__PURE__ */ new Set();
-  var currentSettings = loadAutoBuySettings();
+  var currentSettings2 = loadAutoBuySettings();
   function getAutoBuySettings() {
-    return currentSettings;
+    return currentSettings2;
   }
   function updateAutoBuySettings(partial) {
-    currentSettings = { ...currentSettings, ...partial };
-    saveAutoBuySettings(currentSettings);
+    currentSettings2 = { ...currentSettings2, ...partial };
+    saveAutoBuySettings(currentSettings2);
     notifyListeners2();
   }
   function setSeedConfig(seedId, config) {
-    currentSettings = {
-      ...currentSettings,
+    currentSettings2 = {
+      ...currentSettings2,
       selectedSeeds: {
-        ...currentSettings.selectedSeeds,
+        ...currentSettings2.selectedSeeds,
         [seedId]: config
       }
     };
-    saveAutoBuySettings(currentSettings);
+    saveAutoBuySettings(currentSettings2);
     notifyListeners2();
   }
   function setEggConfig(eggId, config) {
-    currentSettings = {
-      ...currentSettings,
+    currentSettings2 = {
+      ...currentSettings2,
       selectedEggs: {
-        ...currentSettings.selectedEggs,
+        ...currentSettings2.selectedEggs,
         [eggId]: config
       }
     };
-    saveAutoBuySettings(currentSettings);
+    saveAutoBuySettings(currentSettings2);
     notifyListeners2();
   }
   function notifyListeners2() {
     for (const listener of listeners5) {
       try {
-        listener(currentSettings);
+        listener(currentSettings2);
       } catch (error) {
         console.error("[AutoBuy] Listener error:", error);
       }
