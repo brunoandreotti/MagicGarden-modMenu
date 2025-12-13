@@ -1,10 +1,9 @@
-// src/main.ts - teste
+// src/main.ts
 import { installPageWebSocketHook } from "./hooks/ws-hook";
 import { mountHUD, initWatchers } from "./ui/hud";
 
 import { renderDebugDataMenu } from "./ui/menus/debug-data";
 import { renderLockerMenu } from "./ui/menus/locker";
-import { renderPlayersMenu } from "./ui/menus/players";
 import { renderCalculatorMenu } from "./ui/menus/calculator";
 import { renderStatsMenu } from "./ui/menus/stats";
 import { renderPetsMenu } from "./ui/menus/pets";
@@ -15,6 +14,7 @@ import { renderToolsMenu } from "./ui/menus/tools";
 import { renderEditorMenu } from "./ui/menus/editor";
 import { renderRoomMenu } from "./ui/menus/room";
 import { renderKeybindsMenu } from "./ui/menus/keybinds";
+import { renderFriendsMenu } from "./ui/menus/friends";
 import { renderAutoBuyMenu } from "./ui/menus/auto-buy";
 
 import { ensureSpritesReady } from "./services/assetManifest";
@@ -31,6 +31,7 @@ import { loadTileSheet } from "./utils/tileSheet";
 import { migrateLocalStorageToAries } from "./utils/localStorage";
 import type { AriesModApi } from "./utils/ariesModApi";
 import { installAriesModApi } from "./utils/ariesModApi";
+import { startPlayerStateReportingWhenGameReady } from "./utils/payload";
 
 const ariesMod: AriesModApi = installAriesModApi();
 
@@ -74,7 +75,7 @@ async function preloadAllTiles(): Promise<void> {
 
   mountHUD({
     onRegister(register) {
-      register('players', '👥 Players', renderPlayersMenu);
+      register('players', '👥 Friends', renderFriendsMenu);
       register('pets', '🐾 Pets', renderPetsMenu);
       register('room', '🏠 Room', renderRoomMenu);
       register('locker', '🔒 Locker', renderLockerMenu);
@@ -101,5 +102,7 @@ async function preloadAllTiles(): Promise<void> {
   ariesMod.antiAfkController = antiAfk;
 
   antiAfk.start();
+
+  startPlayerStateReportingWhenGameReady();
 
 })();
