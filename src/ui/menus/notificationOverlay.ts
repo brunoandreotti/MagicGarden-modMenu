@@ -2,13 +2,13 @@
 import { NotifierService, type NotifierRule } from "../../services/notifier";
 import { ShopsService, type Kind as ShopKind } from "../../services/shops";
 import { audio, type PlaybackMode, type TriggerOverrides } from "../../utils/audio"; // ← utilise le singleton unifié
-import { createShopSprite, type ShopSpriteType } from "../../utils/sprites";
 import {
   eggNameFromId,          // NEW
   toolNameFromId,         // NEW
   decorNameFromId,
   seedNameFromSpecies
 } from "../../utils/catalogIndex";
+import { attachSpriteIcon } from "../spriteIconCache";
 
 /* ========= Types min ========= */
 type SeedItem  = { itemType: "Seed";  species: string; initialStock: number };
@@ -49,31 +49,51 @@ function iconOf(id: string, size = 24): HTMLElement {
     flex: `0 0 ${size}px`,
   });
 
-  const [rawType, rawId] = id.split(":") as [string | undefined, string | undefined];
-  const type: ShopSpriteType | null =
-    rawType === "Seed" || rawType === "Egg" || rawType === "Tool" || rawType === "Decor"
-      ? rawType
-      : null;
-
+  const [rawType] = id.split(":") as [string | undefined, string | undefined];
   const fallback =
-    type === "Seed" ? "🌱" :
-    type === "Egg"  ? "🥚" :
-    type === "Tool" ? "🧰" :
-    type === "Decor" ? "🏠" : "🔔";
+    rawType === "Seed" ? "seed" :
+    rawType === "Egg"  ? "egg" :
+    rawType === "Tool" ? "tool" :
+    rawType === "Decor" ? "decor" : "item";
 
-  if (type && rawId) {
-    const sprite = createShopSprite(type, rawId, {
-      size,
-      fallback,
-      alt: labelOf(id),
-    });
-    wrap.appendChild(sprite);
-  } else {
-    const span = document.createElement("span");
-    span.textContent = fallback;
-    span.style.fontSize = `${Math.max(10, size - 2)}px`;
-    span.setAttribute("aria-hidden", "true");
-    wrap.appendChild(span);
+  const span = document.createElement("span");
+  span.textContent = fallback;
+  span.style.fontSize = `${Math.max(10, size - 2)}px`;
+  span.setAttribute("aria-hidden", "true");
+  wrap.appendChild(span);
+
+  const categories =
+    rawType === "Seed" ? ["seed"] :
+    rawType === "Egg"  ? ["pet"] :
+    rawType === "Tool" ? ["item"] :
+    rawType === "Decor" ? ["decor"] : null;
+  if (categories) {
+    const label = labelOf(id);
+    const candidatesSet = new Set<string>();
+    const addCandidate = (value?: string | null) => {
+      if (!value) return;
+      const trimmed = value.trim();
+      if (!trimmed) return;
+      candidatesSet.add(trimmed);
+      candidatesSet.add(trimmed.replace(/\s+/g, ""));
+      const last = trimmed.split(/[./]/).pop();
+      if (last && last !== trimmed) {
+        candidatesSet.add(last);
+        candidatesSet.add(last.replace(/\s+/g, ""));
+      }
+    };
+    addCandidate(id.split(":")[1]);
+    addCandidate(label);
+    if (rawType) addCandidate(rawType);
+    const originals = Array.from(candidatesSet);
+    const iconized = originals
+      .map(value => value.replace(/icon$/i, ""))
+      .filter(Boolean)
+      .map(value => `${value}Icon`);
+    const candidates = Array.from(new Set([...originals, ...iconized])).filter(Boolean);
+    if (candidates.length) {
+      attachSpriteIcon(wrap, categories, candidates, size, "alerts-overlay");
+    }
   }
 
   return wrap;
@@ -552,6 +572,7 @@ class OverlayBarebone {
       title.textContent = labelOf(r.id);
       Object.assign(title.style, {
         fontWeight: "600",
+        fontSize: "12px",
         overflow: "hidden",
         textOverflow: "ellipsis",
         whiteSpace: "nowrap",
@@ -717,7 +738,7 @@ class OverlayBarebone {
       position: "absolute",
       top: "calc(100% + var(--chakra-space-2, 0.5rem))",
       right: "0",
-      width: "min(280px, 70vw)",        // ← largeur réduite (était 360px)
+      width: "min(340px, 80vw)",        // ← largeur réduite (était 360px)
       maxHeight: "50vh",
       overflow: "auto",
       overscrollBehavior: "contain",     // ← empêche le scroll de “remonter” au jeu
@@ -856,6 +877,58 @@ class OverlayBarebone {
     style(this.btn, { position: "relative" });
   }
 
+  private anchorIntoToolbar(toolbar: HTMLElement) {
+    this.applyToolbarLook(toolbar);
+
+    const cs = getComputedStyle(toolbar);
+    const isColumn = (cs.flexDirection || "").startsWith("column");
+    const gap = Number.parseFloat(cs.gap || cs.columnGap || cs.rowGap || "0") || 0;
+
+    if (cs.position === "static") {
+      toolbar.style.position = "relative";
+    }
+
+    const rect = toolbar.getBoundingClientRect();
+    const siblings = Array.from(toolbar.children).filter((c) => c !== this.slot) as HTMLElement[];
+    const last = siblings[siblings.length - 1];
+    const lastRect = last?.getBoundingClientRect();
+
+    const targetTop = isColumn
+      ? (lastRect ? (lastRect.bottom - rect.top + gap) : rect.height + gap)
+      : (lastRect ? (lastRect.top - rect.top + lastRect.height / 2) : rect.height / 2);
+    const targetLeft = isColumn
+      ? (lastRect ? (lastRect.left - rect.left + lastRect.width / 2) : rect.width / 2)
+      : (lastRect ? (lastRect.right - rect.left + gap) : rect.width + gap);
+
+    style(this.slot, {
+      position: "absolute",
+      top: `${targetTop}px`,
+      left: `${targetLeft}px`,
+      transform: isColumn ? "translate(-50%, 0)" : "translate(0, -50%)",
+      pointerEvents: "auto", // laisse les clics traverser vers le panel/bouton
+      margin: "0",
+    });
+    style(this.btn, { pointerEvents: "auto" });
+
+    if (this.slot.parentElement !== toolbar || this.slot.nextElementSibling) {
+      toolbar.appendChild(this.slot); // on reste dernier sans pousser le layout
+    }
+  }
+
+  private resetSlotPositioning() {
+    style(this.slot, {
+      position: "relative",
+      top: "",
+      left: "",
+      right: "",
+      bottom: "",
+      transform: "",
+      pointerEvents: "auto",
+      margin: "0",
+    });
+    style(this.btn, { pointerEvents: "auto" });
+  }
+
   private findAnchorBlockFromCanvas(c: HTMLCanvasElement): HTMLElement | null {
     try {
       const tabbable = c.closest("span[tabindex]");
@@ -892,12 +965,11 @@ class OverlayBarebone {
 
   private attachLeftOfTargetCanvas() {
     try {
+      this.resetSlotPositioning();
+
       const toolbar = this.findToolbarContainer();
       if (toolbar && (toolbar as any).isConnected) {
-        this.applyToolbarLook(toolbar);
-        if (this.slot.parentElement !== toolbar || this.slot.nextElementSibling) {
-          toolbar.appendChild(this.slot); // append to keep it at the end of the buttons row
-        }
+        this.anchorIntoToolbar(toolbar);
         return;
       }
 

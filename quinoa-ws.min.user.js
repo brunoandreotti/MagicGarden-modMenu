@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Arie's Mod
 // @namespace    Quinoa
-// @version      2.8.11
+// @version      2.99.05
 // @match        https://1227719606223765687.discordsays.com/*
 // @match        https://magiccircle.gg/r/*
 // @match        https://magicgarden.gg/r/*
@@ -17,2337 +17,677 @@
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @grant        GM_download
-// @connect      supabase.co
+// @connect      ariesmod-api.ariedam.fr
+// @connect      magicgarden.gg
 
 // @downloadURL  https://github.com/Ariedam64/MagicGarden-modMenu/raw/refs/heads/main/quinoa-ws.min.user.js
 // @updateURL    https://github.com/Ariedam64/MagicGarden-modMenu/raw/refs/heads/main/quinoa-ws.min.user.js
 // ==/UserScript==
 (() => {
-  var __create = Object.create;
   var __defProp = Object.defineProperty;
-  var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
   var __getOwnPropNames = Object.getOwnPropertyNames;
-  var __getProtoOf = Object.getPrototypeOf;
-  var __hasOwnProp = Object.prototype.hasOwnProperty;
   var __defNormalProp = (obj, key2, value) => key2 in obj ? __defProp(obj, key2, { enumerable: true, configurable: true, writable: true, value }) : obj[key2] = value;
-  var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, {
-    get: (a, b) => (typeof require !== "undefined" ? require : a)[b]
-  }) : x)(function(x) {
-    if (typeof require !== "undefined") return require.apply(this, arguments);
-    throw Error('Dynamic require of "' + x + '" is not supported');
-  });
-  var __commonJS = (cb, mod) => function __require2() {
-    return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+  var __esm = (fn, res) => function __init() {
+    return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
   };
-  var __copyProps = (to, from, except, desc) => {
-    if (from && typeof from === "object" || typeof from === "function") {
-      for (let key2 of __getOwnPropNames(from))
-        if (!__hasOwnProp.call(to, key2) && key2 !== except)
-          __defProp(to, key2, { get: () => from[key2], enumerable: !(desc = __getOwnPropDesc(from, key2)) || desc.enumerable });
-    }
-    return to;
+  var __export = (target, all) => {
+    for (var name in all)
+      __defProp(target, name, { get: all[name], enumerable: true });
   };
-  var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-    // If the importer is in node compatibility mode or this is not an ESM
-    // file that has been converted to a CommonJS file using a Babel-
-    // compatible transform (i.e. "__esModule" has not been set), then set
-    // "default" to the CommonJS "module.exports" for node compatibility.
-    isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-    mod
-  ));
   var __publicField = (obj, key2, value) => __defNormalProp(obj, typeof key2 !== "symbol" ? key2 + "" : key2, value);
 
-  // node_modules/jszip/dist/jszip.min.js
-  var require_jszip_min = __commonJS({
-    "node_modules/jszip/dist/jszip.min.js"(exports, module) {
-      !function(t) {
-        if ("object" == typeof exports && "undefined" != typeof module) module.exports = t();
-        else if ("function" == typeof define && define.amd) define([], t);
-        else {
-          ("undefined" != typeof window ? window : "undefined" != typeof global ? global : "undefined" != typeof self ? self : this).JSZip = t();
-        }
-      }(function() {
-        return function s(a, o, h) {
-          function u(r, t2) {
-            if (!o[r]) {
-              if (!a[r]) {
-                var e = "function" == typeof __require && __require;
-                if (!t2 && e) return e(r, true);
-                if (l) return l(r, true);
-                var i = new Error("Cannot find module '" + r + "'");
-                throw i.code = "MODULE_NOT_FOUND", i;
-              }
-              var n = o[r] = { exports: {} };
-              a[r][0].call(n.exports, function(t3) {
-                var e2 = a[r][1][t3];
-                return u(e2 || t3);
-              }, n, n.exports, s, a, o, h);
-            }
-            return o[r].exports;
-          }
-          for (var l = "function" == typeof __require && __require, t = 0; t < h.length; t++) u(h[t]);
-          return u;
-        }({ 1: [function(t, e, r) {
-          "use strict";
-          var c = t("./utils"), d = t("./support"), p = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-          r.encode = function(t2) {
-            for (var e2, r2, i, n, s, a, o, h = [], u = 0, l = t2.length, f = l, d2 = "string" !== c.getTypeOf(t2); u < t2.length; ) f = l - u, i = d2 ? (e2 = t2[u++], r2 = u < l ? t2[u++] : 0, u < l ? t2[u++] : 0) : (e2 = t2.charCodeAt(u++), r2 = u < l ? t2.charCodeAt(u++) : 0, u < l ? t2.charCodeAt(u++) : 0), n = e2 >> 2, s = (3 & e2) << 4 | r2 >> 4, a = 1 < f ? (15 & r2) << 2 | i >> 6 : 64, o = 2 < f ? 63 & i : 64, h.push(p.charAt(n) + p.charAt(s) + p.charAt(a) + p.charAt(o));
-            return h.join("");
-          }, r.decode = function(t2) {
-            var e2, r2, i, n, s, a, o = 0, h = 0, u = "data:";
-            if (t2.substr(0, u.length) === u) throw new Error("Invalid base64 input, it looks like a data url.");
-            var l, f = 3 * (t2 = t2.replace(/[^A-Za-z0-9\+\/\=]/g, "")).length / 4;
-            if (t2.charAt(t2.length - 1) === p.charAt(64) && f--, t2.charAt(t2.length - 2) === p.charAt(64) && f--, f % 1 != 0) throw new Error("Invalid base64 input, bad content length.");
-            for (l = d.uint8array ? new Uint8Array(0 | f) : new Array(0 | f); o < t2.length; ) e2 = p.indexOf(t2.charAt(o++)) << 2 | (n = p.indexOf(t2.charAt(o++))) >> 4, r2 = (15 & n) << 4 | (s = p.indexOf(t2.charAt(o++))) >> 2, i = (3 & s) << 6 | (a = p.indexOf(t2.charAt(o++))), l[h++] = e2, 64 !== s && (l[h++] = r2), 64 !== a && (l[h++] = i);
-            return l;
-          };
-        }, { "./support": 30, "./utils": 32 }], 2: [function(t, e, r) {
-          "use strict";
-          var i = t("./external"), n = t("./stream/DataWorker"), s = t("./stream/Crc32Probe"), a = t("./stream/DataLengthProbe");
-          function o(t2, e2, r2, i2, n2) {
-            this.compressedSize = t2, this.uncompressedSize = e2, this.crc32 = r2, this.compression = i2, this.compressedContent = n2;
-          }
-          o.prototype = { getContentWorker: function() {
-            var t2 = new n(i.Promise.resolve(this.compressedContent)).pipe(this.compression.uncompressWorker()).pipe(new a("data_length")), e2 = this;
-            return t2.on("end", function() {
-              if (this.streamInfo.data_length !== e2.uncompressedSize) throw new Error("Bug : uncompressed data size mismatch");
-            }), t2;
-          }, getCompressedWorker: function() {
-            return new n(i.Promise.resolve(this.compressedContent)).withStreamInfo("compressedSize", this.compressedSize).withStreamInfo("uncompressedSize", this.uncompressedSize).withStreamInfo("crc32", this.crc32).withStreamInfo("compression", this.compression);
-          } }, o.createWorkerFrom = function(t2, e2, r2) {
-            return t2.pipe(new s()).pipe(new a("uncompressedSize")).pipe(e2.compressWorker(r2)).pipe(new a("compressedSize")).withStreamInfo("compression", e2);
-          }, e.exports = o;
-        }, { "./external": 6, "./stream/Crc32Probe": 25, "./stream/DataLengthProbe": 26, "./stream/DataWorker": 27 }], 3: [function(t, e, r) {
-          "use strict";
-          var i = t("./stream/GenericWorker");
-          r.STORE = { magic: "\0\0", compressWorker: function(t2) {
-            return new i("STORE compression");
-          }, uncompressWorker: function() {
-            return new i("STORE decompression");
-          } }, r.DEFLATE = t("./flate");
-        }, { "./flate": 7, "./stream/GenericWorker": 28 }], 4: [function(t, e, r) {
-          "use strict";
-          var i = t("./utils");
-          var o = function() {
-            for (var t2, e2 = [], r2 = 0; r2 < 256; r2++) {
-              t2 = r2;
-              for (var i2 = 0; i2 < 8; i2++) t2 = 1 & t2 ? 3988292384 ^ t2 >>> 1 : t2 >>> 1;
-              e2[r2] = t2;
-            }
-            return e2;
-          }();
-          e.exports = function(t2, e2) {
-            return void 0 !== t2 && t2.length ? "string" !== i.getTypeOf(t2) ? function(t3, e3, r2, i2) {
-              var n = o, s = i2 + r2;
-              t3 ^= -1;
-              for (var a = i2; a < s; a++) t3 = t3 >>> 8 ^ n[255 & (t3 ^ e3[a])];
-              return -1 ^ t3;
-            }(0 | e2, t2, t2.length, 0) : function(t3, e3, r2, i2) {
-              var n = o, s = i2 + r2;
-              t3 ^= -1;
-              for (var a = i2; a < s; a++) t3 = t3 >>> 8 ^ n[255 & (t3 ^ e3.charCodeAt(a))];
-              return -1 ^ t3;
-            }(0 | e2, t2, t2.length, 0) : 0;
-          };
-        }, { "./utils": 32 }], 5: [function(t, e, r) {
-          "use strict";
-          r.base64 = false, r.binary = false, r.dir = false, r.createFolders = true, r.date = null, r.compression = null, r.compressionOptions = null, r.comment = null, r.unixPermissions = null, r.dosPermissions = null;
-        }, {}], 6: [function(t, e, r) {
-          "use strict";
-          var i = null;
-          i = "undefined" != typeof Promise ? Promise : t("lie"), e.exports = { Promise: i };
-        }, { lie: 37 }], 7: [function(t, e, r) {
-          "use strict";
-          var i = "undefined" != typeof Uint8Array && "undefined" != typeof Uint16Array && "undefined" != typeof Uint32Array, n = t("pako"), s = t("./utils"), a = t("./stream/GenericWorker"), o = i ? "uint8array" : "array";
-          function h(t2, e2) {
-            a.call(this, "FlateWorker/" + t2), this._pako = null, this._pakoAction = t2, this._pakoOptions = e2, this.meta = {};
-          }
-          r.magic = "\b\0", s.inherits(h, a), h.prototype.processChunk = function(t2) {
-            this.meta = t2.meta, null === this._pako && this._createPako(), this._pako.push(s.transformTo(o, t2.data), false);
-          }, h.prototype.flush = function() {
-            a.prototype.flush.call(this), null === this._pako && this._createPako(), this._pako.push([], true);
-          }, h.prototype.cleanUp = function() {
-            a.prototype.cleanUp.call(this), this._pako = null;
-          }, h.prototype._createPako = function() {
-            this._pako = new n[this._pakoAction]({ raw: true, level: this._pakoOptions.level || -1 });
-            var e2 = this;
-            this._pako.onData = function(t2) {
-              e2.push({ data: t2, meta: e2.meta });
-            };
-          }, r.compressWorker = function(t2) {
-            return new h("Deflate", t2);
-          }, r.uncompressWorker = function() {
-            return new h("Inflate", {});
-          };
-        }, { "./stream/GenericWorker": 28, "./utils": 32, pako: 38 }], 8: [function(t, e, r) {
-          "use strict";
-          function A(t2, e2) {
-            var r2, i2 = "";
-            for (r2 = 0; r2 < e2; r2++) i2 += String.fromCharCode(255 & t2), t2 >>>= 8;
-            return i2;
-          }
-          function i(t2, e2, r2, i2, n2, s2) {
-            var a, o, h = t2.file, u = t2.compression, l = s2 !== O.utf8encode, f = I.transformTo("string", s2(h.name)), d = I.transformTo("string", O.utf8encode(h.name)), c = h.comment, p = I.transformTo("string", s2(c)), m = I.transformTo("string", O.utf8encode(c)), _ = d.length !== h.name.length, g = m.length !== c.length, b = "", v = "", y = "", w = h.dir, k = h.date, x = { crc32: 0, compressedSize: 0, uncompressedSize: 0 };
-            e2 && !r2 || (x.crc32 = t2.crc32, x.compressedSize = t2.compressedSize, x.uncompressedSize = t2.uncompressedSize);
-            var S = 0;
-            e2 && (S |= 8), l || !_ && !g || (S |= 2048);
-            var z = 0, C = 0;
-            w && (z |= 16), "UNIX" === n2 ? (C = 798, z |= function(t3, e3) {
-              var r3 = t3;
-              return t3 || (r3 = e3 ? 16893 : 33204), (65535 & r3) << 16;
-            }(h.unixPermissions, w)) : (C = 20, z |= function(t3) {
-              return 63 & (t3 || 0);
-            }(h.dosPermissions)), a = k.getUTCHours(), a <<= 6, a |= k.getUTCMinutes(), a <<= 5, a |= k.getUTCSeconds() / 2, o = k.getUTCFullYear() - 1980, o <<= 4, o |= k.getUTCMonth() + 1, o <<= 5, o |= k.getUTCDate(), _ && (v = A(1, 1) + A(B(f), 4) + d, b += "up" + A(v.length, 2) + v), g && (y = A(1, 1) + A(B(p), 4) + m, b += "uc" + A(y.length, 2) + y);
-            var E = "";
-            return E += "\n\0", E += A(S, 2), E += u.magic, E += A(a, 2), E += A(o, 2), E += A(x.crc32, 4), E += A(x.compressedSize, 4), E += A(x.uncompressedSize, 4), E += A(f.length, 2), E += A(b.length, 2), { fileRecord: R.LOCAL_FILE_HEADER + E + f + b, dirRecord: R.CENTRAL_FILE_HEADER + A(C, 2) + E + A(p.length, 2) + "\0\0\0\0" + A(z, 4) + A(i2, 4) + f + b + p };
-          }
-          var I = t("../utils"), n = t("../stream/GenericWorker"), O = t("../utf8"), B = t("../crc32"), R = t("../signature");
-          function s(t2, e2, r2, i2) {
-            n.call(this, "ZipFileWorker"), this.bytesWritten = 0, this.zipComment = e2, this.zipPlatform = r2, this.encodeFileName = i2, this.streamFiles = t2, this.accumulate = false, this.contentBuffer = [], this.dirRecords = [], this.currentSourceOffset = 0, this.entriesCount = 0, this.currentFile = null, this._sources = [];
-          }
-          I.inherits(s, n), s.prototype.push = function(t2) {
-            var e2 = t2.meta.percent || 0, r2 = this.entriesCount, i2 = this._sources.length;
-            this.accumulate ? this.contentBuffer.push(t2) : (this.bytesWritten += t2.data.length, n.prototype.push.call(this, { data: t2.data, meta: { currentFile: this.currentFile, percent: r2 ? (e2 + 100 * (r2 - i2 - 1)) / r2 : 100 } }));
-          }, s.prototype.openedSource = function(t2) {
-            this.currentSourceOffset = this.bytesWritten, this.currentFile = t2.file.name;
-            var e2 = this.streamFiles && !t2.file.dir;
-            if (e2) {
-              var r2 = i(t2, e2, false, this.currentSourceOffset, this.zipPlatform, this.encodeFileName);
-              this.push({ data: r2.fileRecord, meta: { percent: 0 } });
-            } else this.accumulate = true;
-          }, s.prototype.closedSource = function(t2) {
-            this.accumulate = false;
-            var e2 = this.streamFiles && !t2.file.dir, r2 = i(t2, e2, true, this.currentSourceOffset, this.zipPlatform, this.encodeFileName);
-            if (this.dirRecords.push(r2.dirRecord), e2) this.push({ data: function(t3) {
-              return R.DATA_DESCRIPTOR + A(t3.crc32, 4) + A(t3.compressedSize, 4) + A(t3.uncompressedSize, 4);
-            }(t2), meta: { percent: 100 } });
-            else for (this.push({ data: r2.fileRecord, meta: { percent: 0 } }); this.contentBuffer.length; ) this.push(this.contentBuffer.shift());
-            this.currentFile = null;
-          }, s.prototype.flush = function() {
-            for (var t2 = this.bytesWritten, e2 = 0; e2 < this.dirRecords.length; e2++) this.push({ data: this.dirRecords[e2], meta: { percent: 100 } });
-            var r2 = this.bytesWritten - t2, i2 = function(t3, e3, r3, i3, n2) {
-              var s2 = I.transformTo("string", n2(i3));
-              return R.CENTRAL_DIRECTORY_END + "\0\0\0\0" + A(t3, 2) + A(t3, 2) + A(e3, 4) + A(r3, 4) + A(s2.length, 2) + s2;
-            }(this.dirRecords.length, r2, t2, this.zipComment, this.encodeFileName);
-            this.push({ data: i2, meta: { percent: 100 } });
-          }, s.prototype.prepareNextSource = function() {
-            this.previous = this._sources.shift(), this.openedSource(this.previous.streamInfo), this.isPaused ? this.previous.pause() : this.previous.resume();
-          }, s.prototype.registerPrevious = function(t2) {
-            this._sources.push(t2);
-            var e2 = this;
-            return t2.on("data", function(t3) {
-              e2.processChunk(t3);
-            }), t2.on("end", function() {
-              e2.closedSource(e2.previous.streamInfo), e2._sources.length ? e2.prepareNextSource() : e2.end();
-            }), t2.on("error", function(t3) {
-              e2.error(t3);
-            }), this;
-          }, s.prototype.resume = function() {
-            return !!n.prototype.resume.call(this) && (!this.previous && this._sources.length ? (this.prepareNextSource(), true) : this.previous || this._sources.length || this.generatedError ? void 0 : (this.end(), true));
-          }, s.prototype.error = function(t2) {
-            var e2 = this._sources;
-            if (!n.prototype.error.call(this, t2)) return false;
-            for (var r2 = 0; r2 < e2.length; r2++) try {
-              e2[r2].error(t2);
-            } catch (t3) {
-            }
-            return true;
-          }, s.prototype.lock = function() {
-            n.prototype.lock.call(this);
-            for (var t2 = this._sources, e2 = 0; e2 < t2.length; e2++) t2[e2].lock();
-          }, e.exports = s;
-        }, { "../crc32": 4, "../signature": 23, "../stream/GenericWorker": 28, "../utf8": 31, "../utils": 32 }], 9: [function(t, e, r) {
-          "use strict";
-          var u = t("../compressions"), i = t("./ZipFileWorker");
-          r.generateWorker = function(t2, a, e2) {
-            var o = new i(a.streamFiles, e2, a.platform, a.encodeFileName), h = 0;
-            try {
-              t2.forEach(function(t3, e3) {
-                h++;
-                var r2 = function(t4, e4) {
-                  var r3 = t4 || e4, i3 = u[r3];
-                  if (!i3) throw new Error(r3 + " is not a valid compression method !");
-                  return i3;
-                }(e3.options.compression, a.compression), i2 = e3.options.compressionOptions || a.compressionOptions || {}, n = e3.dir, s = e3.date;
-                e3._compressWorker(r2, i2).withStreamInfo("file", { name: t3, dir: n, date: s, comment: e3.comment || "", unixPermissions: e3.unixPermissions, dosPermissions: e3.dosPermissions }).pipe(o);
-              }), o.entriesCount = h;
-            } catch (t3) {
-              o.error(t3);
-            }
-            return o;
-          };
-        }, { "../compressions": 3, "./ZipFileWorker": 8 }], 10: [function(t, e, r) {
-          "use strict";
-          function i() {
-            if (!(this instanceof i)) return new i();
-            if (arguments.length) throw new Error("The constructor with parameters has been removed in JSZip 3.0, please check the upgrade guide.");
-            this.files = /* @__PURE__ */ Object.create(null), this.comment = null, this.root = "", this.clone = function() {
-              var t2 = new i();
-              for (var e2 in this) "function" != typeof this[e2] && (t2[e2] = this[e2]);
-              return t2;
-            };
-          }
-          (i.prototype = t("./object")).loadAsync = t("./load"), i.support = t("./support"), i.defaults = t("./defaults"), i.version = "3.9.1", i.loadAsync = function(t2, e2) {
-            return new i().loadAsync(t2, e2);
-          }, i.external = t("./external"), e.exports = i;
-        }, { "./defaults": 5, "./external": 6, "./load": 11, "./object": 15, "./support": 30 }], 11: [function(t, e, r) {
-          "use strict";
-          var u = t("./utils"), n = t("./external"), i = t("./utf8"), s = t("./zipEntries"), a = t("./stream/Crc32Probe"), l = t("./nodejsUtils");
-          function f(i2) {
-            return new n.Promise(function(t2, e2) {
-              var r2 = i2.decompressed.getContentWorker().pipe(new a());
-              r2.on("error", function(t3) {
-                e2(t3);
-              }).on("end", function() {
-                r2.streamInfo.crc32 !== i2.decompressed.crc32 ? e2(new Error("Corrupted zip : CRC32 mismatch")) : t2();
-              }).resume();
-            });
-          }
-          e.exports = function(t2, o) {
-            var h = this;
-            return o = u.extend(o || {}, { base64: false, checkCRC32: false, optimizedBinaryString: false, createFolders: false, decodeFileName: i.utf8decode }), l.isNode && l.isStream(t2) ? n.Promise.reject(new Error("JSZip can't accept a stream when loading a zip file.")) : u.prepareContent("the loaded zip file", t2, true, o.optimizedBinaryString, o.base64).then(function(t3) {
-              var e2 = new s(o);
-              return e2.load(t3), e2;
-            }).then(function(t3) {
-              var e2 = [n.Promise.resolve(t3)], r2 = t3.files;
-              if (o.checkCRC32) for (var i2 = 0; i2 < r2.length; i2++) e2.push(f(r2[i2]));
-              return n.Promise.all(e2);
-            }).then(function(t3) {
-              for (var e2 = t3.shift(), r2 = e2.files, i2 = 0; i2 < r2.length; i2++) {
-                var n2 = r2[i2], s2 = n2.fileNameStr, a2 = u.resolve(n2.fileNameStr);
-                h.file(a2, n2.decompressed, { binary: true, optimizedBinaryString: true, date: n2.date, dir: n2.dir, comment: n2.fileCommentStr.length ? n2.fileCommentStr : null, unixPermissions: n2.unixPermissions, dosPermissions: n2.dosPermissions, createFolders: o.createFolders }), n2.dir || (h.file(a2).unsafeOriginalName = s2);
-              }
-              return e2.zipComment.length && (h.comment = e2.zipComment), h;
-            });
-          };
-        }, { "./external": 6, "./nodejsUtils": 14, "./stream/Crc32Probe": 25, "./utf8": 31, "./utils": 32, "./zipEntries": 33 }], 12: [function(t, e, r) {
-          "use strict";
-          var i = t("../utils"), n = t("../stream/GenericWorker");
-          function s(t2, e2) {
-            n.call(this, "Nodejs stream input adapter for " + t2), this._upstreamEnded = false, this._bindStream(e2);
-          }
-          i.inherits(s, n), s.prototype._bindStream = function(t2) {
-            var e2 = this;
-            (this._stream = t2).pause(), t2.on("data", function(t3) {
-              e2.push({ data: t3, meta: { percent: 0 } });
-            }).on("error", function(t3) {
-              e2.isPaused ? this.generatedError = t3 : e2.error(t3);
-            }).on("end", function() {
-              e2.isPaused ? e2._upstreamEnded = true : e2.end();
-            });
-          }, s.prototype.pause = function() {
-            return !!n.prototype.pause.call(this) && (this._stream.pause(), true);
-          }, s.prototype.resume = function() {
-            return !!n.prototype.resume.call(this) && (this._upstreamEnded ? this.end() : this._stream.resume(), true);
-          }, e.exports = s;
-        }, { "../stream/GenericWorker": 28, "../utils": 32 }], 13: [function(t, e, r) {
-          "use strict";
-          var n = t("readable-stream").Readable;
-          function i(t2, e2, r2) {
-            n.call(this, e2), this._helper = t2;
-            var i2 = this;
-            t2.on("data", function(t3, e3) {
-              i2.push(t3) || i2._helper.pause(), r2 && r2(e3);
-            }).on("error", function(t3) {
-              i2.emit("error", t3);
-            }).on("end", function() {
-              i2.push(null);
-            });
-          }
-          t("../utils").inherits(i, n), i.prototype._read = function() {
-            this._helper.resume();
-          }, e.exports = i;
-        }, { "../utils": 32, "readable-stream": 16 }], 14: [function(t, e, r) {
-          "use strict";
-          e.exports = { isNode: "undefined" != typeof Buffer, newBufferFrom: function(t2, e2) {
-            if (Buffer.from && Buffer.from !== Uint8Array.from) return Buffer.from(t2, e2);
-            if ("number" == typeof t2) throw new Error('The "data" argument must not be a number');
-            return new Buffer(t2, e2);
-          }, allocBuffer: function(t2) {
-            if (Buffer.alloc) return Buffer.alloc(t2);
-            var e2 = new Buffer(t2);
-            return e2.fill(0), e2;
-          }, isBuffer: function(t2) {
-            return Buffer.isBuffer(t2);
-          }, isStream: function(t2) {
-            return t2 && "function" == typeof t2.on && "function" == typeof t2.pause && "function" == typeof t2.resume;
-          } };
-        }, {}], 15: [function(t, e, r) {
-          "use strict";
-          function s(t2, e2, r2) {
-            var i2, n2 = u.getTypeOf(e2), s2 = u.extend(r2 || {}, f);
-            s2.date = s2.date || /* @__PURE__ */ new Date(), null !== s2.compression && (s2.compression = s2.compression.toUpperCase()), "string" == typeof s2.unixPermissions && (s2.unixPermissions = parseInt(s2.unixPermissions, 8)), s2.unixPermissions && 16384 & s2.unixPermissions && (s2.dir = true), s2.dosPermissions && 16 & s2.dosPermissions && (s2.dir = true), s2.dir && (t2 = g(t2)), s2.createFolders && (i2 = _(t2)) && b.call(this, i2, true);
-            var a2 = "string" === n2 && false === s2.binary && false === s2.base64;
-            r2 && void 0 !== r2.binary || (s2.binary = !a2), (e2 instanceof d && 0 === e2.uncompressedSize || s2.dir || !e2 || 0 === e2.length) && (s2.base64 = false, s2.binary = true, e2 = "", s2.compression = "STORE", n2 = "string");
-            var o2 = null;
-            o2 = e2 instanceof d || e2 instanceof l ? e2 : p.isNode && p.isStream(e2) ? new m(t2, e2) : u.prepareContent(t2, e2, s2.binary, s2.optimizedBinaryString, s2.base64);
-            var h2 = new c(t2, o2, s2);
-            this.files[t2] = h2;
-          }
-          var n = t("./utf8"), u = t("./utils"), l = t("./stream/GenericWorker"), a = t("./stream/StreamHelper"), f = t("./defaults"), d = t("./compressedObject"), c = t("./zipObject"), o = t("./generate"), p = t("./nodejsUtils"), m = t("./nodejs/NodejsStreamInputAdapter"), _ = function(t2) {
-            "/" === t2.slice(-1) && (t2 = t2.substring(0, t2.length - 1));
-            var e2 = t2.lastIndexOf("/");
-            return 0 < e2 ? t2.substring(0, e2) : "";
-          }, g = function(t2) {
-            return "/" !== t2.slice(-1) && (t2 += "/"), t2;
-          }, b = function(t2, e2) {
-            return e2 = void 0 !== e2 ? e2 : f.createFolders, t2 = g(t2), this.files[t2] || s.call(this, t2, null, { dir: true, createFolders: e2 }), this.files[t2];
-          };
-          function h(t2) {
-            return "[object RegExp]" === Object.prototype.toString.call(t2);
-          }
-          var i = { load: function() {
-            throw new Error("This method has been removed in JSZip 3.0, please check the upgrade guide.");
-          }, forEach: function(t2) {
-            var e2, r2, i2;
-            for (e2 in this.files) i2 = this.files[e2], (r2 = e2.slice(this.root.length, e2.length)) && e2.slice(0, this.root.length) === this.root && t2(r2, i2);
-          }, filter: function(r2) {
-            var i2 = [];
-            return this.forEach(function(t2, e2) {
-              r2(t2, e2) && i2.push(e2);
-            }), i2;
-          }, file: function(t2, e2, r2) {
-            if (1 !== arguments.length) return t2 = this.root + t2, s.call(this, t2, e2, r2), this;
-            if (h(t2)) {
-              var i2 = t2;
-              return this.filter(function(t3, e3) {
-                return !e3.dir && i2.test(t3);
-              });
-            }
-            var n2 = this.files[this.root + t2];
-            return n2 && !n2.dir ? n2 : null;
-          }, folder: function(r2) {
-            if (!r2) return this;
-            if (h(r2)) return this.filter(function(t3, e3) {
-              return e3.dir && r2.test(t3);
-            });
-            var t2 = this.root + r2, e2 = b.call(this, t2), i2 = this.clone();
-            return i2.root = e2.name, i2;
-          }, remove: function(r2) {
-            r2 = this.root + r2;
-            var t2 = this.files[r2];
-            if (t2 || ("/" !== r2.slice(-1) && (r2 += "/"), t2 = this.files[r2]), t2 && !t2.dir) delete this.files[r2];
-            else for (var e2 = this.filter(function(t3, e3) {
-              return e3.name.slice(0, r2.length) === r2;
-            }), i2 = 0; i2 < e2.length; i2++) delete this.files[e2[i2].name];
-            return this;
-          }, generate: function(t2) {
-            throw new Error("This method has been removed in JSZip 3.0, please check the upgrade guide.");
-          }, generateInternalStream: function(t2) {
-            var e2, r2 = {};
-            try {
-              if ((r2 = u.extend(t2 || {}, { streamFiles: false, compression: "STORE", compressionOptions: null, type: "", platform: "DOS", comment: null, mimeType: "application/zip", encodeFileName: n.utf8encode })).type = r2.type.toLowerCase(), r2.compression = r2.compression.toUpperCase(), "binarystring" === r2.type && (r2.type = "string"), !r2.type) throw new Error("No output type specified.");
-              u.checkSupport(r2.type), "darwin" !== r2.platform && "freebsd" !== r2.platform && "linux" !== r2.platform && "sunos" !== r2.platform || (r2.platform = "UNIX"), "win32" === r2.platform && (r2.platform = "DOS");
-              var i2 = r2.comment || this.comment || "";
-              e2 = o.generateWorker(this, r2, i2);
-            } catch (t3) {
-              (e2 = new l("error")).error(t3);
-            }
-            return new a(e2, r2.type || "string", r2.mimeType);
-          }, generateAsync: function(t2, e2) {
-            return this.generateInternalStream(t2).accumulate(e2);
-          }, generateNodeStream: function(t2, e2) {
-            return (t2 = t2 || {}).type || (t2.type = "nodebuffer"), this.generateInternalStream(t2).toNodejsStream(e2);
-          } };
-          e.exports = i;
-        }, { "./compressedObject": 2, "./defaults": 5, "./generate": 9, "./nodejs/NodejsStreamInputAdapter": 12, "./nodejsUtils": 14, "./stream/GenericWorker": 28, "./stream/StreamHelper": 29, "./utf8": 31, "./utils": 32, "./zipObject": 35 }], 16: [function(t, e, r) {
-          e.exports = t("stream");
-        }, { stream: void 0 }], 17: [function(t, e, r) {
-          "use strict";
-          var i = t("./DataReader");
-          function n(t2) {
-            i.call(this, t2);
-            for (var e2 = 0; e2 < this.data.length; e2++) t2[e2] = 255 & t2[e2];
-          }
-          t("../utils").inherits(n, i), n.prototype.byteAt = function(t2) {
-            return this.data[this.zero + t2];
-          }, n.prototype.lastIndexOfSignature = function(t2) {
-            for (var e2 = t2.charCodeAt(0), r2 = t2.charCodeAt(1), i2 = t2.charCodeAt(2), n2 = t2.charCodeAt(3), s = this.length - 4; 0 <= s; --s) if (this.data[s] === e2 && this.data[s + 1] === r2 && this.data[s + 2] === i2 && this.data[s + 3] === n2) return s - this.zero;
-            return -1;
-          }, n.prototype.readAndCheckSignature = function(t2) {
-            var e2 = t2.charCodeAt(0), r2 = t2.charCodeAt(1), i2 = t2.charCodeAt(2), n2 = t2.charCodeAt(3), s = this.readData(4);
-            return e2 === s[0] && r2 === s[1] && i2 === s[2] && n2 === s[3];
-          }, n.prototype.readData = function(t2) {
-            if (this.checkOffset(t2), 0 === t2) return [];
-            var e2 = this.data.slice(this.zero + this.index, this.zero + this.index + t2);
-            return this.index += t2, e2;
-          }, e.exports = n;
-        }, { "../utils": 32, "./DataReader": 18 }], 18: [function(t, e, r) {
-          "use strict";
-          var i = t("../utils");
-          function n(t2) {
-            this.data = t2, this.length = t2.length, this.index = 0, this.zero = 0;
-          }
-          n.prototype = { checkOffset: function(t2) {
-            this.checkIndex(this.index + t2);
-          }, checkIndex: function(t2) {
-            if (this.length < this.zero + t2 || t2 < 0) throw new Error("End of data reached (data length = " + this.length + ", asked index = " + t2 + "). Corrupted zip ?");
-          }, setIndex: function(t2) {
-            this.checkIndex(t2), this.index = t2;
-          }, skip: function(t2) {
-            this.setIndex(this.index + t2);
-          }, byteAt: function(t2) {
-          }, readInt: function(t2) {
-            var e2, r2 = 0;
-            for (this.checkOffset(t2), e2 = this.index + t2 - 1; e2 >= this.index; e2--) r2 = (r2 << 8) + this.byteAt(e2);
-            return this.index += t2, r2;
-          }, readString: function(t2) {
-            return i.transformTo("string", this.readData(t2));
-          }, readData: function(t2) {
-          }, lastIndexOfSignature: function(t2) {
-          }, readAndCheckSignature: function(t2) {
-          }, readDate: function() {
-            var t2 = this.readInt(4);
-            return new Date(Date.UTC(1980 + (t2 >> 25 & 127), (t2 >> 21 & 15) - 1, t2 >> 16 & 31, t2 >> 11 & 31, t2 >> 5 & 63, (31 & t2) << 1));
-          } }, e.exports = n;
-        }, { "../utils": 32 }], 19: [function(t, e, r) {
-          "use strict";
-          var i = t("./Uint8ArrayReader");
-          function n(t2) {
-            i.call(this, t2);
-          }
-          t("../utils").inherits(n, i), n.prototype.readData = function(t2) {
-            this.checkOffset(t2);
-            var e2 = this.data.slice(this.zero + this.index, this.zero + this.index + t2);
-            return this.index += t2, e2;
-          }, e.exports = n;
-        }, { "../utils": 32, "./Uint8ArrayReader": 21 }], 20: [function(t, e, r) {
-          "use strict";
-          var i = t("./DataReader");
-          function n(t2) {
-            i.call(this, t2);
-          }
-          t("../utils").inherits(n, i), n.prototype.byteAt = function(t2) {
-            return this.data.charCodeAt(this.zero + t2);
-          }, n.prototype.lastIndexOfSignature = function(t2) {
-            return this.data.lastIndexOf(t2) - this.zero;
-          }, n.prototype.readAndCheckSignature = function(t2) {
-            return t2 === this.readData(4);
-          }, n.prototype.readData = function(t2) {
-            this.checkOffset(t2);
-            var e2 = this.data.slice(this.zero + this.index, this.zero + this.index + t2);
-            return this.index += t2, e2;
-          }, e.exports = n;
-        }, { "../utils": 32, "./DataReader": 18 }], 21: [function(t, e, r) {
-          "use strict";
-          var i = t("./ArrayReader");
-          function n(t2) {
-            i.call(this, t2);
-          }
-          t("../utils").inherits(n, i), n.prototype.readData = function(t2) {
-            if (this.checkOffset(t2), 0 === t2) return new Uint8Array(0);
-            var e2 = this.data.subarray(this.zero + this.index, this.zero + this.index + t2);
-            return this.index += t2, e2;
-          }, e.exports = n;
-        }, { "../utils": 32, "./ArrayReader": 17 }], 22: [function(t, e, r) {
-          "use strict";
-          var i = t("../utils"), n = t("../support"), s = t("./ArrayReader"), a = t("./StringReader"), o = t("./NodeBufferReader"), h = t("./Uint8ArrayReader");
-          e.exports = function(t2) {
-            var e2 = i.getTypeOf(t2);
-            return i.checkSupport(e2), "string" !== e2 || n.uint8array ? "nodebuffer" === e2 ? new o(t2) : n.uint8array ? new h(i.transformTo("uint8array", t2)) : new s(i.transformTo("array", t2)) : new a(t2);
-          };
-        }, { "../support": 30, "../utils": 32, "./ArrayReader": 17, "./NodeBufferReader": 19, "./StringReader": 20, "./Uint8ArrayReader": 21 }], 23: [function(t, e, r) {
-          "use strict";
-          r.LOCAL_FILE_HEADER = "PK", r.CENTRAL_FILE_HEADER = "PK", r.CENTRAL_DIRECTORY_END = "PK", r.ZIP64_CENTRAL_DIRECTORY_LOCATOR = "PK\x07", r.ZIP64_CENTRAL_DIRECTORY_END = "PK", r.DATA_DESCRIPTOR = "PK\x07\b";
-        }, {}], 24: [function(t, e, r) {
-          "use strict";
-          var i = t("./GenericWorker"), n = t("../utils");
-          function s(t2) {
-            i.call(this, "ConvertWorker to " + t2), this.destType = t2;
-          }
-          n.inherits(s, i), s.prototype.processChunk = function(t2) {
-            this.push({ data: n.transformTo(this.destType, t2.data), meta: t2.meta });
-          }, e.exports = s;
-        }, { "../utils": 32, "./GenericWorker": 28 }], 25: [function(t, e, r) {
-          "use strict";
-          var i = t("./GenericWorker"), n = t("../crc32");
-          function s() {
-            i.call(this, "Crc32Probe"), this.withStreamInfo("crc32", 0);
-          }
-          t("../utils").inherits(s, i), s.prototype.processChunk = function(t2) {
-            this.streamInfo.crc32 = n(t2.data, this.streamInfo.crc32 || 0), this.push(t2);
-          }, e.exports = s;
-        }, { "../crc32": 4, "../utils": 32, "./GenericWorker": 28 }], 26: [function(t, e, r) {
-          "use strict";
-          var i = t("../utils"), n = t("./GenericWorker");
-          function s(t2) {
-            n.call(this, "DataLengthProbe for " + t2), this.propName = t2, this.withStreamInfo(t2, 0);
-          }
-          i.inherits(s, n), s.prototype.processChunk = function(t2) {
-            if (t2) {
-              var e2 = this.streamInfo[this.propName] || 0;
-              this.streamInfo[this.propName] = e2 + t2.data.length;
-            }
-            n.prototype.processChunk.call(this, t2);
-          }, e.exports = s;
-        }, { "../utils": 32, "./GenericWorker": 28 }], 27: [function(t, e, r) {
-          "use strict";
-          var i = t("../utils"), n = t("./GenericWorker");
-          function s(t2) {
-            n.call(this, "DataWorker");
-            var e2 = this;
-            this.dataIsReady = false, this.index = 0, this.max = 0, this.data = null, this.type = "", this._tickScheduled = false, t2.then(function(t3) {
-              e2.dataIsReady = true, e2.data = t3, e2.max = t3 && t3.length || 0, e2.type = i.getTypeOf(t3), e2.isPaused || e2._tickAndRepeat();
-            }, function(t3) {
-              e2.error(t3);
-            });
-          }
-          i.inherits(s, n), s.prototype.cleanUp = function() {
-            n.prototype.cleanUp.call(this), this.data = null;
-          }, s.prototype.resume = function() {
-            return !!n.prototype.resume.call(this) && (!this._tickScheduled && this.dataIsReady && (this._tickScheduled = true, i.delay(this._tickAndRepeat, [], this)), true);
-          }, s.prototype._tickAndRepeat = function() {
-            this._tickScheduled = false, this.isPaused || this.isFinished || (this._tick(), this.isFinished || (i.delay(this._tickAndRepeat, [], this), this._tickScheduled = true));
-          }, s.prototype._tick = function() {
-            if (this.isPaused || this.isFinished) return false;
-            var t2 = null, e2 = Math.min(this.max, this.index + 16384);
-            if (this.index >= this.max) return this.end();
-            switch (this.type) {
-              case "string":
-                t2 = this.data.substring(this.index, e2);
-                break;
-              case "uint8array":
-                t2 = this.data.subarray(this.index, e2);
-                break;
-              case "array":
-              case "nodebuffer":
-                t2 = this.data.slice(this.index, e2);
-            }
-            return this.index = e2, this.push({ data: t2, meta: { percent: this.max ? this.index / this.max * 100 : 0 } });
-          }, e.exports = s;
-        }, { "../utils": 32, "./GenericWorker": 28 }], 28: [function(t, e, r) {
-          "use strict";
-          function i(t2) {
-            this.name = t2 || "default", this.streamInfo = {}, this.generatedError = null, this.extraStreamInfo = {}, this.isPaused = true, this.isFinished = false, this.isLocked = false, this._listeners = { data: [], end: [], error: [] }, this.previous = null;
-          }
-          i.prototype = { push: function(t2) {
-            this.emit("data", t2);
-          }, end: function() {
-            if (this.isFinished) return false;
-            this.flush();
-            try {
-              this.emit("end"), this.cleanUp(), this.isFinished = true;
-            } catch (t2) {
-              this.emit("error", t2);
-            }
-            return true;
-          }, error: function(t2) {
-            return !this.isFinished && (this.isPaused ? this.generatedError = t2 : (this.isFinished = true, this.emit("error", t2), this.previous && this.previous.error(t2), this.cleanUp()), true);
-          }, on: function(t2, e2) {
-            return this._listeners[t2].push(e2), this;
-          }, cleanUp: function() {
-            this.streamInfo = this.generatedError = this.extraStreamInfo = null, this._listeners = [];
-          }, emit: function(t2, e2) {
-            if (this._listeners[t2]) for (var r2 = 0; r2 < this._listeners[t2].length; r2++) this._listeners[t2][r2].call(this, e2);
-          }, pipe: function(t2) {
-            return t2.registerPrevious(this);
-          }, registerPrevious: function(t2) {
-            if (this.isLocked) throw new Error("The stream '" + this + "' has already been used.");
-            this.streamInfo = t2.streamInfo, this.mergeStreamInfo(), this.previous = t2;
-            var e2 = this;
-            return t2.on("data", function(t3) {
-              e2.processChunk(t3);
-            }), t2.on("end", function() {
-              e2.end();
-            }), t2.on("error", function(t3) {
-              e2.error(t3);
-            }), this;
-          }, pause: function() {
-            return !this.isPaused && !this.isFinished && (this.isPaused = true, this.previous && this.previous.pause(), true);
-          }, resume: function() {
-            if (!this.isPaused || this.isFinished) return false;
-            var t2 = this.isPaused = false;
-            return this.generatedError && (this.error(this.generatedError), t2 = true), this.previous && this.previous.resume(), !t2;
-          }, flush: function() {
-          }, processChunk: function(t2) {
-            this.push(t2);
-          }, withStreamInfo: function(t2, e2) {
-            return this.extraStreamInfo[t2] = e2, this.mergeStreamInfo(), this;
-          }, mergeStreamInfo: function() {
-            for (var t2 in this.extraStreamInfo) this.extraStreamInfo.hasOwnProperty(t2) && (this.streamInfo[t2] = this.extraStreamInfo[t2]);
-          }, lock: function() {
-            if (this.isLocked) throw new Error("The stream '" + this + "' has already been used.");
-            this.isLocked = true, this.previous && this.previous.lock();
-          }, toString: function() {
-            var t2 = "Worker " + this.name;
-            return this.previous ? this.previous + " -> " + t2 : t2;
-          } }, e.exports = i;
-        }, {}], 29: [function(t, e, r) {
-          "use strict";
-          var h = t("../utils"), n = t("./ConvertWorker"), s = t("./GenericWorker"), u = t("../base64"), i = t("../support"), a = t("../external"), o = null;
-          if (i.nodestream) try {
-            o = t("../nodejs/NodejsStreamOutputAdapter");
-          } catch (t2) {
-          }
-          function l(t2, o2) {
-            return new a.Promise(function(e2, r2) {
-              var i2 = [], n2 = t2._internalType, s2 = t2._outputType, a2 = t2._mimeType;
-              t2.on("data", function(t3, e3) {
-                i2.push(t3), o2 && o2(e3);
-              }).on("error", function(t3) {
-                i2 = [], r2(t3);
-              }).on("end", function() {
-                try {
-                  var t3 = function(t4, e3, r3) {
-                    switch (t4) {
-                      case "blob":
-                        return h.newBlob(h.transformTo("arraybuffer", e3), r3);
-                      case "base64":
-                        return u.encode(e3);
-                      default:
-                        return h.transformTo(t4, e3);
-                    }
-                  }(s2, function(t4, e3) {
-                    var r3, i3 = 0, n3 = null, s3 = 0;
-                    for (r3 = 0; r3 < e3.length; r3++) s3 += e3[r3].length;
-                    switch (t4) {
-                      case "string":
-                        return e3.join("");
-                      case "array":
-                        return Array.prototype.concat.apply([], e3);
-                      case "uint8array":
-                        for (n3 = new Uint8Array(s3), r3 = 0; r3 < e3.length; r3++) n3.set(e3[r3], i3), i3 += e3[r3].length;
-                        return n3;
-                      case "nodebuffer":
-                        return Buffer.concat(e3);
-                      default:
-                        throw new Error("concat : unsupported type '" + t4 + "'");
-                    }
-                  }(n2, i2), a2);
-                  e2(t3);
-                } catch (t4) {
-                  r2(t4);
-                }
-                i2 = [];
-              }).resume();
-            });
-          }
-          function f(t2, e2, r2) {
-            var i2 = e2;
-            switch (e2) {
-              case "blob":
-              case "arraybuffer":
-                i2 = "uint8array";
-                break;
-              case "base64":
-                i2 = "string";
-            }
-            try {
-              this._internalType = i2, this._outputType = e2, this._mimeType = r2, h.checkSupport(i2), this._worker = t2.pipe(new n(i2)), t2.lock();
-            } catch (t3) {
-              this._worker = new s("error"), this._worker.error(t3);
-            }
-          }
-          f.prototype = { accumulate: function(t2) {
-            return l(this, t2);
-          }, on: function(t2, e2) {
-            var r2 = this;
-            return "data" === t2 ? this._worker.on(t2, function(t3) {
-              e2.call(r2, t3.data, t3.meta);
-            }) : this._worker.on(t2, function() {
-              h.delay(e2, arguments, r2);
-            }), this;
-          }, resume: function() {
-            return h.delay(this._worker.resume, [], this._worker), this;
-          }, pause: function() {
-            return this._worker.pause(), this;
-          }, toNodejsStream: function(t2) {
-            if (h.checkSupport("nodestream"), "nodebuffer" !== this._outputType) throw new Error(this._outputType + " is not supported by this method");
-            return new o(this, { objectMode: "nodebuffer" !== this._outputType }, t2);
-          } }, e.exports = f;
-        }, { "../base64": 1, "../external": 6, "../nodejs/NodejsStreamOutputAdapter": 13, "../support": 30, "../utils": 32, "./ConvertWorker": 24, "./GenericWorker": 28 }], 30: [function(t, e, r) {
-          "use strict";
-          if (r.base64 = true, r.array = true, r.string = true, r.arraybuffer = "undefined" != typeof ArrayBuffer && "undefined" != typeof Uint8Array, r.nodebuffer = "undefined" != typeof Buffer, r.uint8array = "undefined" != typeof Uint8Array, "undefined" == typeof ArrayBuffer) r.blob = false;
-          else {
-            var i = new ArrayBuffer(0);
-            try {
-              r.blob = 0 === new Blob([i], { type: "application/zip" }).size;
-            } catch (t2) {
-              try {
-                var n = new (self.BlobBuilder || self.WebKitBlobBuilder || self.MozBlobBuilder || self.MSBlobBuilder)();
-                n.append(i), r.blob = 0 === n.getBlob("application/zip").size;
-              } catch (t3) {
-                r.blob = false;
-              }
-            }
-          }
-          try {
-            r.nodestream = !!t("readable-stream").Readable;
-          } catch (t2) {
-            r.nodestream = false;
-          }
-        }, { "readable-stream": 16 }], 31: [function(t, e, s) {
-          "use strict";
-          for (var o = t("./utils"), h = t("./support"), r = t("./nodejsUtils"), i = t("./stream/GenericWorker"), u = new Array(256), n = 0; n < 256; n++) u[n] = 252 <= n ? 6 : 248 <= n ? 5 : 240 <= n ? 4 : 224 <= n ? 3 : 192 <= n ? 2 : 1;
-          u[254] = u[254] = 1;
-          function a() {
-            i.call(this, "utf-8 decode"), this.leftOver = null;
-          }
-          function l() {
-            i.call(this, "utf-8 encode");
-          }
-          s.utf8encode = function(t2) {
-            return h.nodebuffer ? r.newBufferFrom(t2, "utf-8") : function(t3) {
-              var e2, r2, i2, n2, s2, a2 = t3.length, o2 = 0;
-              for (n2 = 0; n2 < a2; n2++) 55296 == (64512 & (r2 = t3.charCodeAt(n2))) && n2 + 1 < a2 && 56320 == (64512 & (i2 = t3.charCodeAt(n2 + 1))) && (r2 = 65536 + (r2 - 55296 << 10) + (i2 - 56320), n2++), o2 += r2 < 128 ? 1 : r2 < 2048 ? 2 : r2 < 65536 ? 3 : 4;
-              for (e2 = h.uint8array ? new Uint8Array(o2) : new Array(o2), n2 = s2 = 0; s2 < o2; n2++) 55296 == (64512 & (r2 = t3.charCodeAt(n2))) && n2 + 1 < a2 && 56320 == (64512 & (i2 = t3.charCodeAt(n2 + 1))) && (r2 = 65536 + (r2 - 55296 << 10) + (i2 - 56320), n2++), r2 < 128 ? e2[s2++] = r2 : (r2 < 2048 ? e2[s2++] = 192 | r2 >>> 6 : (r2 < 65536 ? e2[s2++] = 224 | r2 >>> 12 : (e2[s2++] = 240 | r2 >>> 18, e2[s2++] = 128 | r2 >>> 12 & 63), e2[s2++] = 128 | r2 >>> 6 & 63), e2[s2++] = 128 | 63 & r2);
-              return e2;
-            }(t2);
-          }, s.utf8decode = function(t2) {
-            return h.nodebuffer ? o.transformTo("nodebuffer", t2).toString("utf-8") : function(t3) {
-              var e2, r2, i2, n2, s2 = t3.length, a2 = new Array(2 * s2);
-              for (e2 = r2 = 0; e2 < s2; ) if ((i2 = t3[e2++]) < 128) a2[r2++] = i2;
-              else if (4 < (n2 = u[i2])) a2[r2++] = 65533, e2 += n2 - 1;
-              else {
-                for (i2 &= 2 === n2 ? 31 : 3 === n2 ? 15 : 7; 1 < n2 && e2 < s2; ) i2 = i2 << 6 | 63 & t3[e2++], n2--;
-                1 < n2 ? a2[r2++] = 65533 : i2 < 65536 ? a2[r2++] = i2 : (i2 -= 65536, a2[r2++] = 55296 | i2 >> 10 & 1023, a2[r2++] = 56320 | 1023 & i2);
-              }
-              return a2.length !== r2 && (a2.subarray ? a2 = a2.subarray(0, r2) : a2.length = r2), o.applyFromCharCode(a2);
-            }(t2 = o.transformTo(h.uint8array ? "uint8array" : "array", t2));
-          }, o.inherits(a, i), a.prototype.processChunk = function(t2) {
-            var e2 = o.transformTo(h.uint8array ? "uint8array" : "array", t2.data);
-            if (this.leftOver && this.leftOver.length) {
-              if (h.uint8array) {
-                var r2 = e2;
-                (e2 = new Uint8Array(r2.length + this.leftOver.length)).set(this.leftOver, 0), e2.set(r2, this.leftOver.length);
-              } else e2 = this.leftOver.concat(e2);
-              this.leftOver = null;
-            }
-            var i2 = function(t3, e3) {
-              var r3;
-              for ((e3 = e3 || t3.length) > t3.length && (e3 = t3.length), r3 = e3 - 1; 0 <= r3 && 128 == (192 & t3[r3]); ) r3--;
-              return r3 < 0 ? e3 : 0 === r3 ? e3 : r3 + u[t3[r3]] > e3 ? r3 : e3;
-            }(e2), n2 = e2;
-            i2 !== e2.length && (h.uint8array ? (n2 = e2.subarray(0, i2), this.leftOver = e2.subarray(i2, e2.length)) : (n2 = e2.slice(0, i2), this.leftOver = e2.slice(i2, e2.length))), this.push({ data: s.utf8decode(n2), meta: t2.meta });
-          }, a.prototype.flush = function() {
-            this.leftOver && this.leftOver.length && (this.push({ data: s.utf8decode(this.leftOver), meta: {} }), this.leftOver = null);
-          }, s.Utf8DecodeWorker = a, o.inherits(l, i), l.prototype.processChunk = function(t2) {
-            this.push({ data: s.utf8encode(t2.data), meta: t2.meta });
-          }, s.Utf8EncodeWorker = l;
-        }, { "./nodejsUtils": 14, "./stream/GenericWorker": 28, "./support": 30, "./utils": 32 }], 32: [function(t, e, a) {
-          "use strict";
-          var o = t("./support"), h = t("./base64"), r = t("./nodejsUtils"), i = t("set-immediate-shim"), u = t("./external");
-          function n(t2) {
-            return t2;
-          }
-          function l(t2, e2) {
-            for (var r2 = 0; r2 < t2.length; ++r2) e2[r2] = 255 & t2.charCodeAt(r2);
-            return e2;
-          }
-          a.newBlob = function(e2, r2) {
-            a.checkSupport("blob");
-            try {
-              return new Blob([e2], { type: r2 });
-            } catch (t2) {
-              try {
-                var i2 = new (self.BlobBuilder || self.WebKitBlobBuilder || self.MozBlobBuilder || self.MSBlobBuilder)();
-                return i2.append(e2), i2.getBlob(r2);
-              } catch (t3) {
-                throw new Error("Bug : can't construct the Blob.");
-              }
-            }
-          };
-          var s = { stringifyByChunk: function(t2, e2, r2) {
-            var i2 = [], n2 = 0, s2 = t2.length;
-            if (s2 <= r2) return String.fromCharCode.apply(null, t2);
-            for (; n2 < s2; ) "array" === e2 || "nodebuffer" === e2 ? i2.push(String.fromCharCode.apply(null, t2.slice(n2, Math.min(n2 + r2, s2)))) : i2.push(String.fromCharCode.apply(null, t2.subarray(n2, Math.min(n2 + r2, s2)))), n2 += r2;
-            return i2.join("");
-          }, stringifyByChar: function(t2) {
-            for (var e2 = "", r2 = 0; r2 < t2.length; r2++) e2 += String.fromCharCode(t2[r2]);
-            return e2;
-          }, applyCanBeUsed: { uint8array: function() {
-            try {
-              return o.uint8array && 1 === String.fromCharCode.apply(null, new Uint8Array(1)).length;
-            } catch (t2) {
-              return false;
-            }
-          }(), nodebuffer: function() {
-            try {
-              return o.nodebuffer && 1 === String.fromCharCode.apply(null, r.allocBuffer(1)).length;
-            } catch (t2) {
-              return false;
-            }
-          }() } };
-          function f(t2) {
-            var e2 = 65536, r2 = a.getTypeOf(t2), i2 = true;
-            if ("uint8array" === r2 ? i2 = s.applyCanBeUsed.uint8array : "nodebuffer" === r2 && (i2 = s.applyCanBeUsed.nodebuffer), i2) for (; 1 < e2; ) try {
-              return s.stringifyByChunk(t2, r2, e2);
-            } catch (t3) {
-              e2 = Math.floor(e2 / 2);
-            }
-            return s.stringifyByChar(t2);
-          }
-          function d(t2, e2) {
-            for (var r2 = 0; r2 < t2.length; r2++) e2[r2] = t2[r2];
-            return e2;
-          }
-          a.applyFromCharCode = f;
-          var c = {};
-          c.string = { string: n, array: function(t2) {
-            return l(t2, new Array(t2.length));
-          }, arraybuffer: function(t2) {
-            return c.string.uint8array(t2).buffer;
-          }, uint8array: function(t2) {
-            return l(t2, new Uint8Array(t2.length));
-          }, nodebuffer: function(t2) {
-            return l(t2, r.allocBuffer(t2.length));
-          } }, c.array = { string: f, array: n, arraybuffer: function(t2) {
-            return new Uint8Array(t2).buffer;
-          }, uint8array: function(t2) {
-            return new Uint8Array(t2);
-          }, nodebuffer: function(t2) {
-            return r.newBufferFrom(t2);
-          } }, c.arraybuffer = { string: function(t2) {
-            return f(new Uint8Array(t2));
-          }, array: function(t2) {
-            return d(new Uint8Array(t2), new Array(t2.byteLength));
-          }, arraybuffer: n, uint8array: function(t2) {
-            return new Uint8Array(t2);
-          }, nodebuffer: function(t2) {
-            return r.newBufferFrom(new Uint8Array(t2));
-          } }, c.uint8array = { string: f, array: function(t2) {
-            return d(t2, new Array(t2.length));
-          }, arraybuffer: function(t2) {
-            return t2.buffer;
-          }, uint8array: n, nodebuffer: function(t2) {
-            return r.newBufferFrom(t2);
-          } }, c.nodebuffer = { string: f, array: function(t2) {
-            return d(t2, new Array(t2.length));
-          }, arraybuffer: function(t2) {
-            return c.nodebuffer.uint8array(t2).buffer;
-          }, uint8array: function(t2) {
-            return d(t2, new Uint8Array(t2.length));
-          }, nodebuffer: n }, a.transformTo = function(t2, e2) {
-            if (e2 = e2 || "", !t2) return e2;
-            a.checkSupport(t2);
-            var r2 = a.getTypeOf(e2);
-            return c[r2][t2](e2);
-          }, a.resolve = function(t2) {
-            for (var e2 = t2.split("/"), r2 = [], i2 = 0; i2 < e2.length; i2++) {
-              var n2 = e2[i2];
-              "." === n2 || "" === n2 && 0 !== i2 && i2 !== e2.length - 1 || (".." === n2 ? r2.pop() : r2.push(n2));
-            }
-            return r2.join("/");
-          }, a.getTypeOf = function(t2) {
-            return "string" == typeof t2 ? "string" : "[object Array]" === Object.prototype.toString.call(t2) ? "array" : o.nodebuffer && r.isBuffer(t2) ? "nodebuffer" : o.uint8array && t2 instanceof Uint8Array ? "uint8array" : o.arraybuffer && t2 instanceof ArrayBuffer ? "arraybuffer" : void 0;
-          }, a.checkSupport = function(t2) {
-            if (!o[t2.toLowerCase()]) throw new Error(t2 + " is not supported by this platform");
-          }, a.MAX_VALUE_16BITS = 65535, a.MAX_VALUE_32BITS = -1, a.pretty = function(t2) {
-            var e2, r2, i2 = "";
-            for (r2 = 0; r2 < (t2 || "").length; r2++) i2 += "\\x" + ((e2 = t2.charCodeAt(r2)) < 16 ? "0" : "") + e2.toString(16).toUpperCase();
-            return i2;
-          }, a.delay = function(t2, e2, r2) {
-            i(function() {
-              t2.apply(r2 || null, e2 || []);
-            });
-          }, a.inherits = function(t2, e2) {
-            function r2() {
-            }
-            r2.prototype = e2.prototype, t2.prototype = new r2();
-          }, a.extend = function() {
-            var t2, e2, r2 = {};
-            for (t2 = 0; t2 < arguments.length; t2++) for (e2 in arguments[t2]) arguments[t2].hasOwnProperty(e2) && void 0 === r2[e2] && (r2[e2] = arguments[t2][e2]);
-            return r2;
-          }, a.prepareContent = function(r2, t2, i2, n2, s2) {
-            return u.Promise.resolve(t2).then(function(i3) {
-              return o.blob && (i3 instanceof Blob || -1 !== ["[object File]", "[object Blob]"].indexOf(Object.prototype.toString.call(i3))) && "undefined" != typeof FileReader ? new u.Promise(function(e2, r3) {
-                var t3 = new FileReader();
-                t3.onload = function(t4) {
-                  e2(t4.target.result);
-                }, t3.onerror = function(t4) {
-                  r3(t4.target.error);
-                }, t3.readAsArrayBuffer(i3);
-              }) : i3;
-            }).then(function(t3) {
-              var e2 = a.getTypeOf(t3);
-              return e2 ? ("arraybuffer" === e2 ? t3 = a.transformTo("uint8array", t3) : "string" === e2 && (s2 ? t3 = h.decode(t3) : i2 && true !== n2 && (t3 = function(t4) {
-                return l(t4, o.uint8array ? new Uint8Array(t4.length) : new Array(t4.length));
-              }(t3))), t3) : u.Promise.reject(new Error("Can't read the data of '" + r2 + "'. Is it in a supported JavaScript type (String, Blob, ArrayBuffer, etc) ?"));
-            });
-          };
-        }, { "./base64": 1, "./external": 6, "./nodejsUtils": 14, "./support": 30, "set-immediate-shim": 54 }], 33: [function(t, e, r) {
-          "use strict";
-          var i = t("./reader/readerFor"), n = t("./utils"), s = t("./signature"), a = t("./zipEntry"), o = (t("./utf8"), t("./support"));
-          function h(t2) {
-            this.files = [], this.loadOptions = t2;
-          }
-          h.prototype = { checkSignature: function(t2) {
-            if (!this.reader.readAndCheckSignature(t2)) {
-              this.reader.index -= 4;
-              var e2 = this.reader.readString(4);
-              throw new Error("Corrupted zip or bug: unexpected signature (" + n.pretty(e2) + ", expected " + n.pretty(t2) + ")");
-            }
-          }, isSignature: function(t2, e2) {
-            var r2 = this.reader.index;
-            this.reader.setIndex(t2);
-            var i2 = this.reader.readString(4) === e2;
-            return this.reader.setIndex(r2), i2;
-          }, readBlockEndOfCentral: function() {
-            this.diskNumber = this.reader.readInt(2), this.diskWithCentralDirStart = this.reader.readInt(2), this.centralDirRecordsOnThisDisk = this.reader.readInt(2), this.centralDirRecords = this.reader.readInt(2), this.centralDirSize = this.reader.readInt(4), this.centralDirOffset = this.reader.readInt(4), this.zipCommentLength = this.reader.readInt(2);
-            var t2 = this.reader.readData(this.zipCommentLength), e2 = o.uint8array ? "uint8array" : "array", r2 = n.transformTo(e2, t2);
-            this.zipComment = this.loadOptions.decodeFileName(r2);
-          }, readBlockZip64EndOfCentral: function() {
-            this.zip64EndOfCentralSize = this.reader.readInt(8), this.reader.skip(4), this.diskNumber = this.reader.readInt(4), this.diskWithCentralDirStart = this.reader.readInt(4), this.centralDirRecordsOnThisDisk = this.reader.readInt(8), this.centralDirRecords = this.reader.readInt(8), this.centralDirSize = this.reader.readInt(8), this.centralDirOffset = this.reader.readInt(8), this.zip64ExtensibleData = {};
-            for (var t2, e2, r2, i2 = this.zip64EndOfCentralSize - 44; 0 < i2; ) t2 = this.reader.readInt(2), e2 = this.reader.readInt(4), r2 = this.reader.readData(e2), this.zip64ExtensibleData[t2] = { id: t2, length: e2, value: r2 };
-          }, readBlockZip64EndOfCentralLocator: function() {
-            if (this.diskWithZip64CentralDirStart = this.reader.readInt(4), this.relativeOffsetEndOfZip64CentralDir = this.reader.readInt(8), this.disksCount = this.reader.readInt(4), 1 < this.disksCount) throw new Error("Multi-volumes zip are not supported");
-          }, readLocalFiles: function() {
-            var t2, e2;
-            for (t2 = 0; t2 < this.files.length; t2++) e2 = this.files[t2], this.reader.setIndex(e2.localHeaderOffset), this.checkSignature(s.LOCAL_FILE_HEADER), e2.readLocalPart(this.reader), e2.handleUTF8(), e2.processAttributes();
-          }, readCentralDir: function() {
-            var t2;
-            for (this.reader.setIndex(this.centralDirOffset); this.reader.readAndCheckSignature(s.CENTRAL_FILE_HEADER); ) (t2 = new a({ zip64: this.zip64 }, this.loadOptions)).readCentralPart(this.reader), this.files.push(t2);
-            if (this.centralDirRecords !== this.files.length && 0 !== this.centralDirRecords && 0 === this.files.length) throw new Error("Corrupted zip or bug: expected " + this.centralDirRecords + " records in central dir, got " + this.files.length);
-          }, readEndOfCentral: function() {
-            var t2 = this.reader.lastIndexOfSignature(s.CENTRAL_DIRECTORY_END);
-            if (t2 < 0) throw !this.isSignature(0, s.LOCAL_FILE_HEADER) ? new Error("Can't find end of central directory : is this a zip file ? If it is, see https://stuk.github.io/jszip/documentation/howto/read_zip.html") : new Error("Corrupted zip: can't find end of central directory");
-            this.reader.setIndex(t2);
-            var e2 = t2;
-            if (this.checkSignature(s.CENTRAL_DIRECTORY_END), this.readBlockEndOfCentral(), this.diskNumber === n.MAX_VALUE_16BITS || this.diskWithCentralDirStart === n.MAX_VALUE_16BITS || this.centralDirRecordsOnThisDisk === n.MAX_VALUE_16BITS || this.centralDirRecords === n.MAX_VALUE_16BITS || this.centralDirSize === n.MAX_VALUE_32BITS || this.centralDirOffset === n.MAX_VALUE_32BITS) {
-              if (this.zip64 = true, (t2 = this.reader.lastIndexOfSignature(s.ZIP64_CENTRAL_DIRECTORY_LOCATOR)) < 0) throw new Error("Corrupted zip: can't find the ZIP64 end of central directory locator");
-              if (this.reader.setIndex(t2), this.checkSignature(s.ZIP64_CENTRAL_DIRECTORY_LOCATOR), this.readBlockZip64EndOfCentralLocator(), !this.isSignature(this.relativeOffsetEndOfZip64CentralDir, s.ZIP64_CENTRAL_DIRECTORY_END) && (this.relativeOffsetEndOfZip64CentralDir = this.reader.lastIndexOfSignature(s.ZIP64_CENTRAL_DIRECTORY_END), this.relativeOffsetEndOfZip64CentralDir < 0)) throw new Error("Corrupted zip: can't find the ZIP64 end of central directory");
-              this.reader.setIndex(this.relativeOffsetEndOfZip64CentralDir), this.checkSignature(s.ZIP64_CENTRAL_DIRECTORY_END), this.readBlockZip64EndOfCentral();
-            }
-            var r2 = this.centralDirOffset + this.centralDirSize;
-            this.zip64 && (r2 += 20, r2 += 12 + this.zip64EndOfCentralSize);
-            var i2 = e2 - r2;
-            if (0 < i2) this.isSignature(e2, s.CENTRAL_FILE_HEADER) || (this.reader.zero = i2);
-            else if (i2 < 0) throw new Error("Corrupted zip: missing " + Math.abs(i2) + " bytes.");
-          }, prepareReader: function(t2) {
-            this.reader = i(t2);
-          }, load: function(t2) {
-            this.prepareReader(t2), this.readEndOfCentral(), this.readCentralDir(), this.readLocalFiles();
-          } }, e.exports = h;
-        }, { "./reader/readerFor": 22, "./signature": 23, "./support": 30, "./utf8": 31, "./utils": 32, "./zipEntry": 34 }], 34: [function(t, e, r) {
-          "use strict";
-          var i = t("./reader/readerFor"), s = t("./utils"), n = t("./compressedObject"), a = t("./crc32"), o = t("./utf8"), h = t("./compressions"), u = t("./support");
-          function l(t2, e2) {
-            this.options = t2, this.loadOptions = e2;
-          }
-          l.prototype = { isEncrypted: function() {
-            return 1 == (1 & this.bitFlag);
-          }, useUTF8: function() {
-            return 2048 == (2048 & this.bitFlag);
-          }, readLocalPart: function(t2) {
-            var e2, r2;
-            if (t2.skip(22), this.fileNameLength = t2.readInt(2), r2 = t2.readInt(2), this.fileName = t2.readData(this.fileNameLength), t2.skip(r2), -1 === this.compressedSize || -1 === this.uncompressedSize) throw new Error("Bug or corrupted zip : didn't get enough information from the central directory (compressedSize === -1 || uncompressedSize === -1)");
-            if (null === (e2 = function(t3) {
-              for (var e3 in h) if (h.hasOwnProperty(e3) && h[e3].magic === t3) return h[e3];
-              return null;
-            }(this.compressionMethod))) throw new Error("Corrupted zip : compression " + s.pretty(this.compressionMethod) + " unknown (inner file : " + s.transformTo("string", this.fileName) + ")");
-            this.decompressed = new n(this.compressedSize, this.uncompressedSize, this.crc32, e2, t2.readData(this.compressedSize));
-          }, readCentralPart: function(t2) {
-            this.versionMadeBy = t2.readInt(2), t2.skip(2), this.bitFlag = t2.readInt(2), this.compressionMethod = t2.readString(2), this.date = t2.readDate(), this.crc32 = t2.readInt(4), this.compressedSize = t2.readInt(4), this.uncompressedSize = t2.readInt(4);
-            var e2 = t2.readInt(2);
-            if (this.extraFieldsLength = t2.readInt(2), this.fileCommentLength = t2.readInt(2), this.diskNumberStart = t2.readInt(2), this.internalFileAttributes = t2.readInt(2), this.externalFileAttributes = t2.readInt(4), this.localHeaderOffset = t2.readInt(4), this.isEncrypted()) throw new Error("Encrypted zip are not supported");
-            t2.skip(e2), this.readExtraFields(t2), this.parseZIP64ExtraField(t2), this.fileComment = t2.readData(this.fileCommentLength);
-          }, processAttributes: function() {
-            this.unixPermissions = null, this.dosPermissions = null;
-            var t2 = this.versionMadeBy >> 8;
-            this.dir = !!(16 & this.externalFileAttributes), 0 == t2 && (this.dosPermissions = 63 & this.externalFileAttributes), 3 == t2 && (this.unixPermissions = this.externalFileAttributes >> 16 & 65535), this.dir || "/" !== this.fileNameStr.slice(-1) || (this.dir = true);
-          }, parseZIP64ExtraField: function(t2) {
-            if (this.extraFields[1]) {
-              var e2 = i(this.extraFields[1].value);
-              this.uncompressedSize === s.MAX_VALUE_32BITS && (this.uncompressedSize = e2.readInt(8)), this.compressedSize === s.MAX_VALUE_32BITS && (this.compressedSize = e2.readInt(8)), this.localHeaderOffset === s.MAX_VALUE_32BITS && (this.localHeaderOffset = e2.readInt(8)), this.diskNumberStart === s.MAX_VALUE_32BITS && (this.diskNumberStart = e2.readInt(4));
-            }
-          }, readExtraFields: function(t2) {
-            var e2, r2, i2, n2 = t2.index + this.extraFieldsLength;
-            for (this.extraFields || (this.extraFields = {}); t2.index + 4 < n2; ) e2 = t2.readInt(2), r2 = t2.readInt(2), i2 = t2.readData(r2), this.extraFields[e2] = { id: e2, length: r2, value: i2 };
-            t2.setIndex(n2);
-          }, handleUTF8: function() {
-            var t2 = u.uint8array ? "uint8array" : "array";
-            if (this.useUTF8()) this.fileNameStr = o.utf8decode(this.fileName), this.fileCommentStr = o.utf8decode(this.fileComment);
-            else {
-              var e2 = this.findExtraFieldUnicodePath();
-              if (null !== e2) this.fileNameStr = e2;
-              else {
-                var r2 = s.transformTo(t2, this.fileName);
-                this.fileNameStr = this.loadOptions.decodeFileName(r2);
-              }
-              var i2 = this.findExtraFieldUnicodeComment();
-              if (null !== i2) this.fileCommentStr = i2;
-              else {
-                var n2 = s.transformTo(t2, this.fileComment);
-                this.fileCommentStr = this.loadOptions.decodeFileName(n2);
-              }
-            }
-          }, findExtraFieldUnicodePath: function() {
-            var t2 = this.extraFields[28789];
-            if (t2) {
-              var e2 = i(t2.value);
-              return 1 !== e2.readInt(1) ? null : a(this.fileName) !== e2.readInt(4) ? null : o.utf8decode(e2.readData(t2.length - 5));
-            }
-            return null;
-          }, findExtraFieldUnicodeComment: function() {
-            var t2 = this.extraFields[25461];
-            if (t2) {
-              var e2 = i(t2.value);
-              return 1 !== e2.readInt(1) ? null : a(this.fileComment) !== e2.readInt(4) ? null : o.utf8decode(e2.readData(t2.length - 5));
-            }
-            return null;
-          } }, e.exports = l;
-        }, { "./compressedObject": 2, "./compressions": 3, "./crc32": 4, "./reader/readerFor": 22, "./support": 30, "./utf8": 31, "./utils": 32 }], 35: [function(t, e, r) {
-          "use strict";
-          function i(t2, e2, r2) {
-            this.name = t2, this.dir = r2.dir, this.date = r2.date, this.comment = r2.comment, this.unixPermissions = r2.unixPermissions, this.dosPermissions = r2.dosPermissions, this._data = e2, this._dataBinary = r2.binary, this.options = { compression: r2.compression, compressionOptions: r2.compressionOptions };
-          }
-          var s = t("./stream/StreamHelper"), n = t("./stream/DataWorker"), a = t("./utf8"), o = t("./compressedObject"), h = t("./stream/GenericWorker");
-          i.prototype = { internalStream: function(t2) {
-            var e2 = null, r2 = "string";
-            try {
-              if (!t2) throw new Error("No output type specified.");
-              var i2 = "string" === (r2 = t2.toLowerCase()) || "text" === r2;
-              "binarystring" !== r2 && "text" !== r2 || (r2 = "string"), e2 = this._decompressWorker();
-              var n2 = !this._dataBinary;
-              n2 && !i2 && (e2 = e2.pipe(new a.Utf8EncodeWorker())), !n2 && i2 && (e2 = e2.pipe(new a.Utf8DecodeWorker()));
-            } catch (t3) {
-              (e2 = new h("error")).error(t3);
-            }
-            return new s(e2, r2, "");
-          }, async: function(t2, e2) {
-            return this.internalStream(t2).accumulate(e2);
-          }, nodeStream: function(t2, e2) {
-            return this.internalStream(t2 || "nodebuffer").toNodejsStream(e2);
-          }, _compressWorker: function(t2, e2) {
-            if (this._data instanceof o && this._data.compression.magic === t2.magic) return this._data.getCompressedWorker();
-            var r2 = this._decompressWorker();
-            return this._dataBinary || (r2 = r2.pipe(new a.Utf8EncodeWorker())), o.createWorkerFrom(r2, t2, e2);
-          }, _decompressWorker: function() {
-            return this._data instanceof o ? this._data.getContentWorker() : this._data instanceof h ? this._data : new n(this._data);
-          } };
-          for (var u = ["asText", "asBinary", "asNodeBuffer", "asUint8Array", "asArrayBuffer"], l = function() {
-            throw new Error("This method has been removed in JSZip 3.0, please check the upgrade guide.");
-          }, f = 0; f < u.length; f++) i.prototype[u[f]] = l;
-          e.exports = i;
-        }, { "./compressedObject": 2, "./stream/DataWorker": 27, "./stream/GenericWorker": 28, "./stream/StreamHelper": 29, "./utf8": 31 }], 36: [function(t, l, e) {
-          (function(e2) {
-            "use strict";
-            var r, i, t2 = e2.MutationObserver || e2.WebKitMutationObserver;
-            if (t2) {
-              var n = 0, s = new t2(u), a = e2.document.createTextNode("");
-              s.observe(a, { characterData: true }), r = function() {
-                a.data = n = ++n % 2;
-              };
-            } else if (e2.setImmediate || void 0 === e2.MessageChannel) r = "document" in e2 && "onreadystatechange" in e2.document.createElement("script") ? function() {
-              var t3 = e2.document.createElement("script");
-              t3.onreadystatechange = function() {
-                u(), t3.onreadystatechange = null, t3.parentNode.removeChild(t3), t3 = null;
-              }, e2.document.documentElement.appendChild(t3);
-            } : function() {
-              setTimeout(u, 0);
-            };
-            else {
-              var o = new e2.MessageChannel();
-              o.port1.onmessage = u, r = function() {
-                o.port2.postMessage(0);
-              };
-            }
-            var h = [];
-            function u() {
-              var t3, e3;
-              i = true;
-              for (var r2 = h.length; r2; ) {
-                for (e3 = h, h = [], t3 = -1; ++t3 < r2; ) e3[t3]();
-                r2 = h.length;
-              }
-              i = false;
-            }
-            l.exports = function(t3) {
-              1 !== h.push(t3) || i || r();
-            };
-          }).call(this, "undefined" != typeof global ? global : "undefined" != typeof self ? self : "undefined" != typeof window ? window : {});
-        }, {}], 37: [function(t, e, r) {
-          "use strict";
-          var n = t("immediate");
-          function u() {
-          }
-          var l = {}, s = ["REJECTED"], a = ["FULFILLED"], i = ["PENDING"];
-          function o(t2) {
-            if ("function" != typeof t2) throw new TypeError("resolver must be a function");
-            this.state = i, this.queue = [], this.outcome = void 0, t2 !== u && c(this, t2);
-          }
-          function h(t2, e2, r2) {
-            this.promise = t2, "function" == typeof e2 && (this.onFulfilled = e2, this.callFulfilled = this.otherCallFulfilled), "function" == typeof r2 && (this.onRejected = r2, this.callRejected = this.otherCallRejected);
-          }
-          function f(e2, r2, i2) {
-            n(function() {
-              var t2;
-              try {
-                t2 = r2(i2);
-              } catch (t3) {
-                return l.reject(e2, t3);
-              }
-              t2 === e2 ? l.reject(e2, new TypeError("Cannot resolve promise with itself")) : l.resolve(e2, t2);
-            });
-          }
-          function d(t2) {
-            var e2 = t2 && t2.then;
-            if (t2 && ("object" == typeof t2 || "function" == typeof t2) && "function" == typeof e2) return function() {
-              e2.apply(t2, arguments);
-            };
-          }
-          function c(e2, t2) {
-            var r2 = false;
-            function i2(t3) {
-              r2 || (r2 = true, l.reject(e2, t3));
-            }
-            function n2(t3) {
-              r2 || (r2 = true, l.resolve(e2, t3));
-            }
-            var s2 = p(function() {
-              t2(n2, i2);
-            });
-            "error" === s2.status && i2(s2.value);
-          }
-          function p(t2, e2) {
-            var r2 = {};
-            try {
-              r2.value = t2(e2), r2.status = "success";
-            } catch (t3) {
-              r2.status = "error", r2.value = t3;
-            }
-            return r2;
-          }
-          (e.exports = o).prototype.finally = function(e2) {
-            if ("function" != typeof e2) return this;
-            var r2 = this.constructor;
-            return this.then(function(t2) {
-              return r2.resolve(e2()).then(function() {
-                return t2;
-              });
-            }, function(t2) {
-              return r2.resolve(e2()).then(function() {
-                throw t2;
-              });
-            });
-          }, o.prototype.catch = function(t2) {
-            return this.then(null, t2);
-          }, o.prototype.then = function(t2, e2) {
-            if ("function" != typeof t2 && this.state === a || "function" != typeof e2 && this.state === s) return this;
-            var r2 = new this.constructor(u);
-            this.state !== i ? f(r2, this.state === a ? t2 : e2, this.outcome) : this.queue.push(new h(r2, t2, e2));
-            return r2;
-          }, h.prototype.callFulfilled = function(t2) {
-            l.resolve(this.promise, t2);
-          }, h.prototype.otherCallFulfilled = function(t2) {
-            f(this.promise, this.onFulfilled, t2);
-          }, h.prototype.callRejected = function(t2) {
-            l.reject(this.promise, t2);
-          }, h.prototype.otherCallRejected = function(t2) {
-            f(this.promise, this.onRejected, t2);
-          }, l.resolve = function(t2, e2) {
-            var r2 = p(d, e2);
-            if ("error" === r2.status) return l.reject(t2, r2.value);
-            var i2 = r2.value;
-            if (i2) c(t2, i2);
-            else {
-              t2.state = a, t2.outcome = e2;
-              for (var n2 = -1, s2 = t2.queue.length; ++n2 < s2; ) t2.queue[n2].callFulfilled(e2);
-            }
-            return t2;
-          }, l.reject = function(t2, e2) {
-            t2.state = s, t2.outcome = e2;
-            for (var r2 = -1, i2 = t2.queue.length; ++r2 < i2; ) t2.queue[r2].callRejected(e2);
-            return t2;
-          }, o.resolve = function(t2) {
-            if (t2 instanceof this) return t2;
-            return l.resolve(new this(u), t2);
-          }, o.reject = function(t2) {
-            var e2 = new this(u);
-            return l.reject(e2, t2);
-          }, o.all = function(t2) {
-            var r2 = this;
-            if ("[object Array]" !== Object.prototype.toString.call(t2)) return this.reject(new TypeError("must be an array"));
-            var i2 = t2.length, n2 = false;
-            if (!i2) return this.resolve([]);
-            var s2 = new Array(i2), a2 = 0, e2 = -1, o2 = new this(u);
-            for (; ++e2 < i2; ) h2(t2[e2], e2);
-            return o2;
-            function h2(t3, e3) {
-              r2.resolve(t3).then(function(t4) {
-                s2[e3] = t4, ++a2 !== i2 || n2 || (n2 = true, l.resolve(o2, s2));
-              }, function(t4) {
-                n2 || (n2 = true, l.reject(o2, t4));
-              });
-            }
-          }, o.race = function(t2) {
-            var e2 = this;
-            if ("[object Array]" !== Object.prototype.toString.call(t2)) return this.reject(new TypeError("must be an array"));
-            var r2 = t2.length, i2 = false;
-            if (!r2) return this.resolve([]);
-            var n2 = -1, s2 = new this(u);
-            for (; ++n2 < r2; ) a2 = t2[n2], e2.resolve(a2).then(function(t3) {
-              i2 || (i2 = true, l.resolve(s2, t3));
-            }, function(t3) {
-              i2 || (i2 = true, l.reject(s2, t3));
-            });
-            var a2;
-            return s2;
-          };
-        }, { immediate: 36 }], 38: [function(t, e, r) {
-          "use strict";
-          var i = {};
-          (0, t("./lib/utils/common").assign)(i, t("./lib/deflate"), t("./lib/inflate"), t("./lib/zlib/constants")), e.exports = i;
-        }, { "./lib/deflate": 39, "./lib/inflate": 40, "./lib/utils/common": 41, "./lib/zlib/constants": 44 }], 39: [function(t, e, r) {
-          "use strict";
-          var a = t("./zlib/deflate"), o = t("./utils/common"), h = t("./utils/strings"), n = t("./zlib/messages"), s = t("./zlib/zstream"), u = Object.prototype.toString, l = 0, f = -1, d = 0, c = 8;
-          function p(t2) {
-            if (!(this instanceof p)) return new p(t2);
-            this.options = o.assign({ level: f, method: c, chunkSize: 16384, windowBits: 15, memLevel: 8, strategy: d, to: "" }, t2 || {});
-            var e2 = this.options;
-            e2.raw && 0 < e2.windowBits ? e2.windowBits = -e2.windowBits : e2.gzip && 0 < e2.windowBits && e2.windowBits < 16 && (e2.windowBits += 16), this.err = 0, this.msg = "", this.ended = false, this.chunks = [], this.strm = new s(), this.strm.avail_out = 0;
-            var r2 = a.deflateInit2(this.strm, e2.level, e2.method, e2.windowBits, e2.memLevel, e2.strategy);
-            if (r2 !== l) throw new Error(n[r2]);
-            if (e2.header && a.deflateSetHeader(this.strm, e2.header), e2.dictionary) {
-              var i2;
-              if (i2 = "string" == typeof e2.dictionary ? h.string2buf(e2.dictionary) : "[object ArrayBuffer]" === u.call(e2.dictionary) ? new Uint8Array(e2.dictionary) : e2.dictionary, (r2 = a.deflateSetDictionary(this.strm, i2)) !== l) throw new Error(n[r2]);
-              this._dict_set = true;
-            }
-          }
-          function i(t2, e2) {
-            var r2 = new p(e2);
-            if (r2.push(t2, true), r2.err) throw r2.msg || n[r2.err];
-            return r2.result;
-          }
-          p.prototype.push = function(t2, e2) {
-            var r2, i2, n2 = this.strm, s2 = this.options.chunkSize;
-            if (this.ended) return false;
-            i2 = e2 === ~~e2 ? e2 : true === e2 ? 4 : 0, "string" == typeof t2 ? n2.input = h.string2buf(t2) : "[object ArrayBuffer]" === u.call(t2) ? n2.input = new Uint8Array(t2) : n2.input = t2, n2.next_in = 0, n2.avail_in = n2.input.length;
-            do {
-              if (0 === n2.avail_out && (n2.output = new o.Buf8(s2), n2.next_out = 0, n2.avail_out = s2), 1 !== (r2 = a.deflate(n2, i2)) && r2 !== l) return this.onEnd(r2), !(this.ended = true);
-              0 !== n2.avail_out && (0 !== n2.avail_in || 4 !== i2 && 2 !== i2) || ("string" === this.options.to ? this.onData(h.buf2binstring(o.shrinkBuf(n2.output, n2.next_out))) : this.onData(o.shrinkBuf(n2.output, n2.next_out)));
-            } while ((0 < n2.avail_in || 0 === n2.avail_out) && 1 !== r2);
-            return 4 === i2 ? (r2 = a.deflateEnd(this.strm), this.onEnd(r2), this.ended = true, r2 === l) : 2 !== i2 || (this.onEnd(l), !(n2.avail_out = 0));
-          }, p.prototype.onData = function(t2) {
-            this.chunks.push(t2);
-          }, p.prototype.onEnd = function(t2) {
-            t2 === l && ("string" === this.options.to ? this.result = this.chunks.join("") : this.result = o.flattenChunks(this.chunks)), this.chunks = [], this.err = t2, this.msg = this.strm.msg;
-          }, r.Deflate = p, r.deflate = i, r.deflateRaw = function(t2, e2) {
-            return (e2 = e2 || {}).raw = true, i(t2, e2);
-          }, r.gzip = function(t2, e2) {
-            return (e2 = e2 || {}).gzip = true, i(t2, e2);
-          };
-        }, { "./utils/common": 41, "./utils/strings": 42, "./zlib/deflate": 46, "./zlib/messages": 51, "./zlib/zstream": 53 }], 40: [function(t, e, r) {
-          "use strict";
-          var d = t("./zlib/inflate"), c = t("./utils/common"), p = t("./utils/strings"), m = t("./zlib/constants"), i = t("./zlib/messages"), n = t("./zlib/zstream"), s = t("./zlib/gzheader"), _ = Object.prototype.toString;
-          function a(t2) {
-            if (!(this instanceof a)) return new a(t2);
-            this.options = c.assign({ chunkSize: 16384, windowBits: 0, to: "" }, t2 || {});
-            var e2 = this.options;
-            e2.raw && 0 <= e2.windowBits && e2.windowBits < 16 && (e2.windowBits = -e2.windowBits, 0 === e2.windowBits && (e2.windowBits = -15)), !(0 <= e2.windowBits && e2.windowBits < 16) || t2 && t2.windowBits || (e2.windowBits += 32), 15 < e2.windowBits && e2.windowBits < 48 && 0 == (15 & e2.windowBits) && (e2.windowBits |= 15), this.err = 0, this.msg = "", this.ended = false, this.chunks = [], this.strm = new n(), this.strm.avail_out = 0;
-            var r2 = d.inflateInit2(this.strm, e2.windowBits);
-            if (r2 !== m.Z_OK) throw new Error(i[r2]);
-            this.header = new s(), d.inflateGetHeader(this.strm, this.header);
-          }
-          function o(t2, e2) {
-            var r2 = new a(e2);
-            if (r2.push(t2, true), r2.err) throw r2.msg || i[r2.err];
-            return r2.result;
-          }
-          a.prototype.push = function(t2, e2) {
-            var r2, i2, n2, s2, a2, o2, h = this.strm, u = this.options.chunkSize, l = this.options.dictionary, f = false;
-            if (this.ended) return false;
-            i2 = e2 === ~~e2 ? e2 : true === e2 ? m.Z_FINISH : m.Z_NO_FLUSH, "string" == typeof t2 ? h.input = p.binstring2buf(t2) : "[object ArrayBuffer]" === _.call(t2) ? h.input = new Uint8Array(t2) : h.input = t2, h.next_in = 0, h.avail_in = h.input.length;
-            do {
-              if (0 === h.avail_out && (h.output = new c.Buf8(u), h.next_out = 0, h.avail_out = u), (r2 = d.inflate(h, m.Z_NO_FLUSH)) === m.Z_NEED_DICT && l && (o2 = "string" == typeof l ? p.string2buf(l) : "[object ArrayBuffer]" === _.call(l) ? new Uint8Array(l) : l, r2 = d.inflateSetDictionary(this.strm, o2)), r2 === m.Z_BUF_ERROR && true === f && (r2 = m.Z_OK, f = false), r2 !== m.Z_STREAM_END && r2 !== m.Z_OK) return this.onEnd(r2), !(this.ended = true);
-              h.next_out && (0 !== h.avail_out && r2 !== m.Z_STREAM_END && (0 !== h.avail_in || i2 !== m.Z_FINISH && i2 !== m.Z_SYNC_FLUSH) || ("string" === this.options.to ? (n2 = p.utf8border(h.output, h.next_out), s2 = h.next_out - n2, a2 = p.buf2string(h.output, n2), h.next_out = s2, h.avail_out = u - s2, s2 && c.arraySet(h.output, h.output, n2, s2, 0), this.onData(a2)) : this.onData(c.shrinkBuf(h.output, h.next_out)))), 0 === h.avail_in && 0 === h.avail_out && (f = true);
-            } while ((0 < h.avail_in || 0 === h.avail_out) && r2 !== m.Z_STREAM_END);
-            return r2 === m.Z_STREAM_END && (i2 = m.Z_FINISH), i2 === m.Z_FINISH ? (r2 = d.inflateEnd(this.strm), this.onEnd(r2), this.ended = true, r2 === m.Z_OK) : i2 !== m.Z_SYNC_FLUSH || (this.onEnd(m.Z_OK), !(h.avail_out = 0));
-          }, a.prototype.onData = function(t2) {
-            this.chunks.push(t2);
-          }, a.prototype.onEnd = function(t2) {
-            t2 === m.Z_OK && ("string" === this.options.to ? this.result = this.chunks.join("") : this.result = c.flattenChunks(this.chunks)), this.chunks = [], this.err = t2, this.msg = this.strm.msg;
-          }, r.Inflate = a, r.inflate = o, r.inflateRaw = function(t2, e2) {
-            return (e2 = e2 || {}).raw = true, o(t2, e2);
-          }, r.ungzip = o;
-        }, { "./utils/common": 41, "./utils/strings": 42, "./zlib/constants": 44, "./zlib/gzheader": 47, "./zlib/inflate": 49, "./zlib/messages": 51, "./zlib/zstream": 53 }], 41: [function(t, e, r) {
-          "use strict";
-          var i = "undefined" != typeof Uint8Array && "undefined" != typeof Uint16Array && "undefined" != typeof Int32Array;
-          r.assign = function(t2) {
-            for (var e2 = Array.prototype.slice.call(arguments, 1); e2.length; ) {
-              var r2 = e2.shift();
-              if (r2) {
-                if ("object" != typeof r2) throw new TypeError(r2 + "must be non-object");
-                for (var i2 in r2) r2.hasOwnProperty(i2) && (t2[i2] = r2[i2]);
-              }
-            }
-            return t2;
-          }, r.shrinkBuf = function(t2, e2) {
-            return t2.length === e2 ? t2 : t2.subarray ? t2.subarray(0, e2) : (t2.length = e2, t2);
-          };
-          var n = { arraySet: function(t2, e2, r2, i2, n2) {
-            if (e2.subarray && t2.subarray) t2.set(e2.subarray(r2, r2 + i2), n2);
-            else for (var s2 = 0; s2 < i2; s2++) t2[n2 + s2] = e2[r2 + s2];
-          }, flattenChunks: function(t2) {
-            var e2, r2, i2, n2, s2, a;
-            for (e2 = i2 = 0, r2 = t2.length; e2 < r2; e2++) i2 += t2[e2].length;
-            for (a = new Uint8Array(i2), e2 = n2 = 0, r2 = t2.length; e2 < r2; e2++) s2 = t2[e2], a.set(s2, n2), n2 += s2.length;
-            return a;
-          } }, s = { arraySet: function(t2, e2, r2, i2, n2) {
-            for (var s2 = 0; s2 < i2; s2++) t2[n2 + s2] = e2[r2 + s2];
-          }, flattenChunks: function(t2) {
-            return [].concat.apply([], t2);
-          } };
-          r.setTyped = function(t2) {
-            t2 ? (r.Buf8 = Uint8Array, r.Buf16 = Uint16Array, r.Buf32 = Int32Array, r.assign(r, n)) : (r.Buf8 = Array, r.Buf16 = Array, r.Buf32 = Array, r.assign(r, s));
-          }, r.setTyped(i);
-        }, {}], 42: [function(t, e, r) {
-          "use strict";
-          var h = t("./common"), n = true, s = true;
-          try {
-            String.fromCharCode.apply(null, [0]);
-          } catch (t2) {
-            n = false;
-          }
-          try {
-            String.fromCharCode.apply(null, new Uint8Array(1));
-          } catch (t2) {
-            s = false;
-          }
-          for (var u = new h.Buf8(256), i = 0; i < 256; i++) u[i] = 252 <= i ? 6 : 248 <= i ? 5 : 240 <= i ? 4 : 224 <= i ? 3 : 192 <= i ? 2 : 1;
-          function l(t2, e2) {
-            if (e2 < 65537 && (t2.subarray && s || !t2.subarray && n)) return String.fromCharCode.apply(null, h.shrinkBuf(t2, e2));
-            for (var r2 = "", i2 = 0; i2 < e2; i2++) r2 += String.fromCharCode(t2[i2]);
-            return r2;
-          }
-          u[254] = u[254] = 1, r.string2buf = function(t2) {
-            var e2, r2, i2, n2, s2, a = t2.length, o = 0;
-            for (n2 = 0; n2 < a; n2++) 55296 == (64512 & (r2 = t2.charCodeAt(n2))) && n2 + 1 < a && 56320 == (64512 & (i2 = t2.charCodeAt(n2 + 1))) && (r2 = 65536 + (r2 - 55296 << 10) + (i2 - 56320), n2++), o += r2 < 128 ? 1 : r2 < 2048 ? 2 : r2 < 65536 ? 3 : 4;
-            for (e2 = new h.Buf8(o), n2 = s2 = 0; s2 < o; n2++) 55296 == (64512 & (r2 = t2.charCodeAt(n2))) && n2 + 1 < a && 56320 == (64512 & (i2 = t2.charCodeAt(n2 + 1))) && (r2 = 65536 + (r2 - 55296 << 10) + (i2 - 56320), n2++), r2 < 128 ? e2[s2++] = r2 : (r2 < 2048 ? e2[s2++] = 192 | r2 >>> 6 : (r2 < 65536 ? e2[s2++] = 224 | r2 >>> 12 : (e2[s2++] = 240 | r2 >>> 18, e2[s2++] = 128 | r2 >>> 12 & 63), e2[s2++] = 128 | r2 >>> 6 & 63), e2[s2++] = 128 | 63 & r2);
-            return e2;
-          }, r.buf2binstring = function(t2) {
-            return l(t2, t2.length);
-          }, r.binstring2buf = function(t2) {
-            for (var e2 = new h.Buf8(t2.length), r2 = 0, i2 = e2.length; r2 < i2; r2++) e2[r2] = t2.charCodeAt(r2);
-            return e2;
-          }, r.buf2string = function(t2, e2) {
-            var r2, i2, n2, s2, a = e2 || t2.length, o = new Array(2 * a);
-            for (r2 = i2 = 0; r2 < a; ) if ((n2 = t2[r2++]) < 128) o[i2++] = n2;
-            else if (4 < (s2 = u[n2])) o[i2++] = 65533, r2 += s2 - 1;
-            else {
-              for (n2 &= 2 === s2 ? 31 : 3 === s2 ? 15 : 7; 1 < s2 && r2 < a; ) n2 = n2 << 6 | 63 & t2[r2++], s2--;
-              1 < s2 ? o[i2++] = 65533 : n2 < 65536 ? o[i2++] = n2 : (n2 -= 65536, o[i2++] = 55296 | n2 >> 10 & 1023, o[i2++] = 56320 | 1023 & n2);
-            }
-            return l(o, i2);
-          }, r.utf8border = function(t2, e2) {
-            var r2;
-            for ((e2 = e2 || t2.length) > t2.length && (e2 = t2.length), r2 = e2 - 1; 0 <= r2 && 128 == (192 & t2[r2]); ) r2--;
-            return r2 < 0 ? e2 : 0 === r2 ? e2 : r2 + u[t2[r2]] > e2 ? r2 : e2;
-          };
-        }, { "./common": 41 }], 43: [function(t, e, r) {
-          "use strict";
-          e.exports = function(t2, e2, r2, i) {
-            for (var n = 65535 & t2 | 0, s = t2 >>> 16 & 65535 | 0, a = 0; 0 !== r2; ) {
-              for (r2 -= a = 2e3 < r2 ? 2e3 : r2; s = s + (n = n + e2[i++] | 0) | 0, --a; ) ;
-              n %= 65521, s %= 65521;
-            }
-            return n | s << 16 | 0;
-          };
-        }, {}], 44: [function(t, e, r) {
-          "use strict";
-          e.exports = { Z_NO_FLUSH: 0, Z_PARTIAL_FLUSH: 1, Z_SYNC_FLUSH: 2, Z_FULL_FLUSH: 3, Z_FINISH: 4, Z_BLOCK: 5, Z_TREES: 6, Z_OK: 0, Z_STREAM_END: 1, Z_NEED_DICT: 2, Z_ERRNO: -1, Z_STREAM_ERROR: -2, Z_DATA_ERROR: -3, Z_BUF_ERROR: -5, Z_NO_COMPRESSION: 0, Z_BEST_SPEED: 1, Z_BEST_COMPRESSION: 9, Z_DEFAULT_COMPRESSION: -1, Z_FILTERED: 1, Z_HUFFMAN_ONLY: 2, Z_RLE: 3, Z_FIXED: 4, Z_DEFAULT_STRATEGY: 0, Z_BINARY: 0, Z_TEXT: 1, Z_UNKNOWN: 2, Z_DEFLATED: 8 };
-        }, {}], 45: [function(t, e, r) {
-          "use strict";
-          var o = function() {
-            for (var t2, e2 = [], r2 = 0; r2 < 256; r2++) {
-              t2 = r2;
-              for (var i = 0; i < 8; i++) t2 = 1 & t2 ? 3988292384 ^ t2 >>> 1 : t2 >>> 1;
-              e2[r2] = t2;
-            }
-            return e2;
-          }();
-          e.exports = function(t2, e2, r2, i) {
-            var n = o, s = i + r2;
-            t2 ^= -1;
-            for (var a = i; a < s; a++) t2 = t2 >>> 8 ^ n[255 & (t2 ^ e2[a])];
-            return -1 ^ t2;
-          };
-        }, {}], 46: [function(t, e, r) {
-          "use strict";
-          var h, d = t("../utils/common"), u = t("./trees"), c = t("./adler32"), p = t("./crc32"), i = t("./messages"), l = 0, f = 4, m = 0, _ = -2, g = -1, b = 4, n = 2, v = 8, y = 9, s = 286, a = 30, o = 19, w = 2 * s + 1, k = 15, x = 3, S = 258, z = S + x + 1, C = 42, E = 113, A = 1, I = 2, O = 3, B = 4;
-          function R(t2, e2) {
-            return t2.msg = i[e2], e2;
-          }
-          function T(t2) {
-            return (t2 << 1) - (4 < t2 ? 9 : 0);
-          }
-          function D(t2) {
-            for (var e2 = t2.length; 0 <= --e2; ) t2[e2] = 0;
-          }
-          function F(t2) {
-            var e2 = t2.state, r2 = e2.pending;
-            r2 > t2.avail_out && (r2 = t2.avail_out), 0 !== r2 && (d.arraySet(t2.output, e2.pending_buf, e2.pending_out, r2, t2.next_out), t2.next_out += r2, e2.pending_out += r2, t2.total_out += r2, t2.avail_out -= r2, e2.pending -= r2, 0 === e2.pending && (e2.pending_out = 0));
-          }
-          function N(t2, e2) {
-            u._tr_flush_block(t2, 0 <= t2.block_start ? t2.block_start : -1, t2.strstart - t2.block_start, e2), t2.block_start = t2.strstart, F(t2.strm);
-          }
-          function U(t2, e2) {
-            t2.pending_buf[t2.pending++] = e2;
-          }
-          function P(t2, e2) {
-            t2.pending_buf[t2.pending++] = e2 >>> 8 & 255, t2.pending_buf[t2.pending++] = 255 & e2;
-          }
-          function L(t2, e2) {
-            var r2, i2, n2 = t2.max_chain_length, s2 = t2.strstart, a2 = t2.prev_length, o2 = t2.nice_match, h2 = t2.strstart > t2.w_size - z ? t2.strstart - (t2.w_size - z) : 0, u2 = t2.window, l2 = t2.w_mask, f2 = t2.prev, d2 = t2.strstart + S, c2 = u2[s2 + a2 - 1], p2 = u2[s2 + a2];
-            t2.prev_length >= t2.good_match && (n2 >>= 2), o2 > t2.lookahead && (o2 = t2.lookahead);
-            do {
-              if (u2[(r2 = e2) + a2] === p2 && u2[r2 + a2 - 1] === c2 && u2[r2] === u2[s2] && u2[++r2] === u2[s2 + 1]) {
-                s2 += 2, r2++;
-                do {
-                } while (u2[++s2] === u2[++r2] && u2[++s2] === u2[++r2] && u2[++s2] === u2[++r2] && u2[++s2] === u2[++r2] && u2[++s2] === u2[++r2] && u2[++s2] === u2[++r2] && u2[++s2] === u2[++r2] && u2[++s2] === u2[++r2] && s2 < d2);
-                if (i2 = S - (d2 - s2), s2 = d2 - S, a2 < i2) {
-                  if (t2.match_start = e2, o2 <= (a2 = i2)) break;
-                  c2 = u2[s2 + a2 - 1], p2 = u2[s2 + a2];
-                }
-              }
-            } while ((e2 = f2[e2 & l2]) > h2 && 0 != --n2);
-            return a2 <= t2.lookahead ? a2 : t2.lookahead;
-          }
-          function j(t2) {
-            var e2, r2, i2, n2, s2, a2, o2, h2, u2, l2, f2 = t2.w_size;
-            do {
-              if (n2 = t2.window_size - t2.lookahead - t2.strstart, t2.strstart >= f2 + (f2 - z)) {
-                for (d.arraySet(t2.window, t2.window, f2, f2, 0), t2.match_start -= f2, t2.strstart -= f2, t2.block_start -= f2, e2 = r2 = t2.hash_size; i2 = t2.head[--e2], t2.head[e2] = f2 <= i2 ? i2 - f2 : 0, --r2; ) ;
-                for (e2 = r2 = f2; i2 = t2.prev[--e2], t2.prev[e2] = f2 <= i2 ? i2 - f2 : 0, --r2; ) ;
-                n2 += f2;
-              }
-              if (0 === t2.strm.avail_in) break;
-              if (a2 = t2.strm, o2 = t2.window, h2 = t2.strstart + t2.lookahead, u2 = n2, l2 = void 0, l2 = a2.avail_in, u2 < l2 && (l2 = u2), r2 = 0 === l2 ? 0 : (a2.avail_in -= l2, d.arraySet(o2, a2.input, a2.next_in, l2, h2), 1 === a2.state.wrap ? a2.adler = c(a2.adler, o2, l2, h2) : 2 === a2.state.wrap && (a2.adler = p(a2.adler, o2, l2, h2)), a2.next_in += l2, a2.total_in += l2, l2), t2.lookahead += r2, t2.lookahead + t2.insert >= x) for (s2 = t2.strstart - t2.insert, t2.ins_h = t2.window[s2], t2.ins_h = (t2.ins_h << t2.hash_shift ^ t2.window[s2 + 1]) & t2.hash_mask; t2.insert && (t2.ins_h = (t2.ins_h << t2.hash_shift ^ t2.window[s2 + x - 1]) & t2.hash_mask, t2.prev[s2 & t2.w_mask] = t2.head[t2.ins_h], t2.head[t2.ins_h] = s2, s2++, t2.insert--, !(t2.lookahead + t2.insert < x)); ) ;
-            } while (t2.lookahead < z && 0 !== t2.strm.avail_in);
-          }
-          function Z(t2, e2) {
-            for (var r2, i2; ; ) {
-              if (t2.lookahead < z) {
-                if (j(t2), t2.lookahead < z && e2 === l) return A;
-                if (0 === t2.lookahead) break;
-              }
-              if (r2 = 0, t2.lookahead >= x && (t2.ins_h = (t2.ins_h << t2.hash_shift ^ t2.window[t2.strstart + x - 1]) & t2.hash_mask, r2 = t2.prev[t2.strstart & t2.w_mask] = t2.head[t2.ins_h], t2.head[t2.ins_h] = t2.strstart), 0 !== r2 && t2.strstart - r2 <= t2.w_size - z && (t2.match_length = L(t2, r2)), t2.match_length >= x) if (i2 = u._tr_tally(t2, t2.strstart - t2.match_start, t2.match_length - x), t2.lookahead -= t2.match_length, t2.match_length <= t2.max_lazy_match && t2.lookahead >= x) {
-                for (t2.match_length--; t2.strstart++, t2.ins_h = (t2.ins_h << t2.hash_shift ^ t2.window[t2.strstart + x - 1]) & t2.hash_mask, r2 = t2.prev[t2.strstart & t2.w_mask] = t2.head[t2.ins_h], t2.head[t2.ins_h] = t2.strstart, 0 != --t2.match_length; ) ;
-                t2.strstart++;
-              } else t2.strstart += t2.match_length, t2.match_length = 0, t2.ins_h = t2.window[t2.strstart], t2.ins_h = (t2.ins_h << t2.hash_shift ^ t2.window[t2.strstart + 1]) & t2.hash_mask;
-              else i2 = u._tr_tally(t2, 0, t2.window[t2.strstart]), t2.lookahead--, t2.strstart++;
-              if (i2 && (N(t2, false), 0 === t2.strm.avail_out)) return A;
-            }
-            return t2.insert = t2.strstart < x - 1 ? t2.strstart : x - 1, e2 === f ? (N(t2, true), 0 === t2.strm.avail_out ? O : B) : t2.last_lit && (N(t2, false), 0 === t2.strm.avail_out) ? A : I;
-          }
-          function W(t2, e2) {
-            for (var r2, i2, n2; ; ) {
-              if (t2.lookahead < z) {
-                if (j(t2), t2.lookahead < z && e2 === l) return A;
-                if (0 === t2.lookahead) break;
-              }
-              if (r2 = 0, t2.lookahead >= x && (t2.ins_h = (t2.ins_h << t2.hash_shift ^ t2.window[t2.strstart + x - 1]) & t2.hash_mask, r2 = t2.prev[t2.strstart & t2.w_mask] = t2.head[t2.ins_h], t2.head[t2.ins_h] = t2.strstart), t2.prev_length = t2.match_length, t2.prev_match = t2.match_start, t2.match_length = x - 1, 0 !== r2 && t2.prev_length < t2.max_lazy_match && t2.strstart - r2 <= t2.w_size - z && (t2.match_length = L(t2, r2), t2.match_length <= 5 && (1 === t2.strategy || t2.match_length === x && 4096 < t2.strstart - t2.match_start) && (t2.match_length = x - 1)), t2.prev_length >= x && t2.match_length <= t2.prev_length) {
-                for (n2 = t2.strstart + t2.lookahead - x, i2 = u._tr_tally(t2, t2.strstart - 1 - t2.prev_match, t2.prev_length - x), t2.lookahead -= t2.prev_length - 1, t2.prev_length -= 2; ++t2.strstart <= n2 && (t2.ins_h = (t2.ins_h << t2.hash_shift ^ t2.window[t2.strstart + x - 1]) & t2.hash_mask, r2 = t2.prev[t2.strstart & t2.w_mask] = t2.head[t2.ins_h], t2.head[t2.ins_h] = t2.strstart), 0 != --t2.prev_length; ) ;
-                if (t2.match_available = 0, t2.match_length = x - 1, t2.strstart++, i2 && (N(t2, false), 0 === t2.strm.avail_out)) return A;
-              } else if (t2.match_available) {
-                if ((i2 = u._tr_tally(t2, 0, t2.window[t2.strstart - 1])) && N(t2, false), t2.strstart++, t2.lookahead--, 0 === t2.strm.avail_out) return A;
-              } else t2.match_available = 1, t2.strstart++, t2.lookahead--;
-            }
-            return t2.match_available && (i2 = u._tr_tally(t2, 0, t2.window[t2.strstart - 1]), t2.match_available = 0), t2.insert = t2.strstart < x - 1 ? t2.strstart : x - 1, e2 === f ? (N(t2, true), 0 === t2.strm.avail_out ? O : B) : t2.last_lit && (N(t2, false), 0 === t2.strm.avail_out) ? A : I;
-          }
-          function M(t2, e2, r2, i2, n2) {
-            this.good_length = t2, this.max_lazy = e2, this.nice_length = r2, this.max_chain = i2, this.func = n2;
-          }
-          function H() {
-            this.strm = null, this.status = 0, this.pending_buf = null, this.pending_buf_size = 0, this.pending_out = 0, this.pending = 0, this.wrap = 0, this.gzhead = null, this.gzindex = 0, this.method = v, this.last_flush = -1, this.w_size = 0, this.w_bits = 0, this.w_mask = 0, this.window = null, this.window_size = 0, this.prev = null, this.head = null, this.ins_h = 0, this.hash_size = 0, this.hash_bits = 0, this.hash_mask = 0, this.hash_shift = 0, this.block_start = 0, this.match_length = 0, this.prev_match = 0, this.match_available = 0, this.strstart = 0, this.match_start = 0, this.lookahead = 0, this.prev_length = 0, this.max_chain_length = 0, this.max_lazy_match = 0, this.level = 0, this.strategy = 0, this.good_match = 0, this.nice_match = 0, this.dyn_ltree = new d.Buf16(2 * w), this.dyn_dtree = new d.Buf16(2 * (2 * a + 1)), this.bl_tree = new d.Buf16(2 * (2 * o + 1)), D(this.dyn_ltree), D(this.dyn_dtree), D(this.bl_tree), this.l_desc = null, this.d_desc = null, this.bl_desc = null, this.bl_count = new d.Buf16(k + 1), this.heap = new d.Buf16(2 * s + 1), D(this.heap), this.heap_len = 0, this.heap_max = 0, this.depth = new d.Buf16(2 * s + 1), D(this.depth), this.l_buf = 0, this.lit_bufsize = 0, this.last_lit = 0, this.d_buf = 0, this.opt_len = 0, this.static_len = 0, this.matches = 0, this.insert = 0, this.bi_buf = 0, this.bi_valid = 0;
-          }
-          function G(t2) {
-            var e2;
-            return t2 && t2.state ? (t2.total_in = t2.total_out = 0, t2.data_type = n, (e2 = t2.state).pending = 0, e2.pending_out = 0, e2.wrap < 0 && (e2.wrap = -e2.wrap), e2.status = e2.wrap ? C : E, t2.adler = 2 === e2.wrap ? 0 : 1, e2.last_flush = l, u._tr_init(e2), m) : R(t2, _);
-          }
-          function K(t2) {
-            var e2 = G(t2);
-            return e2 === m && function(t3) {
-              t3.window_size = 2 * t3.w_size, D(t3.head), t3.max_lazy_match = h[t3.level].max_lazy, t3.good_match = h[t3.level].good_length, t3.nice_match = h[t3.level].nice_length, t3.max_chain_length = h[t3.level].max_chain, t3.strstart = 0, t3.block_start = 0, t3.lookahead = 0, t3.insert = 0, t3.match_length = t3.prev_length = x - 1, t3.match_available = 0, t3.ins_h = 0;
-            }(t2.state), e2;
-          }
-          function Y(t2, e2, r2, i2, n2, s2) {
-            if (!t2) return _;
-            var a2 = 1;
-            if (e2 === g && (e2 = 6), i2 < 0 ? (a2 = 0, i2 = -i2) : 15 < i2 && (a2 = 2, i2 -= 16), n2 < 1 || y < n2 || r2 !== v || i2 < 8 || 15 < i2 || e2 < 0 || 9 < e2 || s2 < 0 || b < s2) return R(t2, _);
-            8 === i2 && (i2 = 9);
-            var o2 = new H();
-            return (t2.state = o2).strm = t2, o2.wrap = a2, o2.gzhead = null, o2.w_bits = i2, o2.w_size = 1 << o2.w_bits, o2.w_mask = o2.w_size - 1, o2.hash_bits = n2 + 7, o2.hash_size = 1 << o2.hash_bits, o2.hash_mask = o2.hash_size - 1, o2.hash_shift = ~~((o2.hash_bits + x - 1) / x), o2.window = new d.Buf8(2 * o2.w_size), o2.head = new d.Buf16(o2.hash_size), o2.prev = new d.Buf16(o2.w_size), o2.lit_bufsize = 1 << n2 + 6, o2.pending_buf_size = 4 * o2.lit_bufsize, o2.pending_buf = new d.Buf8(o2.pending_buf_size), o2.d_buf = 1 * o2.lit_bufsize, o2.l_buf = 3 * o2.lit_bufsize, o2.level = e2, o2.strategy = s2, o2.method = r2, K(t2);
-          }
-          h = [new M(0, 0, 0, 0, function(t2, e2) {
-            var r2 = 65535;
-            for (r2 > t2.pending_buf_size - 5 && (r2 = t2.pending_buf_size - 5); ; ) {
-              if (t2.lookahead <= 1) {
-                if (j(t2), 0 === t2.lookahead && e2 === l) return A;
-                if (0 === t2.lookahead) break;
-              }
-              t2.strstart += t2.lookahead, t2.lookahead = 0;
-              var i2 = t2.block_start + r2;
-              if ((0 === t2.strstart || t2.strstart >= i2) && (t2.lookahead = t2.strstart - i2, t2.strstart = i2, N(t2, false), 0 === t2.strm.avail_out)) return A;
-              if (t2.strstart - t2.block_start >= t2.w_size - z && (N(t2, false), 0 === t2.strm.avail_out)) return A;
-            }
-            return t2.insert = 0, e2 === f ? (N(t2, true), 0 === t2.strm.avail_out ? O : B) : (t2.strstart > t2.block_start && (N(t2, false), t2.strm.avail_out), A);
-          }), new M(4, 4, 8, 4, Z), new M(4, 5, 16, 8, Z), new M(4, 6, 32, 32, Z), new M(4, 4, 16, 16, W), new M(8, 16, 32, 32, W), new M(8, 16, 128, 128, W), new M(8, 32, 128, 256, W), new M(32, 128, 258, 1024, W), new M(32, 258, 258, 4096, W)], r.deflateInit = function(t2, e2) {
-            return Y(t2, e2, v, 15, 8, 0);
-          }, r.deflateInit2 = Y, r.deflateReset = K, r.deflateResetKeep = G, r.deflateSetHeader = function(t2, e2) {
-            return t2 && t2.state ? 2 !== t2.state.wrap ? _ : (t2.state.gzhead = e2, m) : _;
-          }, r.deflate = function(t2, e2) {
-            var r2, i2, n2, s2;
-            if (!t2 || !t2.state || 5 < e2 || e2 < 0) return t2 ? R(t2, _) : _;
-            if (i2 = t2.state, !t2.output || !t2.input && 0 !== t2.avail_in || 666 === i2.status && e2 !== f) return R(t2, 0 === t2.avail_out ? -5 : _);
-            if (i2.strm = t2, r2 = i2.last_flush, i2.last_flush = e2, i2.status === C) if (2 === i2.wrap) t2.adler = 0, U(i2, 31), U(i2, 139), U(i2, 8), i2.gzhead ? (U(i2, (i2.gzhead.text ? 1 : 0) + (i2.gzhead.hcrc ? 2 : 0) + (i2.gzhead.extra ? 4 : 0) + (i2.gzhead.name ? 8 : 0) + (i2.gzhead.comment ? 16 : 0)), U(i2, 255 & i2.gzhead.time), U(i2, i2.gzhead.time >> 8 & 255), U(i2, i2.gzhead.time >> 16 & 255), U(i2, i2.gzhead.time >> 24 & 255), U(i2, 9 === i2.level ? 2 : 2 <= i2.strategy || i2.level < 2 ? 4 : 0), U(i2, 255 & i2.gzhead.os), i2.gzhead.extra && i2.gzhead.extra.length && (U(i2, 255 & i2.gzhead.extra.length), U(i2, i2.gzhead.extra.length >> 8 & 255)), i2.gzhead.hcrc && (t2.adler = p(t2.adler, i2.pending_buf, i2.pending, 0)), i2.gzindex = 0, i2.status = 69) : (U(i2, 0), U(i2, 0), U(i2, 0), U(i2, 0), U(i2, 0), U(i2, 9 === i2.level ? 2 : 2 <= i2.strategy || i2.level < 2 ? 4 : 0), U(i2, 3), i2.status = E);
-            else {
-              var a2 = v + (i2.w_bits - 8 << 4) << 8;
-              a2 |= (2 <= i2.strategy || i2.level < 2 ? 0 : i2.level < 6 ? 1 : 6 === i2.level ? 2 : 3) << 6, 0 !== i2.strstart && (a2 |= 32), a2 += 31 - a2 % 31, i2.status = E, P(i2, a2), 0 !== i2.strstart && (P(i2, t2.adler >>> 16), P(i2, 65535 & t2.adler)), t2.adler = 1;
-            }
-            if (69 === i2.status) if (i2.gzhead.extra) {
-              for (n2 = i2.pending; i2.gzindex < (65535 & i2.gzhead.extra.length) && (i2.pending !== i2.pending_buf_size || (i2.gzhead.hcrc && i2.pending > n2 && (t2.adler = p(t2.adler, i2.pending_buf, i2.pending - n2, n2)), F(t2), n2 = i2.pending, i2.pending !== i2.pending_buf_size)); ) U(i2, 255 & i2.gzhead.extra[i2.gzindex]), i2.gzindex++;
-              i2.gzhead.hcrc && i2.pending > n2 && (t2.adler = p(t2.adler, i2.pending_buf, i2.pending - n2, n2)), i2.gzindex === i2.gzhead.extra.length && (i2.gzindex = 0, i2.status = 73);
-            } else i2.status = 73;
-            if (73 === i2.status) if (i2.gzhead.name) {
-              n2 = i2.pending;
-              do {
-                if (i2.pending === i2.pending_buf_size && (i2.gzhead.hcrc && i2.pending > n2 && (t2.adler = p(t2.adler, i2.pending_buf, i2.pending - n2, n2)), F(t2), n2 = i2.pending, i2.pending === i2.pending_buf_size)) {
-                  s2 = 1;
-                  break;
-                }
-                s2 = i2.gzindex < i2.gzhead.name.length ? 255 & i2.gzhead.name.charCodeAt(i2.gzindex++) : 0, U(i2, s2);
-              } while (0 !== s2);
-              i2.gzhead.hcrc && i2.pending > n2 && (t2.adler = p(t2.adler, i2.pending_buf, i2.pending - n2, n2)), 0 === s2 && (i2.gzindex = 0, i2.status = 91);
-            } else i2.status = 91;
-            if (91 === i2.status) if (i2.gzhead.comment) {
-              n2 = i2.pending;
-              do {
-                if (i2.pending === i2.pending_buf_size && (i2.gzhead.hcrc && i2.pending > n2 && (t2.adler = p(t2.adler, i2.pending_buf, i2.pending - n2, n2)), F(t2), n2 = i2.pending, i2.pending === i2.pending_buf_size)) {
-                  s2 = 1;
-                  break;
-                }
-                s2 = i2.gzindex < i2.gzhead.comment.length ? 255 & i2.gzhead.comment.charCodeAt(i2.gzindex++) : 0, U(i2, s2);
-              } while (0 !== s2);
-              i2.gzhead.hcrc && i2.pending > n2 && (t2.adler = p(t2.adler, i2.pending_buf, i2.pending - n2, n2)), 0 === s2 && (i2.status = 103);
-            } else i2.status = 103;
-            if (103 === i2.status && (i2.gzhead.hcrc ? (i2.pending + 2 > i2.pending_buf_size && F(t2), i2.pending + 2 <= i2.pending_buf_size && (U(i2, 255 & t2.adler), U(i2, t2.adler >> 8 & 255), t2.adler = 0, i2.status = E)) : i2.status = E), 0 !== i2.pending) {
-              if (F(t2), 0 === t2.avail_out) return i2.last_flush = -1, m;
-            } else if (0 === t2.avail_in && T(e2) <= T(r2) && e2 !== f) return R(t2, -5);
-            if (666 === i2.status && 0 !== t2.avail_in) return R(t2, -5);
-            if (0 !== t2.avail_in || 0 !== i2.lookahead || e2 !== l && 666 !== i2.status) {
-              var o2 = 2 === i2.strategy ? function(t3, e3) {
-                for (var r3; ; ) {
-                  if (0 === t3.lookahead && (j(t3), 0 === t3.lookahead)) {
-                    if (e3 === l) return A;
-                    break;
-                  }
-                  if (t3.match_length = 0, r3 = u._tr_tally(t3, 0, t3.window[t3.strstart]), t3.lookahead--, t3.strstart++, r3 && (N(t3, false), 0 === t3.strm.avail_out)) return A;
-                }
-                return t3.insert = 0, e3 === f ? (N(t3, true), 0 === t3.strm.avail_out ? O : B) : t3.last_lit && (N(t3, false), 0 === t3.strm.avail_out) ? A : I;
-              }(i2, e2) : 3 === i2.strategy ? function(t3, e3) {
-                for (var r3, i3, n3, s3, a3 = t3.window; ; ) {
-                  if (t3.lookahead <= S) {
-                    if (j(t3), t3.lookahead <= S && e3 === l) return A;
-                    if (0 === t3.lookahead) break;
-                  }
-                  if (t3.match_length = 0, t3.lookahead >= x && 0 < t3.strstart && (i3 = a3[n3 = t3.strstart - 1]) === a3[++n3] && i3 === a3[++n3] && i3 === a3[++n3]) {
-                    s3 = t3.strstart + S;
-                    do {
-                    } while (i3 === a3[++n3] && i3 === a3[++n3] && i3 === a3[++n3] && i3 === a3[++n3] && i3 === a3[++n3] && i3 === a3[++n3] && i3 === a3[++n3] && i3 === a3[++n3] && n3 < s3);
-                    t3.match_length = S - (s3 - n3), t3.match_length > t3.lookahead && (t3.match_length = t3.lookahead);
-                  }
-                  if (t3.match_length >= x ? (r3 = u._tr_tally(t3, 1, t3.match_length - x), t3.lookahead -= t3.match_length, t3.strstart += t3.match_length, t3.match_length = 0) : (r3 = u._tr_tally(t3, 0, t3.window[t3.strstart]), t3.lookahead--, t3.strstart++), r3 && (N(t3, false), 0 === t3.strm.avail_out)) return A;
-                }
-                return t3.insert = 0, e3 === f ? (N(t3, true), 0 === t3.strm.avail_out ? O : B) : t3.last_lit && (N(t3, false), 0 === t3.strm.avail_out) ? A : I;
-              }(i2, e2) : h[i2.level].func(i2, e2);
-              if (o2 !== O && o2 !== B || (i2.status = 666), o2 === A || o2 === O) return 0 === t2.avail_out && (i2.last_flush = -1), m;
-              if (o2 === I && (1 === e2 ? u._tr_align(i2) : 5 !== e2 && (u._tr_stored_block(i2, 0, 0, false), 3 === e2 && (D(i2.head), 0 === i2.lookahead && (i2.strstart = 0, i2.block_start = 0, i2.insert = 0))), F(t2), 0 === t2.avail_out)) return i2.last_flush = -1, m;
-            }
-            return e2 !== f ? m : i2.wrap <= 0 ? 1 : (2 === i2.wrap ? (U(i2, 255 & t2.adler), U(i2, t2.adler >> 8 & 255), U(i2, t2.adler >> 16 & 255), U(i2, t2.adler >> 24 & 255), U(i2, 255 & t2.total_in), U(i2, t2.total_in >> 8 & 255), U(i2, t2.total_in >> 16 & 255), U(i2, t2.total_in >> 24 & 255)) : (P(i2, t2.adler >>> 16), P(i2, 65535 & t2.adler)), F(t2), 0 < i2.wrap && (i2.wrap = -i2.wrap), 0 !== i2.pending ? m : 1);
-          }, r.deflateEnd = function(t2) {
-            var e2;
-            return t2 && t2.state ? (e2 = t2.state.status) !== C && 69 !== e2 && 73 !== e2 && 91 !== e2 && 103 !== e2 && e2 !== E && 666 !== e2 ? R(t2, _) : (t2.state = null, e2 === E ? R(t2, -3) : m) : _;
-          }, r.deflateSetDictionary = function(t2, e2) {
-            var r2, i2, n2, s2, a2, o2, h2, u2, l2 = e2.length;
-            if (!t2 || !t2.state) return _;
-            if (2 === (s2 = (r2 = t2.state).wrap) || 1 === s2 && r2.status !== C || r2.lookahead) return _;
-            for (1 === s2 && (t2.adler = c(t2.adler, e2, l2, 0)), r2.wrap = 0, l2 >= r2.w_size && (0 === s2 && (D(r2.head), r2.strstart = 0, r2.block_start = 0, r2.insert = 0), u2 = new d.Buf8(r2.w_size), d.arraySet(u2, e2, l2 - r2.w_size, r2.w_size, 0), e2 = u2, l2 = r2.w_size), a2 = t2.avail_in, o2 = t2.next_in, h2 = t2.input, t2.avail_in = l2, t2.next_in = 0, t2.input = e2, j(r2); r2.lookahead >= x; ) {
-              for (i2 = r2.strstart, n2 = r2.lookahead - (x - 1); r2.ins_h = (r2.ins_h << r2.hash_shift ^ r2.window[i2 + x - 1]) & r2.hash_mask, r2.prev[i2 & r2.w_mask] = r2.head[r2.ins_h], r2.head[r2.ins_h] = i2, i2++, --n2; ) ;
-              r2.strstart = i2, r2.lookahead = x - 1, j(r2);
-            }
-            return r2.strstart += r2.lookahead, r2.block_start = r2.strstart, r2.insert = r2.lookahead, r2.lookahead = 0, r2.match_length = r2.prev_length = x - 1, r2.match_available = 0, t2.next_in = o2, t2.input = h2, t2.avail_in = a2, r2.wrap = s2, m;
-          }, r.deflateInfo = "pako deflate (from Nodeca project)";
-        }, { "../utils/common": 41, "./adler32": 43, "./crc32": 45, "./messages": 51, "./trees": 52 }], 47: [function(t, e, r) {
-          "use strict";
-          e.exports = function() {
-            this.text = 0, this.time = 0, this.xflags = 0, this.os = 0, this.extra = null, this.extra_len = 0, this.name = "", this.comment = "", this.hcrc = 0, this.done = false;
-          };
-        }, {}], 48: [function(t, e, r) {
-          "use strict";
-          e.exports = function(t2, e2) {
-            var r2, i, n, s, a, o, h, u, l, f, d, c, p, m, _, g, b, v, y, w, k, x, S, z, C;
-            r2 = t2.state, i = t2.next_in, z = t2.input, n = i + (t2.avail_in - 5), s = t2.next_out, C = t2.output, a = s - (e2 - t2.avail_out), o = s + (t2.avail_out - 257), h = r2.dmax, u = r2.wsize, l = r2.whave, f = r2.wnext, d = r2.window, c = r2.hold, p = r2.bits, m = r2.lencode, _ = r2.distcode, g = (1 << r2.lenbits) - 1, b = (1 << r2.distbits) - 1;
-            t: do {
-              p < 15 && (c += z[i++] << p, p += 8, c += z[i++] << p, p += 8), v = m[c & g];
-              e: for (; ; ) {
-                if (c >>>= y = v >>> 24, p -= y, 0 === (y = v >>> 16 & 255)) C[s++] = 65535 & v;
-                else {
-                  if (!(16 & y)) {
-                    if (0 == (64 & y)) {
-                      v = m[(65535 & v) + (c & (1 << y) - 1)];
-                      continue e;
-                    }
-                    if (32 & y) {
-                      r2.mode = 12;
-                      break t;
-                    }
-                    t2.msg = "invalid literal/length code", r2.mode = 30;
-                    break t;
-                  }
-                  w = 65535 & v, (y &= 15) && (p < y && (c += z[i++] << p, p += 8), w += c & (1 << y) - 1, c >>>= y, p -= y), p < 15 && (c += z[i++] << p, p += 8, c += z[i++] << p, p += 8), v = _[c & b];
-                  r: for (; ; ) {
-                    if (c >>>= y = v >>> 24, p -= y, !(16 & (y = v >>> 16 & 255))) {
-                      if (0 == (64 & y)) {
-                        v = _[(65535 & v) + (c & (1 << y) - 1)];
-                        continue r;
-                      }
-                      t2.msg = "invalid distance code", r2.mode = 30;
-                      break t;
-                    }
-                    if (k = 65535 & v, p < (y &= 15) && (c += z[i++] << p, (p += 8) < y && (c += z[i++] << p, p += 8)), h < (k += c & (1 << y) - 1)) {
-                      t2.msg = "invalid distance too far back", r2.mode = 30;
-                      break t;
-                    }
-                    if (c >>>= y, p -= y, (y = s - a) < k) {
-                      if (l < (y = k - y) && r2.sane) {
-                        t2.msg = "invalid distance too far back", r2.mode = 30;
-                        break t;
-                      }
-                      if (S = d, (x = 0) === f) {
-                        if (x += u - y, y < w) {
-                          for (w -= y; C[s++] = d[x++], --y; ) ;
-                          x = s - k, S = C;
-                        }
-                      } else if (f < y) {
-                        if (x += u + f - y, (y -= f) < w) {
-                          for (w -= y; C[s++] = d[x++], --y; ) ;
-                          if (x = 0, f < w) {
-                            for (w -= y = f; C[s++] = d[x++], --y; ) ;
-                            x = s - k, S = C;
-                          }
-                        }
-                      } else if (x += f - y, y < w) {
-                        for (w -= y; C[s++] = d[x++], --y; ) ;
-                        x = s - k, S = C;
-                      }
-                      for (; 2 < w; ) C[s++] = S[x++], C[s++] = S[x++], C[s++] = S[x++], w -= 3;
-                      w && (C[s++] = S[x++], 1 < w && (C[s++] = S[x++]));
-                    } else {
-                      for (x = s - k; C[s++] = C[x++], C[s++] = C[x++], C[s++] = C[x++], 2 < (w -= 3); ) ;
-                      w && (C[s++] = C[x++], 1 < w && (C[s++] = C[x++]));
-                    }
-                    break;
-                  }
-                }
-                break;
-              }
-            } while (i < n && s < o);
-            i -= w = p >> 3, c &= (1 << (p -= w << 3)) - 1, t2.next_in = i, t2.next_out = s, t2.avail_in = i < n ? n - i + 5 : 5 - (i - n), t2.avail_out = s < o ? o - s + 257 : 257 - (s - o), r2.hold = c, r2.bits = p;
-          };
-        }, {}], 49: [function(t, e, r) {
-          "use strict";
-          var I = t("../utils/common"), O = t("./adler32"), B = t("./crc32"), R = t("./inffast"), T = t("./inftrees"), D = 1, F = 2, N = 0, U = -2, P = 1, i = 852, n = 592;
-          function L(t2) {
-            return (t2 >>> 24 & 255) + (t2 >>> 8 & 65280) + ((65280 & t2) << 8) + ((255 & t2) << 24);
-          }
-          function s() {
-            this.mode = 0, this.last = false, this.wrap = 0, this.havedict = false, this.flags = 0, this.dmax = 0, this.check = 0, this.total = 0, this.head = null, this.wbits = 0, this.wsize = 0, this.whave = 0, this.wnext = 0, this.window = null, this.hold = 0, this.bits = 0, this.length = 0, this.offset = 0, this.extra = 0, this.lencode = null, this.distcode = null, this.lenbits = 0, this.distbits = 0, this.ncode = 0, this.nlen = 0, this.ndist = 0, this.have = 0, this.next = null, this.lens = new I.Buf16(320), this.work = new I.Buf16(288), this.lendyn = null, this.distdyn = null, this.sane = 0, this.back = 0, this.was = 0;
-          }
-          function a(t2) {
-            var e2;
-            return t2 && t2.state ? (e2 = t2.state, t2.total_in = t2.total_out = e2.total = 0, t2.msg = "", e2.wrap && (t2.adler = 1 & e2.wrap), e2.mode = P, e2.last = 0, e2.havedict = 0, e2.dmax = 32768, e2.head = null, e2.hold = 0, e2.bits = 0, e2.lencode = e2.lendyn = new I.Buf32(i), e2.distcode = e2.distdyn = new I.Buf32(n), e2.sane = 1, e2.back = -1, N) : U;
-          }
-          function o(t2) {
-            var e2;
-            return t2 && t2.state ? ((e2 = t2.state).wsize = 0, e2.whave = 0, e2.wnext = 0, a(t2)) : U;
-          }
-          function h(t2, e2) {
-            var r2, i2;
-            return t2 && t2.state ? (i2 = t2.state, e2 < 0 ? (r2 = 0, e2 = -e2) : (r2 = 1 + (e2 >> 4), e2 < 48 && (e2 &= 15)), e2 && (e2 < 8 || 15 < e2) ? U : (null !== i2.window && i2.wbits !== e2 && (i2.window = null), i2.wrap = r2, i2.wbits = e2, o(t2))) : U;
-          }
-          function u(t2, e2) {
-            var r2, i2;
-            return t2 ? (i2 = new s(), (t2.state = i2).window = null, (r2 = h(t2, e2)) !== N && (t2.state = null), r2) : U;
-          }
-          var l, f, d = true;
-          function j(t2) {
-            if (d) {
-              var e2;
-              for (l = new I.Buf32(512), f = new I.Buf32(32), e2 = 0; e2 < 144; ) t2.lens[e2++] = 8;
-              for (; e2 < 256; ) t2.lens[e2++] = 9;
-              for (; e2 < 280; ) t2.lens[e2++] = 7;
-              for (; e2 < 288; ) t2.lens[e2++] = 8;
-              for (T(D, t2.lens, 0, 288, l, 0, t2.work, { bits: 9 }), e2 = 0; e2 < 32; ) t2.lens[e2++] = 5;
-              T(F, t2.lens, 0, 32, f, 0, t2.work, { bits: 5 }), d = false;
-            }
-            t2.lencode = l, t2.lenbits = 9, t2.distcode = f, t2.distbits = 5;
-          }
-          function Z(t2, e2, r2, i2) {
-            var n2, s2 = t2.state;
-            return null === s2.window && (s2.wsize = 1 << s2.wbits, s2.wnext = 0, s2.whave = 0, s2.window = new I.Buf8(s2.wsize)), i2 >= s2.wsize ? (I.arraySet(s2.window, e2, r2 - s2.wsize, s2.wsize, 0), s2.wnext = 0, s2.whave = s2.wsize) : (i2 < (n2 = s2.wsize - s2.wnext) && (n2 = i2), I.arraySet(s2.window, e2, r2 - i2, n2, s2.wnext), (i2 -= n2) ? (I.arraySet(s2.window, e2, r2 - i2, i2, 0), s2.wnext = i2, s2.whave = s2.wsize) : (s2.wnext += n2, s2.wnext === s2.wsize && (s2.wnext = 0), s2.whave < s2.wsize && (s2.whave += n2))), 0;
-          }
-          r.inflateReset = o, r.inflateReset2 = h, r.inflateResetKeep = a, r.inflateInit = function(t2) {
-            return u(t2, 15);
-          }, r.inflateInit2 = u, r.inflate = function(t2, e2) {
-            var r2, i2, n2, s2, a2, o2, h2, u2, l2, f2, d2, c, p, m, _, g, b, v, y, w, k, x, S, z, C = 0, E = new I.Buf8(4), A = [16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15];
-            if (!t2 || !t2.state || !t2.output || !t2.input && 0 !== t2.avail_in) return U;
-            12 === (r2 = t2.state).mode && (r2.mode = 13), a2 = t2.next_out, n2 = t2.output, h2 = t2.avail_out, s2 = t2.next_in, i2 = t2.input, o2 = t2.avail_in, u2 = r2.hold, l2 = r2.bits, f2 = o2, d2 = h2, x = N;
-            t: for (; ; ) switch (r2.mode) {
-              case P:
-                if (0 === r2.wrap) {
-                  r2.mode = 13;
-                  break;
-                }
-                for (; l2 < 16; ) {
-                  if (0 === o2) break t;
-                  o2--, u2 += i2[s2++] << l2, l2 += 8;
-                }
-                if (2 & r2.wrap && 35615 === u2) {
-                  E[r2.check = 0] = 255 & u2, E[1] = u2 >>> 8 & 255, r2.check = B(r2.check, E, 2, 0), l2 = u2 = 0, r2.mode = 2;
-                  break;
-                }
-                if (r2.flags = 0, r2.head && (r2.head.done = false), !(1 & r2.wrap) || (((255 & u2) << 8) + (u2 >> 8)) % 31) {
-                  t2.msg = "incorrect header check", r2.mode = 30;
-                  break;
-                }
-                if (8 != (15 & u2)) {
-                  t2.msg = "unknown compression method", r2.mode = 30;
-                  break;
-                }
-                if (l2 -= 4, k = 8 + (15 & (u2 >>>= 4)), 0 === r2.wbits) r2.wbits = k;
-                else if (k > r2.wbits) {
-                  t2.msg = "invalid window size", r2.mode = 30;
-                  break;
-                }
-                r2.dmax = 1 << k, t2.adler = r2.check = 1, r2.mode = 512 & u2 ? 10 : 12, l2 = u2 = 0;
-                break;
-              case 2:
-                for (; l2 < 16; ) {
-                  if (0 === o2) break t;
-                  o2--, u2 += i2[s2++] << l2, l2 += 8;
-                }
-                if (r2.flags = u2, 8 != (255 & r2.flags)) {
-                  t2.msg = "unknown compression method", r2.mode = 30;
-                  break;
-                }
-                if (57344 & r2.flags) {
-                  t2.msg = "unknown header flags set", r2.mode = 30;
-                  break;
-                }
-                r2.head && (r2.head.text = u2 >> 8 & 1), 512 & r2.flags && (E[0] = 255 & u2, E[1] = u2 >>> 8 & 255, r2.check = B(r2.check, E, 2, 0)), l2 = u2 = 0, r2.mode = 3;
-              case 3:
-                for (; l2 < 32; ) {
-                  if (0 === o2) break t;
-                  o2--, u2 += i2[s2++] << l2, l2 += 8;
-                }
-                r2.head && (r2.head.time = u2), 512 & r2.flags && (E[0] = 255 & u2, E[1] = u2 >>> 8 & 255, E[2] = u2 >>> 16 & 255, E[3] = u2 >>> 24 & 255, r2.check = B(r2.check, E, 4, 0)), l2 = u2 = 0, r2.mode = 4;
-              case 4:
-                for (; l2 < 16; ) {
-                  if (0 === o2) break t;
-                  o2--, u2 += i2[s2++] << l2, l2 += 8;
-                }
-                r2.head && (r2.head.xflags = 255 & u2, r2.head.os = u2 >> 8), 512 & r2.flags && (E[0] = 255 & u2, E[1] = u2 >>> 8 & 255, r2.check = B(r2.check, E, 2, 0)), l2 = u2 = 0, r2.mode = 5;
-              case 5:
-                if (1024 & r2.flags) {
-                  for (; l2 < 16; ) {
-                    if (0 === o2) break t;
-                    o2--, u2 += i2[s2++] << l2, l2 += 8;
-                  }
-                  r2.length = u2, r2.head && (r2.head.extra_len = u2), 512 & r2.flags && (E[0] = 255 & u2, E[1] = u2 >>> 8 & 255, r2.check = B(r2.check, E, 2, 0)), l2 = u2 = 0;
-                } else r2.head && (r2.head.extra = null);
-                r2.mode = 6;
-              case 6:
-                if (1024 & r2.flags && (o2 < (c = r2.length) && (c = o2), c && (r2.head && (k = r2.head.extra_len - r2.length, r2.head.extra || (r2.head.extra = new Array(r2.head.extra_len)), I.arraySet(r2.head.extra, i2, s2, c, k)), 512 & r2.flags && (r2.check = B(r2.check, i2, c, s2)), o2 -= c, s2 += c, r2.length -= c), r2.length)) break t;
-                r2.length = 0, r2.mode = 7;
-              case 7:
-                if (2048 & r2.flags) {
-                  if (0 === o2) break t;
-                  for (c = 0; k = i2[s2 + c++], r2.head && k && r2.length < 65536 && (r2.head.name += String.fromCharCode(k)), k && c < o2; ) ;
-                  if (512 & r2.flags && (r2.check = B(r2.check, i2, c, s2)), o2 -= c, s2 += c, k) break t;
-                } else r2.head && (r2.head.name = null);
-                r2.length = 0, r2.mode = 8;
-              case 8:
-                if (4096 & r2.flags) {
-                  if (0 === o2) break t;
-                  for (c = 0; k = i2[s2 + c++], r2.head && k && r2.length < 65536 && (r2.head.comment += String.fromCharCode(k)), k && c < o2; ) ;
-                  if (512 & r2.flags && (r2.check = B(r2.check, i2, c, s2)), o2 -= c, s2 += c, k) break t;
-                } else r2.head && (r2.head.comment = null);
-                r2.mode = 9;
-              case 9:
-                if (512 & r2.flags) {
-                  for (; l2 < 16; ) {
-                    if (0 === o2) break t;
-                    o2--, u2 += i2[s2++] << l2, l2 += 8;
-                  }
-                  if (u2 !== (65535 & r2.check)) {
-                    t2.msg = "header crc mismatch", r2.mode = 30;
-                    break;
-                  }
-                  l2 = u2 = 0;
-                }
-                r2.head && (r2.head.hcrc = r2.flags >> 9 & 1, r2.head.done = true), t2.adler = r2.check = 0, r2.mode = 12;
-                break;
-              case 10:
-                for (; l2 < 32; ) {
-                  if (0 === o2) break t;
-                  o2--, u2 += i2[s2++] << l2, l2 += 8;
-                }
-                t2.adler = r2.check = L(u2), l2 = u2 = 0, r2.mode = 11;
-              case 11:
-                if (0 === r2.havedict) return t2.next_out = a2, t2.avail_out = h2, t2.next_in = s2, t2.avail_in = o2, r2.hold = u2, r2.bits = l2, 2;
-                t2.adler = r2.check = 1, r2.mode = 12;
-              case 12:
-                if (5 === e2 || 6 === e2) break t;
-              case 13:
-                if (r2.last) {
-                  u2 >>>= 7 & l2, l2 -= 7 & l2, r2.mode = 27;
-                  break;
-                }
-                for (; l2 < 3; ) {
-                  if (0 === o2) break t;
-                  o2--, u2 += i2[s2++] << l2, l2 += 8;
-                }
-                switch (r2.last = 1 & u2, l2 -= 1, 3 & (u2 >>>= 1)) {
-                  case 0:
-                    r2.mode = 14;
-                    break;
-                  case 1:
-                    if (j(r2), r2.mode = 20, 6 !== e2) break;
-                    u2 >>>= 2, l2 -= 2;
-                    break t;
-                  case 2:
-                    r2.mode = 17;
-                    break;
-                  case 3:
-                    t2.msg = "invalid block type", r2.mode = 30;
-                }
-                u2 >>>= 2, l2 -= 2;
-                break;
-              case 14:
-                for (u2 >>>= 7 & l2, l2 -= 7 & l2; l2 < 32; ) {
-                  if (0 === o2) break t;
-                  o2--, u2 += i2[s2++] << l2, l2 += 8;
-                }
-                if ((65535 & u2) != (u2 >>> 16 ^ 65535)) {
-                  t2.msg = "invalid stored block lengths", r2.mode = 30;
-                  break;
-                }
-                if (r2.length = 65535 & u2, l2 = u2 = 0, r2.mode = 15, 6 === e2) break t;
-              case 15:
-                r2.mode = 16;
-              case 16:
-                if (c = r2.length) {
-                  if (o2 < c && (c = o2), h2 < c && (c = h2), 0 === c) break t;
-                  I.arraySet(n2, i2, s2, c, a2), o2 -= c, s2 += c, h2 -= c, a2 += c, r2.length -= c;
-                  break;
-                }
-                r2.mode = 12;
-                break;
-              case 17:
-                for (; l2 < 14; ) {
-                  if (0 === o2) break t;
-                  o2--, u2 += i2[s2++] << l2, l2 += 8;
-                }
-                if (r2.nlen = 257 + (31 & u2), u2 >>>= 5, l2 -= 5, r2.ndist = 1 + (31 & u2), u2 >>>= 5, l2 -= 5, r2.ncode = 4 + (15 & u2), u2 >>>= 4, l2 -= 4, 286 < r2.nlen || 30 < r2.ndist) {
-                  t2.msg = "too many length or distance symbols", r2.mode = 30;
-                  break;
-                }
-                r2.have = 0, r2.mode = 18;
-              case 18:
-                for (; r2.have < r2.ncode; ) {
-                  for (; l2 < 3; ) {
-                    if (0 === o2) break t;
-                    o2--, u2 += i2[s2++] << l2, l2 += 8;
-                  }
-                  r2.lens[A[r2.have++]] = 7 & u2, u2 >>>= 3, l2 -= 3;
-                }
-                for (; r2.have < 19; ) r2.lens[A[r2.have++]] = 0;
-                if (r2.lencode = r2.lendyn, r2.lenbits = 7, S = { bits: r2.lenbits }, x = T(0, r2.lens, 0, 19, r2.lencode, 0, r2.work, S), r2.lenbits = S.bits, x) {
-                  t2.msg = "invalid code lengths set", r2.mode = 30;
-                  break;
-                }
-                r2.have = 0, r2.mode = 19;
-              case 19:
-                for (; r2.have < r2.nlen + r2.ndist; ) {
-                  for (; g = (C = r2.lencode[u2 & (1 << r2.lenbits) - 1]) >>> 16 & 255, b = 65535 & C, !((_ = C >>> 24) <= l2); ) {
-                    if (0 === o2) break t;
-                    o2--, u2 += i2[s2++] << l2, l2 += 8;
-                  }
-                  if (b < 16) u2 >>>= _, l2 -= _, r2.lens[r2.have++] = b;
-                  else {
-                    if (16 === b) {
-                      for (z = _ + 2; l2 < z; ) {
-                        if (0 === o2) break t;
-                        o2--, u2 += i2[s2++] << l2, l2 += 8;
-                      }
-                      if (u2 >>>= _, l2 -= _, 0 === r2.have) {
-                        t2.msg = "invalid bit length repeat", r2.mode = 30;
-                        break;
-                      }
-                      k = r2.lens[r2.have - 1], c = 3 + (3 & u2), u2 >>>= 2, l2 -= 2;
-                    } else if (17 === b) {
-                      for (z = _ + 3; l2 < z; ) {
-                        if (0 === o2) break t;
-                        o2--, u2 += i2[s2++] << l2, l2 += 8;
-                      }
-                      l2 -= _, k = 0, c = 3 + (7 & (u2 >>>= _)), u2 >>>= 3, l2 -= 3;
-                    } else {
-                      for (z = _ + 7; l2 < z; ) {
-                        if (0 === o2) break t;
-                        o2--, u2 += i2[s2++] << l2, l2 += 8;
-                      }
-                      l2 -= _, k = 0, c = 11 + (127 & (u2 >>>= _)), u2 >>>= 7, l2 -= 7;
-                    }
-                    if (r2.have + c > r2.nlen + r2.ndist) {
-                      t2.msg = "invalid bit length repeat", r2.mode = 30;
-                      break;
-                    }
-                    for (; c--; ) r2.lens[r2.have++] = k;
-                  }
-                }
-                if (30 === r2.mode) break;
-                if (0 === r2.lens[256]) {
-                  t2.msg = "invalid code -- missing end-of-block", r2.mode = 30;
-                  break;
-                }
-                if (r2.lenbits = 9, S = { bits: r2.lenbits }, x = T(D, r2.lens, 0, r2.nlen, r2.lencode, 0, r2.work, S), r2.lenbits = S.bits, x) {
-                  t2.msg = "invalid literal/lengths set", r2.mode = 30;
-                  break;
-                }
-                if (r2.distbits = 6, r2.distcode = r2.distdyn, S = { bits: r2.distbits }, x = T(F, r2.lens, r2.nlen, r2.ndist, r2.distcode, 0, r2.work, S), r2.distbits = S.bits, x) {
-                  t2.msg = "invalid distances set", r2.mode = 30;
-                  break;
-                }
-                if (r2.mode = 20, 6 === e2) break t;
-              case 20:
-                r2.mode = 21;
-              case 21:
-                if (6 <= o2 && 258 <= h2) {
-                  t2.next_out = a2, t2.avail_out = h2, t2.next_in = s2, t2.avail_in = o2, r2.hold = u2, r2.bits = l2, R(t2, d2), a2 = t2.next_out, n2 = t2.output, h2 = t2.avail_out, s2 = t2.next_in, i2 = t2.input, o2 = t2.avail_in, u2 = r2.hold, l2 = r2.bits, 12 === r2.mode && (r2.back = -1);
-                  break;
-                }
-                for (r2.back = 0; g = (C = r2.lencode[u2 & (1 << r2.lenbits) - 1]) >>> 16 & 255, b = 65535 & C, !((_ = C >>> 24) <= l2); ) {
-                  if (0 === o2) break t;
-                  o2--, u2 += i2[s2++] << l2, l2 += 8;
-                }
-                if (g && 0 == (240 & g)) {
-                  for (v = _, y = g, w = b; g = (C = r2.lencode[w + ((u2 & (1 << v + y) - 1) >> v)]) >>> 16 & 255, b = 65535 & C, !(v + (_ = C >>> 24) <= l2); ) {
-                    if (0 === o2) break t;
-                    o2--, u2 += i2[s2++] << l2, l2 += 8;
-                  }
-                  u2 >>>= v, l2 -= v, r2.back += v;
-                }
-                if (u2 >>>= _, l2 -= _, r2.back += _, r2.length = b, 0 === g) {
-                  r2.mode = 26;
-                  break;
-                }
-                if (32 & g) {
-                  r2.back = -1, r2.mode = 12;
-                  break;
-                }
-                if (64 & g) {
-                  t2.msg = "invalid literal/length code", r2.mode = 30;
-                  break;
-                }
-                r2.extra = 15 & g, r2.mode = 22;
-              case 22:
-                if (r2.extra) {
-                  for (z = r2.extra; l2 < z; ) {
-                    if (0 === o2) break t;
-                    o2--, u2 += i2[s2++] << l2, l2 += 8;
-                  }
-                  r2.length += u2 & (1 << r2.extra) - 1, u2 >>>= r2.extra, l2 -= r2.extra, r2.back += r2.extra;
-                }
-                r2.was = r2.length, r2.mode = 23;
-              case 23:
-                for (; g = (C = r2.distcode[u2 & (1 << r2.distbits) - 1]) >>> 16 & 255, b = 65535 & C, !((_ = C >>> 24) <= l2); ) {
-                  if (0 === o2) break t;
-                  o2--, u2 += i2[s2++] << l2, l2 += 8;
-                }
-                if (0 == (240 & g)) {
-                  for (v = _, y = g, w = b; g = (C = r2.distcode[w + ((u2 & (1 << v + y) - 1) >> v)]) >>> 16 & 255, b = 65535 & C, !(v + (_ = C >>> 24) <= l2); ) {
-                    if (0 === o2) break t;
-                    o2--, u2 += i2[s2++] << l2, l2 += 8;
-                  }
-                  u2 >>>= v, l2 -= v, r2.back += v;
-                }
-                if (u2 >>>= _, l2 -= _, r2.back += _, 64 & g) {
-                  t2.msg = "invalid distance code", r2.mode = 30;
-                  break;
-                }
-                r2.offset = b, r2.extra = 15 & g, r2.mode = 24;
-              case 24:
-                if (r2.extra) {
-                  for (z = r2.extra; l2 < z; ) {
-                    if (0 === o2) break t;
-                    o2--, u2 += i2[s2++] << l2, l2 += 8;
-                  }
-                  r2.offset += u2 & (1 << r2.extra) - 1, u2 >>>= r2.extra, l2 -= r2.extra, r2.back += r2.extra;
-                }
-                if (r2.offset > r2.dmax) {
-                  t2.msg = "invalid distance too far back", r2.mode = 30;
-                  break;
-                }
-                r2.mode = 25;
-              case 25:
-                if (0 === h2) break t;
-                if (c = d2 - h2, r2.offset > c) {
-                  if ((c = r2.offset - c) > r2.whave && r2.sane) {
-                    t2.msg = "invalid distance too far back", r2.mode = 30;
-                    break;
-                  }
-                  p = c > r2.wnext ? (c -= r2.wnext, r2.wsize - c) : r2.wnext - c, c > r2.length && (c = r2.length), m = r2.window;
-                } else m = n2, p = a2 - r2.offset, c = r2.length;
-                for (h2 < c && (c = h2), h2 -= c, r2.length -= c; n2[a2++] = m[p++], --c; ) ;
-                0 === r2.length && (r2.mode = 21);
-                break;
-              case 26:
-                if (0 === h2) break t;
-                n2[a2++] = r2.length, h2--, r2.mode = 21;
-                break;
-              case 27:
-                if (r2.wrap) {
-                  for (; l2 < 32; ) {
-                    if (0 === o2) break t;
-                    o2--, u2 |= i2[s2++] << l2, l2 += 8;
-                  }
-                  if (d2 -= h2, t2.total_out += d2, r2.total += d2, d2 && (t2.adler = r2.check = r2.flags ? B(r2.check, n2, d2, a2 - d2) : O(r2.check, n2, d2, a2 - d2)), d2 = h2, (r2.flags ? u2 : L(u2)) !== r2.check) {
-                    t2.msg = "incorrect data check", r2.mode = 30;
-                    break;
-                  }
-                  l2 = u2 = 0;
-                }
-                r2.mode = 28;
-              case 28:
-                if (r2.wrap && r2.flags) {
-                  for (; l2 < 32; ) {
-                    if (0 === o2) break t;
-                    o2--, u2 += i2[s2++] << l2, l2 += 8;
-                  }
-                  if (u2 !== (4294967295 & r2.total)) {
-                    t2.msg = "incorrect length check", r2.mode = 30;
-                    break;
-                  }
-                  l2 = u2 = 0;
-                }
-                r2.mode = 29;
-              case 29:
-                x = 1;
-                break t;
-              case 30:
-                x = -3;
-                break t;
-              case 31:
-                return -4;
-              case 32:
-              default:
-                return U;
-            }
-            return t2.next_out = a2, t2.avail_out = h2, t2.next_in = s2, t2.avail_in = o2, r2.hold = u2, r2.bits = l2, (r2.wsize || d2 !== t2.avail_out && r2.mode < 30 && (r2.mode < 27 || 4 !== e2)) && Z(t2, t2.output, t2.next_out, d2 - t2.avail_out) ? (r2.mode = 31, -4) : (f2 -= t2.avail_in, d2 -= t2.avail_out, t2.total_in += f2, t2.total_out += d2, r2.total += d2, r2.wrap && d2 && (t2.adler = r2.check = r2.flags ? B(r2.check, n2, d2, t2.next_out - d2) : O(r2.check, n2, d2, t2.next_out - d2)), t2.data_type = r2.bits + (r2.last ? 64 : 0) + (12 === r2.mode ? 128 : 0) + (20 === r2.mode || 15 === r2.mode ? 256 : 0), (0 == f2 && 0 === d2 || 4 === e2) && x === N && (x = -5), x);
-          }, r.inflateEnd = function(t2) {
-            if (!t2 || !t2.state) return U;
-            var e2 = t2.state;
-            return e2.window && (e2.window = null), t2.state = null, N;
-          }, r.inflateGetHeader = function(t2, e2) {
-            var r2;
-            return t2 && t2.state ? 0 == (2 & (r2 = t2.state).wrap) ? U : ((r2.head = e2).done = false, N) : U;
-          }, r.inflateSetDictionary = function(t2, e2) {
-            var r2, i2 = e2.length;
-            return t2 && t2.state ? 0 !== (r2 = t2.state).wrap && 11 !== r2.mode ? U : 11 === r2.mode && O(1, e2, i2, 0) !== r2.check ? -3 : Z(t2, e2, i2, i2) ? (r2.mode = 31, -4) : (r2.havedict = 1, N) : U;
-          }, r.inflateInfo = "pako inflate (from Nodeca project)";
-        }, { "../utils/common": 41, "./adler32": 43, "./crc32": 45, "./inffast": 48, "./inftrees": 50 }], 50: [function(t, e, r) {
-          "use strict";
-          var D = t("../utils/common"), F = [3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17, 19, 23, 27, 31, 35, 43, 51, 59, 67, 83, 99, 115, 131, 163, 195, 227, 258, 0, 0], N = [16, 16, 16, 16, 16, 16, 16, 16, 17, 17, 17, 17, 18, 18, 18, 18, 19, 19, 19, 19, 20, 20, 20, 20, 21, 21, 21, 21, 16, 72, 78], U = [1, 2, 3, 4, 5, 7, 9, 13, 17, 25, 33, 49, 65, 97, 129, 193, 257, 385, 513, 769, 1025, 1537, 2049, 3073, 4097, 6145, 8193, 12289, 16385, 24577, 0, 0], P = [16, 16, 16, 16, 17, 17, 18, 18, 19, 19, 20, 20, 21, 21, 22, 22, 23, 23, 24, 24, 25, 25, 26, 26, 27, 27, 28, 28, 29, 29, 64, 64];
-          e.exports = function(t2, e2, r2, i, n, s, a, o) {
-            var h, u, l, f, d, c, p, m, _, g = o.bits, b = 0, v = 0, y = 0, w = 0, k = 0, x = 0, S = 0, z = 0, C = 0, E = 0, A = null, I = 0, O = new D.Buf16(16), B = new D.Buf16(16), R = null, T = 0;
-            for (b = 0; b <= 15; b++) O[b] = 0;
-            for (v = 0; v < i; v++) O[e2[r2 + v]]++;
-            for (k = g, w = 15; 1 <= w && 0 === O[w]; w--) ;
-            if (w < k && (k = w), 0 === w) return n[s++] = 20971520, n[s++] = 20971520, o.bits = 1, 0;
-            for (y = 1; y < w && 0 === O[y]; y++) ;
-            for (k < y && (k = y), b = z = 1; b <= 15; b++) if (z <<= 1, (z -= O[b]) < 0) return -1;
-            if (0 < z && (0 === t2 || 1 !== w)) return -1;
-            for (B[1] = 0, b = 1; b < 15; b++) B[b + 1] = B[b] + O[b];
-            for (v = 0; v < i; v++) 0 !== e2[r2 + v] && (a[B[e2[r2 + v]]++] = v);
-            if (c = 0 === t2 ? (A = R = a, 19) : 1 === t2 ? (A = F, I -= 257, R = N, T -= 257, 256) : (A = U, R = P, -1), b = y, d = s, S = v = E = 0, l = -1, f = (C = 1 << (x = k)) - 1, 1 === t2 && 852 < C || 2 === t2 && 592 < C) return 1;
-            for (; ; ) {
-              for (p = b - S, _ = a[v] < c ? (m = 0, a[v]) : a[v] > c ? (m = R[T + a[v]], A[I + a[v]]) : (m = 96, 0), h = 1 << b - S, y = u = 1 << x; n[d + (E >> S) + (u -= h)] = p << 24 | m << 16 | _ | 0, 0 !== u; ) ;
-              for (h = 1 << b - 1; E & h; ) h >>= 1;
-              if (0 !== h ? (E &= h - 1, E += h) : E = 0, v++, 0 == --O[b]) {
-                if (b === w) break;
-                b = e2[r2 + a[v]];
-              }
-              if (k < b && (E & f) !== l) {
-                for (0 === S && (S = k), d += y, z = 1 << (x = b - S); x + S < w && !((z -= O[x + S]) <= 0); ) x++, z <<= 1;
-                if (C += 1 << x, 1 === t2 && 852 < C || 2 === t2 && 592 < C) return 1;
-                n[l = E & f] = k << 24 | x << 16 | d - s | 0;
-              }
-            }
-            return 0 !== E && (n[d + E] = b - S << 24 | 64 << 16 | 0), o.bits = k, 0;
-          };
-        }, { "../utils/common": 41 }], 51: [function(t, e, r) {
-          "use strict";
-          e.exports = { 2: "need dictionary", 1: "stream end", 0: "", "-1": "file error", "-2": "stream error", "-3": "data error", "-4": "insufficient memory", "-5": "buffer error", "-6": "incompatible version" };
-        }, {}], 52: [function(t, e, r) {
-          "use strict";
-          var n = t("../utils/common"), o = 0, h = 1;
-          function i(t2) {
-            for (var e2 = t2.length; 0 <= --e2; ) t2[e2] = 0;
-          }
-          var s = 0, a = 29, u = 256, l = u + 1 + a, f = 30, d = 19, _ = 2 * l + 1, g = 15, c = 16, p = 7, m = 256, b = 16, v = 17, y = 18, w = [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 0], k = [0, 0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13], x = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 3, 7], S = [16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15], z = new Array(2 * (l + 2));
-          i(z);
-          var C = new Array(2 * f);
-          i(C);
-          var E = new Array(512);
-          i(E);
-          var A = new Array(256);
-          i(A);
-          var I = new Array(a);
-          i(I);
-          var O, B, R, T = new Array(f);
-          function D(t2, e2, r2, i2, n2) {
-            this.static_tree = t2, this.extra_bits = e2, this.extra_base = r2, this.elems = i2, this.max_length = n2, this.has_stree = t2 && t2.length;
-          }
-          function F(t2, e2) {
-            this.dyn_tree = t2, this.max_code = 0, this.stat_desc = e2;
-          }
-          function N(t2) {
-            return t2 < 256 ? E[t2] : E[256 + (t2 >>> 7)];
-          }
-          function U(t2, e2) {
-            t2.pending_buf[t2.pending++] = 255 & e2, t2.pending_buf[t2.pending++] = e2 >>> 8 & 255;
-          }
-          function P(t2, e2, r2) {
-            t2.bi_valid > c - r2 ? (t2.bi_buf |= e2 << t2.bi_valid & 65535, U(t2, t2.bi_buf), t2.bi_buf = e2 >> c - t2.bi_valid, t2.bi_valid += r2 - c) : (t2.bi_buf |= e2 << t2.bi_valid & 65535, t2.bi_valid += r2);
-          }
-          function L(t2, e2, r2) {
-            P(t2, r2[2 * e2], r2[2 * e2 + 1]);
-          }
-          function j(t2, e2) {
-            for (var r2 = 0; r2 |= 1 & t2, t2 >>>= 1, r2 <<= 1, 0 < --e2; ) ;
-            return r2 >>> 1;
-          }
-          function Z(t2, e2, r2) {
-            var i2, n2, s2 = new Array(g + 1), a2 = 0;
-            for (i2 = 1; i2 <= g; i2++) s2[i2] = a2 = a2 + r2[i2 - 1] << 1;
-            for (n2 = 0; n2 <= e2; n2++) {
-              var o2 = t2[2 * n2 + 1];
-              0 !== o2 && (t2[2 * n2] = j(s2[o2]++, o2));
-            }
-          }
-          function W(t2) {
-            var e2;
-            for (e2 = 0; e2 < l; e2++) t2.dyn_ltree[2 * e2] = 0;
-            for (e2 = 0; e2 < f; e2++) t2.dyn_dtree[2 * e2] = 0;
-            for (e2 = 0; e2 < d; e2++) t2.bl_tree[2 * e2] = 0;
-            t2.dyn_ltree[2 * m] = 1, t2.opt_len = t2.static_len = 0, t2.last_lit = t2.matches = 0;
-          }
-          function M(t2) {
-            8 < t2.bi_valid ? U(t2, t2.bi_buf) : 0 < t2.bi_valid && (t2.pending_buf[t2.pending++] = t2.bi_buf), t2.bi_buf = 0, t2.bi_valid = 0;
-          }
-          function H(t2, e2, r2, i2) {
-            var n2 = 2 * e2, s2 = 2 * r2;
-            return t2[n2] < t2[s2] || t2[n2] === t2[s2] && i2[e2] <= i2[r2];
-          }
-          function G(t2, e2, r2) {
-            for (var i2 = t2.heap[r2], n2 = r2 << 1; n2 <= t2.heap_len && (n2 < t2.heap_len && H(e2, t2.heap[n2 + 1], t2.heap[n2], t2.depth) && n2++, !H(e2, i2, t2.heap[n2], t2.depth)); ) t2.heap[r2] = t2.heap[n2], r2 = n2, n2 <<= 1;
-            t2.heap[r2] = i2;
-          }
-          function K(t2, e2, r2) {
-            var i2, n2, s2, a2, o2 = 0;
-            if (0 !== t2.last_lit) for (; i2 = t2.pending_buf[t2.d_buf + 2 * o2] << 8 | t2.pending_buf[t2.d_buf + 2 * o2 + 1], n2 = t2.pending_buf[t2.l_buf + o2], o2++, 0 === i2 ? L(t2, n2, e2) : (L(t2, (s2 = A[n2]) + u + 1, e2), 0 !== (a2 = w[s2]) && P(t2, n2 -= I[s2], a2), L(t2, s2 = N(--i2), r2), 0 !== (a2 = k[s2]) && P(t2, i2 -= T[s2], a2)), o2 < t2.last_lit; ) ;
-            L(t2, m, e2);
-          }
-          function Y(t2, e2) {
-            var r2, i2, n2, s2 = e2.dyn_tree, a2 = e2.stat_desc.static_tree, o2 = e2.stat_desc.has_stree, h2 = e2.stat_desc.elems, u2 = -1;
-            for (t2.heap_len = 0, t2.heap_max = _, r2 = 0; r2 < h2; r2++) 0 !== s2[2 * r2] ? (t2.heap[++t2.heap_len] = u2 = r2, t2.depth[r2] = 0) : s2[2 * r2 + 1] = 0;
-            for (; t2.heap_len < 2; ) s2[2 * (n2 = t2.heap[++t2.heap_len] = u2 < 2 ? ++u2 : 0)] = 1, t2.depth[n2] = 0, t2.opt_len--, o2 && (t2.static_len -= a2[2 * n2 + 1]);
-            for (e2.max_code = u2, r2 = t2.heap_len >> 1; 1 <= r2; r2--) G(t2, s2, r2);
-            for (n2 = h2; r2 = t2.heap[1], t2.heap[1] = t2.heap[t2.heap_len--], G(t2, s2, 1), i2 = t2.heap[1], t2.heap[--t2.heap_max] = r2, t2.heap[--t2.heap_max] = i2, s2[2 * n2] = s2[2 * r2] + s2[2 * i2], t2.depth[n2] = (t2.depth[r2] >= t2.depth[i2] ? t2.depth[r2] : t2.depth[i2]) + 1, s2[2 * r2 + 1] = s2[2 * i2 + 1] = n2, t2.heap[1] = n2++, G(t2, s2, 1), 2 <= t2.heap_len; ) ;
-            t2.heap[--t2.heap_max] = t2.heap[1], function(t3, e3) {
-              var r3, i3, n3, s3, a3, o3, h3 = e3.dyn_tree, u3 = e3.max_code, l2 = e3.stat_desc.static_tree, f2 = e3.stat_desc.has_stree, d2 = e3.stat_desc.extra_bits, c2 = e3.stat_desc.extra_base, p2 = e3.stat_desc.max_length, m2 = 0;
-              for (s3 = 0; s3 <= g; s3++) t3.bl_count[s3] = 0;
-              for (h3[2 * t3.heap[t3.heap_max] + 1] = 0, r3 = t3.heap_max + 1; r3 < _; r3++) p2 < (s3 = h3[2 * h3[2 * (i3 = t3.heap[r3]) + 1] + 1] + 1) && (s3 = p2, m2++), h3[2 * i3 + 1] = s3, u3 < i3 || (t3.bl_count[s3]++, a3 = 0, c2 <= i3 && (a3 = d2[i3 - c2]), o3 = h3[2 * i3], t3.opt_len += o3 * (s3 + a3), f2 && (t3.static_len += o3 * (l2[2 * i3 + 1] + a3)));
-              if (0 !== m2) {
-                do {
-                  for (s3 = p2 - 1; 0 === t3.bl_count[s3]; ) s3--;
-                  t3.bl_count[s3]--, t3.bl_count[s3 + 1] += 2, t3.bl_count[p2]--, m2 -= 2;
-                } while (0 < m2);
-                for (s3 = p2; 0 !== s3; s3--) for (i3 = t3.bl_count[s3]; 0 !== i3; ) u3 < (n3 = t3.heap[--r3]) || (h3[2 * n3 + 1] !== s3 && (t3.opt_len += (s3 - h3[2 * n3 + 1]) * h3[2 * n3], h3[2 * n3 + 1] = s3), i3--);
-              }
-            }(t2, e2), Z(s2, u2, t2.bl_count);
-          }
-          function X(t2, e2, r2) {
-            var i2, n2, s2 = -1, a2 = e2[1], o2 = 0, h2 = 7, u2 = 4;
-            for (0 === a2 && (h2 = 138, u2 = 3), e2[2 * (r2 + 1) + 1] = 65535, i2 = 0; i2 <= r2; i2++) n2 = a2, a2 = e2[2 * (i2 + 1) + 1], ++o2 < h2 && n2 === a2 || (o2 < u2 ? t2.bl_tree[2 * n2] += o2 : 0 !== n2 ? (n2 !== s2 && t2.bl_tree[2 * n2]++, t2.bl_tree[2 * b]++) : o2 <= 10 ? t2.bl_tree[2 * v]++ : t2.bl_tree[2 * y]++, s2 = n2, u2 = (o2 = 0) === a2 ? (h2 = 138, 3) : n2 === a2 ? (h2 = 6, 3) : (h2 = 7, 4));
-          }
-          function V(t2, e2, r2) {
-            var i2, n2, s2 = -1, a2 = e2[1], o2 = 0, h2 = 7, u2 = 4;
-            for (0 === a2 && (h2 = 138, u2 = 3), i2 = 0; i2 <= r2; i2++) if (n2 = a2, a2 = e2[2 * (i2 + 1) + 1], !(++o2 < h2 && n2 === a2)) {
-              if (o2 < u2) for (; L(t2, n2, t2.bl_tree), 0 != --o2; ) ;
-              else 0 !== n2 ? (n2 !== s2 && (L(t2, n2, t2.bl_tree), o2--), L(t2, b, t2.bl_tree), P(t2, o2 - 3, 2)) : o2 <= 10 ? (L(t2, v, t2.bl_tree), P(t2, o2 - 3, 3)) : (L(t2, y, t2.bl_tree), P(t2, o2 - 11, 7));
-              s2 = n2, u2 = (o2 = 0) === a2 ? (h2 = 138, 3) : n2 === a2 ? (h2 = 6, 3) : (h2 = 7, 4);
-            }
-          }
-          i(T);
-          var q = false;
-          function J(t2, e2, r2, i2) {
-            P(t2, (s << 1) + (i2 ? 1 : 0), 3), function(t3, e3, r3, i3) {
-              M(t3), i3 && (U(t3, r3), U(t3, ~r3)), n.arraySet(t3.pending_buf, t3.window, e3, r3, t3.pending), t3.pending += r3;
-            }(t2, e2, r2, true);
-          }
-          r._tr_init = function(t2) {
-            q || (function() {
-              var t3, e2, r2, i2, n2, s2 = new Array(g + 1);
-              for (i2 = r2 = 0; i2 < a - 1; i2++) for (I[i2] = r2, t3 = 0; t3 < 1 << w[i2]; t3++) A[r2++] = i2;
-              for (A[r2 - 1] = i2, i2 = n2 = 0; i2 < 16; i2++) for (T[i2] = n2, t3 = 0; t3 < 1 << k[i2]; t3++) E[n2++] = i2;
-              for (n2 >>= 7; i2 < f; i2++) for (T[i2] = n2 << 7, t3 = 0; t3 < 1 << k[i2] - 7; t3++) E[256 + n2++] = i2;
-              for (e2 = 0; e2 <= g; e2++) s2[e2] = 0;
-              for (t3 = 0; t3 <= 143; ) z[2 * t3 + 1] = 8, t3++, s2[8]++;
-              for (; t3 <= 255; ) z[2 * t3 + 1] = 9, t3++, s2[9]++;
-              for (; t3 <= 279; ) z[2 * t3 + 1] = 7, t3++, s2[7]++;
-              for (; t3 <= 287; ) z[2 * t3 + 1] = 8, t3++, s2[8]++;
-              for (Z(z, l + 1, s2), t3 = 0; t3 < f; t3++) C[2 * t3 + 1] = 5, C[2 * t3] = j(t3, 5);
-              O = new D(z, w, u + 1, l, g), B = new D(C, k, 0, f, g), R = new D(new Array(0), x, 0, d, p);
-            }(), q = true), t2.l_desc = new F(t2.dyn_ltree, O), t2.d_desc = new F(t2.dyn_dtree, B), t2.bl_desc = new F(t2.bl_tree, R), t2.bi_buf = 0, t2.bi_valid = 0, W(t2);
-          }, r._tr_stored_block = J, r._tr_flush_block = function(t2, e2, r2, i2) {
-            var n2, s2, a2 = 0;
-            0 < t2.level ? (2 === t2.strm.data_type && (t2.strm.data_type = function(t3) {
-              var e3, r3 = 4093624447;
-              for (e3 = 0; e3 <= 31; e3++, r3 >>>= 1) if (1 & r3 && 0 !== t3.dyn_ltree[2 * e3]) return o;
-              if (0 !== t3.dyn_ltree[18] || 0 !== t3.dyn_ltree[20] || 0 !== t3.dyn_ltree[26]) return h;
-              for (e3 = 32; e3 < u; e3++) if (0 !== t3.dyn_ltree[2 * e3]) return h;
-              return o;
-            }(t2)), Y(t2, t2.l_desc), Y(t2, t2.d_desc), a2 = function(t3) {
-              var e3;
-              for (X(t3, t3.dyn_ltree, t3.l_desc.max_code), X(t3, t3.dyn_dtree, t3.d_desc.max_code), Y(t3, t3.bl_desc), e3 = d - 1; 3 <= e3 && 0 === t3.bl_tree[2 * S[e3] + 1]; e3--) ;
-              return t3.opt_len += 3 * (e3 + 1) + 5 + 5 + 4, e3;
-            }(t2), n2 = t2.opt_len + 3 + 7 >>> 3, (s2 = t2.static_len + 3 + 7 >>> 3) <= n2 && (n2 = s2)) : n2 = s2 = r2 + 5, r2 + 4 <= n2 && -1 !== e2 ? J(t2, e2, r2, i2) : 4 === t2.strategy || s2 === n2 ? (P(t2, 2 + (i2 ? 1 : 0), 3), K(t2, z, C)) : (P(t2, 4 + (i2 ? 1 : 0), 3), function(t3, e3, r3, i3) {
-              var n3;
-              for (P(t3, e3 - 257, 5), P(t3, r3 - 1, 5), P(t3, i3 - 4, 4), n3 = 0; n3 < i3; n3++) P(t3, t3.bl_tree[2 * S[n3] + 1], 3);
-              V(t3, t3.dyn_ltree, e3 - 1), V(t3, t3.dyn_dtree, r3 - 1);
-            }(t2, t2.l_desc.max_code + 1, t2.d_desc.max_code + 1, a2 + 1), K(t2, t2.dyn_ltree, t2.dyn_dtree)), W(t2), i2 && M(t2);
-          }, r._tr_tally = function(t2, e2, r2) {
-            return t2.pending_buf[t2.d_buf + 2 * t2.last_lit] = e2 >>> 8 & 255, t2.pending_buf[t2.d_buf + 2 * t2.last_lit + 1] = 255 & e2, t2.pending_buf[t2.l_buf + t2.last_lit] = 255 & r2, t2.last_lit++, 0 === e2 ? t2.dyn_ltree[2 * r2]++ : (t2.matches++, e2--, t2.dyn_ltree[2 * (A[r2] + u + 1)]++, t2.dyn_dtree[2 * N(e2)]++), t2.last_lit === t2.lit_bufsize - 1;
-          }, r._tr_align = function(t2) {
-            P(t2, 2, 3), L(t2, m, z), function(t3) {
-              16 === t3.bi_valid ? (U(t3, t3.bi_buf), t3.bi_buf = 0, t3.bi_valid = 0) : 8 <= t3.bi_valid && (t3.pending_buf[t3.pending++] = 255 & t3.bi_buf, t3.bi_buf >>= 8, t3.bi_valid -= 8);
-            }(t2);
-          };
-        }, { "../utils/common": 41 }], 53: [function(t, e, r) {
-          "use strict";
-          e.exports = function() {
-            this.input = null, this.next_in = 0, this.avail_in = 0, this.total_in = 0, this.output = null, this.next_out = 0, this.avail_out = 0, this.total_out = 0, this.msg = "", this.state = null, this.data_type = 2, this.adler = 0;
-          };
-        }, {}], 54: [function(t, e, r) {
-          "use strict";
-          e.exports = "function" == typeof setImmediate ? setImmediate : function() {
-            var t2 = [].slice.apply(arguments);
-            t2.splice(1, 0, 0), setTimeout.apply(null, t2);
-          };
-        }, {}] }, {}, [10])(10);
+  // src/sprite/settings.ts
+  var DEFAULT_CFG, MUT_META, MUT_NAMES, MUT_G1, MUT_G2, MUT_G3;
+  var init_settings = __esm({
+    "src/sprite/settings.ts"() {
+      DEFAULT_CFG = {
+        origin: "https://magicgarden.gg",
+        jobOn: true,
+        jobBudgetMs: 5,
+        jobBurstMs: 12,
+        jobBurstWindowMs: 400,
+        jobCapPerTick: 20,
+        cacheOn: true,
+        cacheMaxEntries: 1200,
+        cacheMaxCost: 5e3,
+        keepCacheOnClose: true,
+        srcCanvasMax: 450,
+        debugLog: true,
+        debugLimitDefault: 25
+      };
+      MUT_META = {
+        Gold: { overlayTall: null, tallIconOverride: null },
+        Rainbow: { overlayTall: null, tallIconOverride: null, angle: 130, angleTall: 0 },
+        Wet: { overlayTall: "sprite/mutation-overlay/WetTallPlant", tallIconOverride: "sprite/mutation/Puddle" },
+        Chilled: { overlayTall: "sprite/mutation-overlay/ChilledTallPlant", tallIconOverride: null },
+        Frozen: { overlayTall: "sprite/mutation-overlay/FrozenTallPlant", tallIconOverride: null },
+        Dawnlit: { overlayTall: null, tallIconOverride: null },
+        Ambershine: { overlayTall: null, tallIconOverride: null },
+        Dawncharged: { overlayTall: null, tallIconOverride: null },
+        Ambercharged: { overlayTall: null, tallIconOverride: null }
+      };
+      MUT_NAMES = Object.keys(MUT_META);
+      MUT_G1 = ["", "Gold", "Rainbow"].filter(Boolean);
+      MUT_G2 = ["", "Wet", "Chilled", "Frozen"].filter(Boolean);
+      MUT_G3 = ["", "Dawnlit", "Ambershine", "Dawncharged", "Ambercharged"].filter(Boolean);
+    }
+  });
+
+  // src/sprite/mutations/variantBuilder.ts
+  function buildVariantFromMutations(list) {
+    const raw = list.filter((value) => hasMutationFilter(value));
+    const selected = sortMutations(raw);
+    const muts = normalizeMutListColor(raw);
+    const overlayMuts = normalizeMutListOverlay(raw);
+    return {
+      mode: "M",
+      muts,
+      overlayMuts,
+      selectedMuts: selected,
+      sig: `M:${selected.join(",")}|${muts.join(",")}|${overlayMuts.join(",")}`
+    };
+  }
+  function mutationAliases(mut) {
+    switch (mut) {
+      case "Ambershine":
+        return ["Ambershine", "Amberlit"];
+      case "Dawncharged":
+        return ["Dawncharged", "Dawnbound"];
+      case "Ambercharged":
+        return ["Ambercharged", "Amberbound"];
+      default:
+        return [mut];
+    }
+  }
+  function applyFilterOnto(ctx2, sourceCanvas, name, isTall) {
+    const base = FILTERS[name];
+    if (!base) return;
+    const f = { ...base };
+    if (name === "Rainbow" && isTall && f.angTall != null) f.ang = f.angTall;
+    const fullSpan = name === "Rainbow" && isTall;
+    const w = sourceCanvas.width;
+    const h = sourceCanvas.height;
+    ctx2.save();
+    const blendOp = f.masked ? pickBlendOp(f.op) : "source-in";
+    ctx2.globalCompositeOperation = blendOp;
+    if (f.a != null) ctx2.globalAlpha = f.a;
+    if (f.masked) {
+      const m = document.createElement("canvas");
+      m.width = w;
+      m.height = h;
+      const mctx = m.getContext("2d");
+      mctx.imageSmoothingEnabled = false;
+      fillGrad(mctx, w, h, f, fullSpan);
+      mctx.globalCompositeOperation = "destination-in";
+      mctx.drawImage(sourceCanvas, 0, 0);
+      ctx2.drawImage(m, 0, 0);
+    } else {
+      fillGrad(ctx2, w, h, f, fullSpan);
+    }
+    ctx2.restore();
+  }
+  function tallOverlayFromSheet(mutName, state3) {
+    const target = String(mutName || "").toLowerCase();
+    for (const k of state3.tex.keys()) {
+      const m = /sprite\/mutation-overlay\/([A-Za-z0-9]+)TallPlant/i.exec(String(k));
+      if (!m || !m[1]) continue;
+      const prefix = m[1].toLowerCase();
+      if (prefix === target) {
+        const t = state3.tex.get(k);
+        if (t) return { tex: t, key: k };
+      }
+    }
+    return null;
+  }
+  function findOverlayTexture(itKey, mutName, state3, preferTall) {
+    if (!mutName) return null;
+    const base = baseNameOf(itKey);
+    const aliases = mutationAliases(mutName);
+    for (const name of aliases) {
+      const tries = [
+        `sprite/mutation/${name}${base}`,
+        `sprite/mutation/${name}-${base}`,
+        `sprite/mutation/${name}_${base}`,
+        `sprite/mutation/${name}/${base}`,
+        `sprite/mutation/${name}`
+      ];
+      for (const k of tries) {
+        const t = state3.tex.get(k);
+        if (t) return { tex: t, key: k };
+      }
+      if (preferTall) {
+        const hit = state3.tex.get(`sprite/mutation-overlay/${name}TallPlant`) && {
+          tex: state3.tex.get(`sprite/mutation-overlay/${name}TallPlant`),
+          key: `sprite/mutation-overlay/${name}TallPlant`
+        } || state3.tex.get(`sprite/mutation-overlay/${name}`) && {
+          tex: state3.tex.get(`sprite/mutation-overlay/${name}`),
+          key: `sprite/mutation-overlay/${name}`
+        } || tallOverlayFromSheet(mutName, state3);
+        if (hit) return hit;
+      }
+    }
+    return null;
+  }
+  function findIconTexture(itKey, mutName, isTall, state3) {
+    if (!mutName) return null;
+    const meta = MUT_META[mutName];
+    if (isTall && meta?.tallIconOverride) {
+      const t = state3.tex.get(meta.tallIconOverride);
+      if (t) return t;
+    }
+    const base = baseNameOf(itKey);
+    const aliases = mutationAliases(mutName);
+    for (const name of aliases) {
+      const tries = [
+        `sprite/mutation/${name}Icon`,
+        `sprite/mutation/${name}`,
+        `sprite/mutation/${name}${base}`,
+        `sprite/mutation/${name}-${base}`,
+        `sprite/mutation/${name}_${base}`,
+        `sprite/mutation/${name}/${base}`
+      ];
+      for (const k of tries) {
+        const t = state3.tex.get(k);
+        if (t) return t;
+      }
+      if (isTall) {
+        const t = state3.tex.get(`sprite/mutation-overlay/${name}TallPlantIcon`) || state3.tex.get(`sprite/mutation-overlay/${name}TallPlant`);
+        if (t) return t;
+      }
+    }
+    return null;
+  }
+  function computeIconLayout(tex, baseName, isTall) {
+    const width = tex?.orig?.width ?? tex?.frame?.width ?? tex?.width ?? 1;
+    const height = tex?.orig?.height ?? tex?.frame?.height ?? tex?.height ?? 1;
+    const anchorX = tex?.defaultAnchor?.x ?? 0;
+    const anchorY = tex?.defaultAnchor?.y ?? 0;
+    let targetX = MUT_ICON_X_EXCEPT[baseName] ?? anchorX;
+    const isVerticalShape = height > width * 1.5;
+    let targetY = MUT_ICON_Y_EXCEPT[baseName] ?? (isVerticalShape ? anchorY : 0.4);
+    const offset = {
+      x: (targetX - anchorX) * width,
+      y: (targetY - anchorY) * height
+    };
+    const minDimension = Math.min(width, height);
+    const scaleFactor = Math.min(1.5, minDimension / TILE_SIZE_WORLD);
+    let iconScale = BASE_ICON_SCALE * scaleFactor;
+    if (isTall) iconScale *= TALL_PLANT_MUTATION_ICON_SCALE_BOOST;
+    return {
+      width,
+      height,
+      anchorX,
+      anchorY,
+      offset,
+      iconScale,
+      content: {
+        x: 0,
+        y: 0,
+        width,
+        height,
+        centerX: 0.5,
+        centerY: 0.5,
+        top: 0
+      }
+    };
+  }
+  function textureToCanvas(tex, state3, cfg) {
+    const hit = state3.srcCan.get(tex);
+    if (hit) return hit;
+    let c = null;
+    const RDR = state3.renderer;
+    try {
+      if (RDR?.extract?.canvas && (RDR?.resolution ?? 1) === 1) {
+        const s = new state3.ctors.Sprite(tex);
+        c = RDR.extract.canvas(s);
+        s.destroy?.({ children: true, texture: false, baseTexture: false });
+      }
+    } catch {
+    }
+    if (!c) {
+      const fr = tex?.frame || tex?._frame;
+      const orig = tex?.orig || tex?._orig;
+      const trim = tex?.trim || tex?._trim;
+      const rot = tex?.rotate || tex?._rotate || 0;
+      const src = tex?.baseTexture?.resource?.source || tex?.baseTexture?.resource || tex?.source?.resource?.source || tex?.source?.resource || tex?._source?.resource?.source || null;
+      if (!fr || !src) throw new Error("texToCanvas fail");
+      c = document.createElement("canvas");
+      const fullW = Math.max(1, (orig?.width ?? fr.width) | 0);
+      const fullH = Math.max(1, (orig?.height ?? fr.height) | 0);
+      const offX = trim?.x ?? 0;
+      const offY = trim?.y ?? 0;
+      c.width = fullW;
+      c.height = fullH;
+      const ctx2 = c.getContext("2d");
+      ctx2.imageSmoothingEnabled = false;
+      const rotated = rot === true || rot === 2 || rot === 8;
+      if (rotated) {
+        ctx2.save();
+        ctx2.translate(offX + fr.height / 2, offY + fr.width / 2);
+        ctx2.rotate(-Math.PI / 2);
+        ctx2.drawImage(src, fr.x, fr.y, fr.width, fr.height, -fr.width / 2, -fr.height / 2, fr.width, fr.height);
+        ctx2.restore();
+      } else {
+        ctx2.drawImage(src, fr.x, fr.y, fr.width, fr.height, offX, offY, fr.width, fr.height);
+      }
+    }
+    state3.srcCan.set(tex, c);
+    if (state3.srcCan.size > cfg.srcCanvasMax) {
+      const k = state3.srcCan.keys().next().value;
+      if (k !== void 0) state3.srcCan.delete(k);
+    }
+    return c;
+  }
+  function buildColorLayerSprites(tex, dims, pipeline, state3, cfg, disposables, TextureCtor) {
+    const { w, h, aX, aY, basePos } = dims;
+    const layers = [];
+    for (const step of pipeline) {
+      const clone = new state3.ctors.Sprite(tex);
+      clone.anchor?.set?.(aX, aY);
+      clone.position.set(basePos.x, basePos.y);
+      clone.zIndex = 1;
+      const layerCanvas = document.createElement("canvas");
+      layerCanvas.width = w;
+      layerCanvas.height = h;
+      const lctx = layerCanvas.getContext("2d");
+      lctx.imageSmoothingEnabled = false;
+      lctx.save();
+      lctx.translate(w * aX, h * aY);
+      lctx.drawImage(textureToCanvas(tex, state3, cfg), -w * aX, -h * aY);
+      lctx.restore();
+      applyFilterOnto(lctx, layerCanvas, step.name, step.isTall);
+      const filteredTex = TextureCtor.from(layerCanvas);
+      disposables.push(filteredTex);
+      clone.texture = filteredTex;
+      layers.push(clone);
+    }
+    return layers;
+  }
+  function buildTallOverlaySprites(itKey, dims, overlayPipeline, state3, cfg, baseCanvas, TextureCtor, disposables) {
+    const { w, aX, basePos } = dims;
+    if (!baseCanvas) return [];
+    const overlays = [];
+    for (const step of overlayPipeline) {
+      const hit = step.overlayTall && state3.tex.get(step.overlayTall) && { tex: state3.tex.get(step.overlayTall), key: step.overlayTall } || findOverlayTexture(itKey, step.name, state3, true);
+      if (!hit?.tex) continue;
+      const oCan = textureToCanvas(hit.tex, state3, cfg);
+      if (!oCan) continue;
+      const ow = oCan.width;
+      const overlayAnchor = { x: 0, y: 0 };
+      const overlayPos = { x: basePos.x - aX * ow, y: 0 };
+      const maskedCanvas = document.createElement("canvas");
+      maskedCanvas.width = ow;
+      maskedCanvas.height = oCan.height;
+      const mctx = maskedCanvas.getContext("2d");
+      if (!mctx) continue;
+      mctx.imageSmoothingEnabled = false;
+      mctx.drawImage(oCan, 0, 0);
+      mctx.globalCompositeOperation = "destination-in";
+      mctx.drawImage(baseCanvas, -overlayPos.x, -overlayPos.y);
+      const maskedTex = TextureCtor.from(maskedCanvas);
+      disposables.push(maskedTex);
+      const ov = new state3.ctors.Sprite(maskedTex);
+      ov.anchor?.set?.(overlayAnchor.x, overlayAnchor.y);
+      ov.position.set(overlayPos.x, overlayPos.y);
+      ov.scale.set(1);
+      ov.alpha = 1;
+      ov.zIndex = 3;
+      overlays.push(ov);
+    }
+    return overlays;
+  }
+  function buildIconSprites(itKey, dims, iconPipeline, state3, iconLayout) {
+    const { basePos } = dims;
+    const icons = [];
+    for (const step of iconPipeline) {
+      if (step.name === "Gold" || step.name === "Rainbow") continue;
+      const itex = findIconTexture(itKey, step.name, step.isTall, state3);
+      if (!itex) continue;
+      const icon = new state3.ctors.Sprite(itex);
+      const iconAnchorX = itex?.defaultAnchor?.x ?? 0.5;
+      const iconAnchorY = itex?.defaultAnchor?.y ?? 0.5;
+      icon.anchor?.set?.(iconAnchorX, iconAnchorY);
+      icon.position.set(basePos.x + iconLayout.offset.x, basePos.y + iconLayout.offset.y);
+      icon.scale.set(iconLayout.iconScale);
+      if (step.isTall) icon.zIndex = -1;
+      if (FLOATING_MUTATION_ICONS.has(step.name)) icon.zIndex = 10;
+      if (!icon.zIndex) icon.zIndex = 2;
+      icons.push(icon);
+    }
+    return icons;
+  }
+  function lruEvict(state3, cfg) {
+    if (!cfg.cacheOn) return;
+    while (state3.lru.size > cfg.cacheMaxEntries || state3.cost > cfg.cacheMaxCost) {
+      const k = state3.lru.keys().next().value;
+      if (k === void 0) break;
+      const e = state3.lru.get(k);
+      state3.lru.delete(k);
+      state3.cost = Math.max(0, state3.cost - entryCost(e));
+    }
+  }
+  function clearVariantCache(state3) {
+    state3.lru.clear();
+    state3.cost = 0;
+    state3.srcCan.clear();
+  }
+  function renderMutatedTexture(tex, itKey, V, state3, cfg) {
+    try {
+      if (!tex || !state3.renderer || !state3.ctors?.Container || !state3.ctors?.Sprite || !state3.ctors?.Texture) return null;
+      const { Container, Sprite, Texture } = state3.ctors;
+      const w = tex?.orig?.width ?? tex?.frame?.width ?? tex?.width ?? 1;
+      const h = tex?.orig?.height ?? tex?.frame?.height ?? tex?.height ?? 1;
+      const aX = tex?.defaultAnchor?.x ?? 0.5;
+      const aY = tex?.defaultAnchor?.y ?? 0.5;
+      const basePos = { x: w * aX, y: h * aY };
+      const baseCanvas = textureToCanvas(tex, state3, cfg);
+      const root = new Container();
+      root.sortableChildren = true;
+      try {
+        const lock = new Sprite(tex);
+        lock.anchor?.set?.(aX, aY);
+        lock.position.set(basePos.x, basePos.y);
+        lock.width = w;
+        lock.height = h;
+        lock.alpha = 0;
+        lock.zIndex = -1e3;
+        root.addChild(lock);
+      } catch {
+      }
+      const base = new Sprite(tex);
+      base.anchor?.set?.(aX, aY);
+      base.position.set(basePos.x, basePos.y);
+      base.zIndex = 0;
+      root.addChild(base);
+      const isTall = isTallKey(itKey);
+      const pipeline = buildMutationPipeline(V.muts, isTall);
+      const overlayPipeline = buildMutationPipeline(V.overlayMuts, isTall);
+      const iconPipeline = buildMutationPipeline(V.selectedMuts, isTall);
+      const disposables = [];
+      const baseName = baseNameOf(itKey);
+      const iconLayout = computeIconLayout(tex, baseName, isTall);
+      const dims = { w, h, aX, aY, basePos };
+      buildColorLayerSprites(tex, dims, pipeline, state3, cfg, disposables, Texture).forEach((layer) => root.addChild(layer));
+      if (isTall) {
+        buildTallOverlaySprites(itKey, dims, overlayPipeline, state3, cfg, baseCanvas, Texture, disposables).forEach((ov) => root.addChild(ov));
+      }
+      buildIconSprites(itKey, dims, iconPipeline, state3, iconLayout).forEach((icon) => root.addChild(icon));
+      const RDR = state3.renderer;
+      let rt = null;
+      const RectCtor = state3.ctors?.Rectangle;
+      const crop = RectCtor ? new RectCtor(0, 0, w, h) : null;
+      if (typeof RDR?.generateTexture === "function")
+        rt = RDR.generateTexture(root, { resolution: 1, region: crop ?? void 0 });
+      else if (RDR?.textureGenerator?.generateTexture)
+        rt = RDR.textureGenerator.generateTexture({ target: root, resolution: 1 });
+      if (!rt) throw new Error("no render texture");
+      const outTex = rt instanceof Texture ? rt : Texture.from(RDR.extract.canvas(rt));
+      if (rt && rt !== outTex) rt.destroy?.(true);
+      root.destroy({ children: true, texture: false, baseTexture: false });
+      disposables.forEach(() => {
       });
+      try {
+        outTex.__mg_gen = true;
+        outTex.label = `${itKey}|${V.sig}`;
+      } catch {
+      }
+      return outTex;
+    } catch {
+      return null;
+    }
+  }
+  function processVariantJobs(state3, cfg) {
+    if (!cfg.jobOn || !state3.open || !state3.jobs.length) return false;
+    const now2 = performance.now();
+    const burst = now2 - state3.changedAt <= cfg.jobBurstWindowMs;
+    const budget = burst ? cfg.jobBurstMs : cfg.jobBudgetMs;
+    const t0 = performance.now();
+    let done = 0;
+    let needsLayout = false;
+    while (state3.jobs.length) {
+      if (performance.now() - t0 >= budget) break;
+      if (done >= cfg.jobCapPerTick) break;
+      const job = state3.jobs[0];
+      if (job.sig !== state3.sig) {
+        state3.jobs.shift();
+        state3.jobMap.delete(job.k);
+        continue;
+      }
+      const tex = job.src[job.i];
+      if (!tex) {
+        state3.jobs.shift();
+        state3.jobMap.delete(job.k);
+        continue;
+      }
+      const ft = renderMutatedTexture(tex, job.itKey, job.V, state3, cfg);
+      if (ft) job.out.push(ft);
+      job.i++;
+      done++;
+      if (job.i >= job.src.length) {
+        state3.jobs.shift();
+        state3.jobMap.delete(job.k);
+        let entry = null;
+        if (job.isAnim) {
+          if (job.out.length >= 2) entry = { isAnim: true, frames: job.out };
+          else job.out.forEach(() => {
+          });
+        } else {
+          if (job.out[0]) entry = { isAnim: false, tex: job.out[0] };
+        }
+        if (entry) {
+          state3.lru.set(job.k, entry);
+          state3.cost += entryCost(entry);
+          lruEvict(state3, cfg);
+          needsLayout = true;
+        }
+      }
+    }
+    return needsLayout;
+  }
+  var TILE_SIZE_WORLD, BASE_ICON_SCALE, TALL_PLANT_MUTATION_ICON_SCALE_BOOST, FLOATING_MUTATION_ICONS, MUT_ICON_Y_EXCEPT, MUT_ICON_X_EXCEPT, MUTATION_ORDER, MUTATION_INDEX, sortMutations, SUPPORTED_BLEND_OPS, pickBlendOp, FILTERS, hasMutationFilter, isTallKey, computeVariantSignature, curVariant, normalizeMutListColor, normalizeMutListOverlay, buildMutationPipeline, angleGrad, fillGrad, baseNameOf, entryCost, processJobs;
+  var init_variantBuilder = __esm({
+    "src/sprite/mutations/variantBuilder.ts"() {
+      init_settings();
+      TILE_SIZE_WORLD = 256;
+      BASE_ICON_SCALE = 0.5;
+      TALL_PLANT_MUTATION_ICON_SCALE_BOOST = 2;
+      FLOATING_MUTATION_ICONS = /* @__PURE__ */ new Set([
+        "Dawnlit",
+        "Ambershine",
+        "Dawncharged",
+        "Ambercharged"
+      ]);
+      MUT_ICON_Y_EXCEPT = {
+        Banana: 0.6,
+        Carrot: 0.6,
+        Sunflower: 0.5,
+        Starweaver: 0.5,
+        FavaBean: 0.25,
+        BurrosTail: 0.2
+      };
+      MUT_ICON_X_EXCEPT = {
+        Pepper: 0.5,
+        Banana: 0.6
+      };
+      MUTATION_ORDER = ["Gold", "Rainbow", "Wet", "Chilled", "Frozen", "Ambershine", "Dawnlit", "Dawncharged", "Ambercharged"];
+      MUTATION_INDEX = new Map(MUTATION_ORDER.map((m, idx) => [m, idx]));
+      sortMutations = (list) => {
+        const uniq = [...new Set(list.filter(Boolean))];
+        return uniq.sort((a, b) => (MUTATION_INDEX.get(a) ?? Infinity) - (MUTATION_INDEX.get(b) ?? Infinity));
+      };
+      SUPPORTED_BLEND_OPS = (() => {
+        try {
+          const c = document.createElement("canvas");
+          const g = c.getContext("2d");
+          if (!g) return /* @__PURE__ */ new Set();
+          const ops = ["color", "hue", "saturation", "luminosity", "overlay", "screen", "lighter", "source-atop"];
+          const ok = /* @__PURE__ */ new Set();
+          for (const op of ops) {
+            g.globalCompositeOperation = op;
+            if (g.globalCompositeOperation === op) ok.add(op);
+          }
+          return ok;
+        } catch {
+          return /* @__PURE__ */ new Set();
+        }
+      })();
+      pickBlendOp = (desired) => {
+        if (SUPPORTED_BLEND_OPS.has(desired)) return desired;
+        if (SUPPORTED_BLEND_OPS.has("overlay")) return "overlay";
+        if (SUPPORTED_BLEND_OPS.has("screen")) return "screen";
+        if (SUPPORTED_BLEND_OPS.has("lighter")) return "lighter";
+        return "source-atop";
+      };
+      FILTERS = {
+        Gold: { op: "source-atop", colors: ["rgb(235,200,0)"], a: 0.7 },
+        Rainbow: { op: "color", colors: ["#FF1744", "#FF9100", "#FFEA00", "#00E676", "#2979FF", "#D500F9"], ang: 130, angTall: 0, masked: true },
+        Wet: { op: "source-atop", colors: ["rgb(50,180,200)"], a: 0.25 },
+        Chilled: { op: "source-atop", colors: ["rgb(100,160,210)"], a: 0.45 },
+        Frozen: { op: "source-atop", colors: ["rgb(100,130,220)"], a: 0.5 },
+        Dawnlit: { op: "source-atop", colors: ["rgb(209,70,231)"], a: 0.5 },
+        Ambershine: { op: "source-atop", colors: ["rgb(190,100,40)"], a: 0.5 },
+        Dawncharged: { op: "source-atop", colors: ["rgb(140,80,200)"], a: 0.5 },
+        Ambercharged: { op: "source-atop", colors: ["rgb(170,60,25)"], a: 0.5 }
+      };
+      hasMutationFilter = (value) => Boolean(value && FILTERS[value]);
+      isTallKey = (k) => /tallplant/i.test(k);
+      computeVariantSignature = (state3) => {
+        if (!state3.mutOn) {
+          const f = hasMutationFilter(state3.f) ? state3.f : null;
+          const baseMuts = f ? [f] : [];
+          return { mode: "F", muts: baseMuts, overlayMuts: baseMuts, selectedMuts: baseMuts, sig: `F:${f ?? ""}` };
+        }
+        const raw = state3.mutations.filter((value) => hasMutationFilter(value));
+        const selected = sortMutations(raw);
+        const muts = normalizeMutListColor(raw);
+        const overlayMuts = normalizeMutListOverlay(raw);
+        return {
+          mode: "M",
+          muts,
+          overlayMuts,
+          selectedMuts: selected,
+          sig: `M:${selected.join(",")}|${muts.join(",")}|${overlayMuts.join(",")}`
+        };
+      };
+      curVariant = computeVariantSignature;
+      normalizeMutListColor = (list) => {
+        const names = list.filter((m, idx, arr) => FILTERS[m] && arr.indexOf(m) === idx);
+        if (!names.length) return [];
+        if (names.includes("Gold")) return ["Gold"];
+        if (names.includes("Rainbow")) return ["Rainbow"];
+        const warm = ["Ambershine", "Dawnlit", "Dawncharged", "Ambercharged"];
+        const hasWarm = names.some((n) => warm.includes(n));
+        if (hasWarm) {
+          return sortMutations(names.filter((n) => !["Wet", "Chilled", "Frozen"].includes(n)));
+        }
+        return sortMutations(names);
+      };
+      normalizeMutListOverlay = (list) => {
+        const names = list.filter((m, idx, arr) => MUT_META[m]?.overlayTall && arr.indexOf(m) === idx);
+        return sortMutations(names);
+      };
+      buildMutationPipeline = (mutNames, isTall) => mutNames.map((m) => ({ name: m, meta: MUT_META[m], overlayTall: MUT_META[m]?.overlayTall, isTall }));
+      angleGrad = (ctx2, w, h, ang, fullSpan = false) => {
+        const rad = (ang - 90) * Math.PI / 180;
+        const cx = w / 2;
+        const cy = h / 2;
+        if (!fullSpan) {
+          const R2 = Math.min(w, h) / 2;
+          return ctx2.createLinearGradient(cx - Math.cos(rad) * R2, cy - Math.sin(rad) * R2, cx + Math.cos(rad) * R2, cy + Math.sin(rad) * R2);
+        }
+        const dx = Math.cos(rad);
+        const dy = Math.sin(rad);
+        const R = Math.abs(dx) * w / 2 + Math.abs(dy) * h / 2;
+        return ctx2.createLinearGradient(cx - dx * R, cy - dy * R, cx + dx * R, cy + dy * R);
+      };
+      fillGrad = (ctx2, w, h, f, fullSpan = false) => {
+        const cols = f.colors?.length ? f.colors : ["#fff"];
+        const g = f.ang != null ? angleGrad(ctx2, w, h, f.ang, fullSpan) : ctx2.createLinearGradient(0, 0, 0, h);
+        if (cols.length === 1) {
+          g.addColorStop(0, cols[0]);
+          g.addColorStop(1, cols[0]);
+        } else cols.forEach((c, i) => g.addColorStop(i / (cols.length - 1), c));
+        ctx2.fillStyle = g;
+        ctx2.fillRect(0, 0, w, h);
+      };
+      baseNameOf = (k) => {
+        const p = String(k || "").split("/");
+        return p[p.length - 1] || "";
+      };
+      entryCost = (e) => e?.isAnim ? e.frames?.length || 0 : e?.tex ? 1 : 0;
+      processJobs = processVariantJobs;
+    }
+  });
+
+  // src/sprite/api/spriteApi.ts
+  var spriteApi_exports = {};
+  __export(spriteApi_exports, {
+    buildVariant: () => buildVariant,
+    getBaseSprite: () => getBaseSprite,
+    getSpriteWithMutations: () => getSpriteWithMutations,
+    listItemsByCategory: () => listItemsByCategory
+  });
+  function findItem(state3, category, id) {
+    const normId = normalizeKey(id);
+    for (const it of state3.items) {
+      const keyCat = keyCategoryOf(it.key);
+      if (!matchesCategory(keyCat, category)) continue;
+      const base = normalizeKey(baseNameOf2(it.key));
+      if (base === normId) return it;
+    }
+    return null;
+  }
+  function listItemsByCategory(state3, category = "any") {
+    return state3.items.filter((it) => matchesCategory(keyCategoryOf(it.key), category));
+  }
+  function buildVariant(mutations) {
+    return buildVariantFromMutations(mutations);
+  }
+  function getSpriteWithMutations(params, state3, cfg) {
+    const it = findItem(state3, params.category, params.id);
+    if (!it) return null;
+    const tex = it.isAnim ? it.frames?.[0] : it.first;
+    if (!tex) return null;
+    const V = buildVariantFromMutations(params.mutations);
+    return renderMutatedTexture(tex, it.key, V, state3, cfg);
+  }
+  function getBaseSprite(params, state3) {
+    const it = findItem(state3, params.category, params.id);
+    if (!it) return null;
+    return it.isAnim ? it.frames?.[0] ?? null : it.first;
+  }
+  var normalizeKey, categoryAlias, keyCategoryOf, matchesCategory, baseNameOf2;
+  var init_spriteApi = __esm({
+    "src/sprite/api/spriteApi.ts"() {
+      init_variantBuilder();
+      normalizeKey = (s) => String(s || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+      categoryAlias = {
+        plant: ["plant"],
+        tallplant: ["tallplant"],
+        crop: ["crop"],
+        decor: ["decor"],
+        item: ["item"],
+        pet: ["pet"],
+        seed: ["seed"],
+        mutation: ["mutation"],
+        "mutation-overlay": ["mutation-overlay"],
+        ui: ["ui"],
+        any: []
+      };
+      keyCategoryOf = (key2) => {
+        const parts = key2.split("/").filter(Boolean);
+        if (parts[0] === "sprite" || parts[0] === "sprites") return parts[1] ?? "";
+        return parts[0] ?? "";
+      };
+      matchesCategory = (keyCat, requested) => {
+        if (requested === "any") return true;
+        const aliases = categoryAlias[requested] || [];
+        return aliases.some((a) => normalizeKey(keyCat) === normalizeKey(a));
+      };
+      baseNameOf2 = (key2) => {
+        const parts = key2.split("/").filter(Boolean);
+        return parts[parts.length - 1] || "";
+      };
     }
   });
 
@@ -3045,24 +1385,6 @@
     Single: "Single",
     Multiple: "Multiple"
   };
-  var tileRefsMap = {
-    Dirt1: 6,
-    Dirt2: 7,
-    Dirt3: 8,
-    Bush1: 28,
-    Bush2: 38,
-    BushHomer: 48,
-    Sky0: 24,
-    Sky1: 25,
-    Sky2: 26,
-    Sky3: 27,
-    Sky4: 35,
-    Sky5: 36,
-    Sky6: 37,
-    Sky7: 45,
-    Sky8: 46,
-    Sky9: 47
-  };
   var tileRefsPlants = {
     DirtPatch: 1,
     SproutFlower: 2,
@@ -3077,7 +1399,6 @@
     Lily: 14,
     Starweaver: 15,
     Chrysanthemum: 16,
-    AloePlant: 17,
     Aloe: 18,
     Blueberry: 21,
     Banana: 22,
@@ -3090,6 +1411,9 @@
     Pear: 29,
     Pineapple: 30,
     Pepper: 31,
+    PalmTree: 3e3,
+    CacaoTree: 3001,
+    Tree: 8,
     Tomato: 32,
     BabyCarrot: 33,
     Carrot: 34,
@@ -3100,11 +1424,10 @@
     PalmTreeTop: 39,
     BushyTree: 40,
     Coconut: 41,
-    MushroomPlant: 42,
     PassionFruit: 43,
     DragonFruit: 44,
     Lychee: 45,
-    Mushroom: 46,
+    Mushroom: 3002,
     BurrosTail: 47,
     Echeveria: 49,
     Delphinium: 50,
@@ -3113,23 +1436,23 @@
     Camellia: 57,
     Hedge: 58,
     FlowerBush: 59,
-    Squash: 60
+    Squash: 60,
+    PineTree: 61,
+    Poinsettia: 62,
+    Shrub: 63
   };
   var tileRefsTallPlants = {
     Bamboo: 1,
-    PalmTree: 2,
     DawnCelestialPlatform: 3,
     DawnCelestialPlant: 4,
     DawnCelestialPlantActive: 5,
     DawnCelestialPlatformTopmostLayer: 6,
     Cactus: 7,
-    Tree: 8,
     MoonCelestialPlatform: 9,
     MoonCelestialPlant: 10,
     MoonCelestialPlantActive: 11,
     StarweaverPlatform: 13,
-    StarweaverPlant: 14,
-    CacaoTree: 15
+    StarweaverPlant: 14
   };
   var tileRefsSeeds = {
     Daffodil: 1,
@@ -3169,7 +1492,9 @@
     Cactus: 42,
     Camellia: 48,
     Chrysanthemum: 49,
-    Squash: 50
+    Squash: 50,
+    Pinecone: 51,
+    Poinsettia: 52
   };
   var tileRefsItems = {
     Coin: 1,
@@ -3198,15 +1523,6 @@
     ArrowKeys: 41,
     Touchpad: 42
   };
-  var tileRefsAnimations = {
-    Rain: 10,
-    Frost: 20,
-    Sunny: 30,
-    AmberMoon: 40,
-    Dawn: 50,
-    MoonCelestialActivationTile: 91,
-    DawnCelestialActivationTile: 92
-  };
   var tileRefsPets = {
     Bee: 1,
     Chicken: 2,
@@ -3229,7 +1545,11 @@
     Goat: 19,
     Dragonfly: 20,
     Turkey: 29,
-    Peacock: 30
+    Peacock: 30,
+    SnowFox: 31,
+    Stoat: 32,
+    WhiteCaribou: 33,
+    WinterEgg: 34
   };
   var tileRefsMutations = {
     Wet: 1,
@@ -3252,67 +1572,73 @@
     Ambercharged: "Amberbound"
   };
   var tileRefsDecor = {
-    WoodPedestal: 4,
-    StonePedestal: 6,
-    MarblePedestal: 8,
     SmallRock: 11,
+    MediumRock: 21,
+    LargeRock: 31,
+    WoodPedestal: 4,
     WoodBench: 13,
     WoodBenchBackwards: 14,
+    WoodBenchSideways: 24,
+    WoodBucketPedestal: 34,
+    WoodLampPost: 23,
+    WoodStool: 63,
+    WoodArch: 33,
+    WoodArchSide: 43,
+    WoodBridge: 34,
+    WoodBridgeSideways: 44,
+    WoodOwl: 53,
+    WoodGardenBox: 74,
+    Birdhouse: 54,
+    WoodWindmill: 64,
+    StonePedestal: 6,
     StoneBench: 15,
+    StoneBenchSideways: 2600,
     StoneBucketPedestal: 16,
+    StoneLampPost: 25,
+    StoneColumn: 2601,
+    StoneArch: 35,
+    StoneArchSideways: 45,
+    StoneBridge: 36,
+    StoneBridgeSideways: 46,
+    StoneGnome: 55,
+    StoneGardenBox: 66,
+    StoneBirdBath: 56,
+    MarblePedestal: 8,
     MarbleBench: 17,
     MarbleBenchBackwards: 18,
-    MediumRock: 21,
-    WoodLampPost: 23,
-    WoodBenchSideways: 24,
-    StoneLampPost: 25,
-    StoneBenchSideways: 26,
-    StoneColumn: 26,
-    MarbleLampPost: 27,
     MarbleBenchSideways: 28,
-    HayBale: 29,
-    PetHutch: 30,
-    LargeRock: 31,
-    WoodArch: 33,
-    WoodBucketPedestal: 34,
-    WoodBridge: 34,
-    StoneArch: 35,
-    StoneBridge: 36,
-    MarbleArch: 37,
-    MarbleBridge: 38,
-    HayBaleSideways: 39,
-    MiniFairyForge: 40,
-    WoodArchSide: 43,
-    WoodBridgeSideways: 44,
-    StoneArchSideways: 45,
-    StoneBridgeSideways: 46,
-    MarbleArchSideways: 47,
-    MarbleBridgeSideways: 48,
-    StrawScarecrow: 49,
-    MiniFairyCottage: 50,
-    WoodOwl: 53,
-    Birdhouse: 54,
-    StoneGnome: 55,
-    StoneBirdBath: 56,
-    MarbleBlobling: 57,
     MarbleBucketPedestal: 58,
-    MarbleFountain: 58,
-    Cauldron: 59,
-    MiniFairyKeep: 60,
-    WoodStool: 63,
-    WoodWindmill: 64,
-    StoneGardenBox: 66,
+    MarbleLampPost: 27,
     MarbleColumn: 68,
+    MarbleArch: 37,
+    MarbleArchSideways: 47,
+    MarbleBridge: 38,
+    MarbleBridgeSideways: 48,
+    MarbleBlobling: 57,
+    MarbleFountain: 58,
+    MarbleGardenBox: 78,
+    MiniFairyCottage: 50,
+    MiniFairyForge: 40,
+    MiniFairyKeep: 60,
     MiniWizardTower: 68,
+    HayBale: 29,
+    HayBaleSideways: 39,
+    StrawScarecrow: 49,
+    Cauldron: 59,
     SmallGravestone: 69,
     SmallGravestoneSideways: 70,
-    WoodenWindmill: 73,
-    WoodGardenBox: 74,
-    MarbleGardenBox: 78,
     MediumGravestone: 79,
     MediumGravestoneSideways: 80,
     LargeGravestone: 89,
-    LargeGravestoneSideways: 90
+    LargeGravestoneSideways: 90,
+    WoodCaribou: 91,
+    StoneCaribou: 92,
+    MarbleCaribou: 93,
+    ColoredStringLights: 94,
+    ColoredStringLightsSideways: 95,
+    StringLights: 96,
+    StringLightsSideways: 97,
+    PetHutch: 30
   };
   var plantCatalog = {
     Carrot: {
@@ -3769,6 +2095,29 @@
         maxScale: 1.7
       }
     },
+    PineTree: {
+      seed: {
+        tileRef: tileRefsSeeds.Pinecone,
+        name: "Pinecone",
+        coinPrice: 12e3,
+        creditPrice: 30,
+        rarity: rarity.Legendary
+      },
+      plant: {
+        tileRef: tileRefsPlants.PineTree,
+        name: "Pine Tree",
+        harvestType: harvestType.Single,
+        baseTileScale: 1.5
+      },
+      crop: {
+        tileRef: tileRefsPlants.PineTree,
+        name: "Pine Tree",
+        baseSellPrice: 15e3,
+        baseWeight: 1e3,
+        baseTileScale: 1.5,
+        maxScale: 3.5
+      }
+    },
     Lily: {
       seed: {
         tileRef: tileRefsSeeds.Lily,
@@ -3962,6 +2311,48 @@
         baseSellPrice: 5e5,
         baseWeight: 1,
         baseTileScale: 2.5,
+        maxScale: 2
+      }
+    },
+    Poinsettia: {
+      seed: {
+        tileRef: tileRefsSeeds.Poinsettia,
+        name: "Poinsettia Seed",
+        coinPrice: 5e5,
+        creditPrice: 500,
+        rarity: rarity.Mythic
+      },
+      plant: {
+        tileRef: tileRefsTallPlants.Shrub,
+        name: "Poinsettia Bush",
+        harvestType: harvestType.Multiple,
+        slotOffsets: [{
+          x: 0.05,
+          y: -0.4,
+          rotation: 0
+        }, {
+          x: -0.3,
+          y: -0.15,
+          rotation: 0
+        }, {
+          x: 0.3,
+          y: -0.1,
+          rotation: 0
+        }, {
+          x: -0.02,
+          y: 0.17,
+          rotation: 0
+        }],
+        secondsToMature: 10800,
+        baseTileScale: 1,
+        rotateSlotOffsetsRandomly: true
+      },
+      crop: {
+        tileRef: tileRefsTallPlants.Poinsettia,
+        name: "Poinsettia",
+        baseSellPrice: 3e4,
+        baseWeight: 0.02,
+        baseTileScale: 0.3,
         maxScale: 2
       }
     },
@@ -4389,7 +2780,19 @@
     UncommonEgg: { tileRef: tileRefsPets.UncommonEgg, name: "Uncommon Egg", coinPrice: 1e6, creditPrice: 48, rarity: rarity.Uncommon, initialTileScale: 0.3, baseTileScale: 0.8, secondsToHatch: 3600, faunaSpawnWeights: { Chicken: 65, Bunny: 25, Dragonfly: 10 } },
     RareEgg: { tileRef: tileRefsPets.RareEgg, name: "Rare Egg", coinPrice: 1e7, creditPrice: 99, rarity: rarity.Rare, initialTileScale: 0.3, baseTileScale: 0.8, secondsToHatch: 21600, faunaSpawnWeights: { Pig: 90, Cow: 10 } },
     LegendaryEgg: { tileRef: tileRefsPets.LegendaryEgg, name: "Legendary Egg", coinPrice: 1e8, creditPrice: 249, rarity: rarity.Legendary, initialTileScale: 0.3, baseTileScale: 0.8, secondsToHatch: 43200, faunaSpawnWeights: { Squirrel: 60, Turtle: 30, Goat: 10 } },
-    MythicalEgg: { tileRef: tileRefsPets.MythicalEgg, name: "Mythical Egg", coinPrice: 1e9, creditPrice: 599, rarity: rarity.Mythic, initialTileScale: 0.3, baseTileScale: 0.8, secondsToHatch: 86400, faunaSpawnWeights: { Butterfly: 75, Capybara: 5, Peacock: 20 } }
+    MythicalEgg: { tileRef: tileRefsPets.MythicalEgg, name: "Mythical Egg", coinPrice: 1e9, creditPrice: 599, rarity: rarity.Mythic, initialTileScale: 0.3, baseTileScale: 0.8, secondsToHatch: 86400, faunaSpawnWeights: { Butterfly: 75, Capybara: 5, Peacock: 20 } },
+    WinterEgg: {
+      tileRef: tileRefsPets.WinterEgg,
+      name: "Winter Egg",
+      coinPrice: 8e7,
+      creditPrice: 199,
+      rarity: rarity.Legendary,
+      initialTileScale: 0.3,
+      baseTileScale: 0.8,
+      secondsToHatch: 43200,
+      faunaSpawnWeights: { SnowFox: 75, Stoat: 20, WhiteCaribou: 5 },
+      expiryDate: /* @__PURE__ */ new Date("2026-01-12T01:00:00.000Z")
+    }
   };
   var petCatalog = {
     Worm: {
@@ -4582,6 +2985,60 @@
       tileTransformOrigin: "bottom",
       nudgeY: -0.1,
       diet: ["Pumpkin", "Coconut", "Pepper", "Camellia", "PassionFruit"]
+    },
+    SnowFox: {
+      tileRef: tileRefsPets.SnowFox,
+      name: "Snow Fox",
+      coinsToFullyReplenishHunger: 14e3,
+      innateAbilityWeights: {
+        SnowGranter: 30,
+        SnowyCoinFinder: 30,
+        SnowyPetXpBoost: 30
+      },
+      maxScale: 2,
+      maturitySellPrice: 7e6,
+      matureWeight: 7.5,
+      moveProbability: 0.35,
+      moveTweenDurationMs: 400,
+      hoursToMature: 100,
+      rarity: rarity.Legendary,
+      diet: ["Echeveria", "Squash", "Grape"]
+    },
+    Stoat: {
+      tileRef: tileRefsPets.Stoat,
+      name: "Stoat",
+      coinsToFullyReplenishHunger: 1e4,
+      innateAbilityWeights: {
+        SnowGranter: 40,
+        SnowyHungerBoost: 40,
+        SnowyCropMutationBoost: 20
+      },
+      maxScale: 2,
+      maturitySellPrice: 1e7,
+      matureWeight: 0.4,
+      moveProbability: 0.3,
+      moveTweenDurationMs: 600,
+      hoursToMature: 100,
+      rarity: rarity.Legendary,
+      diet: ["Banana", "Pepper", "Cactus"]
+    },
+    WhiteCaribou: {
+      tileRef: tileRefsPets.WhiteCaribou,
+      name: "Caribou",
+      coinsToFullyReplenishHunger: 3e4,
+      innateAbilityWeights: {
+        FrostGranter: 50,
+        SnowyPlantGrowthBoost: 40,
+        SnowyCropSizeBoost: 10
+      },
+      maxScale: 2.5,
+      maturitySellPrice: 15e6,
+      matureWeight: 300,
+      moveProbability: 0.2,
+      moveTweenDurationMs: 1e3,
+      hoursToMature: 100,
+      rarity: rarity.Legendary,
+      diet: ["Camellia", "BurrosTail", "Mushroom"]
     },
     Butterfly: {
       tileRef: tileRefsPets.Butterfly,
@@ -4933,6 +3390,24 @@
       description: "Empowers dawn crops with special mutations",
       trigger: "continuous",
       baseParameters: {}
+    },
+    SnowGranter: {
+      name: "Snow Granter",
+      description: "Number of times Snow Granter triggered",
+      trigger: "continuous",
+      baseProbability: 8,
+      baseParameters: {
+        grantedMutations: ["Chilled"]
+      }
+    },
+    FrostGranter: {
+      name: "Frost Granter",
+      description: "Number of times Frost Granter triggered",
+      trigger: "continuous",
+      baseProbability: 6,
+      baseParameters: {
+        grantedMutations: ["Frozen"]
+      }
     }
   };
   var toolCatalog = {
@@ -5003,6 +3478,15 @@
       name: "Large Garden Rock",
       coinPrice: 5e3,
       creditPrice: 10,
+      rarity: rarity.Common,
+      baseTileScale: 1,
+      isOneTimePurchase: false
+    },
+    WoodCaribou: {
+      tileRef: tileRefsDecor.WoodCaribou,
+      name: "Wood Caribou",
+      coinPrice: 9e3,
+      creditPrice: 14,
       rarity: rarity.Common,
       baseTileScale: 1,
       isOneTimePurchase: false
@@ -5095,6 +3579,15 @@
       isOneTimePurchase: false,
       nudgeY: -0.47
     },
+    StoneCaribou: {
+      tileRef: tileRefsDecor.StoneCaribou,
+      name: "Stone Caribou",
+      coinPrice: 75e4,
+      creditPrice: 72,
+      rarity: rarity.Uncommon,
+      baseTileScale: 1.2,
+      isOneTimePurchase: false
+    },
     // Pierre
     StoneBench: {
       tileRef: tileRefsDecor.StoneBench,
@@ -5172,6 +3665,15 @@
       baseTileScale: 1.2,
       isOneTimePurchase: false,
       nudgeY: -0.46
+    },
+    MarbleCaribou: {
+      tileRef: tileRefsDecor.MarbleCaribou,
+      name: "Marble Caribou",
+      coinPrice: 5e7,
+      creditPrice: 299,
+      rarity: rarity.Rare,
+      baseTileScale: 1.4,
+      isOneTimePurchase: false
     },
     // Marbre
     MarbleBench: {
@@ -5339,6 +3841,50 @@
       isOneTimePurchase: false,
       nudgeY: -0.42,
       expiryDate: /* @__PURE__ */ new Date("2025-11-07T01:00:00.000Z")
+    },
+    StringLights: {
+      tileRef: tileRefsDecor.StringLights,
+      rotationVariants: {
+        90: {
+          tileRef: tileRefsDecor.StringLightsSideways,
+          flipH: true
+        },
+        180: {
+          tileRef: tileRefsDecor.StringLights,
+          flipH: true
+        },
+        270: {
+          tileRef: tileRefsDecor.StringLightsSideways
+        }
+      },
+      name: "String Lights",
+      coinPrice: 7e3,
+      creditPrice: 12,
+      rarity: rarity.Common,
+      baseTileScale: 1,
+      isOneTimePurchase: false
+    },
+    ColoredStringLights: {
+      tileRef: tileRefsDecor.ColoredStringLights,
+      rotationVariants: {
+        90: {
+          tileRef: tileRefsDecor.ColoredStringLightsSideways,
+          flipH: true
+        },
+        180: {
+          tileRef: tileRefsDecor.ColoredStringLights,
+          flipH: true
+        },
+        270: {
+          tileRef: tileRefsDecor.ColoredStringLightsSideways
+        }
+      },
+      name: "Colored String Lights",
+      coinPrice: 8e3,
+      creditPrice: 13,
+      rarity: rarity.Common,
+      baseTileScale: 1,
+      isOneTimePurchase: false
     },
     SmallGravestone: {
       tileRef: tileRefsDecor.SmallGravestone,
@@ -5508,137 +4054,6 @@
       settings: DEFAULT_FRIEND_SETTINGS
     }
   };
-  var LEGACY_STATIC_KEYS = [
-    "aries_storage",
-    "qws:stats:v1",
-    "mg.customRooms",
-    "qws:pets:overrides:v1",
-    "qws:pets:ui:v1",
-    "qws:pets:teams:v1",
-    "qws:pets:teamSearch:v1",
-    "qws:petAlerts:v1",
-    "qws:pets:abilityLogs:v1",
-    "qws:shop:notifs:v1",
-    "qws:shop:notifs:rules.v1",
-    "qws:weather:notifs:v1",
-    "qws:notifier:loopDefaults.v1",
-    "qws:player:ghostMode",
-    "qws:ghost:delayMs",
-    "qws:autoReco:onNewSession",
-    "qws:autoReco:delayMs",
-    "qws:locker:restrictions.v1",
-    "garden.locker.state.v2",
-    "qws:editor:saved-gardens",
-    "qws:editor:enabled",
-    "qws:activityLogs:history:v1",
-    "qws:activityLog:filter",
-    "qws:alerts:audio:settings:v1",
-    "qws:alerts:audio:library:v1",
-    "soundEffectsVolumeAtom",
-    "qws:pos",
-    "qws:collapsed",
-    "qws:hidden",
-    "mg-mod.inventory.sortKey",
-    "mg-mod.inventory.sortDirection",
-    "mg-mod.inventory.showValues"
-  ];
-  var LEGACY_PREFIXES = [
-    "qws:keybind:",
-    "qws:keybind-hold:",
-    "qws:hk:petteam:use:",
-    "qws:win:",
-    "menu:"
-  ];
-  var STATIC_LEGACY_KEYS = [
-    {
-      legacyKey: "qws:stats:v1",
-      apply: (raw, r) => {
-        const flat = unwrapNestedSnapshot(parseSafe(raw));
-        r.stats = flat;
-      }
-    },
-    { legacyKey: "mg.customRooms", apply: (raw, r) => r.room = mergeSection(r.room, { customRooms: parseSafe(raw) }) },
-    { legacyKey: "qws:pets:overrides:v1", apply: (raw, r) => r.pets = mergeSection(r.pets, { overrides: parseSafe(raw) }) },
-    { legacyKey: "qws:pets:ui:v1", apply: (raw, r) => r.pets = mergeSection(r.pets, { ui: parseSafe(raw) }) },
-    { legacyKey: "qws:pets:teams:v1", apply: (raw, r) => r.pets = mergeSection(r.pets, { teams: parseSafe(raw) }) },
-    {
-      legacyKey: "qws:pets:teamSearch:v1",
-      apply: (raw, r) => r.pets = mergeSection(r.pets, { teamSearch: parseSafe(raw) })
-    },
-    { legacyKey: "qws:petAlerts:v1", apply: (raw, r) => r.pets = mergeSection(r.pets, { alerts: parseSafe(raw) }) },
-    {
-      legacyKey: "qws:pets:abilityLogs:v1",
-      apply: (raw, r) => r.pets = mergeSection(r.pets, { abilityLogs: parseSafe(raw) })
-    },
-    { legacyKey: "qws:shop:notifs:v1", apply: (raw, r) => r.notifier = mergeSection(r.notifier, { prefs: parseSafe(raw) }) },
-    {
-      legacyKey: "qws:shop:notifs:rules.v1",
-      apply: (raw, r) => r.notifier = mergeSection(r.notifier, { rules: parseSafe(raw) })
-    },
-    {
-      legacyKey: "qws:weather:notifs:v1",
-      apply: (raw, r) => r.notifier = mergeSection(r.notifier, { weatherPrefs: parseSafe(raw) })
-    },
-    {
-      legacyKey: "qws:notifier:loopDefaults.v1",
-      apply: (raw, r) => r.notifier = mergeSection(r.notifier, { loopDefaults: parseSafe(raw) })
-    },
-    { legacyKey: "qws:player:ghostMode", apply: (raw, r) => r.misc = mergeSection(r.misc, { ghostMode: parseSafe(raw) }) },
-    { legacyKey: "qws:ghost:delayMs", apply: (raw, r) => r.misc = mergeSection(r.misc, { ghostDelayMs: parseSafe(raw) }) },
-    {
-      legacyKey: "qws:autoReco:onNewSession",
-      apply: (raw, r) => r.misc = mergeSection(r.misc, { autoRecoEnabled: parseSafe(raw) })
-    },
-    {
-      legacyKey: "qws:autoReco:delayMs",
-      apply: (raw, r) => r.misc = mergeSection(r.misc, { autoRecoDelayMs: parseSafe(raw) })
-    },
-    {
-      legacyKey: "qws:locker:restrictions.v1",
-      apply: (raw, r) => r.locker = mergeSection(r.locker, { restrictions: parseSafe(raw) })
-    },
-    { legacyKey: "garden.locker.state.v2", apply: (raw, r) => r.locker = mergeSection(r.locker, { state: parseSafe(raw) }) },
-    {
-      legacyKey: "qws:editor:saved-gardens",
-      apply: (raw, r) => r.editor = mergeSection(r.editor, { savedGardens: parseSafe(raw) })
-    },
-    {
-      legacyKey: "qws:editor:enabled",
-      apply: (raw, r) => r.editor = mergeSection(r.editor, { enabled: parseSafe(raw) })
-    },
-    {
-      legacyKey: "qws:activityLogs:history:v1",
-      apply: (raw, r) => r.activityLog = mergeSection(r.activityLog, { history: parseSafe(raw) })
-    },
-    { legacyKey: "qws:activityLog:filter", apply: (raw, r) => r.activityLog = mergeSection(r.activityLog, { filter: parseSafe(raw) }) },
-    {
-      legacyKey: "qws:alerts:audio:settings:v1",
-      apply: (raw, r) => r.audio = mergeSection(r.audio, { settings: parseSafe(raw) })
-    },
-    {
-      legacyKey: "qws:alerts:audio:library:v1",
-      apply: (raw, r) => r.audio = mergeSection(r.audio, { library: parseSafe(raw) })
-    },
-    {
-      legacyKey: "soundEffectsVolumeAtom",
-      apply: (raw, r) => r.audio = mergeSection(r.audio, { sfxVolumeAtom: parseSafe(raw) })
-    },
-    { legacyKey: "qws:pos", apply: (raw, r) => r.hud = mergeSection(r.hud, { pos: parseSafe(raw) }) },
-    { legacyKey: "qws:collapsed", apply: (raw, r) => r.hud = mergeSection(r.hud, { collapsed: parseSafe(raw) }) },
-    { legacyKey: "qws:hidden", apply: (raw, r) => r.hud = mergeSection(r.hud, { hidden: parseSafe(raw) }) },
-    {
-      legacyKey: "mg-mod.inventory.sortKey",
-      apply: (raw, r) => r.inventory = mergeSection(r.inventory, { sortKey: parseSafe(raw) })
-    },
-    {
-      legacyKey: "mg-mod.inventory.sortDirection",
-      apply: (raw, r) => r.inventory = mergeSection(r.inventory, { sortDirection: parseSafe(raw) })
-    },
-    {
-      legacyKey: "mg-mod.inventory.showValues",
-      apply: (raw, r) => r.inventory = mergeSection(r.inventory, { showValues: parseSafe(raw) })
-    }
-  ];
   function getHostStorage() {
     if (typeof window === "undefined") return null;
     try {
@@ -5663,22 +4078,6 @@
       }
     }
     return base;
-  }
-  function collectByPrefix(storage, prefix, transform) {
-    const out = {};
-    for (let i = 0; i < storage.length; i++) {
-      const key2 = storage.key(i);
-      if (!key2 || !key2.startsWith(prefix)) continue;
-      const raw = storage.getItem(key2);
-      if (raw == null) continue;
-      if (transform) {
-        const entry = transform(key2, raw);
-        if (entry) out[entry[0]] = entry[1];
-      } else {
-        out[key2.slice(prefix.length)] = parseSafe(raw);
-      }
-    }
-    return out;
   }
   function unwrapNestedSnapshot(raw) {
     let cur = raw;
@@ -5806,120 +4205,6 @@
       cur[last] = value;
     }
   }
-  function hasLegacyData(storage) {
-    for (const key2 of LEGACY_STATIC_KEYS) {
-      if (storage.getItem(key2) != null) return true;
-    }
-    for (let i = 0; i < storage.length; i++) {
-      const key2 = storage.key(i) || "";
-      if (LEGACY_PREFIXES.some((p) => key2.startsWith(p))) return true;
-    }
-    return false;
-  }
-  function cleanupLegacyData(storage) {
-    for (const key2 of LEGACY_STATIC_KEYS) {
-      try {
-        storage.removeItem(key2);
-      } catch {
-      }
-    }
-    for (let i = storage.length - 1; i >= 0; i--) {
-      const key2 = storage.key(i);
-      if (!key2) continue;
-      if (LEGACY_PREFIXES.some((p) => key2.startsWith(p))) {
-        try {
-          storage.removeItem(key2);
-        } catch {
-        }
-      }
-    }
-  }
-  function migrateLocalStorageToAries() {
-    const storage = getHostStorage();
-    if (!storage) return loadAriesStorage();
-    const current = loadAriesStorage();
-    const shouldMigrate = hasLegacyData(storage);
-    const result = { ...DEFAULT_ARIES_STORAGE, ...current };
-    if (!shouldMigrate) {
-      return result;
-    }
-    for (const entry of STATIC_LEGACY_KEYS) {
-      const { legacyKey, apply } = entry;
-      const raw = storage.getItem(legacyKey);
-      if (raw == null) continue;
-      apply(raw, result);
-    }
-    const bindings = collectByPrefix(storage, "qws:keybind:", (key2, raw) => [
-      key2.replace("qws:keybind:", ""),
-      raw
-    ]);
-    const holds = collectByPrefix(storage, "qws:keybind-hold:", (key2, raw) => [
-      key2.replace("qws:keybind-hold:", ""),
-      raw === "1" || raw === "true"
-    ]);
-    if ((Object.keys(bindings).length || Object.keys(holds).length) && !result.keybinds) {
-      result.keybinds = {};
-    }
-    if (Object.keys(bindings).length) {
-      result.keybinds = {
-        ...result.keybinds ?? {},
-        bindings: { ...result.keybinds?.bindings ?? {}, ...bindings }
-      };
-    }
-    if (Object.keys(holds).length) {
-      result.keybinds = {
-        ...result.keybinds ?? {},
-        hold: { ...result.keybinds?.hold ?? {}, ...holds }
-      };
-    }
-    const teamHotkeys = collectByPrefix(storage, "qws:hk:petteam:use:", (key2, raw) => [
-      key2.replace("qws:hk:petteam:use:", ""),
-      raw
-    ]);
-    if (Object.keys(teamHotkeys).length) {
-      result.pets = {
-        ...result.pets ?? {},
-        hotkeys: { ...result.pets?.hotkeys ?? {}, ...teamHotkeys }
-      };
-    }
-    const hudWindows = collectByPrefix(storage, "qws:win:", (key2, raw) => {
-      const match = key2.match(/^qws:win:(.+):pos$/);
-      if (!match || !match[1]) return null;
-      return [match[1], parseSafe(raw)];
-    });
-    if (Object.keys(hudWindows).length) {
-      result.hud = {
-        ...result.hud ?? {},
-        windows: { ...result.hud?.windows ?? {}, ...hudWindows }
-      };
-    }
-    const menuTabs = collectByPrefix(storage, "menu:", (key2, raw) => {
-      const match = key2.match(/^menu:(.+):activeTab$/);
-      if (!match || !match[1]) return null;
-      return [match[1], parseSafe(raw)];
-    });
-    if (Object.keys(menuTabs).length) {
-      const activeTabs = {};
-      for (const [k, v] of Object.entries(menuTabs)) {
-        if (typeof v === "string") activeTabs[k] = v;
-      }
-      if (Object.keys(activeTabs).length) {
-        result.menu = {
-          ...result.menu ?? {},
-          activeTabs: { ...result.menu?.activeTabs ?? {}, ...activeTabs }
-        };
-      }
-    }
-    if (result.stats && typeof result.stats === "object") {
-      const flat = unwrapNestedSnapshot(result.stats);
-      result.stats = flat;
-    }
-    result.version = ARIES_STORAGE_VERSION;
-    if (!result.migratedAt) result.migratedAt = Date.now();
-    persistAriesStorage(result);
-    cleanupLegacyData(storage);
-    return result;
-  }
   function getAriesStorage() {
     return loadAriesStorage();
   }
@@ -5940,16 +4225,16 @@
     return value;
   }
   function writeAriesPath(path, value) {
-    return updateAriesStorage((state2) => {
-      setValueAtPath(state2, path.split(".").filter(Boolean), value);
+    return updateAriesStorage((state3) => {
+      setValueAtPath(state3, path.split(".").filter(Boolean), value);
     });
   }
   function updateAriesPath(path, updater) {
-    return updateAriesStorage((state2) => {
+    return updateAriesStorage((state3) => {
       const parts = path.split(".").filter(Boolean);
-      const currentValue = getValueAtPath(state2, parts);
+      const currentValue = getValueAtPath(state3, parts);
       const next = updater(currentValue);
-      setValueAtPath(state2, parts, next);
+      setValueAtPath(state3, parts, next);
     });
   }
 
@@ -6052,11 +4337,11 @@
   var slotSignature = (slot) => {
     if (!slot) return "\u2205";
     const species = slot.species ?? "";
-    const start = Number.isFinite(slot.startTime) ? slot.startTime : 0;
+    const start2 = Number.isFinite(slot.startTime) ? slot.startTime : 0;
     const end = Number.isFinite(slot.endTime) ? slot.endTime : 0;
     const target = Number.isFinite(slot.targetScale) ? slot.targetScale : 0;
     const muts = Array.isArray(slot.mutations) ? slot.mutations.join(",") : "";
-    return `${species}|${start}|${end}|${target}|${muts}`;
+    return `${species}|${start2}|${end}|${target}|${muts}`;
   };
   var gardenObjectSignature = (obj) => {
     if (!obj) return "\u2205";
@@ -6474,21 +4759,21 @@
     return base;
   }
   function sanitizeState(raw) {
-    const state2 = defaultState();
-    if (!raw || typeof raw !== "object") return state2;
-    state2.enabled = raw.enabled === true;
-    state2.settings = sanitizeSettings(raw.settings);
-    state2.overrides = {};
+    const state3 = defaultState();
+    if (!raw || typeof raw !== "object") return state3;
+    state3.enabled = raw.enabled === true;
+    state3.settings = sanitizeSettings(raw.settings);
+    state3.overrides = {};
     if (raw.overrides && typeof raw.overrides === "object") {
       for (const [key2, value] of Object.entries(raw.overrides)) {
         if (!key2) continue;
-        state2.overrides[key2] = {
+        state3.overrides[key2] = {
           enabled: value?.enabled === true,
           settings: sanitizeSettings(value?.settings)
         };
       }
     }
-    return state2;
+    return state3;
   }
   function cloneSettings(settings) {
     return {
@@ -6505,14 +4790,14 @@
       weatherRecipes: settings.weatherRecipes.map((recipe) => recipe.slice())
     };
   }
-  function cloneState(state2) {
+  function cloneState(state3) {
     const overrides = {};
-    for (const [key2, value] of Object.entries(state2.overrides)) {
+    for (const [key2, value] of Object.entries(state3.overrides)) {
       overrides[key2] = { enabled: value.enabled, settings: cloneSettings(value.settings) };
     }
     return {
-      enabled: state2.enabled,
-      settings: cloneSettings(state2.settings),
+      enabled: state3.enabled,
+      settings: cloneSettings(state3.settings),
       overrides
     };
   }
@@ -7670,9 +5955,9 @@
     const y = Number.isFinite(p?.position?.y) ? Math.round(p.position.y) : 0;
     return `${species}|${name}|xp:${xp}|hg:${hunger}|sc:${scale}|m:${muts}|a:${ab}|pos:${x},${y}`;
   }
-  function snapshotPets(state2) {
+  function snapshotPets(state3) {
     const snap = /* @__PURE__ */ new Map();
-    const arr = Array.isArray(state2) ? state2 : [];
+    const arr = Array.isArray(state3) ? state3 : [];
     for (const it of arr) {
       const id = String(it?.slot?.id ?? "");
       if (!id) continue;
@@ -8039,11 +6324,11 @@
     },
     onPetsDiff(cb) {
       let prevSnap = snapshotPets(null);
-      return Atoms.pets.myPetInfos.onChange((state2) => {
-        const nextSnap = snapshotPets(state2);
+      return Atoms.pets.myPetInfos.onChange((state3) => {
+        const nextSnap = snapshotPets(state3);
         const d = diffPetsSnapshot(prevSnap, nextSnap);
         if (d.added.length || d.updated.length || d.removed.length) {
-          cb(state2, d);
+          cb(state3, d);
           prevSnap = nextSnap;
         }
       });
@@ -8055,11 +6340,11 @@
       const first = diffPetsSnapshot(prevSnap, nextSnap);
       cb(cur, first);
       prevSnap = nextSnap;
-      return Atoms.pets.myPetInfos.onChange((state2) => {
-        nextSnap = snapshotPets(state2);
+      return Atoms.pets.myPetInfos.onChange((state3) => {
+        nextSnap = snapshotPets(state3);
         const d = diffPetsSnapshot(prevSnap, nextSnap);
         if (d.added.length || d.updated.length || d.removed.length) {
-          cb(state2, d);
+          cb(state3, d);
           prevSnap = nextSnap;
         }
       });
@@ -8177,7 +6462,7 @@
     if (!atoms.length) {
       throw new Error(`${config.label} introuvable`);
     }
-    const state2 = existing ?? {
+    const state3 = existing ?? {
       config,
       enabled: false,
       payload: null,
@@ -8202,13 +6487,13 @@
           }
         }
         const real = orig(get);
-        if (!state2.enabled || state2.payload == null) return real;
-        return config.merge ? config.merge(real, state2.payload) : state2.payload;
+        if (!state3.enabled || state3.payload == null) return real;
+        return config.merge ? config.merge(real, state3.payload) : state3.payload;
       };
-      state2.patched.set(a, { readKey, orig });
+      state3.patched.set(a, { readKey, orig });
     }
     if (gateAtom && config.gate?.autoDisableOnClose) {
-      state2.unsubGate = await jSub(gateAtom, async () => {
+      state3.unsubGate = await jSub(gateAtom, async () => {
         let v;
         try {
           v = await jGet(gateAtom);
@@ -8216,12 +6501,12 @@
           v = null;
         }
         const isOpen = config.gate?.isOpen ? config.gate.isOpen(v) : !!v;
-        if (!isOpen && state2.enabled) state2.enabled = false;
+        if (!isOpen && state3.enabled) state3.enabled = false;
       });
     }
-    state2.installed = true;
-    _fakeRegistry.set(key2, state2);
-    return state2;
+    state3.installed = true;
+    _fakeRegistry.set(key2, state3);
+    return state3;
   }
   async function fakeShow(config, payload, options) {
     await ensureStore();
@@ -9489,9 +7774,9 @@
     }
   }
   async function findFirstEmptySlot() {
-    const state2 = await PlayerService.getGardenState();
-    const dirt = state2?.tileObjects || {};
-    const boardwalk = state2?.boardwalkTileObjects || {};
+    const state3 = await PlayerService.getGardenState();
+    const dirt = state3?.tileObjects || {};
+    const boardwalk = state3?.boardwalkTileObjects || {};
     for (let i = 0; i < 200; i++) {
       const key2 = String(i);
       const has = Object.prototype.hasOwnProperty.call(dirt, key2) && dirt[key2] != null;
@@ -10641,13 +8926,13 @@
         });
       }
     }
-    findScrollableAncestor(start) {
+    findScrollableAncestor(start2) {
       function isScrollable(el3) {
         const s = getComputedStyle(el3);
         const oy = s.overflowY || s.overflow;
         return /(auto|scroll)/.test(oy) && el3.scrollHeight > el3.clientHeight;
       }
-      let el2 = start;
+      let el2 = start2;
       while (el2) {
         if (isScrollable(el2)) return el2;
         el2 = el2.parentElement;
@@ -10978,7 +9263,7 @@
         let pressTimer = null;
         let repeatTimer = null;
         let suppressNextClick = false;
-        const start = (ev) => {
+        const start2 = (ev) => {
           suppressNextClick = false;
           pressTimer = window.setTimeout(() => {
             suppressNextClick = true;
@@ -10997,7 +9282,7 @@
             repeatTimer = null;
           }
         };
-        btn.addEventListener("pointerdown", start);
+        btn.addEventListener("pointerdown", start2);
         ["pointerup", "pointercancel", "pointerleave", "blur"].forEach(
           (ev) => btn.addEventListener(ev, stop2)
         );
@@ -11073,9 +9358,9 @@
           return;
         }
         const clampPercent4 = (value) => Math.max(0, Math.min(100, value));
-        const start = (Math.min(minValue, maxValue) - min) / total * 100;
+        const start2 = (Math.min(minValue, maxValue) - min) / total * 100;
         const end = (Math.max(minValue, maxValue) - min) / total * 100;
-        fill.style.left = `${clampPercent4(start)}%`;
+        fill.style.left = `${clampPercent4(start2)}%`;
         fill.style.right = `${clampPercent4(100 - end)}%`;
       };
       minInput.addEventListener("input", updateFill);
@@ -11490,11 +9775,9 @@
         if (typeof stored === "string" && stored) id = stored;
       } catch {
       }
-      if (!id) {
-        try {
-          id = localStorage.getItem(this.lsKeyActive);
-        } catch {
-        }
+      try {
+        id = localStorage.getItem(this.lsKeyActive);
+      } catch {
       }
       if (id && this.tabs.has(id)) this.switchTo(id);
       else if (this.tabs.size) this.switchTo(this.firstTabId());
@@ -11902,24 +10185,6 @@
 }
 .qmm .stats-pet__total-value{
   font-weight:700;
-}
-.qmm .stats-pet__sprite-icon{
-  --stats-pet-sprite-size:28px;
-  width:var(--stats-pet-sprite-size);
-  height:var(--stats-pet-sprite-size);
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  border-radius:6px;
-  background:rgba(255,255,255,.08);
-  padding:2px;
-  flex-shrink:0;
-}
-.qmm .stats-pet__sprite-icon img{
-  width:100%;
-  height:100%;
-  object-fit:contain;
-  image-rendering:pixelated;
 }
 .qmm .stats-weather__name{
   display:inline-flex;
@@ -12922,9 +11187,9 @@
       __publicField(this, "passthrough", /* @__PURE__ */ new Set(["F5", "F12"]));
       // rapid-fire manager
       __publicField(this, "sessions", /* @__PURE__ */ new Map());
-      const ctx = resolveContext(context);
-      this.win = ctx.window;
-      this.doc = ctx.document;
+      const ctx2 = resolveContext(context);
+      this.win = ctx2.window;
+      this.doc = ctx2.document;
       if (autoAttach) {
         this.attachDoc(this.doc);
         this.attachAllFrames();
@@ -13364,6 +11629,12 @@
           defaultHotkey: { code: "KeyE" }
         },
         {
+          id: "game.pet-hutch",
+          label: "\u{1F3E0} Pet hutch",
+          defaultHotkey: null,
+          allowClear: true
+        },
+        {
           id: "game.move-up",
           label: "\u2B06 Move up",
           defaultHotkey: { code: "KeyW" }
@@ -13451,6 +11722,7 @@
         label: action2.label,
         hint: action2.hint,
         allowModifierOnly: action2.allowModifierOnly,
+        allowClear: action2.allowClear,
         defaultHotkey: cloneHotkey(action2.defaultHotkey),
         holdDetection: action2.holdDetection ? {
           label: action2.holdDetection.label,
@@ -13582,9 +11854,9 @@
   var gameActionBlockers = /* @__PURE__ */ new Set();
   var gameActionBlockedCombos = /* @__PURE__ */ new Set();
   function getCombosForGameAction() {
-    const state2 = gameActiveStates.get(GAME_ACTION_ID);
-    if (!state2) return [];
-    const combo = state2.combo;
+    const state3 = gameActiveStates.get(GAME_ACTION_ID);
+    if (!state3) return [];
+    const combo = state3.combo;
     return typeof combo === "string" && combo.length ? [combo] : [];
   }
   function applyGameActionBlockers() {
@@ -13654,7 +11926,7 @@
     if (code === "ControlLeft" || code === "ControlRight") return "Ctrl";
     if (code === "AltLeft" || code === "AltRight") return "Alt";
     if (code === "ShiftLeft" || code === "ShiftRight") return "Shift";
-    if (code === "MetaLeft" || code === "MetaRight") return isMac2() ? "\u2318" : "Win";
+    if (code === "MetaLeft" || code === "MetaRight") return isMac2() ? "\xE2\u0152\u02DC" : "Win";
     if (code === "Space") return "Space";
     if (code === "Enter") return "Enter";
     if (code === "Escape") return "Esc";
@@ -13662,19 +11934,19 @@
     if (code === "Backspace") return "Backspace";
     if (code === "Delete") return "Del";
     if (code === "Insert") return "Ins";
-    if (code === "ArrowUp") return "\u2191";
-    if (code === "ArrowDown") return "\u2193";
-    if (code === "ArrowLeft") return "\u2190";
-    if (code === "ArrowRight") return "\u2192";
+    if (code === "ArrowUp") return "\xE2\u2020\u2018";
+    if (code === "ArrowDown") return "\xE2\u2020\u201C";
+    if (code === "ArrowLeft") return "\xE2\u2020\x90";
+    if (code === "ArrowRight") return "\xE2\u2020\u2019";
     return code;
   }
   function prettyHotkey(hk) {
-    if (!hk) return "\u2014";
+    if (!hk) return "\xE2\u20AC\u201D";
     const mods = [];
     if (hk.ctrl) mods.push("Ctrl");
     if (hk.shift) mods.push("Shift");
     if (hk.alt) mods.push("Alt");
-    if (hk.meta) mods.push(isMac2() ? "\u2318" : "Win");
+    if (hk.meta) mods.push(isMac2() ? "\xE2\u0152\u02DC" : "Win");
     let base = "";
     const k = hk.key;
     if (typeof k === "string" && k.length === 1) {
@@ -13682,7 +11954,7 @@
     } else {
       base = codeToDisplay(hk.code);
     }
-    const baseIsModifier = base && ["Ctrl", "Shift", "Alt", "\u2318", "Win"].includes(base);
+    const baseIsModifier = base && ["Ctrl", "Shift", "Alt", "\xE2\u0152\u02DC", "Win"].includes(base);
     const parts = baseIsModifier ? mods : mods.concat(base ? [base] : []);
     return parts.join(" + ");
   }
@@ -16051,8 +14323,8 @@
         cleanup(root, INJ_CLASS);
         return;
       }
-      ensureInjectedNextTo(target, INJ_CLASS, INJ_TEXT, (ev, ctx) => {
-        safeInvokeClick(HANDLE, ev, ctx, logger);
+      ensureInjectedNextTo(target, INJ_CLASS, INJ_TEXT, (ev, ctx2) => {
+        safeInvokeClick(HANDLE, ev, ctx2, logger);
       });
     }
     const mo = new MutationObserver(processAll);
@@ -16276,9 +14548,9 @@
   function delay2(ms) {
     return new Promise((resolve2) => setTimeout(resolve2, ms));
   }
-  function safeInvokeClick(handler, ev, ctx, logger) {
+  function safeInvokeClick(handler, ev, ctx2, logger) {
     try {
-      const result = handler(ev, ctx);
+      const result = handler(ev, ctx2);
       if (isPromiseLike(result)) {
         result.catch((err) => logClickError(err, logger));
       }
@@ -16467,6 +14739,34 @@
           event.stopPropagation();
           void runSellAllPetsFlow();
         }
+      },
+      true
+    );
+  }
+
+  // src/services/petHutchKeybind.ts
+  var ACTION_ID = "game.pet-hutch";
+  var PET_HUTCH_MODAL_ID = "petHutch";
+  var petHutchKeybindsInstalled = false;
+  async function togglePetHutchModal() {
+    try {
+      const current = await Atoms.ui.activeModal.get();
+      const next = current === PET_HUTCH_MODAL_ID ? null : PET_HUTCH_MODAL_ID;
+      await Atoms.ui.activeModal.set(next);
+    } catch {
+    }
+  }
+  function installPetHutchKeybindsOnce() {
+    if (petHutchKeybindsInstalled || typeof window === "undefined") return;
+    petHutchKeybindsInstalled = true;
+    window.addEventListener(
+      "keydown",
+      (event) => {
+        if (shouldIgnoreKeydown(event)) return;
+        if (!eventMatchesKeybind(ACTION_ID, event)) return;
+        event.preventDefault();
+        event.stopPropagation();
+        void togglePetHutchModal();
       },
       true
     );
@@ -16685,25 +14985,25 @@
             let petStopLoaded = false;
             let petLoopLoaded = false;
             let petDefaultLoaded = false;
-            const applyContext = (ctx, conf) => {
+            const applyContext = (ctx2, conf) => {
               if (!conf || typeof conf !== "object") return;
               const applyVolume = (value) => {
                 if (typeof value !== "number") return;
                 const normalized = clamp01(value);
-                if (ctx === "weather") {
+                if (ctx2 === "weather") {
                   this.weatherVolume = normalized;
                   weatherVolumeLoaded = true;
-                } else if (ctx === "pets") {
+                } else if (ctx2 === "pets") {
                   this.petVolume = normalized;
                   petVolumeLoaded = true;
                 } else this.volume = normalized;
               };
               const applyMode = (value) => {
                 if (value === "loop" || value === "oneshot") {
-                  if (ctx === "weather") {
+                  if (ctx2 === "weather") {
                     this.weatherMode = value;
                     weatherModeLoaded = true;
-                  } else if (ctx === "pets") {
+                  } else if (ctx2 === "pets") {
                     this.petMode = value;
                     petModeLoaded = true;
                   } else this.mode = value;
@@ -16713,26 +15013,26 @@
                 if (!value || typeof value !== "object") return;
                 const mode = value.mode;
                 if (mode === "purchase") {
-                  if (ctx === "weather") {
+                  if (ctx2 === "weather") {
                     this.weatherStopConf = { mode: "purchase" };
                     weatherStopLoaded = true;
-                  } else if (ctx === "pets") {
+                  } else if (ctx2 === "pets") {
                     this.petStopConf = { mode: "purchase" };
                     petStopLoaded = true;
                   } else this.stopConf = { mode: "purchase" };
                 } else if (mode === "manual") {
-                  if (ctx === "weather") {
+                  if (ctx2 === "weather") {
                     this.weatherStopConf = { mode: "manual" };
                     weatherStopLoaded = true;
-                  } else if (ctx === "pets") {
+                  } else if (ctx2 === "pets") {
                     this.petStopConf = { mode: "manual" };
                     petStopLoaded = true;
                   } else this.stopConf = { mode: "manual" };
                 } else if (mode === "repeat") {
-                  if (ctx === "weather") {
+                  if (ctx2 === "weather") {
                     this.weatherStopConf = { mode: "manual" };
                     weatherStopLoaded = true;
-                  } else if (ctx === "pets") {
+                  } else if (ctx2 === "pets") {
                     this.petStopConf = { mode: "manual" };
                     petStopLoaded = true;
                   } else {
@@ -16743,10 +15043,10 @@
               const applyLoop = (value) => {
                 if (typeof value !== "number" || !Number.isFinite(value)) return;
                 const normalized = Math.max(150, Math.floor(value));
-                if (ctx === "weather") {
+                if (ctx2 === "weather") {
                   this.weatherLoopIntervalMs = normalized;
                   weatherLoopLoaded = true;
-                } else if (ctx === "pets") {
+                } else if (ctx2 === "pets") {
                   this.petLoopIntervalMs = normalized;
                   petLoopLoaded = true;
                 } else this.loopIntervalMs = normalized;
@@ -16754,10 +15054,10 @@
               const applyDefault = (value) => {
                 if (typeof value !== "string") return;
                 const nm = value.trim();
-                if (ctx === "weather") {
+                if (ctx2 === "weather") {
                   this.weatherDefaultSoundName = nm ? nm : null;
                   weatherDefaultLoaded = true;
-                } else if (ctx === "pets") {
+                } else if (ctx2 === "pets") {
                   this.petDefaultSoundName = nm ? nm : null;
                   petDefaultLoaded = true;
                 } else this.defaultSoundName = nm ? nm : null;
@@ -17102,7 +15402,7 @@
       this.stopLoop(key2);
       const stopOverride = normalizeStop(overrides.stop ?? null);
       const loopIntervalOverride = overrides.loopIntervalMs != null && Number.isFinite(overrides.loopIntervalMs) ? Math.max(150, Math.round(overrides.loopIntervalMs)) : null;
-      const state2 = {
+      const state3 = {
         key: key2,
         timer: null,
         plays: 0,
@@ -17115,8 +15415,8 @@
         baseLoopInterval,
         volume: baseVolume
       };
-      this.loops.set(key2, state2);
-      this.scheduleNext(state2, 0);
+      this.loops.set(key2, state3);
+      this.scheduleNext(state3, 0);
     }
     forEachLoop(context, fn) {
       for (const st of this.loops.values()) {
@@ -17291,39 +15591,39 @@
       }
       return true;
     }
-    scheduleNext(state2, delayMs) {
+    scheduleNext(state3, delayMs) {
       const run = async () => {
-        if (state2.stopped) return;
-        const stopConf = state2.stopOverride ?? state2.baseStop;
+        if (state3.stopped) return;
+        const stopConf = state3.stopOverride ?? state3.baseStop;
         if (stopConf.mode === "purchase" && this.purchaseChecker) {
           try {
-            if (this.purchaseChecker(state2.key)) {
-              this.stopLoop(state2.key);
+            if (this.purchaseChecker(state3.key)) {
+              this.stopLoop(state3.key);
               return;
             }
           } catch {
           }
         }
-        const du = this.resolveToDataUrl(state2.soundOverride, state2.context);
+        const du = this.resolveToDataUrl(state3.soundOverride, state3.context);
         const played = await this.playOnce(
           du,
-          state2.volume,
-          state2.context,
+          state3.volume,
+          state3.context,
           { awaitEnd: true }
         );
-        if (played) state2.plays++;
+        if (played) state3.plays++;
         if (stopConf.mode === "repeat") {
           const max = Math.max(1, stopConf.repeats | 0);
-          if (state2.plays >= max) {
-            this.stopLoop(state2.key);
+          if (state3.plays >= max) {
+            this.stopLoop(state3.key);
             return;
           }
         }
-        const intervalBase = state2.loopIntervalOverride ?? state2.baseLoopInterval;
+        const intervalBase = state3.loopIntervalOverride ?? state3.baseLoopInterval;
         const gap = Math.max(150, intervalBase | 0);
-        state2.timer = setTimeout(() => this.scheduleNext(state2, 0), gap);
+        state3.timer = setTimeout(() => this.scheduleNext(state3, 0), gap);
       };
-      if (delayMs > 0) state2.timer = setTimeout(run, delayMs);
+      if (delayMs > 0) state3.timer = setTimeout(run, delayMs);
       else run().catch(() => {
       });
     }
@@ -17396,17 +15696,17 @@
     async decodeFileToBuffer(file) {
       const arrayBuf = await file.arrayBuffer();
       const Ctx = window.AudioContext || window.webkitAudioContext;
-      const ctx = new Ctx();
+      const ctx2 = new Ctx();
       try {
         const buf = await new Promise((res, rej) => {
-          ctx.decodeAudioData(arrayBuf.slice(0), res, rej);
+          ctx2.decodeAudioData(arrayBuf.slice(0), res, rej);
         });
-        await ctx.close().catch(() => {
+        await ctx2.close().catch(() => {
         });
         return buf;
       } catch (e) {
         try {
-          await ctx.close();
+          await ctx2.close();
         } catch {
         }
         throw new Error("Failed to decode audio file.");
@@ -17414,11 +15714,11 @@
     }
     async recordBufferToBlob(buffer, mime, bitsPerSecond) {
       const Ctx = window.AudioContext || window.webkitAudioContext;
-      const ctx = new Ctx();
-      const dest = ctx.createMediaStreamDestination();
-      const src = ctx.createBufferSource();
+      const ctx2 = new Ctx();
+      const dest = ctx2.createMediaStreamDestination();
+      const src = ctx2.createBufferSource();
       src.buffer = buffer;
-      const gain = ctx.createGain();
+      const gain = ctx2.createGain();
       gain.gain.value = 0.9;
       src.connect(gain).connect(dest);
       const chunks = [];
@@ -17444,7 +15744,7 @@
       rec.stop();
       const out = await recorded;
       try {
-        await ctx.close();
+        await ctx2.close();
       } catch {
       }
       return out;
@@ -17454,1938 +15754,6 @@
     minPlayGapMs: 1200,
     volume: 0.7
   });
-
-  // src/core/sprite.ts
-  var import_jszip = __toESM(require_jszip_min(), 1);
-  function isImageUrl(u) {
-    try {
-      if (!u || u.startsWith("blob:")) return false;
-      return /\.(png|jpe?g|gif|webp|svg|avif|bmp|ico|ktx2|basis)$/i.test(u);
-    } catch {
-      return false;
-    }
-  }
-  function toAbs(u) {
-    try {
-      return new URL(u, location.href).href;
-    } catch {
-      return String(u);
-    }
-  }
-  function fileBase(url) {
-    const name = decodeURIComponent(url.split("/").pop() || "");
-    return name.replace(/\.[a-z0-9]+$/i, "");
-  }
-  function guessFamiliesFromUrl(u) {
-    const families = [];
-    const normalized = u.replace(/^\/+/, "").toLowerCase();
-    if (/(^|\/)ui\//.test(normalized)) families.push("ui");
-    if (/(^|\/)tiles\//.test(normalized) || /(map|plants|allplants|items|seeds|pets|animations|mutations)\.(png|webp)$/i.test(normalized)) {
-      families.push("tiles");
-    }
-    return families;
-  }
-  var spriteFilters = {
-    Gold: {
-      blendMode: "source-atop",
-      colors: ["rgb(255, 215, 0)"],
-      alpha: 0.7
-    },
-    Rainbow: {
-      blendMode: "color",
-      colors: ["#FF1744", "#FF9100", "#FFEA00", "#00E676", "#2979FF", "#D500F9"],
-      gradientAngle: 130,
-      masked: true
-    },
-    Wet: {
-      blendMode: "source-atop",
-      colors: ["rgb(128, 128, 255)"],
-      alpha: 0.2
-    },
-    Chilled: {
-      blendMode: "source-atop",
-      colors: ["rgb(183, 183, 236)"],
-      alpha: 0.5
-    },
-    Frozen: {
-      blendMode: "source-atop",
-      colors: ["rgb(128, 128, 255)"],
-      alpha: 0.6
-    },
-    Dawnlit: {
-      blendMode: "source-atop",
-      colors: ["rgb(120, 100, 180)"],
-      alpha: 0.4
-    },
-    Ambershine: {
-      blendMode: "source-atop",
-      colors: ["rgb(255, 140, 26)", "rgb(230, 92, 26)", "rgb(178, 58, 26)"],
-      alpha: 0.5
-    },
-    Dawncharged: {
-      blendMode: "source-atop",
-      colors: ["rgb(100, 80, 160)", "rgb(110, 90, 170)", "rgb(120, 100, 180)"],
-      alpha: 0.5
-    },
-    Ambercharged: {
-      blendMode: "source-atop",
-      colors: ["rgb(167, 50, 30)", "rgb(177, 60, 40)", "rgb(187, 70, 50)"],
-      alpha: 0.5
-    }
-  };
-  var MUTATION_PRIORITY = [
-    "Gold",
-    "Rainbow",
-    "Wet",
-    "Chilled",
-    "Frozen",
-    "Dawnlit",
-    "Ambershine",
-    "Dawncharged",
-    "Ambercharged",
-    "Dawnbound",
-    "Amberlit",
-    "Amberbound"
-  ];
-  var HIGH_MUTATIONS = /* @__PURE__ */ new Set([
-    "Dawnlit",
-    "Ambershine",
-    "Dawncharged",
-    "Ambercharged"
-  ]);
-  var SpritesCore = class {
-    constructor(autoStart = true) {
-      /** Configuration (ajuste à la volée si besoin) */
-      __publicField(this, "cfg", {
-        skipAlphaBelow: 1,
-        blackBelow: 8,
-        tolerance: 5e-3,
-        ruleAllplants512: /allplants|mutation-overlays/i
-      });
-      __publicField(this, "initialized", false);
-      __publicField(this, "onAssetCb");
-      __publicField(this, "onMessageListener");
-      // URLs récoltées
-      __publicField(this, "all", /* @__PURE__ */ new Set());
-      __publicField(this, "familyAssets", /* @__PURE__ */ new Map());
-      __publicField(this, "assetFamilies", /* @__PURE__ */ new Map());
-      // Caches de sprites découpés par feuille et par mode
-      __publicField(this, "tileCacheBitmap", /* @__PURE__ */ new Map());
-      __publicField(this, "tileCacheCanvas", /* @__PURE__ */ new Map());
-      __publicField(this, "tileCacheDataURL", /* @__PURE__ */ new Map());
-      // Images UI chargées
-      __publicField(this, "uiCache", /* @__PURE__ */ new Map());
-      // Hooks / sniffers
-      __publicField(this, "observers", []);
-      __publicField(this, "patched", {});
-      __publicField(this, "blobText", /* @__PURE__ */ new WeakMap());
-      if (autoStart) this.init();
-    }
-    normalizeFamilies(families) {
-      const set2 = /* @__PURE__ */ new Set();
-      for (const raw of families ?? []) {
-        const normalized = raw?.trim().toLowerCase();
-        if (normalized) set2.add(normalized);
-      }
-      return Array.from(set2);
-    }
-    familySet(name) {
-      return this.familyAssets.get(name) ?? /* @__PURE__ */ new Set();
-    }
-    init(opts) {
-      if (opts?.config) Object.assign(this.cfg, opts.config);
-      if (opts?.onAsset) this.onAssetCb = opts.onAsset;
-      if (this.initialized) {
-        console.debug("[Sprites] SpritesCore d\xE9j\xE0 initialis\xE9", {
-          totals: {
-            all: this.all.size,
-            ui: this.familySet("ui").size,
-            tiles: this.familySet("tiles").size
-          }
-        });
-        return this;
-      }
-      console.debug("[Sprites] Initialisation des sniffers de sprites", {
-        config: this.cfg
-      });
-      this.onMessageListener = (e) => {
-        const d = e.data;
-        if (d && d.__awc && d.url) this.add(d.url, "worker");
-      };
-      pageWindow.addEventListener("message", this.onMessageListener, true);
-      this.initialized = true;
-      console.debug("[Sprites] SpritesCore initialis\xE9", {
-        globals: {
-          hasWindowSprites: Boolean(pageWindow.Sprites)
-        }
-      });
-      return this;
-    }
-    /** Désinstalle les hooks et nettoie. */
-    destroy() {
-      if (!this.initialized) return;
-      this.observers.forEach((o) => {
-        try {
-          o.disconnect();
-        } catch {
-        }
-      });
-      this.observers = [];
-      if (this.patched.imgDesc) {
-        Object.defineProperty(HTMLImageElement.prototype, "src", this.patched.imgDesc);
-        this.patched.imgDesc = void 0;
-      }
-      if (this.patched.setAttr) {
-        HTMLImageElement.prototype.setAttribute = this.patched.setAttr;
-        this.patched.setAttr = void 0;
-      }
-      if (this.patched.Worker) {
-        pageWindow.Worker = this.patched.Worker;
-        if (pageWindow !== pageWindow) pageWindow.Worker = this.patched.Worker;
-        this.patched.Worker = void 0;
-      }
-      if (this.patched.Blob) {
-        pageWindow.Blob = this.patched.Blob;
-        if (pageWindow !== pageWindow) pageWindow.Blob = this.patched.Blob;
-        this.patched.Blob = void 0;
-      }
-      if (this.patched.createObjectURL) {
-        const pageURL = pageWindow.URL ?? URL;
-        pageURL.createObjectURL = this.patched.createObjectURL;
-        if (pageWindow !== pageWindow) URL.createObjectURL = this.patched.createObjectURL;
-        this.patched.createObjectURL = void 0;
-      }
-      if (this.onMessageListener) {
-        pageWindow.removeEventListener("message", this.onMessageListener, true);
-        this.onMessageListener = void 0;
-      }
-      this.initialized = false;
-    }
-    /* ===================== PUBLIC API ===================== */
-    /** URLs collectées */
-    lists() {
-      const result = { all: [...this.all] };
-      for (const [family, assets] of this.familyAssets) {
-        result[family] = [...assets];
-      }
-      const ensureFamily = (name) => {
-        if (!result[name]) {
-          result[name] = [...this.familySet(name)];
-        }
-      };
-      ensureFamily("tiles");
-      ensureFamily("ui");
-      return result;
-    }
-    listFamilies() {
-      return [...this.familyAssets.keys()];
-    }
-    listAssetsForFamily(family) {
-      const normalized = family?.trim().toLowerCase();
-      if (!normalized) return [];
-      return [...this.familySet(normalized)];
-    }
-    /** Ajout manuel d'un asset connu (ex: manifest) */
-    registerKnownAsset(url, families = ["tiles"]) {
-      return this.addAsset(url, families);
-    }
-    /** Liste des tilesheets par catégorie de nom (regex sur l'URL) */
-    listTilesByCategory(re) {
-      return [...this.familySet("tiles")].filter((u) => re.test(u));
-    }
-    listPlants() {
-      const urls = new Set(this.listTilesByCategory(/plants/i));
-      for (const url of this.listAllPlants()) urls.add(url);
-      return [...urls];
-    }
-    listAllPlants() {
-      return this.listTilesByCategory(this.cfg.ruleAllplants512);
-    }
-    listItems() {
-      return this.listTilesByCategory(/items/i);
-    }
-    listSeeds() {
-      return this.listTilesByCategory(/seeds/i);
-    }
-    listPets() {
-      return this.listTilesByCategory(/pets/i);
-    }
-    listMap() {
-      return this.listTilesByCategory(/map\.(png|webp)$/i);
-    }
-    /** Charge toutes les images UI (retourne Map<basename, HTMLImageElement>) */
-    async loadUI() {
-      const out = /* @__PURE__ */ new Map();
-      for (const u of this.familySet("ui")) {
-        if (!this.uiCache.has(u)) {
-          const im = await this.loadImage(u);
-          this.uiCache.set(u, im);
-        }
-        out.set(fileBase(u), this.uiCache.get(u));
-      }
-      return out;
-    }
-    /** Charge & découpe les tilesheets (retourne Map<basename, TileInfo[]>) */
-    async loadTiles(options = {}) {
-      const {
-        mode = "bitmap",
-        includeBlanks = false,
-        forceSize,
-        onlySheets
-      } = options;
-      const out = /* @__PURE__ */ new Map();
-      const tiles = [...this.familySet("tiles")];
-      const list = onlySheets ? tiles.filter((u) => onlySheets.test(u)) : tiles;
-      for (const u of list) {
-        const tiles2 = await this.ensureTilesForUrl(u, { mode, includeBlanks, forceSize });
-        out.set(fileBase(u), tiles2);
-      }
-      return out;
-    }
-    async preloadTilesGradually(options = {}) {
-      const {
-        mode = "bitmap",
-        includeBlanks = false,
-        forceSize,
-        onlySheets,
-        batchSize = 1,
-        delayMs = 40,
-        onProgress
-      } = options;
-      const tiles = [...this.familySet("tiles")];
-      const list = onlySheets ? tiles.filter((u) => onlySheets.test(u)) : tiles;
-      const total = list.length;
-      if (!total) return;
-      const throttleBatch = Math.max(1, batchSize);
-      const throttleDelay = Math.max(0, delayMs);
-      let processed = 0;
-      for (const url of list) {
-        await this.ensureTilesForUrl(url, { mode, includeBlanks, forceSize });
-        processed += 1;
-        onProgress?.(processed, total);
-        if (throttleDelay > 0 && processed < total && processed % throttleBatch === 0) {
-          await this.delay(throttleDelay);
-        }
-      }
-    }
-    /** Raccourcis pratiques */
-    async loadTilesAuto() {
-      return this.loadTiles({ mode: "bitmap" });
-    }
-    async loadTiles256() {
-      return this.loadTiles({ mode: "bitmap", forceSize: 256 });
-    }
-    async loadTiles512() {
-      return this.loadTiles({ mode: "bitmap", forceSize: 512 });
-    }
-    getCacheForMode(mode) {
-      if (mode === "canvas") return this.tileCacheCanvas;
-      if (mode === "dataURL") return this.tileCacheDataURL;
-      return this.tileCacheBitmap;
-    }
-    async ensureTilesForUrl(url, opts) {
-      const cache2 = this.getCacheForMode(opts.mode);
-      let cached = cache2.get(url);
-      if (cached) return cached;
-      const tiles = await this.sliceOne(url, opts);
-      cache2.set(url, tiles);
-      return tiles;
-    }
-    async delay(ms) {
-      if (ms <= 0) return;
-      await new Promise((resolve2) => {
-        pageWindow.setTimeout(resolve2, ms);
-      });
-    }
-    /** Récupère un sprite précis (par feuille + index) */
-    async getTile(sheetBase, index, mode = "bitmap") {
-      const url = [...this.familySet("tiles")].find((u) => fileBase(u) === sheetBase);
-      if (!url) return null;
-      const map2 = await this.loadTiles({ mode, onlySheets: new RegExp(sheetBase.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\.(png|webp)$", "i") });
-      const tiles = map2.get(sheetBase) || [];
-      const tile = tiles.find((t) => t.index === index);
-      return tile ?? null;
-    }
-    /** Aplatis toutes les tiles en un seul tableau (utile pour un index global) */
-    async flatTiles(options = {}) {
-      const maps = await this.loadTiles(options);
-      const all = [];
-      maps.forEach((arr) => all.push(...arr));
-      return all;
-    }
-    /** Exporte les UI en ZIP (brut, sans découpe) */
-    async zipUI(name = "ui_assets.zip") {
-      const zip = new import_jszip.default();
-      const list = [...this.familySet("ui")];
-      let i = 0;
-      for (const u of list) {
-        try {
-          const b = await this.fetchBlob(u);
-          const fn = decodeURIComponent(u.split("/").pop() || "").replace(/\?.*$/, "");
-          zip.file(fn, b);
-        } catch {
-        }
-        if (++i % 10 === 0) console.log(`[zipUI] ${i}/${list.length}`);
-      }
-      await this.saveZip(zip, name);
-    }
-    /** Exporte les tiles découpées en ZIP (auto 256/512 selon règle allplants) */
-    async zipTilesAuto(name = "tiles_auto.zip") {
-      await this.zipTiles({ name, mode: "bitmap" });
-    }
-    /** Exporte les tiles en ZIP (forcé 256/512) */
-    async zipTiles256(name = "tiles_256.zip") {
-      await this.zipTiles({ name, mode: "bitmap", forceSize: 256 });
-    }
-    async zipTiles512(name = "tiles_512.zip") {
-      await this.zipTiles({ name, mode: "bitmap", forceSize: 512 });
-    }
-    /** Exporte toutes les tiles découpées + les assets UI dans un seul ZIP */
-    async zipAllSprites(name = "sprites_all.zip") {
-      const zip = new import_jszip.default();
-      const tilesFolder = zip.folder("tiles");
-      const uiFolder = zip.folder("ui");
-      if (tilesFolder) {
-        for (const url of this.familySet("tiles")) {
-          try {
-            const tiles = await this.sliceOne(url, {
-              mode: "canvas",
-              includeBlanks: false
-            });
-            if (!tiles.length) continue;
-            const base = fileBase(url);
-            const sheetFolder = tilesFolder.folder(base) ?? tilesFolder;
-            let index = 0;
-            for (const tile of tiles) {
-              const canvas = tile.data;
-              const baseName = `tile_${String(++index).padStart(4, "0")}`;
-              try {
-                const blob = await new Promise((resolve2, reject) => {
-                  canvas.toBlob((b) => {
-                    if (!b) {
-                      reject(new Error("toBlob returned null"));
-                      return;
-                    }
-                    resolve2(b);
-                  }, "image/png");
-                });
-                sheetFolder.file(`${baseName}.png`, blob);
-              } catch (error) {
-                console.warn("[Sprites] Failed to export tile", { url, error });
-              }
-            }
-          } catch (error) {
-            console.warn("[Sprites] Failed to export sheet", { url, error });
-          }
-        }
-      }
-      if (uiFolder) {
-        let fallbackIndex = 0;
-        for (const url of this.familySet("ui")) {
-          try {
-            const blob = await this.fetchBlob(url);
-            const base = decodeURIComponent(url.split("/").pop() || "").replace(/\?.*$/, "");
-            const fileName = base || `asset_${String(++fallbackIndex).padStart(4, "0")}.png`;
-            uiFolder.file(fileName, blob);
-          } catch (error) {
-            console.warn("[Sprites] Failed to export UI asset", { url, error });
-          }
-        }
-      }
-      await this.saveZip(zip, name);
-    }
-    /** Exporte une sélection de tiles avec les filtres (si fournis). */
-    async exportFilteredTileset(opts) {
-      const { tiles, filters = [], baseName, filename = `${baseName}_tiles.zip` } = opts;
-      const zip = new import_jszip.default();
-      let index = 0;
-      for (const tile of tiles) {
-        const baseCanvas = this.tileToCanvas(tile);
-        let canvas = baseCanvas;
-        for (const filterName of filters) {
-          const filtered = this.applyCanvasFilter(canvas, filterName);
-          if (filtered) canvas = filtered;
-        }
-        const blob = await new Promise((resolve2, reject) => {
-          canvas.toBlob((b) => {
-            if (!b) {
-              reject(new Error("canvas.toBlob returned null"));
-              return;
-            }
-            resolve2(b);
-          }, "image/png");
-        });
-        zip.file(`${baseName}/tile_${String(++index).padStart(4, "0")}.png`, blob);
-        opts.onProgress?.(index, tiles.length);
-      }
-      await this.saveZip(zip, filename);
-    }
-    async exportAssets(opts) {
-      const { urls, baseName, filename = `${baseName}_assets.zip` } = opts;
-      if (!urls.length) return;
-      const zip = new import_jszip.default();
-      const folder = zip.folder(baseName) ?? zip;
-      let index = 0;
-      for (const url of urls) {
-        index++;
-        try {
-          const blob = await this.fetchBlob(url);
-          let name = decodeURIComponent(url.split("/").pop() ?? "");
-          name = name.replace(/\?.*$/, "");
-          if (!name) name = `asset_${String(index).padStart(4, "0")}.png`;
-          folder.file(name, blob);
-        } catch (error) {
-          console.warn("[Sprites] Failed to fetch asset", { url, error });
-        } finally {
-          opts.onProgress?.(index, urls.length);
-        }
-      }
-      await this.saveZip(zip, filename);
-    }
-    /** Vide les caches */
-    clearCaches() {
-      this.tileCacheBitmap.forEach((arr) => arr.forEach((t) => t.data.close?.()));
-      this.tileCacheBitmap.clear();
-      this.tileCacheCanvas.clear();
-      this.tileCacheDataURL.clear();
-      this.uiCache.clear();
-    }
-    toCanvas(tile) {
-      return this.tileToCanvas(tile);
-    }
-    applyCanvasFilter(canvas, filterName) {
-      const cfg = spriteFilters[filterName];
-      if (!cfg) return null;
-      const w = canvas.width;
-      const h = canvas.height;
-      const out = document.createElement("canvas");
-      out.width = w;
-      out.height = h;
-      const ctx = out.getContext("2d");
-      ctx.imageSmoothingEnabled = false;
-      ctx.drawImage(canvas, 0, 0);
-      ctx.save();
-      ctx.globalCompositeOperation = cfg.blendMode;
-      if (cfg.alpha != null) ctx.globalAlpha = cfg.alpha;
-      if (cfg.masked) {
-        const mask = document.createElement("canvas");
-        mask.width = w;
-        mask.height = h;
-        const mctx = mask.getContext("2d");
-        this.drawGradient(mctx, w, h, cfg);
-        mctx.globalCompositeOperation = "destination-in";
-        mctx.drawImage(canvas, 0, 0);
-        mctx.globalCompositeOperation = "source-over";
-        ctx.drawImage(mask, 0, 0);
-      } else {
-        this.drawGradient(ctx, w, h, cfg);
-      }
-      ctx.restore();
-      return out;
-    }
-    applySpriteFilter(tile, filterName) {
-      const canvas = this.tileToCanvas(tile);
-      return this.applyCanvasFilter(canvas, filterName);
-    }
-    renderPlantWithMutationsNonTall(opts) {
-      const { baseTile, mutations, mutationIcons } = opts;
-      let canvas = this.tileToCanvas(baseTile);
-      const size = canvas.width;
-      let ctx = canvas.getContext("2d");
-      ctx.imageSmoothingEnabled = false;
-      const ordered = this.sortMutations(mutations);
-      const colorMutations = ordered.filter(
-        (m) => m === "Gold" || m === "Rainbow" || m === "Wet" || m === "Chilled" || m === "Frozen" || m === "Dawnlit" || m === "Ambershine" || m === "Dawncharged" || m === "Ambercharged"
-      );
-      const iconMutations = ordered.filter(
-        (m) => m !== "Gold" && m !== "Rainbow"
-        // Gold / Rainbow = que couleur
-      );
-      if (colorMutations.length) {
-        canvas = this.applyColorMutations(canvas, colorMutations);
-        ctx = canvas.getContext("2d");
-      }
-      if (iconMutations.length) {
-        this.drawMutationIconsNonTall(ctx, iconMutations, size, mutationIcons);
-      }
-      return canvas;
-    }
-    sortMutations(mutations) {
-      const seen = /* @__PURE__ */ new Set();
-      for (const raw of mutations) {
-        const key2 = raw;
-        if (MUTATION_PRIORITY.includes(key2) && !seen.has(key2)) {
-          seen.add(key2);
-        }
-      }
-      return Array.from(seen).sort(
-        (a, b) => MUTATION_PRIORITY.indexOf(a) - MUTATION_PRIORITY.indexOf(b)
-      );
-    }
-    applyColorMutations(input, mutations) {
-      if (!mutations.length) return input;
-      if (mutations.includes("Gold")) {
-        return this.applyFilterChain(input, ["Gold"]);
-      }
-      if (mutations.includes("Rainbow")) {
-        return this.applyFilterChain(input, ["Rainbow"]);
-      }
-      const others = mutations.filter((m) => m !== "Gold" && m !== "Rainbow");
-      return this.applyFilterChain(input, others);
-    }
-    applyFilterChain(input, filters) {
-      let current = input;
-      for (const f of filters) {
-        const next = this.applyCanvasFilter(current, f);
-        if (next) current = next;
-      }
-      return current;
-    }
-    drawMutationIconsNonTall(ctx, mutations, tileSize, mutationIcons) {
-      ctx.save();
-      ctx.imageSmoothingEnabled = false;
-      for (const m of mutations) {
-        const conf = mutationIcons[m];
-        if (!conf) continue;
-        const iconCanvas = this.tileToCanvas(conf.tile);
-        const srcW = iconCanvas.width;
-        const srcH = iconCanvas.height;
-        const scale = conf.scale ?? 1;
-        const dstW = tileSize * scale;
-        const dstH = tileSize * scale;
-        const baseOffsetY = HIGH_MUTATIONS.has(m) ? -tileSize * 0.25 : 0;
-        const offsetX = (conf.offsetX ?? 0) * tileSize;
-        const offsetY = (conf.offsetY ?? 0) * tileSize + baseOffsetY;
-        ctx.drawImage(
-          iconCanvas,
-          0,
-          0,
-          srcW,
-          srcH,
-          offsetX,
-          offsetY,
-          dstW,
-          dstH
-        );
-      }
-      ctx.restore();
-    }
-    drawGradient(ctx, w, h, cfg) {
-      const baseColors = cfg.colors.length ? cfg.colors : ["#ffffff"];
-      const colors = cfg.reverse ? [...baseColors].reverse() : baseColors;
-      if (cfg.gradientAngle != null) {
-        const grad2 = this.makeAngleGradient(ctx, w, h, cfg.gradientAngle);
-        if (colors.length === 1) {
-          grad2.addColorStop(0, colors[0]);
-          grad2.addColorStop(1, colors[0]);
-        } else {
-          colors.forEach((color, idx) => {
-            grad2.addColorStop(idx / (colors.length - 1), color);
-          });
-        }
-        ctx.fillStyle = grad2;
-        ctx.fillRect(0, 0, w, h);
-        return;
-      }
-      const grad = ctx.createLinearGradient(0, 0, 0, h);
-      if (colors.length === 1) {
-        grad.addColorStop(0, colors[0]);
-        grad.addColorStop(1, colors[0]);
-      } else {
-        colors.forEach((color, idx) => {
-          grad.addColorStop(idx / (colors.length - 1), color);
-        });
-      }
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, w, h);
-    }
-    /* ===================== INTERNE: chargement/découpe ===================== */
-    async loadImage(url) {
-      return await new Promise((res, rej) => {
-        const im = new Image();
-        im.crossOrigin = "anonymous";
-        im.onload = () => res(im);
-        im.onerror = rej;
-        im.src = url;
-      });
-    }
-    guessSize(url, img, forced) {
-      if (forced) return forced;
-      if (this.cfg.ruleAllplants512.test(url)) return 512;
-      if (img.width % 256 === 0 && img.height % 256 === 0) return 256;
-      if (img.width % 512 === 0 && img.height % 512 === 0) return 512;
-      return 256;
-    }
-    isBlankOrBlack(data) {
-      const aThr = this.cfg.skipAlphaBelow;
-      const bThr = this.cfg.blackBelow;
-      const tol = this.cfg.tolerance;
-      const d = data.data;
-      const maxColored = Math.ceil(d.length / 4 * tol);
-      let colored = 0;
-      for (let i = 0; i < d.length; i += 4) {
-        const a = d[i + 3];
-        if (a > aThr) {
-          const r = d[i], g = d[i + 1], b = d[i + 2];
-          if (r > bThr || g > bThr || b > bThr) {
-            if (++colored > maxColored) return false;
-          }
-        }
-      }
-      return true;
-    }
-    async sliceOne(url, opts) {
-      const img = await this.loadImage(url);
-      const size = this.guessSize(url, img, opts.forceSize);
-      const cols = Math.floor(img.width / size);
-      const rows = Math.floor(img.height / size);
-      const base = fileBase(url);
-      const can = document.createElement("canvas");
-      can.width = size;
-      can.height = size;
-      const ctx = can.getContext("2d", { willReadFrequently: true });
-      ctx.imageSmoothingEnabled = false;
-      const list = [];
-      let idx = 0;
-      for (let row = 0; row < rows; row++) {
-        for (let col = 0; col < cols; col++) {
-          ctx.clearRect(0, 0, size, size);
-          ctx.drawImage(img, col * size, row * size, size, size, 0, 0, size, size);
-          let blank = false;
-          try {
-            const data = ctx.getImageData(0, 0, size, size);
-            blank = this.isBlankOrBlack(data);
-          } catch {
-            blank = false;
-          }
-          if (!opts.includeBlanks && blank) {
-            idx++;
-            continue;
-          }
-          if (opts.mode === "bitmap") {
-            const bmp = await createImageBitmap(can);
-            list.push({ sheet: base, url, index: idx, col, row, size, data: bmp });
-          } else if (opts.mode === "canvas") {
-            const clone = document.createElement("canvas");
-            clone.width = size;
-            clone.height = size;
-            clone.getContext("2d").drawImage(can, 0, 0);
-            list.push({ sheet: base, url, index: idx, col, row, size, data: clone });
-          } else {
-            const dataURL = await new Promise((resolve2, reject) => {
-              can.toBlob((blob) => {
-                if (!blob) {
-                  reject(new Error("toBlob returned null"));
-                  return;
-                }
-                const fr = new FileReader();
-                fr.onerror = reject;
-                fr.onload = () => resolve2(fr.result);
-                fr.readAsDataURL(blob);
-              }, "image/png");
-            });
-            list.push({ sheet: base, url, index: idx, col, row, size, data: dataURL });
-          }
-          idx++;
-        }
-      }
-      return list;
-    }
-    async zipTiles(opts) {
-      const zip = new import_jszip.default();
-      for (const u of this.familySet("tiles")) {
-        const tiles = await this.sliceOne(u, { mode: "canvas", includeBlanks: false, forceSize: opts.forceSize });
-        const base = fileBase(u);
-        let k = 0;
-        for (const t of tiles) {
-          const can = t.data;
-          const blob = await new Promise((res) => can.toBlob((b) => res(b), "image/png"));
-          zip.file(`${base}/tile_${String(++k).padStart(4, "0")}.png`, blob);
-        }
-      }
-      await this.saveZip(zip, opts.name);
-    }
-    /** Convertit tile.data -> Canvas (ImageBitmap/Canvas). Refuse dataURL (string). */
-    tileToCanvas(tile) {
-      const src = tile.data;
-      let w = tile.size, h = tile.size;
-      const out = document.createElement("canvas");
-      out.width = w;
-      out.height = h;
-      const ctx = out.getContext("2d");
-      ctx.imageSmoothingEnabled = false;
-      if (src instanceof HTMLCanvasElement) {
-        w = src.width;
-        h = src.height;
-        out.width = w;
-        out.height = h;
-        ctx.drawImage(src, 0, 0);
-      } else if (typeof ImageBitmap !== "undefined" && src instanceof ImageBitmap) {
-        w = src.width;
-        h = src.height;
-        out.width = w;
-        out.height = h;
-        ctx.drawImage(src, 0, 0);
-      } else if (typeof src === "string") {
-        throw new Error("Sprites: tile.data est un dataURL (string). Recharge la tuile en mode 'canvas' ou 'bitmap'.");
-      } else {
-        ctx.drawImage(src, 0, 0);
-      }
-      return out;
-    }
-    /** Crée un gradient linéaire à un angle (deg) couvrant tout le canvas */
-    makeAngleGradient(ctx, w, h, angleDeg) {
-      const rad = (angleDeg - 90) * Math.PI / 180;
-      const cx = w / 2;
-      const cy = h / 2;
-      const R = Math.min(w, h) / 2;
-      const x0 = cx - Math.cos(rad) * R;
-      const y0 = cy - Math.sin(rad) * R;
-      const x1 = cx + Math.cos(rad) * R;
-      const y1 = cy + Math.sin(rad) * R;
-      return ctx.createLinearGradient(x0, y0, x1, y1);
-    }
-    /* ===================== SNIFFERS (UI + Tiles) ===================== */
-    add(url, _why = "") {
-      const families = guessFamiliesFromUrl(url);
-      if (!families.length) return;
-      this.addAsset(url, families);
-    }
-    addAsset(url, families = ["tiles"]) {
-      const abs = toAbs(url);
-      if (!isImageUrl(abs) || this.all.has(abs)) return false;
-      const normalized = this.normalizeFamilies(families);
-      if (!normalized.length) return false;
-      this.all.add(abs);
-      this.assetFamilies.set(abs, normalized);
-      for (const family of normalized) {
-        let bucket = this.familyAssets.get(family);
-        if (!bucket) {
-          bucket = /* @__PURE__ */ new Set();
-          this.familyAssets.set(family, bucket);
-        }
-        bucket.add(abs);
-      }
-      const kind = normalized[0] ?? "unknown";
-      this.onAssetCb?.(abs, kind);
-      return true;
-    }
-    /* ===================== Utils ZIP ===================== */
-    async fetchBlob(u) {
-      const r = await fetch(u, { credentials: "include" });
-      if (!r.ok) throw new Error(`HTTP ${r.status} for ${u}`);
-      return r.blob();
-    }
-    async saveZip(zip, name) {
-      const blob = await zip.generateAsync({ type: "blob" });
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(blob);
-      a.download = name;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      setTimeout(() => URL.revokeObjectURL(a.href), 1e4);
-    }
-  };
-  var sharedSpritesInstance = new SpritesCore(false);
-  shareGlobal("Sprites", sharedSpritesInstance);
-  var Sprites = sharedSpritesInstance;
-  function initSprites(options) {
-    const instance = Sprites.init(options);
-    shareGlobal("Sprites", instance);
-    console.debug("[Sprites] Instance globale disponible sur pageWindow.Sprites", {
-      hasWindowProperty: "Sprites" in pageWindow,
-      lists: instance.lists()
-    });
-    return instance;
-  }
-  shareGlobal("initSprites", initSprites);
-
-  // src/utils/tileSheet.ts
-  var sheetCache = /* @__PURE__ */ new Map();
-  var escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  function clearTileSheetCache() {
-    sheetCache.clear();
-  }
-  function normalizeSheetBase(urlOrBase) {
-    const clean = urlOrBase.split(/[?#]/)[0] ?? urlOrBase;
-    const file = clean.split("/").pop() ?? clean;
-    return file.replace(/\.[^.]+$/, "");
-  }
-  function uniqueBases(urls, fallback) {
-    const set2 = /* @__PURE__ */ new Set();
-    for (const url of urls) {
-      if (typeof url === "string" && url.length) {
-        set2.add(normalizeSheetBase(url));
-      }
-    }
-    if (set2.size === 0) {
-      for (const base of fallback) set2.add(base);
-    }
-    return [...set2];
-  }
-  async function loadTileSheet(base) {
-    const key2 = base.toLowerCase();
-    if (sheetCache.has(key2)) return sheetCache.get(key2);
-    const regex = new RegExp(`${escapeRegExp(base)}\\.(png|webp)$`, "i");
-    const promise = Sprites.loadTiles({ mode: "canvas", onlySheets: regex }).then((map2) => {
-      for (const [sheetBase, tiles] of map2.entries()) {
-        if (sheetBase.toLowerCase() === key2) return tiles ?? [];
-      }
-      const direct = map2.get(base);
-      return direct ?? [];
-    }).catch(() => []);
-    sheetCache.set(key2, promise);
-    return promise;
-  }
-
-  // src/utils/gameVersion.ts
-  var gameVersion = null;
-  function initGameVersion(doc) {
-    if (gameVersion !== null) {
-      return;
-    }
-    const d = doc ?? (typeof document !== "undefined" ? document : null);
-    if (!d) {
-      return;
-    }
-    const scripts = d.scripts;
-    for (let i = 0; i < scripts.length; i++) {
-      const script = scripts.item(i);
-      if (!script) continue;
-      const src = script.src;
-      if (!src) continue;
-      const match = src.match(/\/(?:r\/\d+\/)?version\/([^/]+)/);
-      if (match && match[1]) {
-        gameVersion = match[1];
-        return;
-      }
-    }
-  }
-
-  // src/services/assetManifest.ts
-  var LOG_PREFIX = "[AssetManifest]";
-  var ASSET_BASE_RE = /(https?:\/\/[^/]+\/(?:version\/[^/]+\/)?assets\/)/i;
-  var VERSION_RE = /\/version\/([^/]+)\//i;
-  var VERSION_PATH_RE = /\/version\/([^/]+)\//i;
-  var manifestCache = null;
-  var manifestPromise = null;
-  var resolvedAssets = [];
-  var aliasIndex = /* @__PURE__ */ new Map();
-  var manifestFamilyIndex = /* @__PURE__ */ new Map();
-  var assetBaseUrl = null;
-  var assetVersion = null;
-  var autoLoadScheduled = false;
-  var manifestBaseUsed = null;
-  function normalizeManifest(manifest) {
-    if (!manifest || typeof manifest !== "object") return null;
-    if (!Array.isArray(manifest.bundles)) {
-      return { bundles: [] };
-    }
-    const bundles = manifest.bundles.map((b) => ({
-      name: typeof b.name === "string" && b.name ? b.name : "default",
-      assets: Array.isArray(b.assets) ? b.assets : []
-    })).filter((b) => b.assets.length > 0);
-    return { bundles };
-  }
-  function normalizeFamilyName(name) {
-    if (!name) return null;
-    const normalized = name.trim().toLowerCase();
-    return normalized ? normalized : null;
-  }
-  function extractFamilyFromPath(path) {
-    if (!path) return null;
-    const cleaned = path.replace(/^\/+/, "").replace(/\\/g, "/").replace(/[\?#].*$/, "");
-    const slashIndex = cleaned.indexOf("/");
-    if (slashIndex <= 0) return null;
-    return normalizeFamilyName(cleaned.slice(0, slashIndex));
-  }
-  function deriveAssetFamilies(src, aliases, bundleName) {
-    const families = /* @__PURE__ */ new Set();
-    const add = (path) => {
-      const family = extractFamilyFromPath(path);
-      if (family) families.add(family);
-    };
-    add(src);
-    for (const alias of aliases) {
-      add(alias);
-    }
-    if (!families.size) {
-      const fallback = normalizeFamilyName(bundleName);
-      if (fallback) families.add(fallback);
-    }
-    return Array.from(families);
-  }
-  function toAbsoluteUrl(base, rel) {
-    if (/^https?:\/\//i.test(rel)) return rel;
-    const cleanBase = base.endsWith("/") ? base : `${base}/`;
-    return `${cleanBase}${rel.replace(/^\/+/, "")}`;
-  }
-  function inferAssetBase(url) {
-    try {
-      const href = new URL(url, location.href).href;
-      const m = href.match(ASSET_BASE_RE);
-      if (m && m[1]) {
-        return m[1];
-      }
-    } catch {
-    }
-    return null;
-  }
-  function setAssetBase(url) {
-    if (!url) return;
-    const base = inferAssetBase(url);
-    if (!base) return;
-    if (assetBaseUrl && assetBaseUrl === base) return;
-    assetBaseUrl = base;
-    const match = base.match(VERSION_RE);
-    assetVersion = match?.[1] ?? assetVersion;
-  }
-  function getManifestUrl(custom) {
-    if (custom) return custom;
-    if (assetBaseUrl) return `${assetBaseUrl}manifest.json`;
-    return null;
-  }
-  function inferBaseFromLocation() {
-    try {
-      const href = location.href;
-      const match = href.match(VERSION_PATH_RE);
-      if (match?.[1]) {
-        return `${location.origin}/version/${match[1]}/assets/`;
-      }
-    } catch {
-    }
-    return null;
-  }
-  function baseFromGameVersion() {
-    if (!gameVersion) return null;
-    try {
-      return `${location.origin}/version/${gameVersion}/assets/`;
-    } catch {
-      return null;
-    }
-  }
-  function sleep2(ms) {
-    return new Promise((resolve2) => setTimeout(resolve2, ms));
-  }
-  function indexResolvedAssets(list) {
-    resolvedAssets = list;
-    aliasIndex = /* @__PURE__ */ new Map();
-    manifestFamilyIndex = /* @__PURE__ */ new Map();
-    for (const asset of list) {
-      aliasIndex.set(asset.src, asset);
-      aliasIndex.set(asset.url, asset);
-      for (const alias of asset.aliases) {
-        aliasIndex.set(alias, asset);
-      }
-      for (const family of asset.families) {
-        const bucket = manifestFamilyIndex.get(family);
-        if (bucket) {
-          bucket.push(asset);
-        } else {
-          manifestFamilyIndex.set(family, [asset]);
-        }
-      }
-    }
-  }
-  function resolveManifest(manifest, base) {
-    const out = [];
-    for (const bundle of manifest.bundles ?? []) {
-      const bundleName = bundle.name ?? "default";
-      for (const asset of bundle.assets ?? []) {
-        const aliases = Array.isArray(asset.alias) ? asset.alias.filter(Boolean) : [];
-        for (const src of asset.src ?? []) {
-          const url = base ? toAbsoluteUrl(base, src) : src;
-          const families = deriveAssetFamilies(src, aliases, bundleName);
-          const primaryFamily = families[0] ?? null;
-          out.push({
-            bundle: bundleName,
-            aliases,
-            src,
-            url,
-            tags: asset.data?.tags ?? {},
-            families,
-            primaryFamily
-          });
-        }
-      }
-    }
-    return out;
-  }
-  function registerSpritesFromResolved(list) {
-    let added = 0;
-    for (const asset of list) {
-      const wasNew = Sprites.registerKnownAsset(asset.url, asset.families);
-      if (wasNew && (asset.families.includes("tiles") || asset.families.includes("ui"))) {
-        added += 1;
-      }
-    }
-    if (added > 0) {
-      try {
-        pageWindow.dispatchEvent(new CustomEvent("mg:sprite-detected", { detail: { source: "manifest" } }));
-      } catch {
-      }
-    }
-    return added;
-  }
-  async function fetchManifest(manifestUrl) {
-    try {
-      const res = await fetch(manifestUrl, { cache: "no-store", credentials: "include" });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const json = await res.json();
-      return normalizeManifest(json);
-    } catch (error) {
-      console.warn(LOG_PREFIX, "unable to fetch remote manifest", { manifestUrl, error });
-      return null;
-    }
-  }
-  function recordAssetUrlHint(url) {
-    const previousBase = assetBaseUrl;
-    setAssetBase(url);
-    if (assetBaseUrl && assetBaseUrl !== previousBase) {
-      scheduleAutoLoad();
-    }
-  }
-  function scheduleAutoLoad() {
-    if (autoLoadScheduled) return;
-    autoLoadScheduled = true;
-    setTimeout(() => {
-      autoLoadScheduled = false;
-      void prefetchManifest({ registerSprites: true }).catch(() => {
-      });
-    }, 100);
-  }
-  async function prefetchManifest(options = {}) {
-    const desiredBase = assetBaseUrl ?? null;
-    if (!options.force && manifestCache) {
-      if (!desiredBase || manifestBaseUsed === desiredBase) {
-        return manifestCache;
-      }
-    }
-    if (!options.force && manifestPromise) return manifestPromise;
-    if (!assetBaseUrl) {
-      const hintedVersionBase = baseFromGameVersion();
-      if (hintedVersionBase) {
-        setAssetBase(hintedVersionBase);
-      } else {
-        const hintedBase = inferBaseFromLocation();
-        if (hintedBase) setAssetBase(hintedBase);
-      }
-    }
-    if (!assetBaseUrl && options.waitForVersionMs) {
-      const deadline = Date.now() + options.waitForVersionMs;
-      while (!assetBaseUrl && !gameVersion && Date.now() < deadline) {
-        await sleep2(50);
-      }
-      if (!assetBaseUrl && gameVersion) {
-        const hintedVersionBase = baseFromGameVersion();
-        if (hintedVersionBase) setAssetBase(hintedVersionBase);
-      }
-    }
-    const manifestUrl = getManifestUrl(options.url);
-    if (!manifestUrl) {
-      console.warn(LOG_PREFIX, "no manifest URL could be resolved");
-      return null;
-    }
-    manifestPromise = (async () => {
-      const manifest = manifestUrl ? await fetchManifest(manifestUrl) : null;
-      if (!manifest) return null;
-      if (manifestUrl) {
-        setAssetBase(manifestUrl);
-      }
-      const baseForResolution = assetBaseUrl ?? (manifestUrl ? inferAssetBase(manifestUrl) : null);
-      const resolved = resolveManifest(manifest, baseForResolution);
-      indexResolvedAssets(resolved);
-      manifestBaseUsed = baseForResolution ?? manifestBaseUsed;
-      if (options.registerSprites !== false && baseForResolution) {
-        registerSpritesFromResolved(resolved);
-      }
-      manifestCache = manifest;
-      return manifest;
-    })();
-    try {
-      return await manifestPromise;
-    } finally {
-      manifestPromise = null;
-    }
-  }
-  var spritesReadyPromise = null;
-  function ensureSpritesReady() {
-    if (spritesReadyPromise) return spritesReadyPromise;
-    spritesReadyPromise = (async () => {
-      await prefetchManifest({ registerSprites: true, waitForVersionMs: 4e3 });
-    })();
-    return spritesReadyPromise;
-  }
-
-  // src/utils/sprites.ts
-  var spriteConfig = /* @__PURE__ */ new WeakMap();
-  var spriteSubscribers = /* @__PURE__ */ new Map();
-  var spriteCache = /* @__PURE__ */ new Map();
-  var spritePromises = /* @__PURE__ */ new Map();
-  var nowMs = () => typeof performance !== "undefined" ? performance.now() : Date.now();
-  var plantCatalogLookup = plantCatalog;
-  var FALLBACK_BASES = {
-    Seed: ["seeds"],
-    Egg: ["pets"],
-    Tool: ["items"],
-    Decor: ["decor"],
-    Crop: ["plants"]
-  };
-  var baseCache = {};
-  var tallCropSheetBases = null;
-  var computeBases = (provider, fallback) => {
-    try {
-      const list = provider() ?? [];
-      return uniqueBases(list, fallback);
-    } catch {
-      return [...fallback];
-    }
-  };
-  var LIST_PROVIDERS = {
-    Seed: () => typeof Sprites.listSeeds === "function" ? Sprites.listSeeds() : [],
-    Egg: () => typeof Sprites.listPets === "function" ? Sprites.listPets() : [],
-    Tool: () => typeof Sprites.listItems === "function" ? Sprites.listItems() : [],
-    Decor: () => typeof Sprites.listTilesByCategory === "function" ? Sprites.listTilesByCategory(/decor/i) : []
-  };
-  var TALL_CROP_SPECIES = /* @__PURE__ */ new Set(["Cactus", "Bamboo"]);
-  var SHOP_SPRITE_ID_BUILDERS = {
-    Seed: () => Object.keys(plantCatalogLookup).filter((id) => Boolean(plantCatalogLookup[id]?.seed?.tileRef)),
-    Crop: () => Object.keys(plantCatalogLookup).filter((id) => Boolean(plantCatalogLookup[id]?.crop?.tileRef)),
-    Egg: () => Object.keys(eggCatalog),
-    Tool: () => Object.keys(toolCatalog),
-    Decor: () => Object.keys(decorCatalog)
-  };
-  var warmupIdCache = {};
-  function getShopSpriteWarmupIds(type) {
-    const cached = warmupIdCache[type];
-    if (cached) return cached;
-    const builder = SHOP_SPRITE_ID_BUILDERS[type];
-    if (!builder) return [];
-    const ids = builder().filter((id) => typeof id === "string" && id.length > 0);
-    warmupIdCache[type] = ids;
-    return ids;
-  }
-  function spriteKey(type, id) {
-    return `${type}::${id}`;
-  }
-  function defaultFallback(type) {
-    switch (type) {
-      case "Seed":
-        return "\u{1F331}";
-      case "Egg":
-        return "\u{1F95A}";
-      case "Tool":
-        return "\u{1F9F0}";
-      case "Decor":
-        return "\u{1F3E0}";
-      case "Crop":
-        return "\u{1F34E}";
-    }
-  }
-  function getCropBases() {
-    if (baseCache.Crop) return baseCache.Crop;
-    const provider = () => {
-      if (typeof Sprites.listTilesByCategory !== "function") return [];
-      const all = Sprites.listTilesByCategory(/plants|allplants/i);
-      const filtered = all.filter((u) => !/tallplants/i.test(u) && !/tall/i.test(u));
-      return filtered.length ? filtered : all;
-    };
-    const bases = computeBases(provider, FALLBACK_BASES.Crop);
-    baseCache.Crop = bases;
-    return bases;
-  }
-  function getTallCropBases() {
-    if (tallCropSheetBases) return tallCropSheetBases;
-    const provider = () => {
-      if (typeof Sprites.listTilesByCategory !== "function") return [];
-      return Sprites.listTilesByCategory(/tallplants/i);
-    };
-    tallCropSheetBases = computeBases(provider, ["tallplants", "TallPlants"]);
-    return tallCropSheetBases;
-  }
-  function getBases(type, id) {
-    if (type === "Crop") {
-      const bases2 = getCropBases();
-      if (id && TALL_CROP_SPECIES.has(id)) {
-        return [...getTallCropBases(), ...bases2];
-      }
-      return bases2;
-    }
-    if (baseCache[type]) return baseCache[type];
-    const builder = LIST_PROVIDERS[type];
-    const fallback = FALLBACK_BASES[type];
-    const bases = builder ? computeBases(builder, fallback) : [...fallback];
-    baseCache[type] = bases;
-    return bases;
-  }
-  function toTileIndex(tileRef) {
-    if (tileRef == null) return null;
-    const value = typeof tileRef === "number" && Number.isFinite(tileRef) ? tileRef : Number(tileRef);
-    if (!Number.isFinite(value)) return null;
-    if (value <= 0) return value;
-    return value - 1;
-  }
-  function getTileRef(type, id) {
-    switch (type) {
-      case "Seed":
-        return plantCatalog?.[id]?.seed?.tileRef ?? null;
-      case "Egg":
-        return eggCatalog?.[id]?.tileRef ?? null;
-      case "Tool":
-        return toolCatalog?.[id]?.tileRef ?? null;
-      case "Decor":
-        return decorCatalog?.[id]?.tileRef ?? null;
-      case "Crop":
-        return plantCatalog?.[id]?.crop?.tileRef ?? null;
-    }
-  }
-  function subscribeSprite(key2, el2) {
-    let subs = spriteSubscribers.get(key2);
-    if (!subs) {
-      subs = /* @__PURE__ */ new Set();
-      spriteSubscribers.set(key2, subs);
-    }
-    subs.add(el2);
-  }
-  function unsubscribeIfDisconnected(key2, el2) {
-    const subs = spriteSubscribers.get(key2);
-    if (!subs) return;
-    if (!el2.isConnected) {
-      subs.delete(el2);
-      spriteConfig.delete(el2);
-    }
-    if (subs.size === 0) {
-      spriteSubscribers.delete(key2);
-    }
-  }
-  function applySprite(el2, src) {
-    const cfg = spriteConfig.get(el2);
-    if (!cfg) return;
-    const { size, fallback, alt } = cfg;
-    el2.innerHTML = "";
-    el2.style.display = "inline-flex";
-    el2.style.alignItems = "center";
-    el2.style.justifyContent = "center";
-    el2.style.width = `${size}px`;
-    el2.style.height = `${size}px`;
-    el2.style.flexShrink = "0";
-    el2.style.position = "relative";
-    el2.setAttribute("role", "img");
-    if (src) {
-      el2.removeAttribute("aria-label");
-      el2.style.fontSize = "";
-      const img = document.createElement("img");
-      img.src = src;
-      img.alt = alt;
-      img.decoding = "async";
-      img.loading = "lazy";
-      img.draggable = false;
-      img.style.width = "100%";
-      img.style.height = "100%";
-      img.style.objectFit = "contain";
-      el2.appendChild(img);
-    } else {
-      el2.textContent = fallback;
-      el2.style.fontSize = `${Math.max(10, Math.round(size * 0.72))}px`;
-      el2.setAttribute("aria-label", alt || fallback);
-    }
-  }
-  function notifySpriteSubscribers(key2, src) {
-    const subs = spriteSubscribers.get(key2);
-    if (!subs) return;
-    subs.forEach((el2) => {
-      if (!el2.isConnected) {
-        unsubscribeIfDisconnected(key2, el2);
-        return;
-      }
-      applySprite(el2, src);
-    });
-  }
-  async function fetchSprite(type, id) {
-    await ensureSpritesReady();
-    if (typeof pageWindow === "undefined") return null;
-    if (typeof Sprites?.getTile !== "function") return null;
-    const tileRef = getTileRef(type, id);
-    const index = toTileIndex(tileRef);
-    if (index == null) return null;
-    const bases = getBases(type, id);
-    for (const base of bases) {
-      try {
-        const tiles = await loadTileSheet(base);
-        const tile = tiles.find((t) => t.index === index);
-        const canvas = tile?.data;
-        if (!canvas || canvas.width <= 0 || canvas.height <= 0) continue;
-        const dataUrl = canvas.toDataURL();
-        return dataUrl;
-      } catch (error) {
-      }
-    }
-    return null;
-  }
-  function loadSprite(type, id, key2 = spriteKey(type, id)) {
-    if (typeof pageWindow === "undefined") {
-      spriteCache.set(key2, { payload: null, createdAt: nowMs() });
-      notifySpriteSubscribers(key2, null);
-      return Promise.resolve(null);
-    }
-    const cached = spriteCache.get(key2);
-    if (cached !== void 0) {
-      notifySpriteSubscribers(key2, cached.payload);
-      return Promise.resolve(cached.payload);
-    }
-    const inflight = spritePromises.get(key2);
-    if (inflight) return inflight;
-    const promise = fetchSprite(type, id).then((src) => {
-      spriteCache.set(key2, { payload: src, createdAt: nowMs() });
-      spritePromises.delete(key2);
-      return src;
-    }).catch(() => {
-      spritePromises.delete(key2);
-      return null;
-    });
-    spritePromises.set(key2, promise);
-    return promise;
-  }
-  function prefetchShopSprite(type, id) {
-    const key2 = spriteKey(type, id);
-    return loadSprite(type, id, key2);
-  }
-  var SHOP_SPRITE_WARMUP_TYPES = ["Seed", "Egg", "Tool", "Decor", "Crop"];
-  var DEFAULT_SHOP_SPRITE_WARMUP_LIMITS = {
-    Seed: 18,
-    Egg: 6,
-    Tool: 6,
-    Decor: 24,
-    Crop: 10
-  };
-  var waitMs = (ms) => new Promise((resolve2) => setTimeout(resolve2, ms));
-  function resolveWarmupLimit(type, options) {
-    const limitConfig = options.limit;
-    if (typeof limitConfig === "number") {
-      return limitConfig;
-    }
-    if (limitConfig && typeof limitConfig === "object" && limitConfig[type] != null) {
-      return limitConfig[type];
-    }
-    return DEFAULT_SHOP_SPRITE_WARMUP_LIMITS[type] ?? Infinity;
-  }
-  async function warmUpShopSprites(options = {}) {
-    if (typeof pageWindow === "undefined") return;
-    const delay4 = Math.max(0, options.delayMs ?? 0);
-    const step = Math.max(0, options.stepMs ?? 0);
-    const types = options.types ?? SHOP_SPRITE_WARMUP_TYPES;
-    if (delay4 > 0) {
-      await waitMs(delay4);
-    }
-    for (const type of types) {
-      const ids = getShopSpriteWarmupIds(type);
-      if (ids.length === 0) continue;
-      const limit = resolveWarmupLimit(type, options);
-      if (limit <= 0) {
-        continue;
-      }
-      const selected = limit < ids.length ? ids.slice(0, limit) : ids;
-      for (const id of selected) {
-        try {
-          await prefetchShopSprite(type, id);
-        } catch {
-        }
-        if (step > 0) {
-          await waitMs(step);
-        }
-      }
-    }
-  }
-  var SHOP_SPRITE_BATCH_SIZE = 12;
-  var SHOP_SPRITE_BATCH_DELAY_MS = 0;
-  var SHOP_SPRITE_BATCH_THRESHOLD = 10;
-  var shopSpriteBatchConfig = {
-    enabled: true,
-    batchSize: SHOP_SPRITE_BATCH_SIZE,
-    delayMs: SHOP_SPRITE_BATCH_DELAY_MS,
-    threshold: SHOP_SPRITE_BATCH_THRESHOLD
-  };
-  var shopSpriteBatchQueue = [];
-  var shopSpriteBatchScheduled = false;
-  var shopSpriteBurstCount = 0;
-  var shopSpriteBurstResetToken = null;
-  var resetShopSpriteBurst = () => {
-    shopSpriteBurstCount = 0;
-    shopSpriteBurstResetToken = null;
-  };
-  var trackShopSpriteBurst = () => {
-    shopSpriteBurstCount += 1;
-    if (shopSpriteBurstResetToken != null) return shopSpriteBurstCount;
-    if (typeof requestAnimationFrame === "function") {
-      shopSpriteBurstResetToken = requestAnimationFrame(resetShopSpriteBurst);
-    } else if (typeof window !== "undefined") {
-      shopSpriteBurstResetToken = window.setTimeout(resetShopSpriteBurst, 16);
-    } else {
-      resetShopSpriteBurst();
-    }
-    return shopSpriteBurstCount;
-  };
-  var resolveShopSpriteBatchConfig = (batchOptions) => ({
-    enabled: batchOptions?.enabled ?? shopSpriteBatchConfig.enabled,
-    batchSize: Math.max(1, Math.floor(batchOptions?.batchSize ?? shopSpriteBatchConfig.batchSize)),
-    delayMs: Math.max(0, Math.floor(batchOptions?.delayMs ?? shopSpriteBatchConfig.delayMs)),
-    threshold: Math.max(1, Math.floor(batchOptions?.threshold ?? shopSpriteBatchConfig.threshold))
-  });
-  var shouldBatchShopSprite = (resolved, batchOptions) => {
-    if (!resolved.enabled) return false;
-    if (batchOptions?.force === true) return true;
-    if (batchOptions?.force === false) return false;
-    if (typeof window === "undefined") return false;
-    const burst = trackShopSpriteBurst();
-    return burst >= resolved.threshold;
-  };
-  var normalizeShopSpriteOptions = (type, options) => {
-    const size = Math.max(12, options.size ?? 36);
-    const fallback = String(options.fallback ?? defaultFallback(type));
-    const alt = typeof options.alt === "string" ? options.alt : "";
-    return { size, fallback, alt };
-  };
-  var createShopSpriteImmediate = (type, id, options) => {
-    const { size, fallback, alt } = options;
-    const el2 = document.createElement("span");
-    spriteConfig.set(el2, { size, fallback, alt });
-    if (typeof pageWindow === "undefined") {
-      applySprite(el2, null);
-      return el2;
-    }
-    const key2 = spriteKey(type, id);
-    subscribeSprite(key2, el2);
-    applySprite(el2, spriteCache.get(key2)?.payload ?? null);
-    const promise = loadSprite(type, id, key2);
-    return el2;
-  };
-  function flushShopSpriteBatch() {
-    shopSpriteBatchScheduled = false;
-    if (!shopSpriteBatchQueue.length) return;
-    const batchSize = Math.max(1, shopSpriteBatchQueue[0]?.batchSize ?? SHOP_SPRITE_BATCH_SIZE);
-    const tasks = shopSpriteBatchQueue.splice(0, batchSize);
-    tasks.forEach((task) => {
-      const { placeholder } = task;
-      if (!placeholder.isConnected) return;
-      const sprite = createShopSpriteImmediate(task.type, task.id, task.options);
-      try {
-        placeholder.replaceWith(sprite);
-      } catch {
-      }
-    });
-    if (shopSpriteBatchQueue.length) {
-      scheduleShopSpriteBatch();
-    }
-  }
-  function scheduleShopSpriteBatch() {
-    if (shopSpriteBatchScheduled) return;
-    shopSpriteBatchScheduled = true;
-    const delayMs = Math.max(0, shopSpriteBatchQueue[0]?.delayMs ?? SHOP_SPRITE_BATCH_DELAY_MS);
-    const run = () => {
-      if (delayMs > 0) {
-        setTimeout(flushShopSpriteBatch, delayMs);
-      } else {
-        flushShopSpriteBatch();
-      }
-    };
-    if (typeof requestAnimationFrame === "function") {
-      requestAnimationFrame(run);
-    } else {
-      setTimeout(run, delayMs);
-    }
-  }
-  var enqueueShopSpriteBatch = (type, id, options, batchOptions) => {
-    const placeholder = document.createElement("span");
-    spriteConfig.set(placeholder, options);
-    applySprite(placeholder, null);
-    shopSpriteBatchQueue.push({
-      type,
-      id,
-      options,
-      placeholder,
-      batchSize: batchOptions.batchSize,
-      delayMs: batchOptions.delayMs
-    });
-    scheduleShopSpriteBatch();
-    return placeholder;
-  };
-  function createShopSprite(type, id, options = {}, batchOptions) {
-    const normalizedOptions = normalizeShopSpriteOptions(type, options);
-    const resolvedBatch = resolveShopSpriteBatchConfig(batchOptions);
-    if (shouldBatchShopSprite(resolvedBatch, batchOptions)) {
-      return enqueueShopSpriteBatch(type, id, normalizedOptions, resolvedBatch);
-    }
-    return createShopSpriteImmediate(type, id, normalizedOptions);
-  }
-  var weatherSpriteConfig = /* @__PURE__ */ new WeakMap();
-  var weatherSpriteSubscribers = /* @__PURE__ */ new Map();
-  var weatherSpriteCache = /* @__PURE__ */ new Map();
-  var weatherSpritePromises = /* @__PURE__ */ new Map();
-  var weatherListenerAttached = false;
-  var animationBases = null;
-  var weatherTileIndices = (() => {
-    const map2 = /* @__PURE__ */ new Map();
-    for (const [rawKey, rawValue] of Object.entries(tileRefsAnimations ?? {})) {
-      const key2 = normalizeWeatherRawKey(rawKey);
-      const index = toAnimationTileIndex(rawValue);
-      if (key2 && index != null) {
-        map2.set(key2, index);
-      }
-    }
-    return map2;
-  })();
-  function normalizeWeatherRawKey(raw) {
-    const str = typeof raw === "string" ? raw : String(raw ?? "");
-    return str.trim().replace(/^Weather:/i, "").replace(/[^a-z0-9]+/gi, "").toLowerCase();
-  }
-  function toAnimationTileIndex(value) {
-    const num = typeof value === "number" ? value : Number(value);
-    if (!Number.isFinite(num)) return null;
-    return num > 0 ? Math.trunc(num) - 1 : Math.trunc(num);
-  }
-  function getAnimationBases() {
-    if (animationBases) return animationBases;
-    const bases = /* @__PURE__ */ new Set();
-    try {
-      const listFn = Sprites?.listTilesByCategory;
-      if (typeof listFn === "function") {
-        for (const url of listFn(/anim/i)) {
-          if (typeof url !== "string" || !url.length) continue;
-          const clean = url.split(/[?#]/)[0] ?? url;
-          const file = clean.split("/").pop() ?? clean;
-          bases.add(file.replace(/\.[^.]+$/, ""));
-        }
-      }
-    } catch {
-    }
-    if (bases.size === 0) {
-      bases.add("animations");
-    }
-    animationBases = [...bases];
-    return animationBases;
-  }
-  function subscribeWeatherSprite(key2, el2, config) {
-    let subs = weatherSpriteSubscribers.get(key2);
-    if (!subs) {
-      subs = /* @__PURE__ */ new Set();
-      weatherSpriteSubscribers.set(key2, subs);
-    }
-    subs.add(el2);
-    weatherSpriteConfig.set(el2, config);
-  }
-  function notifyWeatherSpriteSubscribers(key2, src) {
-    const subs = weatherSpriteSubscribers.get(key2);
-    if (!subs) return;
-    subs.forEach((el2) => {
-      if (!el2.isConnected) {
-        subs.delete(el2);
-        weatherSpriteConfig.delete(el2);
-        return;
-      }
-      applyWeatherSprite(el2, src);
-    });
-    if (subs.size === 0) {
-      weatherSpriteSubscribers.delete(key2);
-    }
-  }
-  function ensureWeatherSpriteListener() {
-    if (weatherListenerAttached || typeof window === "undefined") return;
-    weatherListenerAttached = true;
-    window.addEventListener("mg:sprite-detected", () => {
-      weatherSpriteCache.clear();
-      weatherSpritePromises.clear();
-      animationBases = null;
-      clearTileSheetCache();
-      const keys = Array.from(weatherSpriteSubscribers.keys());
-      keys.forEach((key2) => {
-        void loadWeatherSprite(key2);
-      });
-    });
-  }
-  function applyWeatherSprite(el2, src) {
-    const cfg = weatherSpriteConfig.get(el2);
-    if (!cfg) return;
-    const { size, fallback, alt } = cfg;
-    el2.innerHTML = "";
-    el2.style.display = "inline-flex";
-    el2.style.alignItems = "center";
-    el2.style.justifyContent = "center";
-    el2.style.width = `${size}px`;
-    el2.style.height = `${size}px`;
-    el2.style.flexShrink = "0";
-    el2.style.position = "relative";
-    el2.setAttribute("role", "img");
-    if (src) {
-      el2.removeAttribute("aria-label");
-      el2.style.fontSize = "";
-      const img = document.createElement("img");
-      img.src = src;
-      img.alt = alt;
-      img.decoding = "async";
-      img.loading = "lazy";
-      img.draggable = false;
-      img.style.width = "100%";
-      img.style.height = "100%";
-      img.style.objectFit = "contain";
-      el2.appendChild(img);
-    } else {
-      el2.textContent = fallback;
-      el2.style.fontSize = `${Math.max(10, Math.round(size * 0.72))}px`;
-      if (alt) el2.setAttribute("aria-label", alt);
-      else el2.removeAttribute("aria-label");
-    }
-  }
-  async function fetchWeatherSprite(key2) {
-    await ensureSpritesReady();
-    const index = weatherTileIndices.get(key2);
-    if (index == null) return null;
-    const bases = getAnimationBases();
-    for (const base of bases) {
-      try {
-        const tiles = await loadTileSheet(base);
-        const tile = tiles.find((t) => t.index === index);
-        if (!tile) continue;
-        const canvas = Sprites.toCanvas(tile);
-        if (!canvas || canvas.width <= 0 || canvas.height <= 0) continue;
-        return canvas.toDataURL();
-      } catch {
-      }
-    }
-    return null;
-  }
-  function loadWeatherSprite(key2) {
-    if (typeof window === "undefined") {
-      weatherSpriteCache.set(key2, null);
-      notifyWeatherSpriteSubscribers(key2, null);
-      return Promise.resolve(null);
-    }
-    const cached = weatherSpriteCache.get(key2);
-    if (cached !== void 0) {
-      notifyWeatherSpriteSubscribers(key2, cached);
-      return Promise.resolve(cached);
-    }
-    const inflight = weatherSpritePromises.get(key2);
-    if (inflight) return inflight;
-    const promise = fetchWeatherSprite(key2).then((src) => {
-      weatherSpriteCache.set(key2, src);
-      weatherSpritePromises.delete(key2);
-      notifyWeatherSpriteSubscribers(key2, src);
-      return src;
-    }).catch(() => {
-      weatherSpritePromises.delete(key2);
-      return null;
-    });
-    weatherSpritePromises.set(key2, promise);
-    return promise;
-  }
-  async function prefetchWeatherSprites(options = {}) {
-    const { keys, limit = 20, delayMs = 40 } = options;
-    const sourceKeys = (keys ?? Array.from(weatherTileIndices.keys())).map((value) => normalizeWeatherRawKey(value)).map((value) => getWeatherSpriteKey(value)).filter((value) => Boolean(value));
-    const max = limit && limit > 0 ? Math.min(limit, sourceKeys.length) : sourceKeys.length;
-    for (let i = 0; i < max; i += 1) {
-      const key2 = sourceKeys[i];
-      try {
-        await loadWeatherSprite(key2);
-      } catch {
-      }
-      if (delayMs > 0 && i < max - 1) {
-        await waitMs(delayMs);
-      }
-    }
-  }
-  function getWeatherSpriteKey(raw) {
-    if (raw == null) return null;
-    const normalized = normalizeWeatherRawKey(raw);
-    if (!normalized) return null;
-    if (weatherTileIndices.has(normalized)) return normalized;
-    return null;
-  }
-  function createWeatherSprite(rawKey, options = {}) {
-    const size = Math.max(12, options.size ?? 36);
-    const fallback = String(options.fallback ?? "\u011EYO\u0130");
-    const alt = typeof options.alt === "string" ? options.alt : "";
-    const el2 = document.createElement("span");
-    weatherSpriteConfig.set(el2, { size, fallback, alt });
-    if (typeof window === "undefined") {
-      applyWeatherSprite(el2, null);
-      return el2;
-    }
-    ensureWeatherSpriteListener();
-    const key2 = getWeatherSpriteKey(rawKey);
-    if (!key2) {
-      applyWeatherSprite(el2, null);
-      return el2;
-    }
-    subscribeWeatherSprite(key2, el2, { size, fallback, alt });
-    applyWeatherSprite(el2, weatherSpriteCache.get(key2) ?? null);
-    const promise = loadWeatherSprite(key2);
-    return el2;
-  }
-  var PET_VARIANT_COLOR_FILTER = {
-    normal: null,
-    gold: "Gold",
-    rainbow: "Rainbow"
-  };
-  var petSpriteCache = /* @__PURE__ */ new Map();
-  var petSpritePromises = /* @__PURE__ */ new Map();
-  var petSheetBasesCache = null;
-  var petListenerAttached = false;
-  function canonicalSpecies(raw) {
-    if (!raw) return raw;
-    if (petCatalog[raw]) return raw;
-    const pretty = raw.charAt(0).toUpperCase() + raw.slice(1).toLowerCase();
-    return petCatalog[pretty] ? pretty : raw;
-  }
-  function toPetTileIndex(tileRef) {
-    const value = typeof tileRef === "number" && Number.isFinite(tileRef) ? tileRef : Number(tileRef);
-    if (!Number.isFinite(value)) return null;
-    if (value <= 0) return value;
-    return value - 1;
-  }
-  function getPetSheetBases() {
-    if (petSheetBasesCache) return petSheetBasesCache;
-    const urls = /* @__PURE__ */ new Set();
-    try {
-      const list = typeof Sprites.listPets === "function" ? Sprites.listPets() : [];
-      for (const url of list) {
-        if (typeof url === "string" && url.length) {
-          urls.add(url);
-        }
-      }
-    } catch {
-    }
-    const bases = Array.from(urls, (url) => normalizeSheetBase(url));
-    petSheetBasesCache = bases;
-    return bases;
-  }
-  function resetPetCaches() {
-    petSpriteCache.clear();
-    petSpritePromises.clear();
-    petSheetBasesCache = null;
-    clearTileSheetCache();
-  }
-  function ensurePetListener() {
-    if (petListenerAttached || typeof window === "undefined") return;
-    petListenerAttached = true;
-    window.addEventListener("mg:sprite-detected", () => {
-      resetPetCaches();
-    });
-  }
-  function keyForPet(species, variant) {
-    return `${species.toLowerCase()}::${variant}`;
-  }
-  function hasMutation(target, mutations) {
-    if (!mutations) return false;
-    const list = Array.isArray(mutations) ? mutations : [mutations];
-    return list.map((value) => String(value ?? "").toLowerCase()).some((value) => value.includes(target));
-  }
-  function determinePetSpriteVariant(mutations) {
-    if (hasMutation("rainbow", mutations)) return "rainbow";
-    if (hasMutation("gold", mutations)) return "gold";
-    return "normal";
-  }
-  async function fetchPetSprite(species, variant) {
-    await ensureSpritesReady();
-    if (typeof window === "undefined") return null;
-    if (typeof Sprites.getTile !== "function") return null;
-    const entry = petCatalog[species];
-    const tileRef = entry?.tileRef;
-    if (tileRef == null) return null;
-    const index = toPetTileIndex(tileRef);
-    if (index == null) return null;
-    const baseCandidates = new Set(getPetSheetBases());
-    if (baseCandidates.size === 0) {
-      baseCandidates.add("pets");
-      baseCandidates.add("Pets");
-    }
-    for (const base of baseCandidates) {
-      try {
-        const tiles = await loadTileSheet(base);
-        const tile = tiles.find((t) => t.index === index);
-        if (!tile) continue;
-        const canvas = Sprites.toCanvas(tile);
-        if (!canvas || canvas.width <= 0 || canvas.height <= 0) continue;
-        let finalCanvas = canvas;
-        const filterName = PET_VARIANT_COLOR_FILTER[variant];
-        if (filterName) {
-          const filtered = Sprites.applyCanvasFilter(finalCanvas, filterName);
-          if (filtered) finalCanvas = filtered;
-        }
-        return finalCanvas.toDataURL();
-      } catch {
-      }
-    }
-    return null;
-  }
-  function loadPetSprite(speciesRaw, variant = "normal") {
-    if (typeof window === "undefined") {
-      return Promise.resolve(null);
-    }
-    const species = canonicalSpecies(String(speciesRaw ?? "").trim());
-    if (!species) return Promise.resolve(null);
-    ensurePetListener();
-    const key2 = keyForPet(species, variant);
-    const cached = petSpriteCache.get(key2);
-    if (cached !== void 0) {
-      return Promise.resolve(cached);
-    }
-    const inflight = petSpritePromises.get(key2);
-    if (inflight) return inflight;
-    const promise = fetchPetSprite(species, variant).then((src) => {
-      petSpriteCache.set(key2, src);
-      petSpritePromises.delete(key2);
-      return src;
-    }).catch(() => {
-      petSpritePromises.delete(key2);
-      return null;
-    });
-    petSpritePromises.set(key2, promise);
-    return promise;
-  }
-  function loadPetSpriteFromMutations(species, mutations) {
-    const variant = determinePetSpriteVariant(mutations);
-    return loadPetSprite(species, variant);
-  }
-  async function prefetchPetSprites(options = {}) {
-    const { species, variants = ["normal", "gold", "rainbow"], delayMs = 10, limit } = options;
-    const allSpecies = (species ?? Object.keys(petCatalog)).map((value) => canonicalSpecies(value)).filter((value) => Boolean(value));
-    const combos = [];
-    for (const entry of allSpecies) {
-      for (const variant of variants) {
-        combos.push({ species: entry, variant });
-      }
-    }
-    const max = typeof limit === "number" && limit > 0 ? Math.min(limit, combos.length) : combos.length;
-    for (let i = 0; i < max; i += 1) {
-      const combo = combos[i];
-      try {
-        await loadPetSprite(combo.species, combo.variant);
-      } catch {
-      }
-      if (delayMs > 0 && i < max - 1) {
-        await waitMs(delayMs);
-      }
-    }
-  }
-  var FULL_SHOP_WARMUP_LIMIT = {
-    Seed: Infinity,
-    Egg: Infinity,
-    Tool: Infinity,
-    Decor: Infinity,
-    Crop: Infinity
-  };
-  async function warmUpAllSprites(options = {}) {
-    const shopOptions = {
-      delayMs: options.shop?.delayMs,
-      stepMs: options.shop?.stepMs,
-      types: options.shop?.types,
-      limit: options.shop?.limit ?? FULL_SHOP_WARMUP_LIMIT
-    };
-    await warmUpShopSprites(shopOptions);
-    await prefetchWeatherSprites(options.weather ?? { delayMs: 5, limit: 0 });
-    await prefetchPetSprites(options.pet ?? { delayMs: 5 });
-  }
 
   // src/services/notifier.ts
   var PATH_NOTIFIER_PREFS = "notifier.prefs";
@@ -19507,7 +15875,6 @@
       const rawDisplayName = typeof rawValue?.displayName === "string" ? String(rawValue.displayName).trim() : "";
       const displayName = (rawDisplayName || safeName).replace(/([a-z])([A-Z])/g, "$1 $2").replace(/_/g, " ").replace(/\s+/g, " ").trim();
       const atomValue = typeof rawValue?.atomValue === "string" ? String(rawValue.atomValue).trim() : "";
-      const spriteKey2 = getWeatherSpriteKey(safeName) ?? getWeatherSpriteKey(rawDisplayName) ?? null;
       const type = atomValue || displayName;
       const description = typeof rawValue?.description === "string" ? String(rawValue.description).trim() : null;
       const weightInCycle = normalizeNumber(rawValue?.weightInCycle);
@@ -19517,7 +15884,6 @@
         id: `Weather:${safeName}`,
         name: displayName || safeName,
         atomValue,
-        spriteKey: spriteKey2,
         type,
         description,
         cycle,
@@ -19679,17 +16045,17 @@
       const obj = readAriesPath(PATH_NOTIFIER_DEFAULTS);
       if (obj && typeof obj === "object") {
         for (const [context, value] of Object.entries(obj)) {
-          const ctx = context;
-          if (ctx !== "shops" && ctx !== "weather") continue;
+          const ctx2 = context;
+          if (ctx2 !== "shops" && ctx2 !== "weather") continue;
           const modeRaw = value?.stopMode;
           const stopMode = modeRaw === "purchase" ? "purchase" : "manual";
           const repeatsRaw = Number(value?.stopRepeats);
           const stopRepeats = Number.isFinite(repeatsRaw) ? Math.max(1, Math.floor(repeatsRaw)) : null;
           const intervalRaw = Number(value?.loopIntervalMs);
-          const playback = audio.getPlaybackSettings(ctx);
+          const playback = audio.getPlaybackSettings(ctx2);
           const baseLoop = Number.isFinite(intervalRaw) ? intervalRaw : playback.loopIntervalMs;
           const loopIntervalMs = Math.max(150, Math.floor(baseLoop || 0));
-          _contextDefaults[ctx] = { stopMode, stopRepeats, loopIntervalMs };
+          _contextDefaults[ctx2] = { stopMode, stopRepeats, loopIntervalMs };
         }
       }
     } catch {
@@ -19700,11 +16066,11 @@
     if (!_contextDefaultsLoaded) return;
     try {
       const obj = {};
-      for (const [ctx, value] of Object.entries(_contextDefaults)) {
+      for (const [ctx2, value] of Object.entries(_contextDefaults)) {
         if (!value) continue;
         const loopIntervalMs = Math.max(150, Math.floor(value.loopIntervalMs | 0));
         const normalizedRepeats = value.stopRepeats != null ? Math.max(1, Math.floor(value.stopRepeats | 0)) : null;
-        obj[ctx] = {
+        obj[ctx2] = {
           stopMode: value.stopMode,
           stopRepeats: normalizedRepeats,
           loopIntervalMs
@@ -19748,7 +16114,6 @@
         id: def.id,
         name: def.name,
         type: def.type,
-        spriteKey: def.spriteKey,
         atomValue: def.atomValue,
         notify: notify2,
         lastSeen,
@@ -20430,6 +16795,359 @@
     return cat?.[decorId]?.name ?? void 0;
   }
 
+  // src/ui/spriteIconCache.ts
+  var SPRITE_PRELOAD_CATEGORIES = [
+    "plant",
+    "tallplant",
+    "decor",
+    "item",
+    "pet",
+    "seed",
+    "ui",
+    "mutation",
+    "mutation-overlay"
+  ];
+  var spriteDataUrlCache = /* @__PURE__ */ new Map();
+  var spriteWarmupQueued = false;
+  var spriteWarmupStarted = false;
+  var warmupState = { total: 0, done: 0, completed: false };
+  var prefetchedWarmupKeys = [];
+  var warmupCompletedKeys = /* @__PURE__ */ new Set();
+  var WARMUP_RETRY_MS = 100;
+  var WARMUP_DELAY_MS = 8;
+  var WARMUP_BATCH = 3;
+  var warmupListeners = /* @__PURE__ */ new Set();
+  function notifyWarmup(state3) {
+    warmupState = state3;
+    warmupListeners.forEach((listener) => {
+      try {
+        listener(warmupState);
+      } catch {
+      }
+    });
+  }
+  function getSpriteWarmupState() {
+    return warmupState;
+  }
+  function onSpriteWarmupProgress(listener) {
+    warmupListeners.add(listener);
+    try {
+      listener(warmupState);
+    } catch {
+    }
+    return () => {
+      warmupListeners.delete(listener);
+    };
+  }
+  function primeWarmupKeys(keys) {
+    prefetchedWarmupKeys.push(...keys);
+  }
+  function primeSpriteData(category, spriteId, dataUrl) {
+    const cacheKey = cacheKeyFor(category, spriteId);
+    if (!spriteDataUrlCache.has(cacheKey)) {
+      spriteDataUrlCache.set(cacheKey, Promise.resolve(dataUrl));
+    }
+    if (!warmupCompletedKeys.has(cacheKey)) {
+      warmupCompletedKeys.add(cacheKey);
+      const nextDone = warmupState.done + 1;
+      const completed = warmupState.total > 0 ? nextDone >= warmupState.total : false;
+      notifyWarmup({ total: Math.max(warmupState.total, nextDone), done: nextDone, completed });
+    }
+  }
+  var normalizeSpriteId = (value) => String(value || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+  var baseNameFromKey = (key2) => {
+    const parts = key2.split("/").filter(Boolean);
+    return parts[parts.length - 1] ?? key2;
+  };
+  var normalizeMutationList = (mutations) => {
+    const list = Array.from(
+      new Set((mutations ?? []).map((value) => String(value ?? "").trim()).filter(Boolean))
+    );
+    if (!list.length) {
+      return { list, key: "" };
+    }
+    const key2 = list.map((val) => normalizeSpriteId(val)).filter(Boolean).sort().join(",");
+    return { list, key: key2 ? `|m=${key2}` : "" };
+  };
+  var cacheKeyFor = (category, spriteId, mutationKey) => `${category}:${normalizeSpriteId(spriteId)}${mutationKey ?? ""}`;
+  var scheduleNonBlocking = (cb) => {
+    return new Promise((resolve2) => {
+      const runner = () => {
+        Promise.resolve().then(cb).then(resolve2).catch(() => resolve2(cb()));
+      };
+      if (typeof window.requestIdleCallback === "function") {
+        window.requestIdleCallback(runner, { timeout: 50 });
+      } else if (typeof requestAnimationFrame === "function") {
+        requestAnimationFrame(runner);
+      } else {
+        setTimeout(runner, 0);
+      }
+    });
+  };
+  function getSpriteService() {
+    const win = pageWindow ?? globalThis;
+    return win?.__MG_SPRITE_SERVICE__ ?? win?.unsafeWindow?.__MG_SPRITE_SERVICE__ ?? null;
+  }
+  var parseKeyToCategoryId = (key2) => {
+    const parts = key2.split("/").filter(Boolean);
+    if (!parts.length) return null;
+    const start2 = parts[0] === "sprite" || parts[0] === "sprites" ? 1 : 0;
+    const category = parts[start2] ?? "";
+    const id = parts.slice(start2 + 1).join("/") || parts[parts.length - 1] || "";
+    if (!category || !id) return null;
+    return { category, id };
+  };
+  function whenServiceReady(handle) {
+    if (!handle || !handle.ready || typeof handle.ready.then !== "function") {
+      return Promise.resolve();
+    }
+    return handle.ready.then(
+      () => {
+      },
+      () => {
+      }
+    );
+  }
+  async function ensureSpriteDataCached(service, category, spriteId, logTag, options) {
+    if (!service?.renderToCanvas) {
+      return null;
+    }
+    const { list: mutationList, key: mutationKey } = normalizeMutationList(options?.mutations);
+    const cacheKey = cacheKeyFor(category, spriteId, mutationKey);
+    let promise = spriteDataUrlCache.get(cacheKey);
+    if (!promise) {
+      promise = scheduleNonBlocking(async () => {
+        try {
+          const canvas = service.renderToCanvas?.({
+            category,
+            id: spriteId,
+            mutations: mutationList
+          });
+          if (!canvas) return null;
+          return canvas.toDataURL("image/png");
+        } catch (error) {
+          console.error("[SpriteIconCache]", "failed to cache sprite", { category, spriteId, logTag, error });
+          return null;
+        }
+      });
+      spriteDataUrlCache.set(cacheKey, promise);
+    }
+    return promise;
+  }
+  var spriteMatchCache = /* @__PURE__ */ new Map();
+  function getMatchCacheKey(categories, id) {
+    const normalizedCategories = categories.map((category) => category.toLowerCase()).join("|");
+    return `${normalizedCategories}|${normalizeSpriteId(id)}`;
+  }
+  function findSpriteMatch(service, categories, id) {
+    if (!service.list) return null;
+    const cacheKey = getMatchCacheKey(categories, id);
+    if (spriteMatchCache.has(cacheKey)) {
+      return spriteMatchCache.get(cacheKey) ?? null;
+    }
+    const normalizedTarget = normalizeSpriteId(id);
+    const categoryLists = categories.map((category) => ({
+      category,
+      items: service.list?.(category) ?? []
+    }));
+    let matched = null;
+    const tryMatch = (category, base) => {
+      if (normalizeSpriteId(base) === normalizedTarget) {
+        matched = { category, spriteId: base };
+        return true;
+      }
+      return false;
+    };
+    for (const { category, items } of categoryLists) {
+      for (const it of items) {
+        const key2 = typeof it?.key === "string" ? it.key : "";
+        if (!key2) continue;
+        const base = baseNameFromKey(key2);
+        if (tryMatch(category, base)) {
+          spriteMatchCache.set(cacheKey, matched);
+          return matched;
+        }
+      }
+    }
+    for (const { category, items } of categoryLists) {
+      for (const it of items) {
+        const key2 = typeof it?.key === "string" ? it.key : "";
+        if (!key2) continue;
+        const base = baseNameFromKey(key2);
+        const normBase = normalizeSpriteId(base);
+        if (!normBase) continue;
+        if (normalizedTarget.includes(normBase) || normBase.includes(normalizedTarget) || normBase.startsWith(normalizedTarget) || normalizedTarget.startsWith(normBase)) {
+          matched = { category, spriteId: base };
+          spriteMatchCache.set(cacheKey, matched);
+          return matched;
+        }
+      }
+    }
+    spriteMatchCache.set(cacheKey, null);
+    return null;
+  }
+  function attachSpriteIcon(target, categories, id, size, logTag, options) {
+    const service = getSpriteService();
+    if (!service?.renderToCanvas) return;
+    const candidateIds = Array.isArray(id) ? id.map((value) => String(value ?? "").trim()).filter(Boolean) : [String(id ?? "").trim()].filter(Boolean);
+    if (!candidateIds.length) return;
+    void whenServiceReady(service).then(
+      () => scheduleNonBlocking(async () => {
+        let selected = null;
+        for (const candidate of candidateIds) {
+          const match = findSpriteMatch(service, categories, candidate);
+          if (match) {
+            selected = { match, candidate };
+            break;
+          }
+        }
+        if (!selected) {
+          options?.onNoSpriteFound?.({ categories, candidates: candidateIds });
+          return;
+        }
+        const resolved = selected;
+        const { key: mutationKey } = normalizeMutationList(options?.mutations);
+        const spriteKey = `${resolved.match.category}:${resolved.match.spriteId}${mutationKey}`;
+        const existingImg = target.querySelector("img[data-sprite-key]");
+        if (existingImg && existingImg.dataset.spriteKey === spriteKey) {
+          return;
+        }
+        const dataUrl = await ensureSpriteDataCached(
+          service,
+          resolved.match.category,
+          resolved.match.spriteId,
+          logTag,
+          {
+            mutations: options?.mutations
+          }
+        );
+        if (!dataUrl) return;
+        const img = document.createElement("img");
+        img.src = dataUrl;
+        img.width = size;
+        img.height = size;
+        img.alt = "";
+        img.decoding = "async";
+        img.loading = "lazy";
+        img.draggable = false;
+        img.style.width = `${size}px`;
+        img.style.height = `${size}px`;
+        img.style.objectFit = "contain";
+        img.style.imageRendering = "auto";
+        img.style.display = "block";
+        img.dataset.spriteKey = spriteKey;
+        img.dataset.spriteCategory = resolved.match.category;
+        img.dataset.spriteId = resolved.match.spriteId;
+        requestAnimationFrame(() => {
+          target.replaceChildren(img);
+          options?.onSpriteApplied?.(img, {
+            category: resolved.match.category,
+            spriteId: resolved.match.spriteId,
+            candidate: resolved.candidate
+          });
+        });
+      })
+    );
+  }
+  function attachWeatherSpriteIcon(target, tag, size) {
+    if (tag === "NoWeatherEffect") return;
+    attachSpriteIcon(target, ["mutation"], tag, size, "weather");
+  }
+  function warmupSpriteCache() {
+    if (spriteWarmupQueued || spriteWarmupStarted || typeof window === "undefined") return;
+    spriteWarmupQueued = true;
+    notifyWarmup({ total: warmupState.total, done: warmupState.done, completed: false });
+    const scheduleRetry = () => {
+      window.setTimeout(() => {
+        spriteWarmupQueued = false;
+        warmupSpriteCache();
+      }, WARMUP_RETRY_MS);
+    };
+    let service = getSpriteService();
+    if (!service && prefetchedWarmupKeys.length === 0) {
+      scheduleRetry();
+      return;
+    }
+    const tasks = [];
+    const seen = new Set(warmupCompletedKeys);
+    if (service?.list) {
+      SPRITE_PRELOAD_CATEGORIES.forEach((category) => {
+        const items = service.list?.(category) ?? [];
+        items.forEach((item) => {
+          const key2 = typeof item?.key === "string" ? item.key : "";
+          if (!key2) return;
+          const base = baseNameFromKey(key2);
+          if (!base) return;
+          const k = `${category}:${base.toLowerCase()}`;
+          if (seen.has(k)) return;
+          seen.add(k);
+          tasks.push({ category, id: base });
+        });
+      });
+    }
+    if (prefetchedWarmupKeys.length) {
+      prefetchedWarmupKeys.forEach((key2) => {
+        const parsed = parseKeyToCategoryId(key2);
+        if (!parsed) return;
+        const k = `${parsed.category}:${parsed.id.toLowerCase()}`;
+        if (seen.has(k)) return;
+        seen.add(k);
+        tasks.push(parsed);
+      });
+      prefetchedWarmupKeys = [];
+    }
+    if (!tasks.length) {
+      if (warmupState.completed) {
+        spriteWarmupQueued = false;
+        return;
+      }
+      scheduleRetry();
+      return;
+    }
+    spriteWarmupStarted = true;
+    const total = Math.max(warmupState.total, tasks.length);
+    const startingDone = Math.min(warmupState.done, total);
+    notifyWarmup({ total, done: startingDone, completed: total === 0 || startingDone >= total });
+    const processNext = () => {
+      service = service || getSpriteService();
+      if (!service?.renderToCanvas || !service?.list) {
+        setTimeout(processNext, WARMUP_RETRY_MS);
+        return;
+      }
+      if (!tasks.length) {
+        spriteWarmupQueued = false;
+        console.log("[SpriteIconCache]", "warmup complete", {
+          categories: SPRITE_PRELOAD_CATEGORIES,
+          totalCached: spriteDataUrlCache.size
+        });
+        notifyWarmup({ total, done: warmupState.done, completed: true });
+        return;
+      }
+      let processed = 0;
+      const batch = tasks.splice(0, WARMUP_BATCH);
+      batch.forEach((entry) => {
+        ensureSpriteDataCached(service, entry.category, entry.id, "warmup").then((result) => {
+          if (result == null && !service?.renderToCanvas) {
+            tasks.unshift(entry);
+            return;
+          }
+          const completionKey = cacheKeyFor(entry.category, entry.id);
+          if (!warmupCompletedKeys.has(completionKey)) {
+            warmupCompletedKeys.add(completionKey);
+            const nextDone = Math.min(warmupState.done + 1, total);
+            notifyWarmup({ total, done: nextDone, completed: nextDone >= total });
+          }
+        }).finally(() => {
+          processed += 1;
+          if (processed >= batch.length) {
+            setTimeout(processNext, WARMUP_DELAY_MS);
+          }
+        });
+      });
+    };
+    processNext();
+  }
+
   // src/ui/menus/notificationOverlay.ts
   var style = (el2, s) => Object.assign(el2.style, s);
   var setProps = (el2, props) => {
@@ -20445,22 +17163,38 @@
       justifyContent: "center",
       flex: `0 0 ${size}px`
     });
-    const [rawType, rawId] = id.split(":");
-    const type = rawType === "Seed" || rawType === "Egg" || rawType === "Tool" || rawType === "Decor" ? rawType : null;
-    const fallback = type === "Seed" ? "\u{1F331}" : type === "Egg" ? "\u{1F95A}" : type === "Tool" ? "\u{1F9F0}" : type === "Decor" ? "\u{1F3E0}" : "\u{1F514}";
-    if (type && rawId) {
-      const sprite = createShopSprite(type, rawId, {
-        size,
-        fallback,
-        alt: labelOf(id)
-      });
-      wrap.appendChild(sprite);
-    } else {
-      const span = document.createElement("span");
-      span.textContent = fallback;
-      span.style.fontSize = `${Math.max(10, size - 2)}px`;
-      span.setAttribute("aria-hidden", "true");
-      wrap.appendChild(span);
+    const [rawType] = id.split(":");
+    const fallback = rawType === "Seed" ? "seed" : rawType === "Egg" ? "egg" : rawType === "Tool" ? "tool" : rawType === "Decor" ? "decor" : "item";
+    const span = document.createElement("span");
+    span.textContent = fallback;
+    span.style.fontSize = `${Math.max(10, size - 2)}px`;
+    span.setAttribute("aria-hidden", "true");
+    wrap.appendChild(span);
+    const categories = rawType === "Seed" ? ["seed"] : rawType === "Egg" ? ["pet"] : rawType === "Tool" ? ["item"] : rawType === "Decor" ? ["decor"] : null;
+    if (categories) {
+      const label2 = labelOf(id);
+      const candidatesSet = /* @__PURE__ */ new Set();
+      const addCandidate = (value) => {
+        if (!value) return;
+        const trimmed = value.trim();
+        if (!trimmed) return;
+        candidatesSet.add(trimmed);
+        candidatesSet.add(trimmed.replace(/\s+/g, ""));
+        const last = trimmed.split(/[./]/).pop();
+        if (last && last !== trimmed) {
+          candidatesSet.add(last);
+          candidatesSet.add(last.replace(/\s+/g, ""));
+        }
+      };
+      addCandidate(id.split(":")[1]);
+      addCandidate(label2);
+      if (rawType) addCandidate(rawType);
+      const originals = Array.from(candidatesSet);
+      const iconized = originals.map((value) => value.replace(/icon$/i, "")).filter(Boolean).map((value) => `${value}Icon`);
+      const candidates = Array.from(/* @__PURE__ */ new Set([...originals, ...iconized])).filter(Boolean);
+      if (candidates.length) {
+        attachSpriteIcon(wrap, categories, candidates, size, "alerts-overlay");
+      }
     }
     return wrap;
   }
@@ -20852,6 +17586,7 @@
         title.textContent = labelOf(r.id);
         Object.assign(title.style, {
           fontWeight: "600",
+          fontSize: "12px",
           overflow: "hidden",
           textOverflow: "ellipsis",
           whiteSpace: "nowrap",
@@ -21023,7 +17758,7 @@
         position: "absolute",
         top: "calc(100% + var(--chakra-space-2, 0.5rem))",
         right: "0",
-        width: "min(280px, 70vw)",
+        width: "min(340px, 80vw)",
         // ← largeur réduite (était 360px)
         maxHeight: "50vh",
         overflow: "auto",
@@ -21146,6 +17881,47 @@
       });
       style(this.btn, { position: "relative" });
     }
+    anchorIntoToolbar(toolbar) {
+      this.applyToolbarLook(toolbar);
+      const cs = getComputedStyle(toolbar);
+      const isColumn = (cs.flexDirection || "").startsWith("column");
+      const gap = Number.parseFloat(cs.gap || cs.columnGap || cs.rowGap || "0") || 0;
+      if (cs.position === "static") {
+        toolbar.style.position = "relative";
+      }
+      const rect = toolbar.getBoundingClientRect();
+      const siblings = Array.from(toolbar.children).filter((c) => c !== this.slot);
+      const last = siblings[siblings.length - 1];
+      const lastRect = last?.getBoundingClientRect();
+      const targetTop = isColumn ? lastRect ? lastRect.bottom - rect.top + gap : rect.height + gap : lastRect ? lastRect.top - rect.top + lastRect.height / 2 : rect.height / 2;
+      const targetLeft = isColumn ? lastRect ? lastRect.left - rect.left + lastRect.width / 2 : rect.width / 2 : lastRect ? lastRect.right - rect.left + gap : rect.width + gap;
+      style(this.slot, {
+        position: "absolute",
+        top: `${targetTop}px`,
+        left: `${targetLeft}px`,
+        transform: isColumn ? "translate(-50%, 0)" : "translate(0, -50%)",
+        pointerEvents: "auto",
+        // laisse les clics traverser vers le panel/bouton
+        margin: "0"
+      });
+      style(this.btn, { pointerEvents: "auto" });
+      if (this.slot.parentElement !== toolbar || this.slot.nextElementSibling) {
+        toolbar.appendChild(this.slot);
+      }
+    }
+    resetSlotPositioning() {
+      style(this.slot, {
+        position: "relative",
+        top: "",
+        left: "",
+        right: "",
+        bottom: "",
+        transform: "",
+        pointerEvents: "auto",
+        margin: "0"
+      });
+      style(this.btn, { pointerEvents: "auto" });
+    }
     findAnchorBlockFromCanvas(c) {
       try {
         const tabbable = c.closest("span[tabindex]");
@@ -21180,12 +17956,10 @@
     }
     attachLeftOfTargetCanvas() {
       try {
+        this.resetSlotPositioning();
         const toolbar = this.findToolbarContainer();
         if (toolbar && toolbar.isConnected) {
-          this.applyToolbarLook(toolbar);
-          if (this.slot.parentElement !== toolbar || this.slot.nextElementSibling) {
-            toolbar.appendChild(this.slot);
-          }
+          this.anchorIntoToolbar(toolbar);
           return;
         }
         const canvas = this.findTargetCanvas();
@@ -21864,6 +18638,470 @@
         window.removeEventListener("popstate", onPop);
       }
     };
+  }
+
+  // src/core/dom.ts
+  var ready = new Promise((res) => {
+    if (document.readyState !== "loading") res();
+    else addEventListener("DOMContentLoaded", () => res(), { once: true });
+  });
+  function addStyle(css) {
+    const s = document.createElement("style");
+    s.textContent = css;
+    document.head.appendChild(s);
+    return s;
+  }
+  function toPredicate(selOrFn) {
+    if (typeof selOrFn === "function") return selOrFn;
+    if (typeof selOrFn === "string") return (el2) => el2.matches?.(selOrFn) ?? false;
+    throw new Error("Selector or predicate required");
+  }
+  function onAdded(selOrFn, cb, { root = document, callForExisting = true } = {}) {
+    const pred = toPredicate(selOrFn);
+    const seen = /* @__PURE__ */ new WeakSet();
+    const consider = (el2) => {
+      if (seen.has(el2)) return;
+      if (pred(el2)) {
+        seen.add(el2);
+        cb(el2);
+      }
+    };
+    if (callForExisting && "querySelectorAll" in root) {
+      root.querySelectorAll("*").forEach(consider);
+    }
+    const obs = new MutationObserver((muts) => {
+      for (const m of muts) for (const n of Array.from(m.addedNodes)) {
+        if (n.nodeType !== 1) continue;
+        const el2 = n;
+        consider(el2);
+        el2.querySelectorAll?.("*").forEach(consider);
+      }
+    });
+    obs.observe(root, { childList: true, subtree: true });
+    return { disconnect: () => obs.disconnect() };
+  }
+
+  // src/utils/petPanelEnhancer.ts
+  var PANEL_SELECTOR = ".css-1rszi55";
+  var FEED_BUTTON_CLASS = "tm-feed-from-inventory-btn";
+  var FEED_ROW_CLASS = "tm-feed-from-inventory-row";
+  var started = false;
+  function startPetPanelEnhancer() {
+    if (started) return;
+    started = true;
+    if (typeof document === "undefined") {
+      return;
+    }
+    onAdded(PANEL_SELECTOR, (node) => {
+      if (!(node instanceof HTMLElement)) return;
+      enhancePanel(node);
+    });
+  }
+  function enhancePanel(root) {
+    try {
+      ensureFeedButton(root);
+    } catch (err) {
+      console.warn("[PetPanel] Failed to inject feed button", err);
+    }
+  }
+  function ensureFeedButton(root) {
+    if (root.querySelector(`.${FEED_BUTTON_CLASS}`)) return;
+    const templateBtn = root.querySelector("button.chakra-button");
+    const btn = createStyledButton(templateBtn, "INSTANT FEED");
+    btn.classList.add(FEED_BUTTON_CLASS);
+    btn.setAttribute("aria-label", "Feed pet from inventory");
+    btn.title = "Feed pet from inventory";
+    btn.style.width = "100%";
+    btn.style.minWidth = "100%";
+    btn.style.alignContent = "center";
+    btn.style.alignItems = "center";
+    btn.style.padding = "6px 14px";
+    btn.style.fontSize = "13px";
+    btn.style.border = "2px solid #FFC83D";
+    btn.style.color = "rgb(205 200 193)";
+    btn.style.borderRadius = "10px";
+    btn.style.height = "40px";
+    btn.addEventListener("click", () => {
+      void handleFeedClick(btn);
+    });
+    const row = document.createElement("div");
+    row.classList.add("McFlex", FEED_ROW_CLASS);
+    row.style.marginTop = "8px";
+    row.style.justifyContent = "center";
+    row.style.width = "100%";
+    row.style.flexDirection = "column";
+    row.style.alignItems = "stretch";
+    row.style.gap = "8px";
+    row.appendChild(btn);
+    const feedFromInventoryBtn = createStyledButton(
+      templateBtn,
+      "FEED FROM INVENTORY"
+    );
+    feedFromInventoryBtn.style.width = "100%";
+    feedFromInventoryBtn.style.minWidth = "100%";
+    feedFromInventoryBtn.style.alignContent = "center";
+    feedFromInventoryBtn.style.alignItems = "center";
+    feedFromInventoryBtn.style.marginTop = "8px";
+    feedFromInventoryBtn.style.padding = "6px 14px";
+    feedFromInventoryBtn.style.fontSize = "13px";
+    feedFromInventoryBtn.style.border = "2px solid #BA5E1E";
+    feedFromInventoryBtn.style.color = "rgb(205 200 193)";
+    feedFromInventoryBtn.style.borderRadius = "10px";
+    feedFromInventoryBtn.style.height = "40px";
+    row.appendChild(feedFromInventoryBtn);
+    feedFromInventoryBtn.addEventListener("click", () => {
+      void handleInventoryPreviewClick(feedFromInventoryBtn);
+    });
+    const actions = root.querySelector(".McFlex.css-cabebk");
+    const abilities = root.querySelector(".McFlex.css-1hd05pq");
+    if (actions && abilities && abilities.parentElement === actions.parentElement) {
+      abilities.parentElement.insertBefore(row, abilities);
+    } else if (actions?.parentElement) {
+      actions.parentElement.insertBefore(row, actions.nextSibling);
+    } else {
+      root.appendChild(row);
+    }
+  }
+  function createStyledButton(template, label2) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    if (template?.className) {
+      btn.className = template.className;
+    } else {
+      btn.className = "chakra-button";
+    }
+    const wrapper = document.createElement("div");
+    wrapper.className = template?.firstElementChild instanceof HTMLElement ? template.firstElementChild.className : "McFlex";
+    const textEl = document.createElement("p");
+    const templateText = template?.querySelector(".chakra-text");
+    textEl.className = templateText instanceof HTMLElement ? templateText.className : "chakra-text";
+    textEl.textContent = label2;
+    wrapper.appendChild(textEl);
+    btn.appendChild(wrapper);
+    return btn;
+  }
+  async function handleFeedClick(btn) {
+    const prevDisabled = btn.disabled;
+    btn.disabled = true;
+    try {
+      const petId = await getExpandedPetId();
+      if (!petId) {
+        await toastSimple("Feed from inventory", "No expanded pet detected.", "error");
+        return;
+      }
+      const pet = await findPetById2(petId);
+      if (!pet) {
+        await toastSimple("Feed from inventory", "Unable to resolve expanded pet.", "error");
+        return;
+      }
+      const species = String(pet?.slot?.petSpecies || "");
+      const compatibleList = PetsService.getCompatibleCropsForSpecies(species) ?? [];
+      const compatible = new Set(compatibleList.map((item) => String(item || "")));
+      if (!compatible.size) {
+        await toastSimple("Feed from inventory", "No compatible crops for this pet.", "info");
+        return;
+      }
+      const inventory = await PlayerService.getCropInventoryState();
+      const items = Array.isArray(inventory) ? inventory : [];
+      const favoriteSet = await PlayerService.getFavoriteIdSet().catch(() => /* @__PURE__ */ new Set());
+      const chosen = items.find((item) => {
+        const speciesId = String(item?.species || "");
+        if (!speciesId || !compatible.has(speciesId)) return false;
+        const id = String(item?.id || "");
+        return id && !favoriteSet.has(id);
+      });
+      const chosenId = String(chosen?.id || "");
+      if (!chosenId) {
+        await toastSimple(
+          "Feed from inventory",
+          "No compatible crops in inventory (excluding favorites).",
+          "info"
+        );
+        return;
+      }
+      const previousHungerPct = getHungerPctForPet(pet);
+      await PlayerService.feedPet(petId, chosenId);
+      const hungerPct = await waitForHungerIncrease(petId, previousHungerPct, {
+        initialDelay: 150
+      });
+      const hungerSuffix = hungerPct != null ? ` Hunger: ${formatHungerPct(hungerPct)}%.` : "";
+      const cropName = String(chosen?.species || "crop");
+      const petLabel = pet?.slot?.name || species || petId;
+      await toastSimple(
+        "Feed from inventory",
+        `Fed ${petLabel} with ${cropName}.${hungerSuffix}`,
+        "success"
+      );
+    } catch (err) {
+      console.error("[Pet panel] Failed to feed pet from inventory", err);
+      await toastSimple(
+        "Feed from inventory",
+        err instanceof Error ? err.message : "Failed to feed pet.",
+        "error"
+      );
+    } finally {
+      btn.disabled = prevDisabled;
+    }
+  }
+  async function handleInventoryPreviewClick(btn) {
+    const prevDisabled = btn.disabled;
+    let shouldCloseInventory = false;
+    btn.disabled = true;
+    try {
+      const petId = await getExpandedPetId();
+      if (!petId) {
+        await toastSimple("Feed from inventory", "No expanded pet detected.", "error");
+        return;
+      }
+      const pet = await findPetById2(petId);
+      if (!pet) {
+        await toastSimple("Feed from inventory", "Unable to resolve expanded pet.", "error");
+        return;
+      }
+      const species = String(pet?.slot?.petSpecies || "");
+      let lastKnownHungerPct = getHungerPctForPet(pet);
+      const allowed = await getAllowedCrops(petId, species);
+      if (!allowed.size) {
+        await toastSimple("Feed from inventory", "No compatible crops for this pet.", "info");
+        return;
+      }
+      const inventory = await PlayerService.getCropInventoryState();
+      const items = Array.isArray(inventory) ? inventory : [];
+      const favoriteSet = await PlayerService.getFavoriteIdSet().catch(() => /* @__PURE__ */ new Set());
+      const filtered = items.filter((item) => {
+        const speciesId = String(item?.species || "");
+        if (!speciesId || !allowed.has(speciesId)) return false;
+        const id = String(item?.id || "");
+        return id && !favoriteSet.has(id);
+      });
+      if (!filtered.length) {
+        await toastSimple("Feed from inventory", "No compatible crops in inventory.", "info");
+        return;
+      }
+      const computeFavoritedIds = (items2) => {
+        const allowedIds = /* @__PURE__ */ new Set();
+        for (const item of items2) {
+          const id = String(item?.id || "");
+          if (id) allowedIds.add(id);
+        }
+        return Array.from(favoriteSet).filter((id) => allowedIds.has(id));
+      };
+      await clearHandSelection().catch(() => {
+      });
+      let visibleItems = filtered.slice();
+      let favoritedItemIds = computeFavoritedIds(visibleItems);
+      await fakeInventoryShow({ items: visibleItems, favoritedItemIds }, { open: true });
+      const label2 = pet?.slot?.name || species || petId;
+      await toastSimple(
+        "Feed from inventory",
+        `Showing ${visibleItems.length} compatible crop(s) for ${label2}. Select a crop to feed it immediately.`,
+        "info"
+      );
+      while (true) {
+        const selectedIndex = await waitForFakeInventorySelection(2e4);
+        if (selectedIndex == null) {
+          await toastSimple("Feed from inventory", "No crop selected.", "info");
+          break;
+        }
+        if (selectedIndex < 0 || selectedIndex >= visibleItems.length) {
+          await toastSimple("Feed from inventory", "Invalid crop selection.", "error");
+          await clearHandSelection().catch(() => {
+          });
+          continue;
+        }
+        const chosen = visibleItems[selectedIndex];
+        const chosenId = String(chosen?.id || "");
+        if (!chosenId) {
+          await toastSimple("Feed from inventory", "Invalid crop selection.", "error");
+          await clearHandSelection().catch(() => {
+          });
+          continue;
+        }
+        const hungerPctBeforeFeed = lastKnownHungerPct;
+        await PlayerService.feedPet(petId, chosenId);
+        const hungerPct = await waitForHungerIncrease(petId, hungerPctBeforeFeed, {
+          initialDelay: 200
+        });
+        if (hungerPct != null) {
+          lastKnownHungerPct = hungerPct;
+        }
+        const hungerSuffix = hungerPct != null ? ` Hunger: ${formatHungerPct(hungerPct)}%.` : "";
+        const cropName = String(chosen?.species || "crop");
+        const petLabel = pet?.slot?.name || species || petId;
+        await toastSimple(
+          "Feed from inventory",
+          `Fed ${petLabel} with ${cropName}.${hungerSuffix}`,
+          "success"
+        );
+        const hungerFull = hungerPct != null && hungerPct >= 99.9;
+        if (hungerFull) {
+          shouldCloseInventory = true;
+          try {
+            await closeInventoryPanel();
+          } catch {
+          }
+          break;
+        }
+        let invItems = null;
+        try {
+          const nextInventory = await PlayerService.getCropInventoryState();
+          invItems = Array.isArray(nextInventory) ? nextInventory : null;
+        } catch {
+          invItems = null;
+        }
+        let nextVisible = invItems?.filter((item) => {
+          const speciesId = String(item?.species || "");
+          if (!speciesId || !allowed.has(speciesId)) return false;
+          const id = String(item?.id || "");
+          return id && !favoriteSet.has(id);
+        }) ?? null;
+        const removeChosenLocally = () => visibleItems.filter((item) => String(item?.id || "") !== chosenId);
+        if (!nextVisible) {
+          nextVisible = removeChosenLocally();
+        } else {
+          const stillContainsChosen = nextVisible.some(
+            (item) => String(item?.id || "") === chosenId
+          );
+          if (stillContainsChosen) {
+            nextVisible = removeChosenLocally();
+          }
+        }
+        visibleItems = nextVisible;
+        if (!visibleItems.length) {
+          await toastSimple("Feed from inventory", "No compatible crops in inventory.", "info");
+          shouldCloseInventory = true;
+          try {
+            await closeInventoryPanel();
+          } catch {
+          }
+          break;
+        }
+        favoritedItemIds = computeFavoritedIds(visibleItems);
+        await fakeInventoryShow({ items: visibleItems, favoritedItemIds }, { open: false });
+        await clearHandSelection().catch(() => {
+        });
+      }
+    } catch (err) {
+      console.error("[Pet panel] Failed to handle inventory feed", err);
+      await toastSimple(
+        "Feed from inventory",
+        err instanceof Error ? err.message : "Failed to feed pet from inventory.",
+        "error"
+      );
+    } finally {
+      try {
+        await clearHandSelection();
+      } catch {
+      }
+      if (shouldCloseInventory) {
+        try {
+          await closeInventoryPanel();
+        } catch {
+        }
+      }
+      btn.disabled = prevDisabled;
+    }
+  }
+  async function getExpandedPetId() {
+    try {
+      const raw = await Atoms.pets.expandedPetSlotId.get();
+      const id = typeof raw === "string" ? raw.trim() : "";
+      return id.length ? id : null;
+    } catch {
+      return null;
+    }
+  }
+  async function findPetById2(petId) {
+    try {
+      const list = await PetsService.getPets();
+      const arr = Array.isArray(list) ? list : [];
+      return arr.find((p) => String(p?.slot?.id || "") === petId) ?? null;
+    } catch (err) {
+      console.warn("[Pet panel] Failed to fetch pets", err);
+      return null;
+    }
+  }
+  async function getAllowedCrops(petId, species) {
+    const defaults = PetsService.getCompatibleCropsForSpecies(species) ?? [];
+    return new Set(defaults);
+  }
+  function formatHungerPct(pct) {
+    if (!Number.isFinite(pct)) return "";
+    const clamped = Math.max(0, Math.min(100, pct));
+    const rounded = Math.round(clamped * 10) / 10;
+    return Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(1);
+  }
+  var HUNGER_EPSILON = 0.05;
+  var HUNGER_TIMEOUT_MS = 4e3;
+  var HUNGER_POLL_INTERVAL_MS = 120;
+  function isPetInfo(value) {
+    if (!value || typeof value !== "object") return false;
+    const slot = value.slot;
+    return !!slot && typeof slot === "object";
+  }
+  function getHungerPctForPet(pet) {
+    if (!isPetInfo(pet)) return null;
+    try {
+      const hungerPct = PetsService.getHungerPctFor(pet);
+      return typeof hungerPct === "number" && Number.isFinite(hungerPct) ? hungerPct : null;
+    } catch {
+      return null;
+    }
+  }
+  async function getPetHungerPct(petId) {
+    try {
+      const updatedPet = await findPetById2(petId);
+      return getHungerPctForPet(updatedPet);
+    } catch {
+      return null;
+    }
+  }
+  async function waitForHungerIncrease(petId, previousPct, options = {}) {
+    const { initialDelay = 0, timeout = HUNGER_TIMEOUT_MS, interval = HUNGER_POLL_INTERVAL_MS } = options;
+    if (initialDelay > 0) {
+      await delay3(initialDelay);
+    }
+    const start2 = typeof performance !== "undefined" && typeof performance.now === "function" ? performance.now() : Date.now();
+    let lastResult = null;
+    while (true) {
+      const pct = await getPetHungerPct(petId);
+      if (pct != null) {
+        lastResult = pct;
+        if (previousPct == null || pct >= Math.min(100, previousPct + HUNGER_EPSILON) || pct >= 99.9) {
+          return pct;
+        }
+      }
+      const now2 = typeof performance !== "undefined" && typeof performance.now === "function" ? performance.now() : Date.now();
+      if (now2 - start2 >= timeout) {
+        return lastResult;
+      }
+      if (interval > 0) {
+        await delay3(interval);
+      }
+    }
+  }
+  function delay3(ms) {
+    return new Promise((resolve2) => setTimeout(resolve2, ms));
+  }
+  async function waitForFakeInventorySelection(timeoutMs = 2e4) {
+    const start2 = performance.now();
+    while (performance.now() - start2 < timeoutMs) {
+      try {
+        const modalVal = await Atoms.ui.activeModal.get();
+        if (!isInventoryOpen(modalVal)) return null;
+      } catch {
+        return null;
+      }
+      try {
+        const value = await Atoms.inventory.myPossiblyNoLongerValidSelectedItemIndex.get();
+        if (typeof value === "number" && Number.isInteger(value) && value >= 0) {
+          return value;
+        }
+      } catch {
+      }
+      await new Promise((resolve2) => setTimeout(resolve2, 80));
+    }
+    return null;
   }
 
   // src/utils/calculators.ts
@@ -22684,6 +19922,453 @@
     }
   }
 
+  // src/utils/sellCropsLock.ts
+  var CONTAINER_SELECTOR = ".css-vmnhaw";
+  var LOCK_ICON_CLASS2 = "tm-sell-crops-lock";
+  var DATA_BORDER = "tmSellLockBorder";
+  var DATA_RADIUS = "tmSellLockRadius";
+  var DATA_POSITION = "tmSellLockPosition";
+  var DATA_PADDING = "tmSellLockPadding";
+  var DATA_BOX = "tmSellLockBox";
+  var DATA_SHADOW = "tmSellLockShadow";
+  var DATA_OVERFLOW = "tmSellLockOverflow";
+  function startSellCropsLockWatcher() {
+    if (typeof window === "undefined" || typeof document === "undefined") {
+      return { stop() {
+      } };
+    }
+    let bonusFromMultiplier = null;
+    let bonusFromPlayers = friendBonusPercentFromPlayers(1);
+    let running = true;
+    const disposables = [];
+    const resolveCurrentBonus = () => bonusFromMultiplier ?? bonusFromPlayers ?? 0;
+    const applyLockState = (locked) => {
+      const containers = Array.from(
+        document.querySelectorAll(CONTAINER_SELECTOR)
+      );
+      containers.forEach((wrap) => setContainerLocked(wrap, locked));
+    };
+    const recompute = () => {
+      if (!running) return;
+      const requiredPct = lockerRestrictionsService.getRequiredPercent();
+      const current = resolveCurrentBonus();
+      const locked = requiredPct > 0 && !(Number.isFinite(current) && current + 1e-4 >= requiredPct);
+      applyLockState(locked);
+    };
+    const observeDom = () => {
+      const mo = new MutationObserver(() => recompute());
+      mo.observe(document.documentElement, { childList: true, subtree: true });
+      disposables.push(() => mo.disconnect());
+    };
+    const subscribeAtoms = async () => {
+      try {
+        const initial = await Atoms.server.friendBonusMultiplier.get();
+        bonusFromMultiplier = friendBonusPercentFromMultiplier(initial);
+      } catch {
+      }
+      try {
+        const unsub = await Atoms.server.friendBonusMultiplier.onChange((next) => {
+          bonusFromMultiplier = friendBonusPercentFromMultiplier(next);
+          recompute();
+        });
+        if (typeof unsub === "function") disposables.push(unsub);
+      } catch {
+      }
+      try {
+        const initialPlayers = await Atoms.server.numPlayers.get();
+        bonusFromPlayers = friendBonusPercentFromPlayers(initialPlayers);
+      } catch {
+      }
+      try {
+        const unsubPlayers = await Atoms.server.numPlayers.onChange((next) => {
+          bonusFromPlayers = friendBonusPercentFromPlayers(next);
+          recompute();
+        });
+        if (typeof unsubPlayers === "function") disposables.push(unsubPlayers);
+      } catch {
+      }
+    };
+    observeDom();
+    disposables.push(lockerRestrictionsService.subscribe(() => recompute()));
+    void subscribeAtoms();
+    recompute();
+    return {
+      stop() {
+        running = false;
+        disposables.splice(0).forEach((fn) => {
+          try {
+            fn();
+          } catch {
+          }
+        });
+        applyLockState(false);
+      }
+    };
+  }
+  function setContainerLocked(container, locked) {
+    if (!container) return;
+    const sellButton = findSellButton(container);
+    if (!sellButton) {
+      restoreContainerStyles(container);
+      removeLockIcon2(container);
+      return;
+    }
+    if (!locked) {
+      restoreContainerStyles(container);
+      removeLockIcon2(container);
+      return;
+    }
+    storeOriginalStyle(container, DATA_BORDER, "border");
+    storeOriginalStyle(container, DATA_RADIUS, "borderRadius");
+    storeOriginalStyle(container, DATA_POSITION, "position");
+    storeOriginalStyle(container, DATA_PADDING, "padding");
+    storeOriginalStyle(container, DATA_BOX, "boxSizing");
+    storeOriginalStyle(container, DATA_SHADOW, "boxShadow");
+    storeOriginalStyle(container, DATA_OVERFLOW, "overflow");
+    container.style.border = "none";
+    container.style.borderRadius = "";
+    container.style.padding = "";
+    container.style.boxSizing = "";
+    container.style.boxShadow = "none";
+    container.style.overflow = "";
+    const computedPos = window.getComputedStyle(container).position;
+    if (computedPos === "static") {
+      container.style.position = "relative";
+    }
+    container.style.zIndex = "1000";
+    ensureLockIcon2(container);
+  }
+  function storeOriginalStyle(el2, key2, cssProperty) {
+    const data = el2.dataset;
+    if (data[key2] !== void 0) return;
+    data[key2] = el2.style[cssProperty];
+  }
+  function restoreContainerStyles(el2) {
+    restoreStyle(el2, DATA_BORDER, "border");
+    restoreStyle(el2, DATA_RADIUS, "borderRadius");
+    restoreStyle(el2, DATA_POSITION, "position");
+    restoreStyle(el2, DATA_PADDING, "padding");
+    restoreStyle(el2, DATA_BOX, "boxSizing");
+    restoreStyle(el2, DATA_SHADOW, "boxShadow");
+    restoreStyle(el2, DATA_OVERFLOW, "overflow");
+  }
+  function restoreStyle(el2, key2, cssProperty) {
+    const data = el2.dataset;
+    if (data[key2] === void 0) return;
+    const value = data[key2];
+    if (value) {
+      el2.style.setProperty(camelToKebab(cssProperty), value);
+    } else {
+      el2.style.removeProperty(camelToKebab(cssProperty));
+    }
+    delete data[key2];
+  }
+  function camelToKebab(str) {
+    return str.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`);
+  }
+  function ensureLockIcon2(btn) {
+    const existing = btn.querySelector(`span.${LOCK_ICON_CLASS2}`);
+    if (existing) return;
+    const icon = document.createElement("span");
+    icon.className = LOCK_ICON_CLASS2;
+    icon.textContent = "\u{1F512}";
+    icon.style.position = "absolute";
+    icon.style.top = "-4px";
+    icon.style.right = "-4px";
+    icon.style.fontSize = "16px";
+    icon.style.pointerEvents = "none";
+    icon.style.userSelect = "none";
+    icon.style.zIndex = "2";
+    btn.appendChild(icon);
+  }
+  function removeLockIcon2(btn) {
+    btn.querySelectorAll(`span.${LOCK_ICON_CLASS2}`).forEach((node) => node.remove());
+  }
+  function findSellButton(container) {
+    const btn = container.querySelector("button");
+    if (!btn) return null;
+    const text = (btn.textContent || "").trim();
+    return /sell\s*crops/i.test(text) ? btn : null;
+  }
+
+  // src/utils/eggHatchLockIndicator.ts
+  var CONTAINER_SELECTOR2 = ".css-502lyi";
+  var LOCK_CLASS = "tm-egg-lock";
+  var BORDER_COLOR = "rgb(188, 53, 215)";
+  var DATA_BORDER2 = "tmEggLockBorder";
+  var DATA_RADIUS2 = "tmEggLockRadius";
+  var DATA_POSITION2 = "tmEggLockPosition";
+  var DATA_OVERFLOW2 = "tmEggLockOverflow";
+  function startEggHatchLockIndicator() {
+    if (typeof window === "undefined" || typeof document === "undefined") {
+      return { stop() {
+      } };
+    }
+    let running = true;
+    let currentEggId = null;
+    const disposables = [];
+    const isEggLocked = () => lockerRestrictionsService.isEggLocked(currentEggId);
+    const applyLockState = () => {
+      if (!running) return;
+      const locked = isEggLocked();
+      const containers = Array.from(document.querySelectorAll(CONTAINER_SELECTOR2));
+      containers.forEach((el2) => {
+        if (!containsEggLabel(el2)) {
+          restore(el2);
+          return;
+        }
+        setLocked(el2, locked);
+      });
+    };
+    const observeDom = () => {
+      const mo = new MutationObserver(() => applyLockState());
+      mo.observe(document.documentElement, { childList: true, subtree: true });
+      disposables.push(() => mo.disconnect());
+    };
+    const subscribeAtoms = async () => {
+      try {
+        const initial = await Atoms.data.myCurrentGardenObject.get();
+        currentEggId = extractEggId2(initial);
+      } catch {
+      }
+      try {
+        const unsub = await Atoms.data.myCurrentGardenObject.onChange((next) => {
+          currentEggId = extractEggId2(next);
+          applyLockState();
+        });
+        if (typeof unsub === "function") disposables.push(unsub);
+      } catch {
+      }
+      const unsubLocker = lockerRestrictionsService.subscribe(() => applyLockState());
+      disposables.push(unsubLocker);
+    };
+    observeDom();
+    void subscribeAtoms();
+    applyLockState();
+    return {
+      stop() {
+        running = false;
+        disposables.splice(0).forEach((fn) => {
+          try {
+            fn();
+          } catch {
+          }
+        });
+        const containers = Array.from(document.querySelectorAll(CONTAINER_SELECTOR2));
+        containers.forEach(restore);
+      }
+    };
+  }
+  function containsEggLabel(el2) {
+    const text = (el2.textContent || "").toLowerCase();
+    return text.includes("egg");
+  }
+  function setLocked(el2, locked) {
+    if (!locked) {
+      restore(el2);
+      return;
+    }
+    storeStyle(el2, DATA_BORDER2, "border");
+    storeStyle(el2, DATA_RADIUS2, "borderRadius");
+    storeStyle(el2, DATA_POSITION2, "position");
+    storeStyle(el2, DATA_OVERFLOW2, "overflow");
+    el2.style.border = `3px solid ${BORDER_COLOR}`;
+    el2.style.borderRadius = "16px";
+    el2.style.overflow = "visible";
+    const pos = window.getComputedStyle(el2).position;
+    if (pos === "static") {
+      el2.style.position = "relative";
+    }
+    ensureLockIcon3(el2);
+  }
+  function restore(el2) {
+    restoreStyle2(el2, DATA_BORDER2, "border");
+    restoreStyle2(el2, DATA_RADIUS2, "borderRadius");
+    restoreStyle2(el2, DATA_POSITION2, "position");
+    restoreStyle2(el2, DATA_OVERFLOW2, "overflow");
+    removeLockIcon3(el2);
+  }
+  function storeStyle(el2, key2, cssProperty) {
+    const data = el2.dataset;
+    if (data[key2] !== void 0) return;
+    data[key2] = el2.style[cssProperty];
+  }
+  function restoreStyle2(el2, key2, cssProperty) {
+    const data = el2.dataset;
+    if (data[key2] === void 0) return;
+    const value = data[key2];
+    if (value) {
+      el2.style.setProperty(camelToKebab2(cssProperty), value);
+    } else {
+      el2.style.removeProperty(camelToKebab2(cssProperty));
+    }
+    delete data[key2];
+  }
+  function camelToKebab2(str) {
+    return str.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`);
+  }
+  function ensureLockIcon3(el2) {
+    const existing = el2.querySelector(`span.${LOCK_CLASS}`);
+    if (existing) return;
+    const icon = document.createElement("span");
+    icon.className = LOCK_CLASS;
+    icon.textContent = "\u{1F512}";
+    icon.style.position = "absolute";
+    icon.style.top = "-8px";
+    icon.style.right = "-8px";
+    icon.style.fontSize = "16px";
+    icon.style.pointerEvents = "none";
+    icon.style.userSelect = "none";
+    icon.style.zIndex = "2";
+    el2.appendChild(icon);
+  }
+  function removeLockIcon3(el2) {
+    el2.querySelectorAll(`span.${LOCK_CLASS}`).forEach((node) => node.remove());
+  }
+  function extractEggId2(obj) {
+    if (!obj || typeof obj !== "object") return null;
+    if (obj.objectType !== "egg") return null;
+    const eggId = obj.eggId;
+    return typeof eggId === "string" && eggId ? eggId : null;
+  }
+
+  // src/utils/decorPickupLockIndicator.ts
+  var CONTAINER_SELECTOR3 = ".css-502lyi";
+  var LOCK_CLASS2 = "tm-decor-lock";
+  var BORDER_COLOR2 = "rgb(188, 53, 215)";
+  var DATA_BORDER3 = "tmDecorLockBorder";
+  var DATA_RADIUS3 = "tmDecorLockRadius";
+  var DATA_POSITION3 = "tmDecorLockPosition";
+  var DATA_OVERFLOW3 = "tmDecorLockOverflow";
+  var DECOR_LABELS = (() => {
+    const labels = /* @__PURE__ */ new Set();
+    try {
+      Object.entries(decorCatalog).forEach(([decorId, entry]) => {
+        if (decorId) labels.add(decorId.toLowerCase());
+        const name = entry?.name;
+        if (typeof name === "string" && name) {
+          labels.add(name.toLowerCase());
+        }
+      });
+    } catch {
+    }
+    return Array.from(labels).filter(Boolean);
+  })();
+  function startDecorPickupLockIndicator() {
+    if (typeof window === "undefined" || typeof document === "undefined") {
+      return { stop() {
+      } };
+    }
+    let running = true;
+    const disposables = [];
+    const isLocked = () => lockerRestrictionsService.isDecorPickupLocked();
+    const applyLockState = () => {
+      if (!running) return;
+      const locked = isLocked();
+      const containers = Array.from(document.querySelectorAll(CONTAINER_SELECTOR3));
+      containers.forEach((el2) => {
+        if (!looksLikeDecorItem(el2)) {
+          restore2(el2);
+          return;
+        }
+        setLocked2(el2, locked);
+      });
+    };
+    const observeDom = () => {
+      const mo = new MutationObserver(() => applyLockState());
+      mo.observe(document.documentElement, { childList: true, subtree: true });
+      disposables.push(() => mo.disconnect());
+    };
+    const subscribeLocker2 = () => {
+      const unsub = lockerRestrictionsService.subscribe(() => applyLockState());
+      disposables.push(unsub);
+    };
+    observeDom();
+    subscribeLocker2();
+    applyLockState();
+    return {
+      stop() {
+        running = false;
+        disposables.splice(0).forEach((fn) => {
+          try {
+            fn();
+          } catch {
+          }
+        });
+        const containers = Array.from(document.querySelectorAll(CONTAINER_SELECTOR3));
+        containers.forEach(restore2);
+      }
+    };
+  }
+  function looksLikeDecorItem(el2) {
+    const text = (el2.textContent || "").toLowerCase();
+    if (!text) return false;
+    if (!el2.querySelector("canvas")) return false;
+    return DECOR_LABELS.some((label2) => label2 && text.includes(label2));
+  }
+  function setLocked2(el2, locked) {
+    if (!locked) {
+      restore2(el2);
+      return;
+    }
+    storeStyle2(el2, DATA_BORDER3, "border");
+    storeStyle2(el2, DATA_RADIUS3, "borderRadius");
+    storeStyle2(el2, DATA_POSITION3, "position");
+    storeStyle2(el2, DATA_OVERFLOW3, "overflow");
+    el2.style.border = `3px solid ${BORDER_COLOR2}`;
+    el2.style.borderRadius = "16px";
+    el2.style.overflow = "visible";
+    const pos = window.getComputedStyle(el2).position;
+    if (pos === "static") {
+      el2.style.position = "relative";
+    }
+    ensureLockIcon4(el2);
+  }
+  function restore2(el2) {
+    restoreStyle3(el2, DATA_BORDER3, "border");
+    restoreStyle3(el2, DATA_RADIUS3, "borderRadius");
+    restoreStyle3(el2, DATA_POSITION3, "position");
+    restoreStyle3(el2, DATA_OVERFLOW3, "overflow");
+    removeLockIcon4(el2);
+  }
+  function storeStyle2(el2, key2, cssProperty) {
+    const data = el2.dataset;
+    if (data[key2] !== void 0) return;
+    data[key2] = el2.style[cssProperty];
+  }
+  function restoreStyle3(el2, key2, cssProperty) {
+    const data = el2.dataset;
+    if (data[key2] === void 0) return;
+    const value = data[key2];
+    if (value) {
+      el2.style.setProperty(camelToKebab3(cssProperty), value);
+    } else {
+      el2.style.removeProperty(camelToKebab3(cssProperty));
+    }
+    delete data[key2];
+  }
+  function camelToKebab3(str) {
+    return str.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`);
+  }
+  function ensureLockIcon4(el2) {
+    const existing = el2.querySelector(`span.${LOCK_CLASS2}`);
+    if (existing) return;
+    const icon = document.createElement("span");
+    icon.className = LOCK_CLASS2;
+    icon.textContent = "\u{1F512}";
+    icon.style.position = "absolute";
+    icon.style.top = "-8px";
+    icon.style.right = "-8px";
+    icon.style.fontSize = "16px";
+    icon.style.pointerEvents = "none";
+    icon.style.userSelect = "none";
+    icon.style.zIndex = "2";
+    el2.appendChild(icon);
+  }
+  function removeLockIcon4(el2) {
+    el2.querySelectorAll(`span.${LOCK_CLASS2}`).forEach((node) => node.remove());
+  }
+
   // src/utils/version.ts
   var REPO_OWNER = "Ariedam64";
   var REPO_NAME = "MagicGarden-modMenu";
@@ -22792,470 +20477,6 @@
       return GM_info.script.version;
     }
     return void 0;
-  }
-
-  // src/core/dom.ts
-  var ready = new Promise((res) => {
-    if (document.readyState !== "loading") res();
-    else addEventListener("DOMContentLoaded", () => res(), { once: true });
-  });
-  function addStyle(css) {
-    const s = document.createElement("style");
-    s.textContent = css;
-    document.head.appendChild(s);
-    return s;
-  }
-  function toPredicate(selOrFn) {
-    if (typeof selOrFn === "function") return selOrFn;
-    if (typeof selOrFn === "string") return (el2) => el2.matches?.(selOrFn) ?? false;
-    throw new Error("Selector or predicate required");
-  }
-  function onAdded(selOrFn, cb, { root = document, callForExisting = true } = {}) {
-    const pred = toPredicate(selOrFn);
-    const seen = /* @__PURE__ */ new WeakSet();
-    const consider = (el2) => {
-      if (seen.has(el2)) return;
-      if (pred(el2)) {
-        seen.add(el2);
-        cb(el2);
-      }
-    };
-    if (callForExisting && "querySelectorAll" in root) {
-      root.querySelectorAll("*").forEach(consider);
-    }
-    const obs = new MutationObserver((muts) => {
-      for (const m of muts) for (const n of Array.from(m.addedNodes)) {
-        if (n.nodeType !== 1) continue;
-        const el2 = n;
-        consider(el2);
-        el2.querySelectorAll?.("*").forEach(consider);
-      }
-    });
-    obs.observe(root, { childList: true, subtree: true });
-    return { disconnect: () => obs.disconnect() };
-  }
-
-  // src/utils/petPanelEnhancer.ts
-  var PANEL_SELECTOR = ".css-1rszi55";
-  var FEED_BUTTON_CLASS = "tm-feed-from-inventory-btn";
-  var FEED_ROW_CLASS = "tm-feed-from-inventory-row";
-  var started = false;
-  function startPetPanelEnhancer() {
-    if (started) return;
-    started = true;
-    if (typeof document === "undefined") {
-      return;
-    }
-    onAdded(PANEL_SELECTOR, (node) => {
-      if (!(node instanceof HTMLElement)) return;
-      enhancePanel(node);
-    });
-  }
-  function enhancePanel(root) {
-    try {
-      ensureFeedButton(root);
-    } catch (err) {
-      console.warn("[PetPanel] Failed to inject feed button", err);
-    }
-  }
-  function ensureFeedButton(root) {
-    if (root.querySelector(`.${FEED_BUTTON_CLASS}`)) return;
-    const templateBtn = root.querySelector("button.chakra-button");
-    const btn = createStyledButton(templateBtn, "INSTANT FEED");
-    btn.classList.add(FEED_BUTTON_CLASS);
-    btn.setAttribute("aria-label", "Feed pet from inventory");
-    btn.title = "Feed pet from inventory";
-    btn.style.width = "100%";
-    btn.style.minWidth = "100%";
-    btn.style.alignContent = "center";
-    btn.style.alignItems = "center";
-    btn.style.padding = "6px 14px";
-    btn.style.fontSize = "13px";
-    btn.style.border = "2px solid #FFC83D";
-    btn.style.color = "rgb(205 200 193)";
-    btn.style.borderRadius = "10px";
-    btn.style.height = "40px";
-    btn.addEventListener("click", () => {
-      void handleFeedClick(btn);
-    });
-    const row = document.createElement("div");
-    row.classList.add("McFlex", FEED_ROW_CLASS);
-    row.style.marginTop = "8px";
-    row.style.justifyContent = "center";
-    row.style.width = "100%";
-    row.style.flexDirection = "column";
-    row.style.alignItems = "stretch";
-    row.style.gap = "8px";
-    row.appendChild(btn);
-    const feedFromInventoryBtn = createStyledButton(
-      templateBtn,
-      "FEED FROM INVENTORY"
-    );
-    feedFromInventoryBtn.style.width = "100%";
-    feedFromInventoryBtn.style.minWidth = "100%";
-    feedFromInventoryBtn.style.alignContent = "center";
-    feedFromInventoryBtn.style.alignItems = "center";
-    feedFromInventoryBtn.style.marginTop = "8px";
-    feedFromInventoryBtn.style.padding = "6px 14px";
-    feedFromInventoryBtn.style.fontSize = "13px";
-    feedFromInventoryBtn.style.border = "2px solid #BA5E1E";
-    feedFromInventoryBtn.style.color = "rgb(205 200 193)";
-    feedFromInventoryBtn.style.borderRadius = "10px";
-    feedFromInventoryBtn.style.height = "40px";
-    row.appendChild(feedFromInventoryBtn);
-    feedFromInventoryBtn.addEventListener("click", () => {
-      void handleInventoryPreviewClick(feedFromInventoryBtn);
-    });
-    const actions = root.querySelector(".McFlex.css-cabebk");
-    const abilities = root.querySelector(".McFlex.css-1hd05pq");
-    if (actions && abilities && abilities.parentElement === actions.parentElement) {
-      abilities.parentElement.insertBefore(row, abilities);
-    } else if (actions?.parentElement) {
-      actions.parentElement.insertBefore(row, actions.nextSibling);
-    } else {
-      root.appendChild(row);
-    }
-  }
-  function createStyledButton(template, label2) {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    if (template?.className) {
-      btn.className = template.className;
-    } else {
-      btn.className = "chakra-button";
-    }
-    const wrapper = document.createElement("div");
-    wrapper.className = template?.firstElementChild instanceof HTMLElement ? template.firstElementChild.className : "McFlex";
-    const textEl = document.createElement("p");
-    const templateText = template?.querySelector(".chakra-text");
-    textEl.className = templateText instanceof HTMLElement ? templateText.className : "chakra-text";
-    textEl.textContent = label2;
-    wrapper.appendChild(textEl);
-    btn.appendChild(wrapper);
-    return btn;
-  }
-  async function handleFeedClick(btn) {
-    const prevDisabled = btn.disabled;
-    btn.disabled = true;
-    try {
-      const petId = await getExpandedPetId();
-      if (!petId) {
-        await toastSimple("Feed from inventory", "No expanded pet detected.", "error");
-        return;
-      }
-      const pet = await findPetById2(petId);
-      if (!pet) {
-        await toastSimple("Feed from inventory", "Unable to resolve expanded pet.", "error");
-        return;
-      }
-      const species = String(pet?.slot?.petSpecies || "");
-      const compatibleList = PetsService.getCompatibleCropsForSpecies(species) ?? [];
-      const compatible = new Set(compatibleList.map((item) => String(item || "")));
-      if (!compatible.size) {
-        await toastSimple("Feed from inventory", "No compatible crops for this pet.", "info");
-        return;
-      }
-      const inventory = await PlayerService.getCropInventoryState();
-      const items = Array.isArray(inventory) ? inventory : [];
-      const favoriteSet = await PlayerService.getFavoriteIdSet().catch(() => /* @__PURE__ */ new Set());
-      const chosen = items.find((item) => {
-        const speciesId = String(item?.species || "");
-        if (!speciesId || !compatible.has(speciesId)) return false;
-        const id = String(item?.id || "");
-        return id && !favoriteSet.has(id);
-      });
-      const chosenId = String(chosen?.id || "");
-      if (!chosenId) {
-        await toastSimple(
-          "Feed from inventory",
-          "No compatible crops in inventory (excluding favorites).",
-          "info"
-        );
-        return;
-      }
-      const previousHungerPct = getHungerPctForPet(pet);
-      await PlayerService.feedPet(petId, chosenId);
-      const hungerPct = await waitForHungerIncrease(petId, previousHungerPct, {
-        initialDelay: 150
-      });
-      const hungerSuffix = hungerPct != null ? ` Hunger: ${formatHungerPct(hungerPct)}%.` : "";
-      const cropName = String(chosen?.species || "crop");
-      const petLabel = pet?.slot?.name || species || petId;
-      await toastSimple(
-        "Feed from inventory",
-        `Fed ${petLabel} with ${cropName}.${hungerSuffix}`,
-        "success"
-      );
-    } catch (err) {
-      console.error("[Pet panel] Failed to feed pet from inventory", err);
-      await toastSimple(
-        "Feed from inventory",
-        err instanceof Error ? err.message : "Failed to feed pet.",
-        "error"
-      );
-    } finally {
-      btn.disabled = prevDisabled;
-    }
-  }
-  async function handleInventoryPreviewClick(btn) {
-    const prevDisabled = btn.disabled;
-    let shouldCloseInventory = false;
-    btn.disabled = true;
-    try {
-      const petId = await getExpandedPetId();
-      if (!petId) {
-        await toastSimple("Feed from inventory", "No expanded pet detected.", "error");
-        return;
-      }
-      const pet = await findPetById2(petId);
-      if (!pet) {
-        await toastSimple("Feed from inventory", "Unable to resolve expanded pet.", "error");
-        return;
-      }
-      const species = String(pet?.slot?.petSpecies || "");
-      let lastKnownHungerPct = getHungerPctForPet(pet);
-      const allowed = await getAllowedCrops(petId, species);
-      if (!allowed.size) {
-        await toastSimple("Feed from inventory", "No compatible crops for this pet.", "info");
-        return;
-      }
-      const inventory = await PlayerService.getCropInventoryState();
-      const items = Array.isArray(inventory) ? inventory : [];
-      const favoriteSet = await PlayerService.getFavoriteIdSet().catch(() => /* @__PURE__ */ new Set());
-      const filtered = items.filter((item) => {
-        const speciesId = String(item?.species || "");
-        if (!speciesId || !allowed.has(speciesId)) return false;
-        const id = String(item?.id || "");
-        return id && !favoriteSet.has(id);
-      });
-      if (!filtered.length) {
-        await toastSimple("Feed from inventory", "No compatible crops in inventory.", "info");
-        return;
-      }
-      const computeFavoritedIds = (items2) => {
-        const allowedIds = /* @__PURE__ */ new Set();
-        for (const item of items2) {
-          const id = String(item?.id || "");
-          if (id) allowedIds.add(id);
-        }
-        return Array.from(favoriteSet).filter((id) => allowedIds.has(id));
-      };
-      await clearHandSelection().catch(() => {
-      });
-      let visibleItems = filtered.slice();
-      let favoritedItemIds = computeFavoritedIds(visibleItems);
-      await fakeInventoryShow({ items: visibleItems, favoritedItemIds }, { open: true });
-      const label2 = pet?.slot?.name || species || petId;
-      await toastSimple(
-        "Feed from inventory",
-        `Showing ${visibleItems.length} compatible crop(s) for ${label2}. Select a crop to feed it immediately.`,
-        "info"
-      );
-      while (true) {
-        const selectedIndex = await waitForFakeInventorySelection(2e4);
-        if (selectedIndex == null) {
-          await toastSimple("Feed from inventory", "No crop selected.", "info");
-          break;
-        }
-        if (selectedIndex < 0 || selectedIndex >= visibleItems.length) {
-          await toastSimple("Feed from inventory", "Invalid crop selection.", "error");
-          await clearHandSelection().catch(() => {
-          });
-          continue;
-        }
-        const chosen = visibleItems[selectedIndex];
-        const chosenId = String(chosen?.id || "");
-        if (!chosenId) {
-          await toastSimple("Feed from inventory", "Invalid crop selection.", "error");
-          await clearHandSelection().catch(() => {
-          });
-          continue;
-        }
-        const hungerPctBeforeFeed = lastKnownHungerPct;
-        await PlayerService.feedPet(petId, chosenId);
-        const hungerPct = await waitForHungerIncrease(petId, hungerPctBeforeFeed, {
-          initialDelay: 200
-        });
-        if (hungerPct != null) {
-          lastKnownHungerPct = hungerPct;
-        }
-        const hungerSuffix = hungerPct != null ? ` Hunger: ${formatHungerPct(hungerPct)}%.` : "";
-        const cropName = String(chosen?.species || "crop");
-        const petLabel = pet?.slot?.name || species || petId;
-        await toastSimple(
-          "Feed from inventory",
-          `Fed ${petLabel} with ${cropName}.${hungerSuffix}`,
-          "success"
-        );
-        const hungerFull = hungerPct != null && hungerPct >= 99.9;
-        if (hungerFull) {
-          shouldCloseInventory = true;
-          try {
-            await closeInventoryPanel();
-          } catch {
-          }
-          break;
-        }
-        let invItems = null;
-        try {
-          const nextInventory = await PlayerService.getCropInventoryState();
-          invItems = Array.isArray(nextInventory) ? nextInventory : null;
-        } catch {
-          invItems = null;
-        }
-        let nextVisible = invItems?.filter((item) => {
-          const speciesId = String(item?.species || "");
-          if (!speciesId || !allowed.has(speciesId)) return false;
-          const id = String(item?.id || "");
-          return id && !favoriteSet.has(id);
-        }) ?? null;
-        const removeChosenLocally = () => visibleItems.filter((item) => String(item?.id || "") !== chosenId);
-        if (!nextVisible) {
-          nextVisible = removeChosenLocally();
-        } else {
-          const stillContainsChosen = nextVisible.some(
-            (item) => String(item?.id || "") === chosenId
-          );
-          if (stillContainsChosen) {
-            nextVisible = removeChosenLocally();
-          }
-        }
-        visibleItems = nextVisible;
-        if (!visibleItems.length) {
-          await toastSimple("Feed from inventory", "No compatible crops in inventory.", "info");
-          shouldCloseInventory = true;
-          try {
-            await closeInventoryPanel();
-          } catch {
-          }
-          break;
-        }
-        favoritedItemIds = computeFavoritedIds(visibleItems);
-        await fakeInventoryShow({ items: visibleItems, favoritedItemIds }, { open: false });
-        await clearHandSelection().catch(() => {
-        });
-      }
-    } catch (err) {
-      console.error("[Pet panel] Failed to handle inventory feed", err);
-      await toastSimple(
-        "Feed from inventory",
-        err instanceof Error ? err.message : "Failed to feed pet from inventory.",
-        "error"
-      );
-    } finally {
-      try {
-        await clearHandSelection();
-      } catch {
-      }
-      if (shouldCloseInventory) {
-        try {
-          await closeInventoryPanel();
-        } catch {
-        }
-      }
-      btn.disabled = prevDisabled;
-    }
-  }
-  async function getExpandedPetId() {
-    try {
-      const raw = await Atoms.pets.expandedPetSlotId.get();
-      const id = typeof raw === "string" ? raw.trim() : "";
-      return id.length ? id : null;
-    } catch {
-      return null;
-    }
-  }
-  async function findPetById2(petId) {
-    try {
-      const list = await PetsService.getPets();
-      const arr = Array.isArray(list) ? list : [];
-      return arr.find((p) => String(p?.slot?.id || "") === petId) ?? null;
-    } catch (err) {
-      console.warn("[Pet panel] Failed to fetch pets", err);
-      return null;
-    }
-  }
-  async function getAllowedCrops(petId, species) {
-    const defaults = PetsService.getCompatibleCropsForSpecies(species) ?? [];
-    return new Set(defaults);
-  }
-  function formatHungerPct(pct) {
-    if (!Number.isFinite(pct)) return "";
-    const clamped = Math.max(0, Math.min(100, pct));
-    const rounded = Math.round(clamped * 10) / 10;
-    return Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(1);
-  }
-  var HUNGER_EPSILON = 0.05;
-  var HUNGER_TIMEOUT_MS = 4e3;
-  var HUNGER_POLL_INTERVAL_MS = 120;
-  function isPetInfo(value) {
-    if (!value || typeof value !== "object") return false;
-    const slot = value.slot;
-    return !!slot && typeof slot === "object";
-  }
-  function getHungerPctForPet(pet) {
-    if (!isPetInfo(pet)) return null;
-    try {
-      const hungerPct = PetsService.getHungerPctFor(pet);
-      return typeof hungerPct === "number" && Number.isFinite(hungerPct) ? hungerPct : null;
-    } catch {
-      return null;
-    }
-  }
-  async function getPetHungerPct(petId) {
-    try {
-      const updatedPet = await findPetById2(petId);
-      return getHungerPctForPet(updatedPet);
-    } catch {
-      return null;
-    }
-  }
-  async function waitForHungerIncrease(petId, previousPct, options = {}) {
-    const { initialDelay = 0, timeout = HUNGER_TIMEOUT_MS, interval = HUNGER_POLL_INTERVAL_MS } = options;
-    if (initialDelay > 0) {
-      await delay3(initialDelay);
-    }
-    const start = typeof performance !== "undefined" && typeof performance.now === "function" ? performance.now() : Date.now();
-    let lastResult = null;
-    while (true) {
-      const pct = await getPetHungerPct(petId);
-      if (pct != null) {
-        lastResult = pct;
-        if (previousPct == null || pct >= Math.min(100, previousPct + HUNGER_EPSILON) || pct >= 99.9) {
-          return pct;
-        }
-      }
-      const now2 = typeof performance !== "undefined" && typeof performance.now === "function" ? performance.now() : Date.now();
-      if (now2 - start >= timeout) {
-        return lastResult;
-      }
-      if (interval > 0) {
-        await delay3(interval);
-      }
-    }
-  }
-  function delay3(ms) {
-    return new Promise((resolve2) => setTimeout(resolve2, ms));
-  }
-  async function waitForFakeInventorySelection(timeoutMs = 2e4) {
-    const start = performance.now();
-    while (performance.now() - start < timeoutMs) {
-      try {
-        const modalVal = await Atoms.ui.activeModal.get();
-        if (!isInventoryOpen(modalVal)) return null;
-      } catch {
-        return null;
-      }
-      try {
-        const value = await Atoms.inventory.myPossiblyNoLongerValidSelectedItemIndex.get();
-        if (typeof value === "number" && Number.isInteger(value) && value >= 0) {
-          return value;
-        }
-      } catch {
-      }
-      await new Promise((resolve2) => setTimeout(resolve2, 80));
-    }
-    return null;
   }
 
   // src/utils/inventorySelectionLogger.ts
@@ -23444,132 +20665,6 @@
     } catch (error) {
     }
   }
-
-  // src/utils/checkModal.ts
-  var DEFAULTS4 = {
-    intervalMs: 6e4,
-    log: false
-  };
-  var normalize = (s) => (s || "").replace(/\s+/g, " ").trim();
-  var reGameUpdate = /game\s*update\s+ava?ilab?le/i;
-  var reDailyBread = /your\s+daily\s+bread/i;
-  var log = (enabled, ...args) => {
-    if (enabled) console.log("[checkModal]", ...args);
-  };
-  var reloadScheduled = false;
-  var schedulePageReload = (doLog) => {
-    if (reloadScheduled) return;
-    reloadScheduled = true;
-    log(doLog, "Game Update: \u267B\uFE0F rechargement de la page dans un instant...");
-    pageWindow.setTimeout(() => {
-      log(doLog, "Game Update: \u{1F504} rechargement maintenant.");
-      pageWindow.location.reload();
-    }, 500);
-  };
-  var isVisible = (el2) => {
-    if (!el2 || !(el2 instanceof HTMLElement)) return false;
-    const rect = el2.getBoundingClientRect();
-    if (rect.width <= 0 || rect.height <= 0) return false;
-    const cs = getComputedStyle(el2);
-    if (cs.display === "none" || cs.visibility === "hidden" || parseFloat(cs.opacity) === 0) return false;
-    let cur = el2;
-    while (cur) {
-      const cs2 = getComputedStyle(cur);
-      if (cs2.display === "none" || cs2.visibility === "hidden") return false;
-      cur = cur.parentElement;
-    }
-    return true;
-  };
-  function findGameUpdateModal() {
-    const sections = document.querySelectorAll(
-      'section.chakra-modal__content[role="dialog"], section.chakra-modal__content[role="alertdialog"]'
-    );
-    for (const sec of sections) {
-      const header = sec.querySelector("header.chakra-modal__header");
-      const txt = normalize(header?.textContent || sec.textContent || "");
-      if (reGameUpdate.test(txt)) return sec;
-    }
-    return null;
-  }
-  function findBreadModal() {
-    const sections = document.querySelectorAll(
-      'section.chakra-modal__content[role="dialog"], section.chakra-modal__content[role="alertdialog"]'
-    );
-    for (const sec of sections) {
-      const txt = normalize(sec.textContent || "");
-      if (!reDailyBread.test(txt)) continue;
-      let btn = sec.querySelector("button.chakra-button.css-1o32am8");
-      if (!btn) {
-        const candidates = sec.querySelectorAll("button");
-        btn = Array.from(candidates).find((b) => /claim/i.test(normalize(b.textContent))) ?? null;
-      }
-      if (btn) return { section: sec, button: btn };
-    }
-    return null;
-  }
-  var clickedBreadButtons = /* @__PURE__ */ new WeakSet();
-  function clickBreadIfVisible(btn, doLog) {
-    if (clickedBreadButtons.has(btn)) {
-      log(doLog, "Bread: bouton d\xE9j\xE0 cliqu\xE9 (guard).");
-      return false;
-    }
-    const ariaDisabled = btn.getAttribute("aria-disabled");
-    if (btn.disabled || ariaDisabled === "true") {
-      log(doLog, "Bread: bouton d\xE9sactiv\xE9.");
-      return false;
-    }
-    if (!isVisible(btn)) {
-      log(doLog, "Bread: bouton non visible.");
-      return false;
-    }
-    btn.click();
-    clickedBreadButtons.add(btn);
-    log(doLog, "Bread: \u2705 click() envoy\xE9.");
-    return true;
-  }
-  function checkOnce(opts) {
-    const { log: doLog } = { ...DEFAULTS4, ...opts };
-    const gameUpdateSec = findGameUpdateModal();
-    const gameUpdateFound = !!gameUpdateSec;
-    if (gameUpdateFound) {
-      log(doLog, "Game Update: \u2705 d\xE9tect\xE9.", gameUpdateSec);
-      schedulePageReload(doLog);
-    }
-    const found = findBreadModal();
-    const breadFound = !!found;
-    let breadClicked = false;
-    if (found) {
-      log(doLog, "Daily Bread: \u2705 d\xE9tect\xE9.", found.section);
-      breadClicked = clickBreadIfVisible(found.button, doLog);
-    }
-    if (!gameUpdateFound && !breadFound) log(doLog, "Rien d\xE9tect\xE9 pour l\u2019instant.");
-    return { gameUpdateFound, breadFound, breadClicked };
-  }
-  function startModalObserver(options) {
-    const { intervalMs, log: doLog } = { ...DEFAULTS4, ...options };
-    let stopped = false;
-    const tick = () => {
-      if (stopped) return { gameUpdateFound: false, breadFound: false, breadClicked: false };
-      return checkOnce({ log: doLog });
-    };
-    tick();
-    const timer = pageWindow.setInterval(tick, intervalMs);
-    const stop2 = () => {
-      if (stopped) return;
-      stopped = true;
-      pageWindow.clearInterval(timer);
-      log(doLog, "\u23F9\uFE0F Observateur arr\xEAt\xE9.");
-    };
-    log(doLog, `\u25B6\uFE0F Observateur d\xE9marr\xE9 (intervalle: ${intervalMs} ms).`);
-    return { stop: stop2, tick };
-  }
-  var exposed = {
-    startModalObserver,
-    checkOnce,
-    findGameUpdateModal,
-    findBreadModal
-  };
-  shareGlobal("CheckModal", exposed);
 
   // src/utils/petCalcul.ts
   var SEC_PER_HOUR = 3600;
@@ -24011,7 +21106,7 @@
   }
 
   // src/utils/inventorySorting.ts
-  var DEFAULTS5 = {
+  var DEFAULTS4 = {
     // Updated to new Inventory root grid container (game UI update)
     gridSelector: "div.McGrid.css-1kv58ap",
     filtersBlockSelector: ".McGrid.css-o1vp12",
@@ -24032,9 +21127,9 @@
     "mutations",
     "strength"
   ];
-  var SORT_STORAGE_KEY = "mg-mod.inventory.sortKey";
+  var SORT_KEY_PATH = "inventory.sortKey";
   var SORT_KEY_SET = new Set(ORDER);
-  var SORT_DIRECTION_STORAGE_KEY = "mg-mod.inventory.sortDirection";
+  var SORT_DIRECTION_PATH = "inventory.sortDirection";
   var SORT_DIRECTION_SET = /* @__PURE__ */ new Set(["asc", "desc"]);
   var DEFAULT_DIRECTION_LABEL = "Order:";
   var DIRECTION_LABELS_DEFAULT = {
@@ -24051,14 +21146,17 @@
     const trimmedName = name.trim();
     return trimmedName ? trimmedName : null;
   };
-  var INVENTORY_VALUE_VISIBILITY_STORAGE_KEY = "mg-mod.inventory.showValues";
+  var INVENTORY_VALUE_VISIBILITY_PATH = "inventory.showValues";
+  var resolveVisibilityFromStoredValue = (value) => {
+    if (value === true || value === false) return value;
+    if (value === 1 || value === "1" || value === "true") return true;
+    if (value === 0 || value === "0" || value === "false") return false;
+    return null;
+  };
   var loadPersistedInventoryValueVisibility = () => {
-    if (typeof window === "undefined") return null;
     try {
-      const stored = window.localStorage?.getItem(INVENTORY_VALUE_VISIBILITY_STORAGE_KEY) ?? null;
-      if (stored === "1") return true;
-      if (stored === "0") return false;
-      return null;
+      const stored = readAriesPath(INVENTORY_VALUE_VISIBILITY_PATH);
+      return resolveVisibilityFromStoredValue(stored);
     } catch (error) {
       console.warn(
         "[InventorySorting] Impossible de lire la pr\xE9f\xE9rence d'affichage des valeurs d'inventaire",
@@ -24068,9 +21166,8 @@
     }
   };
   var persistInventoryValueVisibility = (visible) => {
-    if (typeof window === "undefined") return;
     try {
-      window.localStorage?.setItem(INVENTORY_VALUE_VISIBILITY_STORAGE_KEY, visible ? "1" : "0");
+      writeAriesPath(INVENTORY_VALUE_VISIBILITY_PATH, visible);
     } catch (error) {
       console.warn(
         "[InventorySorting] Impossible de sauvegarder la pr\xE9f\xE9rence d'affichage des valeurs d'inventaire",
@@ -24097,9 +21194,8 @@
   var isPersistedSortKey = (value) => typeof value === "string" && SORT_KEY_SET.has(value);
   var isPersistedSortDirection = (value) => typeof value === "string" && SORT_DIRECTION_SET.has(value);
   var loadPersistedSortKey = () => {
-    if (typeof window === "undefined") return null;
     try {
-      const stored = window.localStorage?.getItem(SORT_STORAGE_KEY) ?? null;
+      const stored = readAriesPath(SORT_KEY_PATH);
       return isPersistedSortKey(stored) ? stored : null;
     } catch (error) {
       console.warn("[InventorySorting] Impossible de lire la valeur de tri persist\xE9e", error);
@@ -24107,17 +21203,15 @@
     }
   };
   var persistSortKey = (value) => {
-    if (typeof window === "undefined") return;
     try {
-      window.localStorage?.setItem(SORT_STORAGE_KEY, value);
+      writeAriesPath(SORT_KEY_PATH, value);
     } catch (error) {
       console.warn("[InventorySorting] Impossible de sauvegarder la valeur de tri", error);
     }
   };
   var loadPersistedSortDirection = () => {
-    if (typeof window === "undefined") return null;
     try {
-      const stored = window.localStorage?.getItem(SORT_DIRECTION_STORAGE_KEY) ?? null;
+      const stored = readAriesPath(SORT_DIRECTION_PATH);
       return isPersistedSortDirection(stored) ? stored : null;
     } catch (error) {
       console.warn("[InventorySorting] Impossible de lire l'ordre de tri persist\xE9", error);
@@ -24125,9 +21219,8 @@
     }
   };
   var persistSortDirection = (value) => {
-    if (typeof window === "undefined") return;
     try {
-      window.localStorage?.setItem(SORT_DIRECTION_STORAGE_KEY, value);
+      writeAriesPath(SORT_DIRECTION_PATH, value);
     } catch (error) {
       console.warn("[InventorySorting] Impossible de sauvegarder l'ordre de tri", error);
     }
@@ -24172,7 +21265,9 @@
     strength: "Strength"
   };
   var INVENTORY_BASE_INDEX_DATASET_KEY = "tmInventoryBaseIndex";
+  var INVENTORY_ITEM_CARD_SELECTORS = [".css-vmnhaw", ".css-1avy1fz"];
   var INVENTORY_ITEMS_CONTAINER_SELECTOR = ".McFlex.css-zo8r2v";
+  var INVENTORY_ITEM_CARD_SELECTOR = INVENTORY_ITEM_CARD_SELECTORS.join(", ");
   var INVENTORY_VALUE_CONTAINER_SELECTOR = ".McFlex.css-1p00rng";
   var INVENTORY_VALUE_ELEMENT_CLASS = "tm-inventory-item-value";
   var INVENTORY_VALUE_TEXT_CLASS = `${INVENTORY_VALUE_ELEMENT_CLASS}__text`;
@@ -24208,7 +21303,7 @@
       t = window.setTimeout(() => fn(...args), wait);
     };
   };
-  function isVisible2(el2) {
+  function isVisible(el2) {
     if (!el2 || !document.contains(el2)) return false;
     const r = el2.getBoundingClientRect();
     const cs = getComputedStyle(el2);
@@ -24216,11 +21311,11 @@
     return r.width > 0 && r.height > 0;
   }
   var labelIsChecked = (el2) => el2.matches("[data-checked]") || !!el2.querySelector("[data-checked]");
-  var normalize2 = (s) => (s ?? "").trim().toLowerCase();
+  var normalize = (s) => (s ?? "").trim().toLowerCase();
   var createFilterContextKey = (filters, search) => {
-    const normalizedFilters = filters.map((value) => normalize2(value)).filter((value) => value && value !== "all");
+    const normalizedFilters = filters.map((value) => normalize(value)).filter((value) => value && value !== "all");
     normalizedFilters.sort();
-    const normalizedSearch = normalize2(search);
+    const normalizedSearch = normalize(search);
     return `${normalizedFilters.join("|")}::${normalizedSearch}`;
   };
   var areSetsEqual = (a, b) => {
@@ -24241,7 +21336,7 @@
   var setCachedItemTypesForKey = (contextKey, types) => {
     const normalizedTypes = /* @__PURE__ */ new Set();
     types.forEach((type) => {
-      const normalizedType = normalize2(type);
+      const normalizedType = normalize(type);
       if (normalizedType) {
         normalizedTypes.add(normalizedType);
       }
@@ -24262,7 +21357,7 @@
     const input = getInventorySearchInput(grid);
     return typeof input?.value === "string" ? input.value : "";
   };
-  var getNormalizedInventorySearchQuery = (grid) => normalize2(getInventorySearchQuery(grid));
+  var getNormalizedInventorySearchQuery = (grid) => normalize(getInventorySearchQuery(grid));
   var logFilteredInventorySearchResults = async (grid, filters, searchQuery) => {
     if (!grid) return;
     try {
@@ -24299,19 +21394,19 @@
   var RARITY_RANK = (() => {
     const entries = /* @__PURE__ */ new Map();
     RARITY_ORDER.forEach((label2, index) => {
-      const key2 = normalize2(label2);
+      const key2 = normalize(label2);
       if (key2) {
         entries.set(key2, index);
       }
     });
-    const mythicIndex = entries.get(normalize2(rarity.Mythic));
+    const mythicIndex = entries.get(normalize(rarity.Mythic));
     if (typeof mythicIndex === "number") {
-      entries.set(normalize2("Mythic"), mythicIndex);
+      entries.set(normalize("Mythic"), mythicIndex);
     }
     return entries;
   })();
   var getRarityRank = (value) => {
-    const key2 = normalize2(value);
+    const key2 = normalize(value);
     if (!key2) return RARITY_ORDER.length;
     return RARITY_RANK.get(key2) ?? RARITY_ORDER.length;
   };
@@ -24449,7 +21544,7 @@
     const mapping = /* @__PURE__ */ new Map();
     for (const [filterKey, itemTypes] of Object.entries(FILTER_LABEL_TO_ITEM_TYPES)) {
       for (const itemType of itemTypes) {
-        const normalizedType = normalize2(itemType);
+        const normalizedType = normalize(itemType);
         if (!normalizedType) continue;
         const set2 = mapping.get(normalizedType) ?? /* @__PURE__ */ new Set();
         set2.add(filterKey);
@@ -24480,7 +21575,7 @@
     return [];
   };
   var getExtrasForItemType = (itemType, mapExtraByFilter) => {
-    const normalizedType = normalize2(itemType);
+    const normalizedType = normalize(itemType);
     if (!normalizedType) return [];
     const extras = /* @__PURE__ */ new Set();
     const direct = mapExtraByFilter[normalizedType];
@@ -24497,7 +21592,7 @@
     return Array.from(extras);
   };
   function filterLabelToItemTypes(filter) {
-    const key2 = normalize2(filter);
+    const key2 = normalize(filter);
     if (!key2 || key2 === "all") return [];
     const mapped = FILTER_LABEL_TO_ITEM_TYPES[key2];
     if (mapped) return mapped;
@@ -24512,10 +21607,10 @@
     const matchesValue = (value) => {
       if (value == null) return false;
       if (typeof value === "string") {
-        return normalize2(value).includes(normalizedQuery);
+        return normalize(value).includes(normalizedQuery);
       }
       if (typeof value === "number" || typeof value === "boolean") {
-        return normalize2(String(value)).includes(normalizedQuery);
+        return normalize(String(value)).includes(normalizedQuery);
       }
       if (Array.isArray(value)) {
         for (const entry of value) {
@@ -24582,7 +21677,7 @@
     }
   }
   function filterInventoryItems(items, filters, searchQuery) {
-    const normalizedFilters = filters.map((f) => normalize2(f)).filter(Boolean);
+    const normalizedFilters = filters.map((f) => normalize(f)).filter(Boolean);
     const itemTypes = /* @__PURE__ */ new Set();
     let recognized = false;
     for (const filter of normalizedFilters) {
@@ -24599,7 +21694,7 @@
       const type = typeof item?.itemType === "string" ? item.itemType.trim() : "";
       return type ? itemTypes.has(type) : false;
     });
-    const normalizedSearch = normalize2(searchQuery);
+    const normalizedSearch = normalize(searchQuery);
     const filteredItems = normalizedSearch ? filteredByType.filter((item) => inventoryItemMatchesSearchQuery(item, normalizedSearch)) : filteredByType;
     attachItemValues(filteredItems);
     const detectedItemTypes = /* @__PURE__ */ new Set();
@@ -24616,17 +21711,21 @@
   function getInventoryItemsContainer(grid) {
     return grid.querySelector(INVENTORY_ITEMS_CONTAINER_SELECTOR) || document.querySelector(INVENTORY_ITEMS_CONTAINER_SELECTOR);
   }
+  var getInventoryCardElement = (element) => {
+    for (const selector of INVENTORY_ITEM_CARD_SELECTORS) {
+      if (element.matches(selector)) {
+        return element;
+      }
+    }
+    return element.querySelector(INVENTORY_ITEM_CARD_SELECTOR);
+  };
   function getInventoryDomEntries(container) {
     const entries = [];
     const children = Array.from(container.children);
     for (const child of children) {
       if (!(child instanceof HTMLElement)) continue;
-      if (child.matches(".css-vmnhaw")) {
-        entries.push({ wrapper: child, card: child });
-        continue;
-      }
-      const card = child.querySelector(".css-vmnhaw");
-      if (card instanceof HTMLElement) {
+      const card = getInventoryCardElement(child);
+      if (card) {
         entries.push({ wrapper: child, card });
       }
     }
@@ -25203,25 +22302,25 @@
     const stateByGrid = /* @__PURE__ */ new WeakMap();
     const ensureState = async (grid, filters, entries, searchQuery) => {
       const filtersKey = JSON.stringify({ filters });
-      const state2 = stateByGrid.get(grid);
+      const state3 = stateByGrid.get(grid);
       const hasAllBaseIndexes = entries.every((e) => readBaseIndex(e) != null);
-      const searchChanged = state2 ? state2.searchQuery !== searchQuery : false;
-      const entryCountChanged = state2 ? state2.entryCount !== entries.length : false;
-      const filtersChanged = state2 ? state2.filtersKey !== filtersKey : false;
-      const baseLengthChanged = state2 ? state2.baseItems.length !== entries.length : false;
-      const needsRebuild = !state2 || filtersChanged || entryCountChanged || baseLengthChanged || !hasAllBaseIndexes || searchChanged;
-      if (state2 && !needsRebuild) {
-        state2.entryByBaseIndex.clear();
+      const searchChanged = state3 ? state3.searchQuery !== searchQuery : false;
+      const entryCountChanged = state3 ? state3.entryCount !== entries.length : false;
+      const filtersChanged = state3 ? state3.filtersKey !== filtersKey : false;
+      const baseLengthChanged = state3 ? state3.baseItems.length !== entries.length : false;
+      const needsRebuild = !state3 || filtersChanged || entryCountChanged || baseLengthChanged || !hasAllBaseIndexes || searchChanged;
+      if (state3 && !needsRebuild) {
+        state3.entryByBaseIndex.clear();
         for (const entry of entries) {
           const baseIndex = readBaseIndex(entry);
           if (baseIndex != null) {
-            state2.entryByBaseIndex.set(baseIndex, entry);
+            state3.entryByBaseIndex.set(baseIndex, entry);
           }
         }
-        state2.filtersKey = filtersKey;
-        state2.searchQuery = searchQuery;
-        state2.entryCount = entries.length;
-        return state2;
+        state3.filtersKey = filtersKey;
+        state3.searchQuery = searchQuery;
+        state3.entryCount = entries.length;
+        return state3;
       }
       try {
         const inventory = await Atoms.inventory.myInventory.get();
@@ -25267,20 +22366,20 @@
         cfg.checkboxLabelSelector
       );
       const searchQuery = getNormalizedInventorySearchQuery(grid);
-      const state2 = await ensureState(grid, filters, entries, searchQuery);
-      if (!state2) return;
+      const state3 = await ensureState(grid, filters, entries, searchQuery);
+      if (!state3) return;
       const baseIndexByItem = /* @__PURE__ */ new Map();
-      state2.baseItems.forEach((item, index) => {
+      state3.baseItems.forEach((item, index) => {
         baseIndexByItem.set(item, index);
       });
       const effectiveDirection = direction && DIRECTION_ORDER.includes(direction) ? direction : DEFAULT_DIRECTION_BY_SORT_KEY[sortKey] ?? "asc";
-      const desiredItems = !sortKey || sortKey === "none" ? state2.baseItems.slice() : sortInventoryItems(state2.baseItems, sortKey, effectiveDirection);
+      const desiredItems = !sortKey || sortKey === "none" ? state3.baseItems.slice() : sortInventoryItems(state3.baseItems, sortKey, effectiveDirection);
       const desiredEntries = [];
       const usedEntries = /* @__PURE__ */ new Set();
       for (const item of desiredItems) {
         const baseIndex = baseIndexByItem.get(item);
         if (baseIndex == null) continue;
-        const entry = state2.entryByBaseIndex.get(baseIndex);
+        const entry = state3.entryByBaseIndex.get(baseIndex);
         if (!entry || usedEntries.has(entry)) continue;
         const value = getInventoryItemValue(item);
         updateInventoryCardValue(entry.card, value);
@@ -25298,11 +22397,11 @@
         fragment.appendChild(entry.wrapper);
       });
       container.appendChild(fragment);
-      state2.entryByBaseIndex.clear();
+      state3.entryByBaseIndex.clear();
       desiredEntries.forEach((entry) => {
         const baseIndex = readBaseIndex(entry);
         if (baseIndex != null) {
-          state2.entryByBaseIndex.set(baseIndex, entry);
+          state3.entryByBaseIndex.set(baseIndex, entry);
         }
       });
     };
@@ -25314,7 +22413,7 @@
   }
   function computeSortOptions(activeFilters, labelByValue = LABEL_BY_VALUE_DEFAULT, mapExtraByFilter = MAP_EXTRA_BY_FILTER_DEFAULT, searchQuery = "") {
     const normalizedFilters = activeFilters.map((value) => (value ?? "").trim().toLowerCase()).filter(Boolean);
-    const normalizedSearch = normalize2(searchQuery);
+    const normalizedSearch = normalize(searchQuery);
     const intersectSets = (sets) => {
       if (!sets.length) return null;
       let intersection = new Set(sets[0]);
@@ -25747,7 +22846,7 @@
   }
   function attachInventorySorting(userConfig = {}) {
     const cfg = {
-      ...DEFAULTS5,
+      ...DEFAULTS4,
       ...userConfig
     };
     const mapExtraByFilter = { ...MAP_EXTRA_BY_FILTER_DEFAULT, ...cfg.mapExtraByFilter || {} };
@@ -25863,7 +22962,7 @@
     };
     const update = () => {
       const targetGrid = resolveGrid();
-      if (!targetGrid || !isVisible2(targetGrid)) {
+      if (!targetGrid || !isVisible(targetGrid)) {
         shouldEnsureInventoryValueWatcherOnNextVisible = true;
         return;
       }
@@ -26182,7 +23281,7 @@
     const attachIfPossible = () => {
       if (controller) return controller;
       if (waitForGrid) {
-        const selector = cfg.gridSelector ?? DEFAULTS5.gridSelector;
+        const selector = cfg.gridSelector ?? DEFAULTS4.gridSelector;
         if (!document.querySelector(selector)) {
           return null;
         }
@@ -26204,7 +23303,7 @@
       });
       observer2.observe(target, { childList: true, subtree: true });
     };
-    const start = () => {
+    const start2 = () => {
       if (!attachIfPossible()) {
         ensureObserver();
       }
@@ -26212,11 +23311,11 @@
     if (document.readyState === "loading") {
       readyListener = () => {
         readyListener = null;
-        start();
+        start2();
       };
       document.addEventListener("DOMContentLoaded", readyListener, { once: true });
     } else {
-      start();
+      start2();
     }
     return {
       stop() {
@@ -26233,7 +23332,7 @@
         if (controller) {
           controller.update();
         } else {
-          start();
+          start2();
         }
       },
       getController() {
@@ -26242,229 +23341,131 @@
     };
   }
 
-  // src/services/activityLogHistory.ts
-  var HISTORY_STORAGE_KEY = "activityLog.history";
-  var HISTORY_LIMIT = 500;
-  function normalizeEntry(raw) {
-    if (!raw || typeof raw !== "object") return null;
-    const ts = Number(raw.timestamp);
-    if (!Number.isFinite(ts)) return null;
-    const parameters = (() => {
-      const p = raw.parameters;
-      if (!p || typeof p !== "object") return p;
-      const petId = typeof p?.pet?.id === "string" ? p.pet.id : null;
-      if (petId && !p.petId) {
-        return { ...p, petId };
-      }
-      return p;
-    })();
-    const action2 = typeof raw.action === "string" && raw.action.trim() ? String(raw.action) : null;
-    const entry = {
-      ...raw,
-      timestamp: ts,
-      parameters
-    };
-    if (action2 !== null) entry.action = action2;
-    return entry;
-  }
-  function normalizeList(logs) {
-    const out = [];
-    if (!Array.isArray(logs)) return out;
-    for (const raw of logs) {
-      const norm3 = normalizeEntry(raw);
-      if (norm3) out.push(norm3);
+  // src/utils/checkModal.ts
+  var DEFAULTS5 = {
+    intervalMs: 6e4,
+    log: false
+  };
+  var normalize2 = (s) => (s || "").replace(/\s+/g, " ").trim();
+  var reGameUpdate = /game\s*update\s+ava?ilab?le/i;
+  var reDailyBread = /your\s+daily\s+bread/i;
+  var log = (enabled, ...args) => {
+    if (enabled) console.log("[checkModal]", ...args);
+  };
+  var reloadScheduled = false;
+  var schedulePageReload = (doLog) => {
+    if (reloadScheduled) return;
+    reloadScheduled = true;
+    log(doLog, "Game Update: \u267B\uFE0F rechargement de la page dans un instant...");
+    pageWindow.setTimeout(() => {
+      log(doLog, "Game Update: \u{1F504} rechargement maintenant.");
+      pageWindow.location.reload();
+    }, 500);
+  };
+  var isVisible2 = (el2) => {
+    if (!el2 || !(el2 instanceof HTMLElement)) return false;
+    const rect = el2.getBoundingClientRect();
+    if (rect.width <= 0 || rect.height <= 0) return false;
+    const cs = getComputedStyle(el2);
+    if (cs.display === "none" || cs.visibility === "hidden" || parseFloat(cs.opacity) === 0) return false;
+    let cur = el2;
+    while (cur) {
+      const cs2 = getComputedStyle(cur);
+      if (cs2.display === "none" || cs2.visibility === "hidden") return false;
+      cur = cur.parentElement;
     }
-    return out;
-  }
-  function stableStringify(value) {
-    const seen = /* @__PURE__ */ new WeakSet();
-    const walk = (val) => {
-      if (val === null) return null;
-      if (typeof val !== "object") return val;
-      if (seen.has(val)) return "__CYCLE__";
-      seen.add(val);
-      if (Array.isArray(val)) return val.map(walk);
-      const obj = {};
-      const keys = Object.keys(val).sort();
-      for (const k of keys) obj[k] = walk(val[k]);
-      return obj;
-    };
-    try {
-      return JSON.stringify(walk(value));
-    } catch {
-      return "";
-    }
-  }
-  function entryIdentity(entry) {
-    const p = entry?.parameters;
-    const candidates = [
-      p?.id,
-      p?.pet?.id,
-      p?.petId,
-      p?.playerId,
-      p?.userId,
-      p?.objectId,
-      p?.slotId,
-      p?.itemId,
-      p?.cropId,
-      p?.seedId,
-      p?.decorId,
-      p?.toolId,
-      p?.targetId,
-      p?.abilityId
-    ];
-    for (const c of candidates) {
-      if (typeof c === "string" && c.trim()) return c;
+    return true;
+  };
+  function findGameUpdateModal() {
+    const sections = document.querySelectorAll(
+      'section.chakra-modal__content[role="dialog"], section.chakra-modal__content[role="alertdialog"]'
+    );
+    for (const sec of sections) {
+      const header = sec.querySelector("header.chakra-modal__header");
+      const txt = normalize2(header?.textContent || sec.textContent || "");
+      if (reGameUpdate.test(txt)) return sec;
     }
     return null;
   }
-  function entryKey(entry) {
-    const ts = Number(entry.timestamp);
-    const action2 = typeof entry.action === "string" ? entry.action : "";
-    const identity = entryIdentity(entry) ?? "__noid__";
-    const tsPart = Number.isFinite(ts) ? String(ts) : `t:${stableStringify({ timestamp: entry.timestamp ?? null })}`;
-    return `${tsPart}|${action2}|${identity}`;
-  }
-  function entriesEqual(a, b) {
-    return stableStringify(a) === stableStringify(b);
-  }
-  function loadHistory() {
-    try {
-      const parsed = readAriesPath(HISTORY_STORAGE_KEY);
-      if (!Array.isArray(parsed)) return [];
-      const out = [];
-      for (const item of parsed) {
-        const norm3 = normalizeEntry(item);
-        if (norm3) out.push(norm3);
+  function findBreadModal() {
+    const sections = document.querySelectorAll(
+      'section.chakra-modal__content[role="dialog"], section.chakra-modal__content[role="alertdialog"]'
+    );
+    for (const sec of sections) {
+      const txt = normalize2(sec.textContent || "");
+      if (!reDailyBread.test(txt)) continue;
+      let btn = sec.querySelector("button.chakra-button.css-1o32am8");
+      if (!btn) {
+        const candidates = sec.querySelectorAll("button");
+        btn = Array.from(candidates).find((b) => /claim/i.test(normalize2(b.textContent))) ?? null;
       }
-      return out;
-    } catch {
-      return [];
+      if (btn) return { section: sec, button: btn };
     }
+    return null;
   }
-  function saveHistory(entries) {
-    const sorted = entries.slice().sort((a, b) => Number(a.timestamp || 0) - Number(b.timestamp || 0));
-    if (sorted.length > HISTORY_LIMIT) {
-      sorted.splice(0, sorted.length - HISTORY_LIMIT);
+  var clickedBreadButtons = /* @__PURE__ */ new WeakSet();
+  function clickBreadIfVisible(btn, doLog) {
+    if (clickedBreadButtons.has(btn)) {
+      log(doLog, "Bread: bouton d\xE9j\xE0 cliqu\xE9 (guard).");
+      return false;
     }
-    try {
-      writeAriesPath(HISTORY_STORAGE_KEY, sorted);
-    } catch {
+    const ariaDisabled = btn.getAttribute("aria-disabled");
+    if (btn.disabled || ariaDisabled === "true") {
+      log(doLog, "Bread: bouton d\xE9sactiv\xE9.");
+      return false;
     }
+    if (!isVisible2(btn)) {
+      log(doLog, "Bread: bouton non visible.");
+      return false;
+    }
+    btn.click();
+    clickedBreadButtons.add(btn);
+    log(doLog, "Bread: \u2705 click() envoy\xE9.");
+    return true;
   }
-  function diffSnapshots(prev, next) {
-    const prevBuckets = /* @__PURE__ */ new Map();
-    const bucketPush = (k, entry) => {
-      const arr = prevBuckets.get(k);
-      if (arr) arr.push(entry);
-      else prevBuckets.set(k, [entry]);
+  function checkOnce(opts) {
+    const { log: doLog } = { ...DEFAULTS5, ...opts };
+    const gameUpdateSec = findGameUpdateModal();
+    const gameUpdateFound = !!gameUpdateSec;
+    if (gameUpdateFound) {
+      log(doLog, "Game Update: \u2705 d\xE9tect\xE9.", gameUpdateSec);
+      schedulePageReload(doLog);
+    }
+    const found = findBreadModal();
+    const breadFound = !!found;
+    let breadClicked = false;
+    if (found) {
+      log(doLog, "Daily Bread: \u2705 d\xE9tect\xE9.", found.section);
+      breadClicked = clickBreadIfVisible(found.button, doLog);
+    }
+    if (!gameUpdateFound && !breadFound) log(doLog, "Rien d\xE9tect\xE9 pour l\u2019instant.");
+    return { gameUpdateFound, breadFound, breadClicked };
+  }
+  function startModalObserver(options) {
+    const { intervalMs, log: doLog } = { ...DEFAULTS5, ...options };
+    let stopped = false;
+    const tick = () => {
+      if (stopped) return { gameUpdateFound: false, breadFound: false, breadClicked: false };
+      return checkOnce({ log: doLog });
     };
-    for (const entry of prev) bucketPush(entryKey(entry), entry);
-    const added = [];
-    const updated = [];
-    for (const entry of next) {
-      const key2 = entryKey(entry);
-      const bucket = prevBuckets.get(key2);
-      const prevEntry = bucket?.shift();
-      if (!prevEntry) {
-        added.push(entry);
-      } else if (!entriesEqual(prevEntry, entry)) {
-        updated.push(entry);
-      }
-      if (bucket && bucket.length === 0) prevBuckets.delete(key2);
-    }
-    return { added, updated };
-  }
-  function syncHistory(prevSnapshot, nextSnapshot) {
-    const history2 = loadHistory();
-    const { added, updated } = diffSnapshots(prevSnapshot, nextSnapshot);
-    if (!added.length && !updated.length) return history2;
-    const map2 = /* @__PURE__ */ new Map();
-    for (const h of history2) map2.set(entryKey(h), h);
-    let changed = false;
-    const upsert = (entry) => {
-      const key2 = entryKey(entry);
-      const cur = map2.get(key2);
-      if (!cur || !entriesEqual(cur, entry)) {
-        map2.set(key2, entry);
-        changed = true;
-      }
+    tick();
+    const timer = pageWindow.setInterval(tick, intervalMs);
+    const stop2 = () => {
+      if (stopped) return;
+      stopped = true;
+      pageWindow.clearInterval(timer);
+      log(doLog, "\u23F9\uFE0F Observateur arr\xEAt\xE9.");
     };
-    updated.forEach(upsert);
-    added.forEach(upsert);
-    if (!changed) return history2;
-    const merged = Array.from(map2.values());
-    saveHistory(merged);
-    return merged;
+    log(doLog, `\u25B6\uFE0F Observateur d\xE9marr\xE9 (intervalle: ${intervalMs} ms).`);
+    return { stop: stop2, tick };
   }
-  async function reopenFakeActivityLogFromHistory() {
-    try {
-      const history2 = loadHistory();
-      await fakeActivityLogShow(history2, { open: true });
-    } catch {
-    }
-  }
-  async function startActivityLogHistoryWatcher() {
-    const stops = [];
-    let lastSnapshot = [];
-    const ingest = async (logs, prev) => {
-      try {
-        const prevSnapshot = typeof prev !== "undefined" ? normalizeList(prev) : lastSnapshot;
-        const nextSnapshot = normalizeList(logs);
-        syncHistory(prevSnapshot, nextSnapshot);
-        lastSnapshot = nextSnapshot;
-      } catch {
-      }
-    };
-    try {
-      const initial = normalizeList(await myActivityLog.get());
-      await ingest(initial);
-    } catch {
-    }
-    try {
-      const unsub = await myActivityLog.onChange((next, prev) => {
-        void ingest(next, prev);
-      });
-      stops.push(() => {
-        try {
-          unsub();
-        } catch {
-        }
-      });
-    } catch {
-    }
-    let lastModal = null;
-    try {
-      const cur = await Atoms.ui.activeModal.get();
-      lastModal = cur ?? null;
-    } catch {
-    }
-    const onModalChange = async (modalId) => {
-      const cur = modalId ?? null;
-      if (cur === ACTIVITY_LOG_MODAL_ID && lastModal !== ACTIVITY_LOG_MODAL_ID) {
-        await reopenFakeActivityLogFromHistory();
-      }
-      lastModal = cur;
-    };
-    try {
-      const unsubModal = await Atoms.ui.activeModal.onChange(onModalChange);
-      stops.push(() => {
-        try {
-          unsubModal();
-        } catch {
-        }
-      });
-    } catch {
-    }
-    return async () => {
-      for (const stop2 of stops) {
-        try {
-          await stop2();
-        } catch {
-        }
-      }
-    };
-  }
+  var exposed = {
+    startModalObserver,
+    checkOnce,
+    findGameUpdateModal,
+    findBreadModal
+  };
+  shareGlobal("CheckModal", exposed);
 
   // src/utils/activityLogFilter.ts
   var FILTER_STORAGE_KEY = "activityLog.filter";
@@ -26802,451 +23803,239 @@
     s.id = STYLE_ID2;
   }
 
-  // src/utils/sellCropsLock.ts
-  var CONTAINER_SELECTOR = ".css-vmnhaw";
-  var LOCK_ICON_CLASS2 = "tm-sell-crops-lock";
-  var DATA_BORDER = "tmSellLockBorder";
-  var DATA_RADIUS = "tmSellLockRadius";
-  var DATA_POSITION = "tmSellLockPosition";
-  var DATA_PADDING = "tmSellLockPadding";
-  var DATA_BOX = "tmSellLockBox";
-  var DATA_SHADOW = "tmSellLockShadow";
-  var DATA_OVERFLOW = "tmSellLockOverflow";
-  function startSellCropsLockWatcher() {
-    if (typeof window === "undefined" || typeof document === "undefined") {
-      return { stop() {
-      } };
-    }
-    let bonusFromMultiplier = null;
-    let bonusFromPlayers = friendBonusPercentFromPlayers(1);
-    let running = true;
-    const disposables = [];
-    const resolveCurrentBonus = () => bonusFromMultiplier ?? bonusFromPlayers ?? 0;
-    const applyLockState = (locked) => {
-      const containers = Array.from(
-        document.querySelectorAll(CONTAINER_SELECTOR)
-      );
-      containers.forEach((wrap) => setContainerLocked(wrap, locked));
-    };
-    const recompute = () => {
-      if (!running) return;
-      const requiredPct = lockerRestrictionsService.getRequiredPercent();
-      const current = resolveCurrentBonus();
-      const locked = requiredPct > 0 && !(Number.isFinite(current) && current + 1e-4 >= requiredPct);
-      applyLockState(locked);
-    };
-    const observeDom = () => {
-      const mo = new MutationObserver(() => recompute());
-      mo.observe(document.documentElement, { childList: true, subtree: true });
-      disposables.push(() => mo.disconnect());
-    };
-    const subscribeAtoms = async () => {
-      try {
-        const initial = await Atoms.server.friendBonusMultiplier.get();
-        bonusFromMultiplier = friendBonusPercentFromMultiplier(initial);
-      } catch {
+  // src/services/activityLogHistory.ts
+  var HISTORY_STORAGE_KEY = "activityLog.history";
+  var HISTORY_LIMIT = 500;
+  var skipNextHistoryReopen = false;
+  function skipNextActivityLogHistoryReopen() {
+    skipNextHistoryReopen = true;
+  }
+  function normalizeEntry(raw) {
+    if (!raw || typeof raw !== "object") return null;
+    const ts = Number(raw.timestamp);
+    if (!Number.isFinite(ts)) return null;
+    const parameters = (() => {
+      const p = raw.parameters;
+      if (!p || typeof p !== "object") return p;
+      const petId = typeof p?.pet?.id === "string" ? p.pet.id : null;
+      if (petId && !p.petId) {
+        return { ...p, petId };
       }
-      try {
-        const unsub = await Atoms.server.friendBonusMultiplier.onChange((next) => {
-          bonusFromMultiplier = friendBonusPercentFromMultiplier(next);
-          recompute();
-        });
-        if (typeof unsub === "function") disposables.push(unsub);
-      } catch {
-      }
-      try {
-        const initialPlayers = await Atoms.server.numPlayers.get();
-        bonusFromPlayers = friendBonusPercentFromPlayers(initialPlayers);
-      } catch {
-      }
-      try {
-        const unsubPlayers = await Atoms.server.numPlayers.onChange((next) => {
-          bonusFromPlayers = friendBonusPercentFromPlayers(next);
-          recompute();
-        });
-        if (typeof unsubPlayers === "function") disposables.push(unsubPlayers);
-      } catch {
-      }
+      return p;
+    })();
+    const action2 = typeof raw.action === "string" && raw.action.trim() ? String(raw.action) : null;
+    const entry = {
+      ...raw,
+      timestamp: ts,
+      parameters
     };
-    observeDom();
-    disposables.push(lockerRestrictionsService.subscribe(() => recompute()));
-    void subscribeAtoms();
-    recompute();
-    return {
-      stop() {
-        running = false;
-        disposables.splice(0).forEach((fn) => {
-          try {
-            fn();
-          } catch {
-          }
-        });
-        applyLockState(false);
-      }
+    if (action2 !== null) entry.action = action2;
+    return entry;
+  }
+  function normalizeList(logs) {
+    const out = [];
+    if (!Array.isArray(logs)) return out;
+    for (const raw of logs) {
+      const norm3 = normalizeEntry(raw);
+      if (norm3) out.push(norm3);
+    }
+    return out;
+  }
+  function stableStringify(value) {
+    const seen = /* @__PURE__ */ new WeakSet();
+    const walk = (val) => {
+      if (val === null) return null;
+      if (typeof val !== "object") return val;
+      if (seen.has(val)) return "__CYCLE__";
+      seen.add(val);
+      if (Array.isArray(val)) return val.map(walk);
+      const obj = {};
+      const keys = Object.keys(val).sort();
+      for (const k of keys) obj[k] = walk(val[k]);
+      return obj;
     };
-  }
-  function setContainerLocked(container, locked) {
-    if (!container) return;
-    const sellButton = findSellButton(container);
-    if (!sellButton) {
-      restoreContainerStyles(container);
-      removeLockIcon2(container);
-      return;
-    }
-    if (!locked) {
-      restoreContainerStyles(container);
-      removeLockIcon2(container);
-      return;
-    }
-    storeOriginalStyle(container, DATA_BORDER, "border");
-    storeOriginalStyle(container, DATA_RADIUS, "borderRadius");
-    storeOriginalStyle(container, DATA_POSITION, "position");
-    storeOriginalStyle(container, DATA_PADDING, "padding");
-    storeOriginalStyle(container, DATA_BOX, "boxSizing");
-    storeOriginalStyle(container, DATA_SHADOW, "boxShadow");
-    storeOriginalStyle(container, DATA_OVERFLOW, "overflow");
-    container.style.border = "none";
-    container.style.borderRadius = "";
-    container.style.padding = "";
-    container.style.boxSizing = "";
-    container.style.boxShadow = "none";
-    container.style.overflow = "";
-    const computedPos = window.getComputedStyle(container).position;
-    if (computedPos === "static") {
-      container.style.position = "relative";
-    }
-    container.style.zIndex = "1000";
-    ensureLockIcon2(container);
-  }
-  function storeOriginalStyle(el2, key2, cssProperty) {
-    const data = el2.dataset;
-    if (data[key2] !== void 0) return;
-    data[key2] = el2.style[cssProperty];
-  }
-  function restoreContainerStyles(el2) {
-    restoreStyle(el2, DATA_BORDER, "border");
-    restoreStyle(el2, DATA_RADIUS, "borderRadius");
-    restoreStyle(el2, DATA_POSITION, "position");
-    restoreStyle(el2, DATA_PADDING, "padding");
-    restoreStyle(el2, DATA_BOX, "boxSizing");
-    restoreStyle(el2, DATA_SHADOW, "boxShadow");
-    restoreStyle(el2, DATA_OVERFLOW, "overflow");
-  }
-  function restoreStyle(el2, key2, cssProperty) {
-    const data = el2.dataset;
-    if (data[key2] === void 0) return;
-    const value = data[key2];
-    if (value) {
-      el2.style.setProperty(camelToKebab(cssProperty), value);
-    } else {
-      el2.style.removeProperty(camelToKebab(cssProperty));
-    }
-    delete data[key2];
-  }
-  function camelToKebab(str) {
-    return str.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`);
-  }
-  function ensureLockIcon2(btn) {
-    const existing = btn.querySelector(`span.${LOCK_ICON_CLASS2}`);
-    if (existing) return;
-    const icon = document.createElement("span");
-    icon.className = LOCK_ICON_CLASS2;
-    icon.textContent = "\u{1F512}";
-    icon.style.position = "absolute";
-    icon.style.top = "-4px";
-    icon.style.right = "-4px";
-    icon.style.fontSize = "16px";
-    icon.style.pointerEvents = "none";
-    icon.style.userSelect = "none";
-    icon.style.zIndex = "2";
-    btn.appendChild(icon);
-  }
-  function removeLockIcon2(btn) {
-    btn.querySelectorAll(`span.${LOCK_ICON_CLASS2}`).forEach((node) => node.remove());
-  }
-  function findSellButton(container) {
-    const btn = container.querySelector("button");
-    if (!btn) return null;
-    const text = (btn.textContent || "").trim();
-    return /sell\s*crops/i.test(text) ? btn : null;
-  }
-
-  // src/utils/eggHatchLockIndicator.ts
-  var CONTAINER_SELECTOR2 = ".css-502lyi";
-  var LOCK_CLASS = "tm-egg-lock";
-  var BORDER_COLOR = "rgb(188, 53, 215)";
-  var DATA_BORDER2 = "tmEggLockBorder";
-  var DATA_RADIUS2 = "tmEggLockRadius";
-  var DATA_POSITION2 = "tmEggLockPosition";
-  var DATA_OVERFLOW2 = "tmEggLockOverflow";
-  function startEggHatchLockIndicator() {
-    if (typeof window === "undefined" || typeof document === "undefined") {
-      return { stop() {
-      } };
-    }
-    let running = true;
-    let currentEggId = null;
-    const disposables = [];
-    const isEggLocked = () => lockerRestrictionsService.isEggLocked(currentEggId);
-    const applyLockState = () => {
-      if (!running) return;
-      const locked = isEggLocked();
-      const containers = Array.from(document.querySelectorAll(CONTAINER_SELECTOR2));
-      containers.forEach((el2) => {
-        if (!containsEggLabel(el2)) {
-          restore(el2);
-          return;
-        }
-        setLocked(el2, locked);
-      });
-    };
-    const observeDom = () => {
-      const mo = new MutationObserver(() => applyLockState());
-      mo.observe(document.documentElement, { childList: true, subtree: true });
-      disposables.push(() => mo.disconnect());
-    };
-    const subscribeAtoms = async () => {
-      try {
-        const initial = await Atoms.data.myCurrentGardenObject.get();
-        currentEggId = extractEggId2(initial);
-      } catch {
-      }
-      try {
-        const unsub = await Atoms.data.myCurrentGardenObject.onChange((next) => {
-          currentEggId = extractEggId2(next);
-          applyLockState();
-        });
-        if (typeof unsub === "function") disposables.push(unsub);
-      } catch {
-      }
-      const unsubLocker = lockerRestrictionsService.subscribe(() => applyLockState());
-      disposables.push(unsubLocker);
-    };
-    observeDom();
-    void subscribeAtoms();
-    applyLockState();
-    return {
-      stop() {
-        running = false;
-        disposables.splice(0).forEach((fn) => {
-          try {
-            fn();
-          } catch {
-          }
-        });
-        const containers = Array.from(document.querySelectorAll(CONTAINER_SELECTOR2));
-        containers.forEach(restore);
-      }
-    };
-  }
-  function containsEggLabel(el2) {
-    const text = (el2.textContent || "").toLowerCase();
-    return text.includes("egg");
-  }
-  function setLocked(el2, locked) {
-    if (!locked) {
-      restore(el2);
-      return;
-    }
-    storeStyle(el2, DATA_BORDER2, "border");
-    storeStyle(el2, DATA_RADIUS2, "borderRadius");
-    storeStyle(el2, DATA_POSITION2, "position");
-    storeStyle(el2, DATA_OVERFLOW2, "overflow");
-    el2.style.border = `3px solid ${BORDER_COLOR}`;
-    el2.style.borderRadius = "16px";
-    el2.style.overflow = "visible";
-    const pos = window.getComputedStyle(el2).position;
-    if (pos === "static") {
-      el2.style.position = "relative";
-    }
-    ensureLockIcon3(el2);
-  }
-  function restore(el2) {
-    restoreStyle2(el2, DATA_BORDER2, "border");
-    restoreStyle2(el2, DATA_RADIUS2, "borderRadius");
-    restoreStyle2(el2, DATA_POSITION2, "position");
-    restoreStyle2(el2, DATA_OVERFLOW2, "overflow");
-    removeLockIcon3(el2);
-  }
-  function storeStyle(el2, key2, cssProperty) {
-    const data = el2.dataset;
-    if (data[key2] !== void 0) return;
-    data[key2] = el2.style[cssProperty];
-  }
-  function restoreStyle2(el2, key2, cssProperty) {
-    const data = el2.dataset;
-    if (data[key2] === void 0) return;
-    const value = data[key2];
-    if (value) {
-      el2.style.setProperty(camelToKebab2(cssProperty), value);
-    } else {
-      el2.style.removeProperty(camelToKebab2(cssProperty));
-    }
-    delete data[key2];
-  }
-  function camelToKebab2(str) {
-    return str.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`);
-  }
-  function ensureLockIcon3(el2) {
-    const existing = el2.querySelector(`span.${LOCK_CLASS}`);
-    if (existing) return;
-    const icon = document.createElement("span");
-    icon.className = LOCK_CLASS;
-    icon.textContent = "\u{1F512}";
-    icon.style.position = "absolute";
-    icon.style.top = "-8px";
-    icon.style.right = "-8px";
-    icon.style.fontSize = "16px";
-    icon.style.pointerEvents = "none";
-    icon.style.userSelect = "none";
-    icon.style.zIndex = "2";
-    el2.appendChild(icon);
-  }
-  function removeLockIcon3(el2) {
-    el2.querySelectorAll(`span.${LOCK_CLASS}`).forEach((node) => node.remove());
-  }
-  function extractEggId2(obj) {
-    if (!obj || typeof obj !== "object") return null;
-    if (obj.objectType !== "egg") return null;
-    const eggId = obj.eggId;
-    return typeof eggId === "string" && eggId ? eggId : null;
-  }
-
-  // src/utils/decorPickupLockIndicator.ts
-  var CONTAINER_SELECTOR3 = ".css-502lyi";
-  var LOCK_CLASS2 = "tm-decor-lock";
-  var BORDER_COLOR2 = "rgb(188, 53, 215)";
-  var DATA_BORDER3 = "tmDecorLockBorder";
-  var DATA_RADIUS3 = "tmDecorLockRadius";
-  var DATA_POSITION3 = "tmDecorLockPosition";
-  var DATA_OVERFLOW3 = "tmDecorLockOverflow";
-  var DECOR_LABELS = (() => {
-    const labels = /* @__PURE__ */ new Set();
     try {
-      Object.entries(decorCatalog).forEach(([decorId, entry]) => {
-        if (decorId) labels.add(decorId.toLowerCase());
-        const name = entry?.name;
-        if (typeof name === "string" && name) {
-          labels.add(name.toLowerCase());
+      return JSON.stringify(walk(value));
+    } catch {
+      return "";
+    }
+  }
+  function entryIdentity(entry) {
+    const p = entry?.parameters;
+    const candidates = [
+      p?.id,
+      p?.pet?.id,
+      p?.petId,
+      p?.playerId,
+      p?.userId,
+      p?.objectId,
+      p?.slotId,
+      p?.itemId,
+      p?.cropId,
+      p?.seedId,
+      p?.decorId,
+      p?.toolId,
+      p?.targetId,
+      p?.abilityId
+    ];
+    for (const c of candidates) {
+      if (typeof c === "string" && c.trim()) return c;
+    }
+    return null;
+  }
+  function entryKey(entry) {
+    const ts = Number(entry.timestamp);
+    const action2 = typeof entry.action === "string" ? entry.action : "";
+    const identity = entryIdentity(entry) ?? "__noid__";
+    const tsPart = Number.isFinite(ts) ? String(ts) : `t:${stableStringify({ timestamp: entry.timestamp ?? null })}`;
+    return `${tsPart}|${action2}|${identity}`;
+  }
+  function entriesEqual(a, b) {
+    return stableStringify(a) === stableStringify(b);
+  }
+  function loadHistory() {
+    try {
+      const parsed = readAriesPath(HISTORY_STORAGE_KEY);
+      if (!Array.isArray(parsed)) return [];
+      const out = [];
+      for (const item of parsed) {
+        const norm3 = normalizeEntry(item);
+        if (norm3) out.push(norm3);
+      }
+      return out;
+    } catch {
+      return [];
+    }
+  }
+  function saveHistory(entries) {
+    const sorted = entries.slice().sort((a, b) => Number(a.timestamp || 0) - Number(b.timestamp || 0));
+    if (sorted.length > HISTORY_LIMIT) {
+      sorted.splice(0, sorted.length - HISTORY_LIMIT);
+    }
+    try {
+      writeAriesPath(HISTORY_STORAGE_KEY, sorted);
+    } catch {
+    }
+  }
+  function diffSnapshots(prev, next) {
+    const prevBuckets = /* @__PURE__ */ new Map();
+    const bucketPush = (k, entry) => {
+      const arr = prevBuckets.get(k);
+      if (arr) arr.push(entry);
+      else prevBuckets.set(k, [entry]);
+    };
+    for (const entry of prev) bucketPush(entryKey(entry), entry);
+    const added = [];
+    const updated = [];
+    for (const entry of next) {
+      const key2 = entryKey(entry);
+      const bucket = prevBuckets.get(key2);
+      const prevEntry = bucket?.shift();
+      if (!prevEntry) {
+        added.push(entry);
+      } else if (!entriesEqual(prevEntry, entry)) {
+        updated.push(entry);
+      }
+      if (bucket && bucket.length === 0) prevBuckets.delete(key2);
+    }
+    return { added, updated };
+  }
+  function syncHistory(prevSnapshot, nextSnapshot) {
+    const history2 = loadHistory();
+    const { added, updated } = diffSnapshots(prevSnapshot, nextSnapshot);
+    if (!added.length && !updated.length) return history2;
+    const map2 = /* @__PURE__ */ new Map();
+    for (const h of history2) map2.set(entryKey(h), h);
+    let changed = false;
+    const upsert = (entry) => {
+      const key2 = entryKey(entry);
+      const cur = map2.get(key2);
+      if (!cur || !entriesEqual(cur, entry)) {
+        map2.set(key2, entry);
+        changed = true;
+      }
+    };
+    updated.forEach(upsert);
+    added.forEach(upsert);
+    if (!changed) return history2;
+    const merged = Array.from(map2.values());
+    saveHistory(merged);
+    return merged;
+  }
+  async function reopenFakeActivityLogFromHistory() {
+    try {
+      const history2 = loadHistory();
+      await fakeActivityLogShow(history2, { open: true });
+    } catch {
+    }
+  }
+  async function startActivityLogHistoryWatcher() {
+    const stops = [];
+    let lastSnapshot = [];
+    const ingest = async (logs, prev) => {
+      try {
+        const prevSnapshot = typeof prev !== "undefined" ? normalizeList(prev) : lastSnapshot;
+        const nextSnapshot = normalizeList(logs);
+        syncHistory(prevSnapshot, nextSnapshot);
+        lastSnapshot = nextSnapshot;
+      } catch {
+      }
+    };
+    try {
+      const initial = normalizeList(await myActivityLog.get());
+      await ingest(initial);
+    } catch {
+    }
+    try {
+      const unsub = await myActivityLog.onChange((next, prev) => {
+        void ingest(next, prev);
+      });
+      stops.push(() => {
+        try {
+          unsub();
+        } catch {
         }
       });
     } catch {
     }
-    return Array.from(labels).filter(Boolean);
-  })();
-  function startDecorPickupLockIndicator() {
-    if (typeof window === "undefined" || typeof document === "undefined") {
-      return { stop() {
-      } };
+    let lastModal = null;
+    try {
+      const cur = await Atoms.ui.activeModal.get();
+      lastModal = cur ?? null;
+    } catch {
     }
-    let running = true;
-    const disposables = [];
-    const isLocked = () => lockerRestrictionsService.isDecorPickupLocked();
-    const applyLockState = () => {
-      if (!running) return;
-      const locked = isLocked();
-      const containers = Array.from(document.querySelectorAll(CONTAINER_SELECTOR3));
-      containers.forEach((el2) => {
-        if (!looksLikeDecorItem(el2)) {
-          restore2(el2);
-          return;
+    const consumeHistoryReopenSkip = () => {
+      if (!skipNextHistoryReopen) return false;
+      skipNextHistoryReopen = false;
+      return true;
+    };
+    const onModalChange = async (modalId) => {
+      const cur = modalId ?? null;
+      if (cur === ACTIVITY_LOG_MODAL_ID && lastModal !== ACTIVITY_LOG_MODAL_ID) {
+        if (!consumeHistoryReopenSkip()) {
+          await reopenFakeActivityLogFromHistory();
         }
-        setLocked2(el2, locked);
+      }
+      lastModal = cur;
+    };
+    try {
+      const unsubModal = await Atoms.ui.activeModal.onChange(onModalChange);
+      stops.push(() => {
+        try {
+          unsubModal();
+        } catch {
+        }
       });
-    };
-    const observeDom = () => {
-      const mo = new MutationObserver(() => applyLockState());
-      mo.observe(document.documentElement, { childList: true, subtree: true });
-      disposables.push(() => mo.disconnect());
-    };
-    const subscribeLocker2 = () => {
-      const unsub = lockerRestrictionsService.subscribe(() => applyLockState());
-      disposables.push(unsub);
-    };
-    observeDom();
-    subscribeLocker2();
-    applyLockState();
-    return {
-      stop() {
-        running = false;
-        disposables.splice(0).forEach((fn) => {
-          try {
-            fn();
-          } catch {
-          }
-        });
-        const containers = Array.from(document.querySelectorAll(CONTAINER_SELECTOR3));
-        containers.forEach(restore2);
+    } catch {
+    }
+    return async () => {
+      for (const stop2 of stops) {
+        try {
+          await stop2();
+        } catch {
+        }
       }
     };
-  }
-  function looksLikeDecorItem(el2) {
-    const text = (el2.textContent || "").toLowerCase();
-    if (!text) return false;
-    if (!el2.querySelector("canvas")) return false;
-    return DECOR_LABELS.some((label2) => label2 && text.includes(label2));
-  }
-  function setLocked2(el2, locked) {
-    if (!locked) {
-      restore2(el2);
-      return;
-    }
-    storeStyle2(el2, DATA_BORDER3, "border");
-    storeStyle2(el2, DATA_RADIUS3, "borderRadius");
-    storeStyle2(el2, DATA_POSITION3, "position");
-    storeStyle2(el2, DATA_OVERFLOW3, "overflow");
-    el2.style.border = `3px solid ${BORDER_COLOR2}`;
-    el2.style.borderRadius = "16px";
-    el2.style.overflow = "visible";
-    const pos = window.getComputedStyle(el2).position;
-    if (pos === "static") {
-      el2.style.position = "relative";
-    }
-    ensureLockIcon4(el2);
-  }
-  function restore2(el2) {
-    restoreStyle3(el2, DATA_BORDER3, "border");
-    restoreStyle3(el2, DATA_RADIUS3, "borderRadius");
-    restoreStyle3(el2, DATA_POSITION3, "position");
-    restoreStyle3(el2, DATA_OVERFLOW3, "overflow");
-    removeLockIcon4(el2);
-  }
-  function storeStyle2(el2, key2, cssProperty) {
-    const data = el2.dataset;
-    if (data[key2] !== void 0) return;
-    data[key2] = el2.style[cssProperty];
-  }
-  function restoreStyle3(el2, key2, cssProperty) {
-    const data = el2.dataset;
-    if (data[key2] === void 0) return;
-    const value = data[key2];
-    if (value) {
-      el2.style.setProperty(camelToKebab3(cssProperty), value);
-    } else {
-      el2.style.removeProperty(camelToKebab3(cssProperty));
-    }
-    delete data[key2];
-  }
-  function camelToKebab3(str) {
-    return str.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`);
-  }
-  function ensureLockIcon4(el2) {
-    const existing = el2.querySelector(`span.${LOCK_CLASS2}`);
-    if (existing) return;
-    const icon = document.createElement("span");
-    icon.className = LOCK_CLASS2;
-    icon.textContent = "\u{1F512}";
-    icon.style.position = "absolute";
-    icon.style.top = "-8px";
-    icon.style.right = "-8px";
-    icon.style.fontSize = "16px";
-    icon.style.pointerEvents = "none";
-    icon.style.userSelect = "none";
-    icon.style.zIndex = "2";
-    el2.appendChild(icon);
-  }
-  function removeLockIcon4(el2) {
-    el2.querySelectorAll(`span.${LOCK_CLASS2}`).forEach((node) => node.remove());
   }
 
   // src/ui/hud.ts
@@ -27277,6 +24066,7 @@
   /* ---------- HUD floating box ---------- */
   .qws2{
     position:fixed; right:16px; bottom:16px; z-index:${Z_BASE};
+    position:fixed; right:16px; bottom:16px; z-index:1000010;
     font:12px/1.4 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
     color:var(--qws-text);
     background:var(--qws-panel);
@@ -27288,20 +24078,6 @@
     min-width:160px;
     display:flex; flex-direction:column; gap:8px;
   }
-
-
-  .qws2 .btn{
-    cursor:pointer;
-    border-radius:10px;
-    border:1px solid var(--qws-border);
-    padding:6px 10px;
-    background:linear-gradient(180deg, #ffffff12, #ffffff06);
-    color:#fff;
-    transition:transform .1s ease, background .18s ease, border-color .18s ease;
-    width:auto !important;
-    margin-bottom:0 !important;
-  }
-
   .qws2.hidden{ display:none }
   .qws2 .row{ display:flex; gap:8px; align-items:center; flex-wrap:wrap }
   .qws2 .col{ display:flex; flex-direction:column; gap:4px }
@@ -27659,7 +24435,7 @@
     btnMin.onclick = () => {
       withTopLocked(box, () => {
         box.classList.toggle("min");
-        btnMin.textContent = box.classList.contains("min") ? "+" : "-";
+        btnMin.textContent = box.classList.contains("min") ? "+" : "\u2013";
         try {
           writeAriesPath(HUD_COLLAPSED_PATH, box.classList.contains("min"));
         } catch {
@@ -28064,7 +24840,23 @@
       } catch {
       }
     })();
-    setInterval(() => {
+    let warmupState2 = getSpriteWarmupState();
+    const updateStatus = () => {
+      if (!warmupState2.completed) {
+        const total = warmupState2.total;
+        const done = warmupState2.done;
+        const progressText = total > 0 ? `${done}/${total}` : `${done}`;
+        const summary2 = total > 0 ? `Sprites warming: ${progressText}` : "Sprites warming up";
+        sFull.textContent = `Sprites ${progressText}`;
+        sFull.title = summary2;
+        tag(sFull, "warn");
+        sFull.style.display = "";
+        sMini.textContent = progressText;
+        sMini.title = summary2;
+        tag(sMini, "warn");
+        sMini.style.display = "";
+        return;
+      }
       const wsStatus = getWSStatus();
       const storeStatus = getStoreStatus();
       const isStoreMissing = storeStatus.message === "store none";
@@ -28074,11 +24866,22 @@
       sFull.textContent = "status";
       sFull.title = summary;
       tag(sFull, level);
+      sFull.style.display = "";
       const miniText = level === "ok" ? "OK" : level === "warn" ? "WARN" : "ISSUES";
       sMini.textContent = miniText;
       sMini.title = summary;
       tag(sMini, level);
-    }, 800);
+      if (level === "ok") {
+        sMini.style.display = "none";
+      } else {
+        sMini.style.display = "";
+      }
+    };
+    const offWarmup = onSpriteWarmupProgress((state3) => {
+      warmupState2 = state3;
+      updateStatus();
+    });
+    setInterval(updateStatus, 800);
     function getOpenPageWS() {
       for (let i = 0; i < sockets.length; i++) {
         if (sockets[i].readyState === NativeWS.OPEN) return sockets[i];
@@ -28116,6 +24919,13 @@
       el2.classList.remove("ok", "warn", "bad");
       if (cls) el2.classList.add(cls);
     }
+    box.__cleanup__ = (() => {
+      const prev = box.__cleanup__;
+      return () => {
+        offWarmup?.();
+        if (typeof prev === "function") prev();
+      };
+    })();
     function escapeHtml2(s) {
       return s.replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[m]);
     }
@@ -28123,6 +24933,7 @@
   function initWatchers() {
     installShopKeybindsOnce();
     installSellKeybindsOnce();
+    installPetHutchKeybindsOnce();
     installGameKeybindsOnce();
     (async () => {
       try {
@@ -28154,15 +24965,15 @@
       await renderOverlay();
       setupBuyAll();
       startReorderObserver();
-      startSellCropsLockWatcher();
       startCropValuesObserverFromGardenAtom();
-      startInjectSellAllPets();
-      startEggHatchLockIndicator();
+      startSellCropsLockWatcher();
       startDecorPickupLockIndicator();
+      startEggHatchLockIndicator();
+      startInjectSellAllPets();
       startPetPanelEnhancer();
       startSelectedInventoryQuantityLogger();
       startInventorySortingObserver();
-      startModalObserver({ intervalMs: 6e4, log: false });
+      startModalObserver({ intervalMs: 6e4, log: true });
     })();
   }
 
@@ -29377,864 +26188,6 @@ next: ${next}`;
     };
   }
 
-  // src/data/sprites.ts
-  var SOURCE_LABELS = {
-    tileRefsMap: "Map tiles",
-    tileRefsPlants: "Plants",
-    tileRefsTallPlants: "Tall plants",
-    tileRefsSeeds: "Seeds",
-    tileRefsItems: "Items",
-    tileRefsAnimations: "Animations",
-    tileRefsPets: "Pets",
-    tileRefsMutations: "Mutations",
-    tileRefsDecor: "Decor"
-  };
-  function formatDisplayName(key2) {
-    const spaced = key2.replace(/_/g, " ").replace(/([a-z0-9])([A-Z])/g, "$1 $2").replace(/\s+/g, " ").trim();
-    if (!spaced) return key2;
-    return spaced.charAt(0).toUpperCase() + spaced.slice(1);
-  }
-  function buildEntries(config) {
-    const map2 = /* @__PURE__ */ new Map();
-    for (const { source, refs } of config.sources) {
-      const sourceLabel = SOURCE_LABELS[source] ?? source;
-      for (const [key2, value] of Object.entries(refs)) {
-        if (typeof value !== "number" || Number.isNaN(value)) continue;
-        const index = value > 0 ? value - 1 : value;
-        const entry = {
-          index,
-          key: key2,
-          source,
-          sourceLabel,
-          qualifiedName: `${source}.${key2}`,
-          displayName: formatDisplayName(key2)
-        };
-        const current = map2.get(index);
-        if (current) {
-          current.push(entry);
-        } else {
-          map2.set(index, [entry]);
-        }
-      }
-    }
-    return map2;
-  }
-  var rawMatchers = [
-    {
-      id: "plants-tall",
-      label: "Tall plants",
-      test: (sheet) => sheet.includes("tall"),
-      sources: [{ source: "tileRefsTallPlants", refs: tileRefsTallPlants }]
-    },
-    {
-      id: "plants",
-      label: "Plants",
-      test: (sheet) => sheet.includes("plants"),
-      sources: [{ source: "tileRefsPlants", refs: tileRefsPlants }]
-    },
-    {
-      id: "mutations",
-      label: "Mutations",
-      test: (sheet) => sheet.includes("mutation"),
-      sources: [{ source: "tileRefsMutations", refs: tileRefsMutations }]
-    },
-    {
-      id: "seeds",
-      label: "Seeds",
-      test: (sheet) => sheet.includes("seed"),
-      sources: [{ source: "tileRefsSeeds", refs: tileRefsSeeds }]
-    },
-    {
-      id: "items",
-      label: "Items",
-      test: (sheet) => sheet.includes("item"),
-      sources: [{ source: "tileRefsItems", refs: tileRefsItems }]
-    },
-    {
-      id: "pets",
-      label: "Pets",
-      test: (sheet) => sheet.includes("pet"),
-      sources: [{ source: "tileRefsPets", refs: tileRefsPets }]
-    },
-    {
-      id: "decor",
-      label: "Decor",
-      test: (sheet) => sheet.includes("decor"),
-      sources: [{ source: "tileRefsDecor", refs: tileRefsDecor }]
-    },
-    {
-      id: "animations",
-      label: "Animations",
-      test: (sheet) => sheet.includes("anim"),
-      sources: [{ source: "tileRefsAnimations", refs: tileRefsAnimations }]
-    },
-    {
-      id: "map",
-      label: "Map",
-      test: (sheet) => sheet.includes("map"),
-      sources: [{ source: "tileRefsMap", refs: tileRefsMap }]
-    }
-  ];
-  var matchers = rawMatchers.map((config) => ({
-    ...config,
-    entries: buildEntries(config)
-  }));
-  var matchersBySource = /* @__PURE__ */ new Map();
-  for (const matcher of matchers) {
-    for (const { source } of matcher.sources) {
-      const existing = matchersBySource.get(source);
-      if (existing) existing.push(matcher);
-      else matchersBySource.set(source, [matcher]);
-    }
-  }
-  var fallbackEntries = (() => {
-    const map2 = /* @__PURE__ */ new Map();
-    for (const matcher of matchers) {
-      for (const [index, entries] of matcher.entries) {
-        const existing = map2.get(index);
-        if (existing) {
-          existing.push(...entries);
-        } else {
-          map2.set(index, [...entries]);
-        }
-      }
-    }
-    return map2;
-  })();
-  function normalizeSheet(sheet) {
-    return sheet.toLowerCase();
-  }
-  function findTileRefMatch(sheet, index) {
-    const normalized = normalizeSheet(sheet);
-    for (const matcher of matchers) {
-      if (!matcher.test(normalized)) continue;
-      const entries = matcher.entries.get(index);
-      if (entries?.length) {
-        return {
-          sheetId: matcher.id,
-          sheetLabel: matcher.label,
-          entries: [...entries]
-        };
-      }
-    }
-    const fallback = fallbackEntries.get(index);
-    if (fallback?.length === 1) {
-      const entry = fallback[0];
-      const sourceMatchers = matchersBySource.get(entry.source);
-      if (!sourceMatchers || sourceMatchers.some((m) => m.test(normalized))) {
-        return {
-          sheetId: entry.source,
-          sheetLabel: entry.sourceLabel,
-          entries: [...fallback]
-        };
-      }
-    }
-    return null;
-  }
-
-  // src/ui/menus/debug-data-sprites.ts
-  var COLOR_FILTERS = ["None", "Gold", "Rainbow"];
-  var CONDITION_MUTATION_KEYS = ["None", "Wet", "Chilled", "Frozen"];
-  function debugAssetName(url) {
-    const clean = url.split(/[?#]/)[0];
-    const last = clean.split("/").filter(Boolean).pop() ?? clean;
-    return last.replace(/\.[a-z0-9]+$/i, "");
-  }
-  function deriveAssetCategory(family, url) {
-    const base = debugAssetName(url);
-    const normalized = (family || "").toLowerCase();
-    if (normalized === "tiles") return base;
-    if (normalized === "cosmetics") {
-      return base.split("_")[0] || base;
-    }
-    try {
-      const trimmed = url.split(/[?#]/)[0].replace(/^https?:\/\/[^/]+\//, "");
-      const segments = trimmed.split("/").filter(Boolean);
-      if (segments.length >= 2) {
-        return segments[1].split(".")[0] || base;
-      }
-    } catch {
-    }
-    return base;
-  }
-  var COSMETICS_EXPRESSION_CATEGORY = "expression";
-  var COSMETICS_EXPRESSION_BASE_REGEX = /\/cosmetics\/mid_defaultblack\.png(?:$|\?)/i;
-  function isExpressionCategoryName(name) {
-    return (name ?? "").toLowerCase() === COSMETICS_EXPRESSION_CATEGORY;
-  }
-  function findExpressionBaseUrl(urls) {
-    return urls.find((url) => COSMETICS_EXPRESSION_BASE_REGEX.test(url.split(/[?#]/)[0])) ?? null;
-  }
-  function formatExpressionDisplayName(url) {
-    const raw = debugAssetName(url);
-    const cleaned = raw.replace(/^Mid_DefaultBlack[_-]?/i, "").replace(/_/g, " ").trim();
-    return cleaned || raw;
-  }
-  async function loadImageElement(url) {
-    const response = await fetch(url, { credentials: "include" });
-    if (!response.ok) {
-      throw new Error(`Failed to load image ${url}: ${response.status}`);
-    }
-    const blob = await response.blob();
-    const objectUrl = URL.createObjectURL(blob);
-    try {
-      return await new Promise((resolve2, reject) => {
-        const img = new Image();
-        img.onload = () => {
-          URL.revokeObjectURL(objectUrl);
-          resolve2(img);
-        };
-        img.onerror = (error) => {
-          URL.revokeObjectURL(objectUrl);
-          reject(error);
-        };
-        img.src = objectUrl;
-      });
-    } catch (error) {
-      URL.revokeObjectURL(objectUrl);
-      throw error;
-    }
-  }
-  function imageToCanvas(img) {
-    const canvas = document.createElement("canvas");
-    canvas.width = img.width;
-    canvas.height = img.height;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) throw new Error("Failed to get 2D context for expression canvas");
-    ctx.imageSmoothingEnabled = false;
-    ctx.drawImage(img, 0, 0);
-    return canvas;
-  }
-  async function loadCanvasFromUrl(url) {
-    try {
-      const img = await loadImageElement(url);
-      return imageToCanvas(img);
-    } catch (error) {
-      console.error("[Sprites] Failed to load canvas for expression asset", { url, error });
-      return null;
-    }
-  }
-  function blendBaseAndOverlay(baseCanvas, overlayCanvas) {
-    const width = baseCanvas?.width ?? overlayCanvas?.width ?? 1;
-    const height = baseCanvas?.height ?? overlayCanvas?.height ?? 1;
-    const canvas = document.createElement("canvas");
-    canvas.width = width;
-    canvas.height = height;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) throw new Error("Failed to get 2D context when blending canvases");
-    ctx.imageSmoothingEnabled = false;
-    if (baseCanvas) ctx.drawImage(baseCanvas, 0, 0, width, height);
-    else if (overlayCanvas) ctx.drawImage(overlayCanvas, 0, 0, width, height);
-    if (overlayCanvas) ctx.drawImage(overlayCanvas, 0, 0, width, height);
-    return canvas;
-  }
-  function renderSpritesTab(view, ui) {
-    view.innerHTML = "";
-    view.classList.add("dd-debug-view");
-    const { leftCol, rightCol } = createTwoColumns(view);
-    const explorerCard = ui.card("Sprite Explorer", {
-      tone: "muted",
-      subtitle: "Browse captured assets by manifest family."
-    });
-    leftCol.appendChild(explorerCard.root);
-    const listCard = ui.card("Assets", {
-      tone: "muted",
-      subtitle: "Click an entry to open the file in a new tab."
-    });
-    rightCol.appendChild(listCard.root);
-    const families = ["all", ...Array.from(new Set(Sprites.listFamilies().filter(Boolean))).sort()];
-    let selectedFamily = "all";
-    let selectedCategory = "all";
-    const categoryCache = /* @__PURE__ */ new Map();
-    const familySelect = ui.select({ width: "100%" });
-    families.forEach((family) => {
-      const option = document.createElement("option");
-      option.value = family;
-      option.textContent = family === "all" ? "All families" : family;
-      familySelect.appendChild(option);
-    });
-    familySelect.value = selectedFamily;
-    const categorySelect = ui.select({ width: "100%" });
-    categorySelect.disabled = true;
-    const controlsGrid = document.createElement("div");
-    controlsGrid.className = "dd-sprite-control-grid";
-    controlsGrid.append(
-      createSelectControl("Asset family", familySelect),
-      createSelectControl("Asset category", categorySelect)
-    );
-    explorerCard.body.appendChild(controlsGrid);
-    const filterPanel = document.createElement("div");
-    filterPanel.className = "dd-sprite-filter-panel";
-    explorerCard.body.appendChild(filterPanel);
-    const colorSegmentRow = document.createElement("div");
-    const conditionSegmentRow = document.createElement("div");
-    const lightingSegmentRow = document.createElement("div");
-    filterPanel.append(colorSegmentRow, conditionSegmentRow, lightingSegmentRow);
-    const COLOR_FILTERS_LIST = COLOR_FILTERS;
-    const mutationLabelMap = tileRefsMutationLabels;
-    const CONDITION_OPTIONS = CONDITION_MUTATION_KEYS.map((value) => ({
-      value,
-      label: value === "None" ? "None" : mutationLabelMap[value] ?? value
-    }));
-    const LIGHTING_DEFINITIONS = [
-      { id: "None", key: "None", label: "None" },
-      { id: "Dawnlit", key: "Dawnlit", label: mutationLabelMap["Dawnlit"] ?? "Dawnlit" },
-      { id: "Ambershine", key: "Amberlit", label: mutationLabelMap["Amberlit"] ?? "Amberlit" },
-      { id: "Dawncharged", key: "Dawnbound", label: mutationLabelMap["Dawnbound"] ?? "Dawnbound" },
-      { id: "Ambercharged", key: "Amberbound", label: mutationLabelMap["Amberbound"] ?? "Amberbound" }
-    ];
-    const LIGHTING_OPTIONS = LIGHTING_DEFINITIONS.map((def) => ({
-      value: def.id,
-      label: def.label
-    }));
-    let colorFilter = "None";
-    let conditionFilter = "None";
-    let lightingFilter = "None";
-    let lightingSelectionKey = "None";
-    const categoryMatches = (keyword) => selectedFamily === "tiles" && selectedCategory.toLowerCase().includes(keyword);
-    const renderSegment = (container, title, options, selected, onSelect) => {
-      container.innerHTML = "";
-      const heading = document.createElement("span");
-      heading.className = "dd-sprite-filter-label";
-      heading.textContent = title;
-      const segment = document.createElement("div");
-      segment.className = "dd-sprite-segmented";
-      options.forEach(({ value, label: label2 }) => {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "dd-sprite-seg-btn";
-        btn.textContent = label2;
-        if (value === selected) btn.classList.add("is-active");
-        btn.addEventListener("click", () => {
-          onSelect(value);
-          renderFilters();
-          void updateList();
-        });
-        segment.append(btn);
-      });
-      container.append(heading, segment);
-    };
-    let currentTilesheetUrl = null;
-    let currentTiles = [];
-    let tileSheetActive = false;
-    let visibleAssetUrls = [];
-    let mutationIconsCache = null;
-    const mutationIconsPromise = loadMutationIcons();
-    const applyFiltersToCanvas = (canvas, filters = buildFilterQueue()) => {
-      let result = canvas;
-      for (const filterName of filters) {
-        const filtered = Sprites.applyCanvasFilter(result, filterName);
-        if (filtered) result = filtered;
-      }
-      return result;
-    };
-    const exportCard = ui.card("Export", {
-      tone: "muted",
-      subtitle: "Download the assets currently visible in the explorer."
-    });
-    leftCol.appendChild(exportCard.root);
-    const exportBtn = ui.btn("Export visible assets", {
-      variant: "primary",
-      icon: "\u2B07",
-      onClick: exportVisibleAssets
-    });
-    const exportStatus = document.createElement("span");
-    exportStatus.className = "dd-sprite-stats";
-    exportStatus.textContent = "Select assets to export.";
-    const progressWrapper = document.createElement("div");
-    progressWrapper.className = "dd-sprite-export-progress";
-    const progressBar = document.createElement("div");
-    progressBar.className = "dd-sprite-export-progress__bar";
-    progressWrapper.append(progressBar);
-    exportCard.body.append(exportBtn, exportStatus, progressWrapper);
-    let exporting = false;
-    const showProgress = (value) => {
-      progressBar.style.width = `${value}%`;
-      progressWrapper.style.opacity = value > 0 && value < 100 ? "1" : "0";
-    };
-    const getAssetExportBaseName = () => {
-      const familyPart = selectedFamily === "all" ? "all" : selectedFamily || "assets";
-      const categoryPart = selectedCategory && selectedCategory !== "all" ? `-${selectedCategory}` : "";
-      const raw = `${familyPart}${categoryPart}`.replace(/[^a-z0-9_-]+/gi, "_");
-      return raw || "assets";
-    };
-    const updateExportStatusText = () => {
-      if (tileSheetActive) {
-        exportStatus.textContent = currentTiles.length ? `${currentTiles.length} tiles ready to export.` : "Load a tilesheet to export.";
-        return;
-      }
-      if (visibleAssetUrls.length) {
-        exportStatus.textContent = `${visibleAssetUrls.length} assets ready to download.`;
-        return;
-      }
-      exportStatus.textContent = "Select assets to export.";
-    };
-    function triggerDownload(blob, filename) {
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(blob);
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      setTimeout(() => URL.revokeObjectURL(a.href), 1e4);
-    }
-    async function downloadCanvasAsPng(canvas, filename) {
-      const blob = await new Promise((resolve2, reject) => {
-        canvas.toBlob((b) => {
-          if (!b) {
-            reject(new Error("canvas.toBlob returned null"));
-            return;
-          }
-          resolve2(b);
-        }, "image/png");
-      });
-      triggerDownload(blob, filename);
-    }
-    async function renderCosmeticsExpressionPreview(options) {
-      const { previewArea: previewArea2, expressionUrls, baseUrl, baseCanvas } = options;
-      previewArea2.innerHTML = "";
-      previewArea2.classList.remove("dd-sprite-grid--tiles");
-      const baseItem = document.createElement("div");
-      baseItem.className = "dd-sprite-grid__item";
-      if (baseCanvas || baseUrl) {
-        const baseImg = document.createElement("img");
-        baseImg.className = "dd-sprite-grid__img";
-        baseImg.alt = "Mid Default Black base";
-        baseImg.loading = "lazy";
-        baseImg.referrerPolicy = "no-referrer";
-        baseImg.src = baseCanvas ? baseCanvas.toDataURL() : baseUrl;
-        baseItem.appendChild(baseImg);
-      }
-      const baseName = document.createElement("span");
-      baseName.className = "dd-sprite-grid__name";
-      baseName.textContent = "Mid Default Black (base)";
-      const baseMeta = document.createElement("span");
-      baseMeta.className = "dd-sprite-grid__meta";
-      baseMeta.textContent = baseUrl ?? "Base asset missing (Mid_DefaultBlack)";
-      baseItem.append(baseName, baseMeta);
-      previewArea2.appendChild(baseItem);
-      if (!expressionUrls.length) {
-        const empty = document.createElement("div");
-        empty.className = "dd-sprite-grid__empty";
-        empty.textContent = "No expression assets recorded yet.";
-        previewArea2.appendChild(empty);
-        return;
-      }
-      const overlays = await Promise.all(expressionUrls.map(async (url) => ({
-        url,
-        overlayCanvas: await loadCanvasFromUrl(url)
-      })));
-      for (const { url, overlayCanvas } of overlays) {
-        const displayName = formatExpressionDisplayName(url);
-        if (!overlayCanvas) {
-          const failItem = document.createElement("div");
-          failItem.className = "dd-sprite-grid__item";
-          const failLabel = document.createElement("span");
-          failLabel.className = "dd-sprite-grid__name";
-          failLabel.textContent = `${displayName} (failed to render)`;
-          const failMeta = document.createElement("span");
-          failMeta.className = "dd-sprite-grid__meta";
-          failMeta.textContent = url;
-          failItem.append(failLabel, failMeta);
-          previewArea2.appendChild(failItem);
-          continue;
-        }
-        const combined = blendBaseAndOverlay(baseCanvas, overlayCanvas);
-        const item = document.createElement("a");
-        item.className = "dd-sprite-grid__item";
-        item.href = url;
-        item.target = "_blank";
-        item.rel = "noopener noreferrer";
-        const img = document.createElement("img");
-        img.className = "dd-sprite-grid__img";
-        img.src = combined.toDataURL();
-        img.alt = displayName;
-        img.loading = "lazy";
-        img.referrerPolicy = "no-referrer";
-        const nameEl = document.createElement("span");
-        nameEl.className = "dd-sprite-grid__name";
-        nameEl.textContent = displayName;
-        const meta = document.createElement("span");
-        meta.className = "dd-sprite-grid__meta";
-        meta.textContent = url;
-        item.append(img, nameEl, meta);
-        item.addEventListener("click", (event) => {
-          event.preventDefault();
-          event.stopPropagation();
-          const downloadCanvas = overlayCanvas ?? combined;
-          void downloadCanvasAsPng(downloadCanvas, `${debugAssetName(url)}.png`);
-        });
-        previewArea2.appendChild(item);
-      }
-    }
-    async function downloadUrlAsset(url) {
-      try {
-        const resp = await fetch(url, { credentials: "include" });
-        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-        const blob = await resp.blob();
-        let name = debugAssetName(url);
-        if (!/\.[a-z0-9]+$/i.test(name)) name += ".png";
-        triggerDownload(blob, name);
-      } catch (error) {
-        console.error("[Sprites] Asset download failed", { url, error });
-      }
-    }
-    async function exportVisibleAssets() {
-      if (exporting) return;
-      const hasTiles = tileSheetActive && Boolean(currentTilesheetUrl) && currentTiles.length > 0;
-      const hasAssets = visibleAssetUrls.length > 0;
-      if (!hasTiles && !hasAssets) {
-        showProgress(0);
-        exportStatus.textContent = "Select assets to export.";
-        return;
-      }
-      exporting = true;
-      exportBtn.disabled = true;
-      showProgress(0);
-      exportStatus.textContent = "Preparing export...";
-      try {
-        if (hasTiles) {
-          const base = normalizeSheetBase(currentTilesheetUrl);
-          const filters = buildFilterQueue();
-          await Sprites.exportFilteredTileset({
-            tiles: currentTiles,
-            filters,
-            baseName: base,
-            onProgress: (processed, total) => {
-              const percent = total ? Math.round(processed / total * 100) : 0;
-              showProgress(percent);
-              exportStatus.textContent = `Processing ${processed}/${total} tiles`;
-            }
-          });
-        } else {
-          const base = getAssetExportBaseName();
-          await Sprites.exportAssets({
-            urls: visibleAssetUrls,
-            baseName: base,
-            onProgress: (processed, total) => {
-              const percent = total ? Math.round(processed / total * 100) : 0;
-              showProgress(percent);
-              exportStatus.textContent = `Processing ${processed}/${total} assets`;
-            }
-          });
-        }
-        showProgress(100);
-        exportStatus.textContent = "Export ready \u2014 check your downloads.";
-        setTimeout(() => showProgress(0), 1e3);
-      } catch (error) {
-        console.error("[Sprites] Export failed", error);
-        exportStatus.textContent = "Export failed (see console).";
-        showProgress(0);
-      } finally {
-        exporting = false;
-        exportBtn.disabled = false;
-      }
-    }
-    const renderFilters = () => {
-      const showColor = categoryMatches("plant") || categoryMatches("pet");
-      const showCondition = categoryMatches("plant");
-      const showLighting = categoryMatches("plant");
-      filterPanel.style.display = showColor ? "" : "none";
-      colorSegmentRow.style.display = showColor ? "" : "none";
-      conditionSegmentRow.style.display = showCondition ? "" : "none";
-      lightingSegmentRow.style.display = showLighting ? "" : "none";
-      renderSegment(
-        colorSegmentRow,
-        "Color",
-        COLOR_FILTERS_LIST.map((value) => ({ value, label: value })),
-        colorFilter,
-        (value) => {
-          colorFilter = value;
-        }
-      );
-      renderSegment(conditionSegmentRow, "Weather", CONDITION_OPTIONS, conditionFilter, (value) => {
-        conditionFilter = value;
-      });
-      renderSegment(lightingSegmentRow, "Lighting", LIGHTING_OPTIONS, lightingFilter, (value) => {
-        lightingFilter = value;
-        lightingSelectionKey = LIGHTING_DEFINITIONS.find((def) => def.id === value)?.key ?? value;
-      });
-    };
-    const buildFilterQueue = () => {
-      const queue = [];
-      if (colorFilter !== "None") queue.push(colorFilter);
-      if (colorFilter === "Gold" || colorFilter === "Rainbow") return queue;
-      if (categoryMatches("plant")) {
-        if (conditionFilter !== "None") queue.push(conditionFilter);
-        if (lightingFilter !== "None") queue.push(lightingFilter);
-      }
-      return queue;
-    };
-    renderFilters();
-    const stats = document.createElement("p");
-    stats.className = "dd-sprite-stats";
-    stats.textContent = "Select a family to inspect its assets.";
-    explorerCard.body.appendChild(stats);
-    const previewArea = document.createElement("div");
-    previewArea.className = "dd-sprite-grid";
-    listCard.body.appendChild(previewArea);
-    const ensureCategories = (family) => {
-      if (!categoryCache.has(family)) {
-        const assets = Sprites.listAssetsForFamily(family);
-        const categories = Array.from(new Set(assets.map((url) => deriveAssetCategory(family, url))));
-        categories.sort();
-        categoryCache.set(family, categories);
-      }
-      return categoryCache.get(family) ?? [];
-    };
-    const updateCategoryOptions = () => {
-      if (selectedFamily === "all") {
-        categorySelect.innerHTML = "";
-        const option = document.createElement("option");
-        option.value = "all";
-        option.textContent = "All categories";
-        categorySelect.appendChild(option);
-        categorySelect.value = "all";
-        categorySelect.disabled = true;
-        selectedCategory = "all";
-        return;
-      }
-      const familyHasGroups = selectedFamily === "tiles" || selectedFamily === "cosmetics";
-      if (!familyHasGroups) {
-        categorySelect.innerHTML = "";
-        const option = document.createElement("option");
-        option.value = "all";
-        option.textContent = "All categories";
-        categorySelect.appendChild(option);
-        categorySelect.value = "all";
-        categorySelect.disabled = true;
-        selectedCategory = "all";
-        return;
-      }
-      const categories = ensureCategories(selectedFamily);
-      categorySelect.innerHTML = "";
-      const allOption = document.createElement("option");
-      allOption.value = "all";
-      allOption.textContent = "All categories";
-      categorySelect.appendChild(allOption);
-      categories.forEach((category) => {
-        const option = document.createElement("option");
-        option.value = category;
-        option.textContent = category;
-        categorySelect.appendChild(option);
-      });
-      if (!categories.length) {
-        categorySelect.disabled = true;
-        selectedCategory = "all";
-      } else {
-        categorySelect.disabled = false;
-        selectedCategory = categories.includes(selectedCategory) ? selectedCategory : "all";
-        categorySelect.value = selectedCategory;
-      }
-    };
-    const updateList = async () => {
-      const filterQueue = buildFilterQueue();
-      const familyAssets = selectedFamily === "all" ? Sprites.lists().all : Sprites.listAssetsForFamily(selectedFamily);
-      let assets = familyAssets;
-      if (selectedFamily !== "all" && selectedCategory !== "all") {
-        assets = assets.filter(
-          (url) => deriveAssetCategory(selectedFamily, url) === selectedCategory
-        );
-      }
-      visibleAssetUrls = assets;
-      previewArea.innerHTML = "";
-      let tileCount = null;
-      const isTileSheetView = selectedFamily === "tiles" && selectedCategory !== "all" && assets.length > 0;
-      previewArea.classList.toggle("dd-sprite-grid--tiles", isTileSheetView);
-      currentTilesheetUrl = null;
-      currentTiles = [];
-      tileSheetActive = isTileSheetView;
-      const isCosmeticsExpressionCategory = selectedFamily === "cosmetics" && isExpressionCategoryName(selectedCategory);
-      if (isCosmeticsExpressionCategory) {
-        const expressionBaseUrl = findExpressionBaseUrl(familyAssets);
-        const expressionBaseCanvas = expressionBaseUrl ? await loadCanvasFromUrl(expressionBaseUrl) : null;
-        tileSheetActive = false;
-        currentTilesheetUrl = null;
-        currentTiles = [];
-        previewArea.classList.remove("dd-sprite-grid--tiles");
-        await renderCosmeticsExpressionPreview({
-          previewArea,
-          expressionUrls: assets,
-          baseUrl: expressionBaseUrl,
-          baseCanvas: expressionBaseCanvas
-        });
-        const baseLabel = expressionBaseUrl ? debugAssetName(expressionBaseUrl) : "Mid Default Black";
-        stats.textContent = `${assets.length} expression overlays on ${baseLabel}`;
-        updateExportStatusText();
-        return;
-      }
-      if (isTileSheetView) {
-        const sheetUrl = assets[0];
-        const base = normalizeSheetBase(sheetUrl);
-        const tiles = await loadTileSheet(base);
-        currentTilesheetUrl = sheetUrl;
-        currentTiles = tiles;
-        tileCount = tiles.length;
-        if (!tiles.length) {
-          const empty = document.createElement("div");
-          empty.className = "dd-sprite-grid__empty";
-          empty.textContent = `No tiles could be sliced for ${debugAssetName(sheetUrl)} yet.`;
-          previewArea.appendChild(empty);
-        } else {
-          tiles.forEach((tile) => {
-            const item = document.createElement("a");
-            item.className = "dd-sprite-grid__item";
-            item.href = sheetUrl;
-            item.target = "_blank";
-            item.rel = "noopener noreferrer";
-            const baseCanvas = Sprites.toCanvas(tile);
-            const match = findTileRefMatch(tile.sheet, tile.index);
-            const isPlantSheet = match?.sheetId === "plants";
-            let displayCanvas = applyFiltersToCanvas(baseCanvas, filterQueue);
-            if (isPlantSheet && filterQueue.length && mutationIconsCache && Object.keys(mutationIconsCache).length > 0) {
-              const renderMutations = [];
-              if (colorFilter !== "None") {
-                renderMutations.push(colorFilter);
-              }
-              if (conditionFilter !== "None") {
-                renderMutations.push(conditionFilter);
-              }
-              if (lightingFilter !== "None") {
-                renderMutations.push(lightingFilter);
-              }
-              const mutated = Sprites.renderPlantWithMutationsNonTall({
-                baseTile: tile,
-                mutations: renderMutations,
-                mutationIcons: mutationIconsCache
-              });
-              if (mutated) displayCanvas = mutated;
-            }
-            displayCanvas.className = "dd-sprite-grid__img";
-            const name = document.createElement("span");
-            name.className = "dd-sprite-grid__name";
-            const displayNames = match?.entries.map((entry) => entry.displayName).filter(Boolean);
-            if (displayNames && displayNames.length) {
-              name.textContent = displayNames.join(", ");
-            } else {
-              name.textContent = `${debugAssetName(tile.url)} #${tile.index + 1}`;
-            }
-            const meta = document.createElement("span");
-            meta.className = "dd-sprite-grid__meta";
-            const sheetLabel = match?.sheetLabel ?? tile.sheet;
-            meta.textContent = `${sheetLabel} (${tile.col},${tile.row})`;
-            item.append(displayCanvas, name, meta);
-            item.addEventListener("click", (ev) => {
-              ev.preventDefault();
-              ev.stopPropagation();
-              const label2 = match?.sheetLabel ?? debugAssetName(tile.url);
-              const tileName = `${label2}_#${String(tile.index + 1).padStart(3, "0")}.png`;
-              void downloadCanvasAsPng(displayCanvas, tileName);
-            });
-            previewArea.appendChild(item);
-          });
-        }
-      } else {
-        if (!assets.length) {
-          const empty = document.createElement("div");
-          empty.className = "dd-sprite-grid__empty";
-          empty.textContent = "No assets recorded for this selection yet.";
-          previewArea.appendChild(empty);
-        } else {
-          assets.forEach((url) => {
-            const item = document.createElement("a");
-            item.className = "dd-sprite-grid__item";
-            item.href = url;
-            item.target = "_blank";
-            item.rel = "noopener noreferrer";
-            const img = document.createElement("img");
-            img.className = "dd-sprite-grid__img";
-            img.src = url;
-            img.alt = debugAssetName(url);
-            img.loading = "lazy";
-            img.referrerPolicy = "no-referrer";
-            const name = document.createElement("span");
-            name.className = "dd-sprite-grid__name";
-            name.textContent = debugAssetName(url);
-            const meta = document.createElement("span");
-            meta.className = "dd-sprite-grid__meta";
-            meta.textContent = url;
-            item.append(img, name, meta);
-            previewArea.appendChild(item);
-            item.addEventListener("click", (ev) => {
-              ev.preventDefault();
-              ev.stopPropagation();
-              void downloadUrlAsset(url);
-            });
-          });
-        }
-      }
-      const familyLabel = selectedFamily === "all" ? "all families" : `family "${selectedFamily}" (${familyAssets.length})`;
-      const categoryLabel = selectedFamily === "all" || selectedCategory === "all" ? "all categories" : `category "${selectedCategory}"`;
-      const summaryCount = tileCount !== null ? `${tileCount} tiles` : `${assets.length} assets`;
-      stats.textContent = `${summaryCount} \xB7 ${familyLabel} \xB7 ${categoryLabel}`;
-      updateExportStatusText();
-    };
-    familySelect.addEventListener("change", () => {
-      selectedFamily = familySelect.value || "all";
-      selectedCategory = "all";
-      colorFilter = "None";
-      conditionFilter = "None";
-      lightingFilter = "None";
-      updateCategoryOptions();
-      renderFilters();
-      void updateList();
-    });
-    categorySelect.addEventListener("change", () => {
-      selectedCategory = categorySelect.value || "all";
-      colorFilter = "None";
-      conditionFilter = "None";
-      lightingFilter = "None";
-      renderFilters();
-      void updateList();
-    });
-    updateCategoryOptions();
-    void updateList();
-    mutationIconsPromise.then((map2) => {
-      mutationIconsCache = map2;
-    }).catch(() => {
-      mutationIconsCache = {};
-    }).finally(() => {
-      void updateList();
-    });
-  }
-  function createSelectControl(labelText, select2) {
-    const wrapper = document.createElement("label");
-    wrapper.className = "dd-sprite-control";
-    const label2 = document.createElement("span");
-    label2.className = "dd-sprite-control__label";
-    label2.textContent = labelText;
-    wrapper.append(label2, select2);
-    return wrapper;
-  }
-  async function loadMutationIcons() {
-    const icons = {};
-    const tiles = await loadTileSheet("mutations");
-    const TILE_REF_TO_MUTATION_NAME = {
-      Wet: "Wet",
-      Chilled: "Chilled",
-      Frozen: "Frozen",
-      Dawnlit: "Dawnlit",
-      Amberlit: "Ambershine",
-      Dawnbound: "Dawncharged",
-      Amberbound: "Ambercharged"
-    };
-    for (const [key2, rawIndex] of Object.entries(tileRefsMutations)) {
-      if (typeof rawIndex !== "number") continue;
-      const index = rawIndex > 0 ? rawIndex - 1 : rawIndex;
-      const tile = tiles.find((t) => t.index === index);
-      if (!tile) continue;
-      icons[key2] = { tile };
-      const logical = TILE_REF_TO_MUTATION_NAME[key2];
-      if (logical) {
-        icons[logical] = { tile };
-      }
-    }
-    console.debug("[Sprites] mutationIcons loaded", {
-      keys: Object.keys(icons)
-    });
-    return icons;
-  }
-
   // src/ui/menus/debug-data-ws.ts
   function renderWSTab(view, ui) {
     if (typeof view.__ws_cleanup__ === "function") {
@@ -30575,6 +26528,659 @@ next: ${next}`;
     };
   }
 
+  // src/ui/menus/debug-data-sprites.ts
+  init_settings();
+  var SPRITE_FAMILY_ID = "sprite";
+  var ANY_CATEGORY = "all";
+  var MAX_VISIBLE_SPRITES = 400;
+  var SPRITE_ICON_SIZE = 96;
+  var spriteServicePromise = null;
+  var sleep2 = (ms) => new Promise((resolve2) => setTimeout(resolve2, ms));
+  function resolveGlobalSpriteService() {
+    const root = globalThis.unsafeWindow || globalThis;
+    return root?.__MG_SPRITE_SERVICE__ ?? null;
+  }
+  async function waitForSpriteService() {
+    const timeoutMs = 8e3;
+    const start2 = Date.now();
+    while (Date.now() - start2 < timeoutMs) {
+      const svc = resolveGlobalSpriteService();
+      if (svc) {
+        try {
+          if (svc.ready && typeof svc.ready.then === "function") {
+            await svc.ready;
+          }
+        } catch {
+        }
+        return svc;
+      }
+      await sleep2(200);
+    }
+    return null;
+  }
+  async function acquireSpriteService(force = false) {
+    if (force) {
+      spriteServicePromise = null;
+    }
+    if (!spriteServicePromise) {
+      spriteServicePromise = waitForSpriteService();
+    }
+    const svc = await spriteServicePromise;
+    if (!svc) {
+      spriteServicePromise = null;
+      return null;
+    }
+    return svc;
+  }
+  function parseSpriteKey(key2) {
+    const safe = String(key2 || "");
+    const parts = safe.split("/").filter(Boolean);
+    const start2 = parts[0] === "sprite" || parts[0] === "sprites" ? 1 : 0;
+    const category = parts[start2] ?? "misc";
+    const id = parts.slice(start2 + 1).join("/") || parts[parts.length - 1] || safe;
+    const full = parts.slice(start2).join("/") || safe;
+    return { category, id, full };
+  }
+  function buildSpriteCandidates(parsed) {
+    const variants = [parsed.id, parsed.full];
+    const compact = parsed.id.replace(/\W+/g, "");
+    if (compact && compact !== parsed.id) {
+      variants.push(compact);
+    }
+    return Array.from(new Set(variants.filter(Boolean)));
+  }
+  function extractSpriteCategories(service) {
+    if (!service) return [];
+    const cats = service.state?.cats;
+    let values = [];
+    if (cats instanceof Map) {
+      values = Array.from(cats.keys());
+    } else if (cats && typeof cats === "object") {
+      values = Object.keys(cats);
+    }
+    if (!values.length && typeof service.list === "function") {
+      try {
+        const fallback = service.list("any") ?? [];
+        const collected = /* @__PURE__ */ new Set();
+        fallback.forEach((entry) => {
+          const parsed = parseSpriteKey(entry?.key ?? "");
+          if (parsed.category) collected.add(parsed.category);
+        });
+        values = Array.from(collected);
+      } catch {
+        values = [];
+      }
+    }
+    return values.map((value) => value.trim()).filter(Boolean).sort((a, b) => a.localeCompare(b));
+  }
+  var sanitizeFileComponent = (value) => value.replace(/[^a-z0-9_\-]+/gi, "_").replace(/_+/g, "_").replace(/^_+|_+$/g, "") || "sprite";
+  var buildSpriteFilename = (parsed, mutations) => {
+    const mutSegment = mutations.length ? `-${mutations.map((m) => sanitizeFileComponent(m)).join("_")}` : "";
+    return `${sanitizeFileComponent(parsed.category)}-${sanitizeFileComponent(parsed.id)}${mutSegment}.png`;
+  };
+  var COLOR_SELECTIONS = ["None", ...MUT_G1];
+  var CONDITION_SELECTIONS = ["None", ...MUT_G2];
+  var LIGHTING_SELECTIONS = ["None", ...MUT_G3];
+  function renderSpritesTab(view, ui) {
+    view.innerHTML = "";
+    view.classList.add("dd-debug-view");
+    const { leftCol, rightCol } = createTwoColumns(view);
+    const explorerCard = ui.card("Sprite Explorer", {
+      tone: "muted",
+      subtitle: "Browse captured sprites via the runtime sprite service."
+    });
+    leftCol.appendChild(explorerCard.root);
+    const listCard = ui.card("Sprites", {
+      tone: "muted",
+      subtitle: "Preview sprites for the selected category."
+    });
+    rightCol.appendChild(listCard.root);
+    const familySelect = ui.select({ width: "100%" });
+    const families = [{ value: SPRITE_FAMILY_ID, label: "Sprite catalog" }];
+    families.forEach(({ value, label: label2 }) => {
+      const option = document.createElement("option");
+      option.value = value;
+      option.textContent = label2;
+      familySelect.appendChild(option);
+    });
+    familySelect.value = SPRITE_FAMILY_ID;
+    const categorySelect = ui.select({ width: "100%" });
+    categorySelect.disabled = true;
+    const searchInput = document.createElement("input");
+    searchInput.type = "search";
+    searchInput.placeholder = "Search name or key";
+    searchInput.className = "dd-sprite-search";
+    const reloadBtn = ui.btn("Reload sprites", {
+      size: "sm",
+      variant: "ghost",
+      onClick: () => {
+        void updateList(true);
+      }
+    });
+    const downloadBtnLabel = "Download visible sprites";
+    const downloadBtn = ui.btn(downloadBtnLabel, {
+      size: "sm",
+      variant: "primary",
+      onClick: () => {
+        void downloadVisibleSprites();
+      }
+    });
+    downloadBtn.disabled = true;
+    const controlsGrid = document.createElement("div");
+    controlsGrid.className = "dd-sprite-control-grid";
+    controlsGrid.append(
+      createSelectControl("Asset family", familySelect),
+      createSelectControl("Asset category", categorySelect),
+      createSelectControl("Search", searchInput)
+    );
+    explorerCard.body.appendChild(controlsGrid);
+    const actionRow = document.createElement("div");
+    actionRow.className = "dd-sprite-actions";
+    actionRow.append(reloadBtn, downloadBtn);
+    explorerCard.body.appendChild(actionRow);
+    const mutationFilters = { color: "None", condition: "None", lighting: "None" };
+    let mutationGroupContainers = null;
+    const mutationCard = ui.card("Mutations", {
+      tone: "muted",
+      subtitle: "Apply color or weather overlays to the previews."
+    });
+    leftCol.appendChild(mutationCard.root);
+    const mutationBody = document.createElement("div");
+    mutationBody.className = "dd-sprite-mutation-card";
+    mutationCard.body.appendChild(mutationBody);
+    mutationGroupContainers = {
+      color: document.createElement("div"),
+      condition: document.createElement("div"),
+      lighting: document.createElement("div")
+    };
+    mutationGroupContainers.color.className = "dd-sprite-mutation-group";
+    mutationGroupContainers.condition.className = "dd-sprite-mutation-group";
+    mutationGroupContainers.lighting.className = "dd-sprite-mutation-group";
+    mutationBody.append(
+      mutationGroupContainers.color,
+      mutationGroupContainers.condition,
+      mutationGroupContainers.lighting
+    );
+    renderMutationControls();
+    const stats = document.createElement("p");
+    stats.className = "dd-sprite-stats";
+    stats.textContent = "Waiting for sprite service\u2026";
+    explorerCard.body.appendChild(stats);
+    const previewArea = document.createElement("div");
+    previewArea.className = "dd-sprite-grid";
+    const previewWrap = document.createElement("div");
+    previewWrap.className = "dd-sprite-grid-wrap";
+    previewWrap.appendChild(previewArea);
+    listCard.body.appendChild(previewWrap);
+    let selectedFamily = SPRITE_FAMILY_ID;
+    let selectedCategory = ANY_CATEGORY;
+    let searchTerm = "";
+    let spriteCategories = [];
+    let listRequestId = 0;
+    let retryTimer = null;
+    let searchDebounce = null;
+    let visibleSpriteRecords = [];
+    let downloadInProgress = false;
+    const clearRetry = () => {
+      if (retryTimer !== null) {
+        clearTimeout(retryTimer);
+        retryTimer = null;
+      }
+    };
+    const scheduleRetry = () => {
+      if (retryTimer !== null) return;
+      retryTimer = window.setTimeout(() => {
+        retryTimer = null;
+        void updateList();
+      }, 2e3);
+    };
+    const applySpriteCategories = (categories) => {
+      spriteCategories = categories;
+      categorySelect.innerHTML = "";
+      const allOption = document.createElement("option");
+      allOption.value = ANY_CATEGORY;
+      allOption.textContent = categories.length ? "All categories" : "No categories";
+      categorySelect.appendChild(allOption);
+      categories.forEach((category) => {
+        const option = document.createElement("option");
+        option.value = category;
+        option.textContent = category;
+        categorySelect.appendChild(option);
+      });
+      const valid = categories.includes(selectedCategory);
+      selectedCategory = valid ? selectedCategory : ANY_CATEGORY;
+      categorySelect.value = selectedCategory;
+      categorySelect.disabled = !categories.length;
+    };
+    const renderEmptyState = (message) => {
+      previewArea.innerHTML = "";
+      const empty = document.createElement("div");
+      empty.className = "dd-sprite-grid__empty";
+      empty.textContent = message;
+      previewArea.appendChild(empty);
+    };
+    const getActiveMutations = () => {
+      const active = [];
+      if (mutationFilters.color !== "None") active.push(mutationFilters.color);
+      if (mutationFilters.condition !== "None") active.push(mutationFilters.condition);
+      if (mutationFilters.lighting !== "None") active.push(mutationFilters.lighting);
+      return active;
+    };
+    function renderMutationControls() {
+      if (!mutationGroupContainers) return;
+      renderMutationGroup(
+        "color",
+        COLOR_SELECTIONS,
+        "Color",
+        mutationGroupContainers.color
+      );
+      renderMutationGroup(
+        "condition",
+        CONDITION_SELECTIONS,
+        "Weather",
+        mutationGroupContainers.condition
+      );
+      renderMutationGroup(
+        "lighting",
+        LIGHTING_SELECTIONS,
+        "Lighting",
+        mutationGroupContainers.lighting
+      );
+    }
+    function renderMutationGroup(key2, options, label2, container) {
+      container.innerHTML = "";
+      const heading = document.createElement("span");
+      heading.className = "dd-sprite-mutation-group-title";
+      heading.textContent = label2;
+      const row = document.createElement("div");
+      row.className = "dd-sprite-mutation-buttons";
+      options.forEach((option) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "dd-sprite-mutation-btn";
+        btn.textContent = option === "None" ? "None" : option;
+        if (mutationFilters[key2] === option) {
+          btn.classList.add("active");
+        }
+        btn.setAttribute("aria-pressed", mutationFilters[key2] === option ? "true" : "false");
+        btn.addEventListener("click", () => {
+          if (mutationFilters[key2] === option) return;
+          mutationFilters[key2] = option;
+          renderMutationControls();
+          if (visibleSpriteRecords.length) {
+            renderSpriteCards(visibleSpriteRecords);
+          }
+        });
+        row.appendChild(btn);
+      });
+      container.append(heading, row);
+    }
+    ;
+    function renderSpriteCards(records) {
+      if (!records.length) {
+        renderEmptyState("No sprites match the current filters.");
+        return;
+      }
+      const activeMutations = getActiveMutations();
+      previewArea.innerHTML = "";
+      records.forEach((record) => {
+        const { entry, parsed } = record;
+        const card = document.createElement("div");
+        card.className = "dd-sprite-grid__item";
+        card.title = entry?.key ?? parsed.full;
+        const imgWrap = document.createElement("div");
+        imgWrap.className = "dd-sprite-grid__img";
+        imgWrap.style.setProperty("--sprite-size", `${SPRITE_ICON_SIZE}px`);
+        const iconSlot = document.createElement("span");
+        iconSlot.className = "dd-sprite-grid__icon";
+        iconSlot.textContent = "\u2026";
+        imgWrap.appendChild(iconSlot);
+        attachSpriteIcon(
+          iconSlot,
+          [parsed.category],
+          buildSpriteCandidates(parsed),
+          SPRITE_ICON_SIZE,
+          "debug-sprites",
+          { mutations: activeMutations }
+        );
+        const nameEl = document.createElement("span");
+        nameEl.className = "dd-sprite-grid__name";
+        const animSuffix = entry?.isAnim && typeof entry.count === "number" ? ` (anim ${entry.count})` : entry?.isAnim ? " (anim)" : "";
+        nameEl.textContent = `${parsed.id}${animSuffix}`;
+        const meta = document.createElement("span");
+        meta.className = "dd-sprite-grid__meta";
+        meta.textContent = entry?.key ?? parsed.full;
+        card.append(imgWrap, nameEl, meta);
+        const triggerDownload = () => {
+          if (downloadInProgress) return;
+          void downloadSpriteRecord(record, void 0, getActiveMutations());
+        };
+        card.addEventListener("click", triggerDownload);
+        card.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            triggerDownload();
+          }
+        });
+        card.tabIndex = 0;
+        previewArea.appendChild(card);
+      });
+    }
+    const updateList = async (forceService = false) => {
+      const token = ++listRequestId;
+      stats.textContent = "Loading sprites\u2026";
+      const service = await acquireSpriteService(forceService);
+      if (token !== listRequestId) return;
+      if (!service) {
+        renderEmptyState("Sprite service not ready. Waiting\u2026");
+        stats.textContent = "Sprite service not ready yet.";
+        scheduleRetry();
+        return;
+      }
+      clearRetry();
+      if (!spriteCategories.length || forceService) {
+        const categories = extractSpriteCategories(service);
+        applySpriteCategories(categories);
+      }
+      if (selectedFamily !== SPRITE_FAMILY_ID) {
+        renderEmptyState("No assets for this family.");
+        stats.textContent = "Select the sprite family to browse sprites.";
+        return;
+      }
+      const catArg = selectedCategory === ANY_CATEGORY ? "any" : selectedCategory;
+      let sprites = [];
+      try {
+        sprites = typeof service.list === "function" ? service.list(catArg) ?? [] : [];
+      } catch (error) {
+        console.error("[DebugSprites] Failed to list sprites", error);
+        renderEmptyState("Failed to list sprites (see console).");
+        stats.textContent = "Listing sprites failed.";
+        return;
+      }
+      const normalizedSearch = searchTerm.trim().toLowerCase();
+      const filtered = !normalizedSearch ? sprites : sprites.filter((entry) => {
+        const parsed = parseSpriteKey(entry?.key ?? "");
+        const label2 = `${parsed.category}/${parsed.id}`.toLowerCase();
+        return label2.includes(normalizedSearch) || (entry?.key ?? "").toLowerCase().includes(normalizedSearch);
+      });
+      const limited = filtered.slice(0, MAX_VISIBLE_SPRITES);
+      const records = limited.map((entry) => ({ entry, parsed: parseSpriteKey(entry?.key ?? "") }));
+      visibleSpriteRecords = records;
+      if (!downloadInProgress) {
+        downloadBtn.textContent = downloadBtnLabel;
+      }
+      downloadBtn.disabled = !records.length || downloadInProgress;
+      if (!records.length) {
+        renderEmptyState("No sprites match the current filters.");
+      } else {
+        renderSpriteCards(records);
+      }
+      const clipped = filtered.length > MAX_VISIBLE_SPRITES;
+      const categoryLabel = selectedCategory === ANY_CATEGORY ? "all categories" : `category "${selectedCategory}"`;
+      stats.textContent = clipped ? `Showing ${limited.length}/${filtered.length} sprites for ${categoryLabel}.` : `${filtered.length} sprites for ${categoryLabel}.`;
+    };
+    familySelect.addEventListener("change", () => {
+      selectedFamily = familySelect.value || SPRITE_FAMILY_ID;
+      void updateList();
+    });
+    categorySelect.addEventListener("change", () => {
+      selectedCategory = categorySelect.value || ANY_CATEGORY;
+      void updateList();
+    });
+    searchInput.addEventListener("input", () => {
+      if (searchDebounce !== null) {
+        clearTimeout(searchDebounce);
+      }
+      searchDebounce = window.setTimeout(() => {
+        searchDebounce = null;
+        searchTerm = searchInput.value || "";
+        void updateList();
+      }, 150);
+    });
+    void updateList();
+    async function downloadSpriteRecord(record, svc, mutations) {
+      const activeMutations = mutations ?? getActiveMutations();
+      const dataUrl = await renderRecordToDataUrl(record, svc, activeMutations);
+      if (!dataUrl) return false;
+      triggerDataUrlDownload(
+        dataUrl,
+        buildSpriteFilename(record.parsed, activeMutations)
+      );
+      return true;
+    }
+    async function downloadVisibleSprites() {
+      if (!visibleSpriteRecords.length || downloadInProgress) return;
+      downloadInProgress = true;
+      downloadBtn.disabled = true;
+      downloadBtn.textContent = "Preparing zip...";
+      try {
+        const service = await acquireSpriteService();
+        if (!service) return;
+        const activeMutations = getActiveMutations();
+        const files = [];
+        for (const record of visibleSpriteRecords) {
+          const dataUrl = await renderRecordToDataUrl(record, service, activeMutations);
+          if (!dataUrl) continue;
+          files.push({ name: buildSpriteFilename(record.parsed, activeMutations), dataUrl });
+          downloadBtn.textContent = `Collected ${files.length}/${visibleSpriteRecords.length}`;
+        }
+        if (!files.length) return;
+        downloadBtn.textContent = "Bundling zip...";
+        const zipBlob = await packFilesToZip(files);
+        triggerBlobDownload(zipBlob, `sprites-${Date.now()}.zip`);
+      } finally {
+        downloadInProgress = false;
+        downloadBtn.textContent = downloadBtnLabel;
+        downloadBtn.disabled = !visibleSpriteRecords.length;
+      }
+    }
+    async function renderRecordToDataUrl(record, svc, mutations) {
+      const service = svc ?? await acquireSpriteService();
+      if (!service?.renderToDataURL) return null;
+      try {
+        const dataUrl = await service.renderToDataURL(
+          {
+            category: record.parsed.category,
+            id: record.parsed.id,
+            mutations: mutations ?? getActiveMutations()
+          },
+          "image/png"
+        );
+        return dataUrl ?? null;
+      } catch (error) {
+        console.error("[DebugSprites] download failed", { key: record.entry.key, error });
+        return null;
+      }
+    }
+    async function packFilesToZip(files) {
+      const chunks = [];
+      const fileEntries = [];
+      let offset = 0;
+      for (const file of files) {
+        const { bytes: data, crc32: crc322 } = dataUrlToBytesAndCrc(file.dataUrl);
+        const nameBytes = new TextEncoder().encode(file.name);
+        const localHeader = buildZipLocalHeader(nameBytes, data.length, crc322);
+        fileEntries.push({ nameBytes, data, crc: crc322, offset });
+        chunks.push(localHeader, data);
+        offset += localHeader.length + data.length;
+      }
+      const centralRecords = [];
+      fileEntries.forEach((entry) => {
+        centralRecords.push(
+          buildZipCentralDirectory(entry.nameBytes, entry.data.length, entry.crc, entry.offset)
+        );
+      });
+      const centralDirectory = concatUint8Arrays(centralRecords);
+      const endRecord = buildZipEndRecord(fileEntries.length, centralDirectory.length, offset);
+      return new Blob([...chunks, centralDirectory, endRecord].map((chunk) => chunk.slice()), {
+        type: "application/zip"
+      });
+    }
+    const LOCAL_HEADER_SIGNATURE = 67324752;
+    const CENTRAL_DIR_SIGNATURE = 33639248;
+    const END_SIGNATURE = 101010256;
+    const ZIP_VERSION = 20;
+    const ZIP_FLAGS = 0;
+    const ZIP_METHOD_STORE = 0;
+    function buildZipLocalHeader(nameBytes, size, crc322) {
+      const buffer = new ArrayBuffer(30 + nameBytes.length);
+      const view2 = new DataView(buffer);
+      let offset = 0;
+      view2.setUint32(offset, LOCAL_HEADER_SIGNATURE, true);
+      offset += 4;
+      view2.setUint16(offset, ZIP_VERSION, true);
+      offset += 2;
+      view2.setUint16(offset, ZIP_FLAGS, true);
+      offset += 2;
+      view2.setUint16(offset, ZIP_METHOD_STORE, true);
+      offset += 2;
+      view2.setUint16(offset, 0, true);
+      offset += 2;
+      view2.setUint16(offset, 0, true);
+      offset += 2;
+      view2.setUint32(offset, crc322 >>> 0, true);
+      offset += 4;
+      view2.setUint32(offset, size, true);
+      offset += 4;
+      view2.setUint32(offset, size, true);
+      offset += 4;
+      view2.setUint16(offset, nameBytes.length, true);
+      offset += 2;
+      view2.setUint16(offset, 0, true);
+      const out = new Uint8Array(buffer);
+      out.set(nameBytes, offset);
+      return out;
+    }
+    function buildZipCentralDirectory(nameBytes, size, crc322, offset) {
+      const buffer = new ArrayBuffer(46 + nameBytes.length);
+      const view2 = new DataView(buffer);
+      let pos = 0;
+      view2.setUint32(pos, CENTRAL_DIR_SIGNATURE, true);
+      pos += 4;
+      view2.setUint16(pos, ZIP_VERSION, true);
+      pos += 2;
+      view2.setUint16(pos, ZIP_VERSION, true);
+      pos += 2;
+      view2.setUint16(pos, ZIP_FLAGS, true);
+      pos += 2;
+      view2.setUint16(pos, ZIP_METHOD_STORE, true);
+      pos += 2;
+      view2.setUint16(pos, 0, true);
+      pos += 2;
+      view2.setUint16(pos, 0, true);
+      pos += 2;
+      view2.setUint32(pos, crc322 >>> 0, true);
+      pos += 4;
+      view2.setUint32(pos, size, true);
+      pos += 4;
+      view2.setUint32(pos, size, true);
+      pos += 4;
+      view2.setUint16(pos, nameBytes.length, true);
+      pos += 2;
+      view2.setUint16(pos, 0, true);
+      pos += 2;
+      view2.setUint16(pos, 0, true);
+      pos += 2;
+      view2.setUint16(pos, 0, true);
+      pos += 2;
+      view2.setUint16(pos, 0, true);
+      pos += 2;
+      view2.setUint32(pos, 0, true);
+      pos += 4;
+      view2.setUint32(pos, offset, true);
+      pos += 4;
+      const out = new Uint8Array(buffer);
+      out.set(nameBytes, pos);
+      return out;
+    }
+    function buildZipEndRecord(fileCount, centralSize, centralOffset) {
+      const buffer = new ArrayBuffer(22);
+      const view2 = new DataView(buffer);
+      let pos = 0;
+      view2.setUint32(pos, END_SIGNATURE, true);
+      pos += 4;
+      view2.setUint16(pos, 0, true);
+      pos += 2;
+      view2.setUint16(pos, 0, true);
+      pos += 2;
+      view2.setUint16(pos, fileCount, true);
+      pos += 2;
+      view2.setUint16(pos, fileCount, true);
+      pos += 2;
+      view2.setUint32(pos, centralSize, true);
+      pos += 4;
+      view2.setUint32(pos, centralOffset, true);
+      pos += 4;
+      view2.setUint16(pos, 0, true);
+      return new Uint8Array(buffer);
+    }
+    function concatUint8Arrays(arrays) {
+      const total = arrays.reduce((sum, arr) => sum + arr.length, 0);
+      const result = new Uint8Array(total);
+      let offset = 0;
+      arrays.forEach((arr) => {
+        result.set(arr, offset);
+        offset += arr.length;
+      });
+      return result;
+    }
+    function dataUrlToBytesAndCrc(dataUrl) {
+      const base64 = dataUrl.split(",")[1] ?? "";
+      const binary = atob(base64);
+      const length = binary.length;
+      const bytes = new Uint8Array(length);
+      for (let i = 0; i < length; i++) {
+        bytes[i] = binary.charCodeAt(i);
+      }
+      return { bytes, crc32: crc32(bytes) };
+    }
+    function crc32(bytes) {
+      let crc = ~0;
+      for (let i = 0; i < bytes.length; i++) {
+        crc = crc >>> 8 ^ CRC_TABLE[(crc ^ bytes[i]) & 255];
+      }
+      return ~crc >>> 0;
+    }
+    const CRC_TABLE = (() => {
+      const table = new Uint32Array(256);
+      for (let i = 0; i < 256; i++) {
+        let c = i;
+        for (let k = 0; k < 8; k++) {
+          c = c & 1 ? 3988292384 ^ c >>> 1 : c >>> 1;
+        }
+        table[i] = c >>> 0;
+      }
+      return table;
+    })();
+    function triggerDataUrlDownload(dataUrl, filename) {
+      const a = document.createElement("a");
+      a.href = dataUrl;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+    function triggerBlobDownload(blob, filename) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1e3);
+    }
+  }
+  function createSelectControl(labelText, control) {
+    const wrapper = document.createElement("label");
+    wrapper.className = "dd-sprite-control";
+    const label2 = document.createElement("span");
+    label2.className = "dd-sprite-control__label";
+    label2.textContent = labelText;
+    wrapper.append(label2, control);
+    return wrapper;
+  }
+
   // src/ui/menus/debug-data.ts
   var stylesInjected = false;
   function ensureStyles2() {
@@ -30650,30 +27256,30 @@ next: ${next}`;
   .dd-audio-url{font-family:var(--qmm-font-mono,monospace);font-size:11px;word-break:break-all;color:#d6dcffb3;}
   .dd-audio-actions{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto;}
   .dd-audio-empty{padding:24px 12px;text-align:center;font-size:13px;opacity:.6;}
-  .dd-sprite-controls{display:flex;flex-direction:column;gap:12px;}
-  .dd-sprite-control-grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));}
-  .dd-sprite-control{display:flex;flex-direction:column;gap:4px;}
-  .dd-sprite-control__label{font-size:11px;opacity:.72;text-transform:uppercase;letter-spacing:.08em;}
-  .dd-sprite-control.is-hidden{display:none;}
-  .dd-sprite-control .qmm-select{width:100%;}
-  .dd-sprite-stats{font-size:12px;opacity:.72;margin-top:8px;}
-  .dd-sprite-grid{display:grid;gap:12px;border-radius:12px;border:1px solid rgba(255,255,255,.08);padding:12px;background:rgba(6,8,12,.8);max-height:62vh;min-height:360px;overflow:auto;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));}
-  .dd-sprite-grid--tiles{grid-template-columns:repeat(3,minmax(0,1fr));}
-  .dd-sprite-grid__item{display:flex;flex-direction:column;gap:6px;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,.05);background:rgba(255,255,255,.02);text-decoration:none;color:inherit;transition:background .12s ease,border-color .12s ease,transform .12s ease;}
-  .dd-sprite-grid__item:hover{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.16);transform:translateY(-1px);}
-  .dd-sprite-grid__item:focus-visible{outline:2px solid rgba(92,126,255,.5);}
-  .dd-sprite-grid__img{width:100%;height:120px;object-fit:contain;background:#020407;border-radius:8px;border:1px solid rgba(255,255,255,.08);image-rendering:pixelated;}
-  .dd-sprite-grid__name{font-weight:600;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .dd-sprite-grid__meta{font-size:11px;opacity:.65;font-family:var(--qmm-font-mono,monospace);word-break:break-word;}
-  .dd-sprite-grid__empty{text-align:center;font-size:13px;opacity:.65;padding:20px 0;}
-  .dd-sprite-filter-panel{margin-top:16px;display:flex;flex-direction:column;gap:8px;}
-  .dd-sprite-filter-row{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
-  .dd-sprite-filter-row .dd-sprite-filter-label{font-size:11px;text-transform:uppercase;letter-spacing:0.1em;opacity:0.6;}
-  .dd-sprite-segmented{display:flex;gap:4px;flex-wrap:wrap;}
-  .dd-sprite-seg-btn{background:#111418;border:1px solid #29303a;border-radius:8px;padding:4px 10px;font-size:12px;color:#d2ddff;cursor:pointer;transition:background .12s ease,border .12s ease;}
-  .dd-sprite-seg-btn.is-active{background:#3d58ff;border-color:#5d7cff;color:#fff;}
-  .dd-sprite-export-progress{height:4px;width:100%;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden;transition:opacity .2s ease;opacity:0;}
-  .dd-sprite-export-progress__bar{height:100%;width:0;background:linear-gradient(90deg,#44ffa4,#2ea3ff 35%,#ff7b9a);transition:width .25s ease;}
+  .dd-sprite-control-grid{display:grid;gap:12px;width:100%;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));align-items:end;}
+  .dd-sprite-control{display:flex;flex-direction:column;gap:4px;font-size:12px;}
+  .dd-sprite-control__label{font-size:11px;letter-spacing:.04em;text-transform:uppercase;opacity:.75;}
+  .dd-sprite-control select,.dd-sprite-control input{width:100%;padding:6px 8px;border-radius:8px;border:1px solid rgba(255,255,255,.18);background:rgba(12,16,23,.9);color:#f5f7ff;font-size:13px;}
+  .dd-sprite-control input[type="search"]::-webkit-search-cancel-button{filter:invert(1);}
+  .dd-sprite-stats{font-size:13px;opacity:.75;margin:8px 0 0;}
+  .dd-sprite-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
+  .dd-sprite-grid-wrap{max-height:65vh;overflow:auto;padding-right:6px;width:100%;}
+  .dd-sprite-grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));align-items:stretch;min-height:0;}
+  .dd-sprite-grid__item{display:flex;flex-direction:column;gap:8px;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.08);background:rgba(8,11,17,.85);box-shadow:inset 0 1px 0 rgba(255,255,255,.04);min-width:0;cursor:pointer;outline:none;}
+  .dd-sprite-grid__item:focus-visible{border-color:rgba(88,138,255,.6);box-shadow:0 0 0 1px rgba(88,138,255,.3);}
+  .dd-sprite-grid__img{display:flex;align-items:center;justify-content:center;background:#05080d;border-radius:12px;border:1px solid rgba(255,255,255,.05);overflow:hidden;min-height:var(--sprite-size,96px);}
+  .dd-sprite-grid__icon{width:var(--sprite-size,96px);height:var(--sprite-size,96px);display:flex;align-items:center;justify-content:center;}
+  .dd-sprite-grid__icon img{max-width:100%;max-height:100%;object-fit:contain;}
+  .dd-sprite-grid__name{font-weight:600;font-size:13px;word-break:break-word;}
+  .dd-sprite-grid__meta{font-size:11px;opacity:.65;word-break:break-all;font-family:var(--qmm-font-mono,monospace);}
+  .dd-sprite-grid__empty{grid-column:1/-1;text-align:center;padding:32px 12px;font-size:13px;opacity:.66;}
+  .dd-sprite-mutation-card{display:flex;flex-direction:column;gap:12px;}
+  .dd-sprite-mutation-group{display:flex;flex-direction:column;gap:6px;}
+  .dd-sprite-mutation-group-title{font-size:11px;letter-spacing:.04em;text-transform:uppercase;opacity:.75;}
+  .dd-sprite-mutation-buttons{display:flex;flex-wrap:wrap;gap:6px;}
+  .dd-sprite-mutation-btn{padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.18);background:rgba(14,18,26,.8);color:#e4e8f1;font-size:12px;cursor:pointer;transition:background .12s ease,border-color .12s ease,color .12s ease;}
+  .dd-sprite-mutation-btn:hover{border-color:rgba(255,255,255,.35);}
+  .dd-sprite-mutation-btn.active{background:rgba(90,118,255,.18);border-color:rgba(90,118,255,.6);color:#9fb4ff;}
   `;
     document.head.appendChild(style2);
   }
@@ -30683,7 +27289,7 @@ next: ${next}`;
     ui.mount(root);
     ui.addTab("jotai", "Jotai", (view) => renderJotaiTab(view, ui));
     ui.addTab("atoms-live", "Live atoms", (view) => renderLiveAtomsTab(view, ui));
-    ui.addTab("sprites", "Sprites", (view) => renderSpritesTab(view, ui));
+    ui.addTab("sprite-assets", "Sprites", (view) => renderSpritesTab(view, ui));
     ui.addTab("audio-player", "Audio player", (view) => renderAudioPlayerTab(view, ui));
     ui.addTab("websocket", "WebSocket", (view) => renderWSTab(view, ui));
   }
@@ -30763,7 +27369,8 @@ next: ${next}`;
   }).map(([key2, value]) => ({
     key: key2,
     label: WEATHER_MUTATION_LABELS[key2] ?? formatMutationLabel(key2),
-    tileRef: value
+    tileRef: value,
+    iconFactory: (options) => createWeatherBadge(key2, options)
   }));
   var createNoWeatherIcon = (options) => {
     const size = Math.max(24, options?.size ?? 48);
@@ -30831,373 +27438,89 @@ next: ${next}`;
     });
     return el2;
   };
-  var plantSpriteCache = /* @__PURE__ */ new Map();
-  var plantSpritePromises = /* @__PURE__ */ new Map();
-  var plantSpriteSubscribers = /* @__PURE__ */ new Map();
-  var spriteConfig2 = /* @__PURE__ */ new WeakMap();
-  var plantSpriteListenerAttached = false;
-  var lockerSpritesPreloaded = false;
-  var lockerSpritesLoading = false;
-  var lockerSpritePreloadTimer = null;
   var weatherModeNameSeq = 0;
-  function hasLockerSpriteSources() {
-    try {
-      if (Sprites.listPlants().length || Sprites.listAllPlants().length) {
-        return true;
-      }
-    } catch {
-    }
-    try {
-      if (Sprites.listTilesByCategory(/mutations/i).length) {
-        return true;
-      }
-    } catch {
-    }
-    return false;
-  }
-  function scheduleLockerSpritePreload(delay4 = 0) {
-    if (lockerSpritesPreloaded || typeof window === "undefined") {
-      return;
-    }
-    if (lockerSpritePreloadTimer != null) {
-      window.clearTimeout(lockerSpritePreloadTimer);
-    }
-    lockerSpritePreloadTimer = window.setTimeout(() => {
-      lockerSpritePreloadTimer = null;
-      preloadLockerSprites();
-    }, Math.max(0, delay4));
-  }
-  function ensurePlantSpriteListener() {
-    if (plantSpriteListenerAttached) return;
-    plantSpriteListenerAttached = true;
-    window.addEventListener("mg:sprite-detected", () => {
-      plantSpriteCache.clear();
-      plantSpritePromises.clear();
-      const keys = Array.from(plantSpriteSubscribers.keys());
-      keys.forEach((key2) => {
-        loadPlantSprite(key2);
-      });
+  function createEmojiIcon(symbol, size) {
+    const wrap = applyStyles(document.createElement("span"), {
+      width: `${size}px`,
+      height: `${size}px`,
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontSize: `${Math.round(size * 0.75)}px`,
+      lineHeight: "1"
     });
+    wrap.textContent = symbol;
+    wrap.setAttribute("aria-hidden", "true");
+    return wrap;
   }
-  function subscribePlantSprite(seedKey, el2, config) {
-    let subs = plantSpriteSubscribers.get(seedKey);
-    if (!subs) {
-      subs = /* @__PURE__ */ new Set();
-      plantSpriteSubscribers.set(seedKey, subs);
-    }
-    subs.add(el2);
-    spriteConfig2.set(el2, config);
-  }
-  function notifyPlantSpriteSubscribers(seedKey, src) {
-    const subs = plantSpriteSubscribers.get(seedKey);
-    if (!subs) return;
-    subs.forEach((el2) => {
-      if (!el2.isConnected) {
-        subs.delete(el2);
-        spriteConfig2.delete(el2);
-        return;
-      }
-      applySprite2(el2, src);
-    });
-    if (subs.size === 0) {
-      plantSpriteSubscribers.delete(seedKey);
-    }
-  }
-  var TALL_PLANT_SEEDS = /* @__PURE__ */ new Set(["Bamboo", "Cactus"]);
-  function plantSheetBases(seedKey) {
-    const urls = /* @__PURE__ */ new Set();
-    try {
-      Sprites.listPlants().forEach((url) => urls.add(url));
-    } catch {
-    }
-    try {
-      Sprites.listAllPlants().forEach((url) => urls.add(url));
-    } catch {
-    }
-    const bases = Array.from(urls, (url) => {
-      const clean = url.split(/[?#]/)[0] ?? url;
-      const file = clean.split("/").pop() ?? clean;
-      return file.replace(/\.[^.]+$/, "");
-    });
-    if (!seedKey) return bases;
-    const normalizedBases = bases.map((base) => base.toLowerCase());
-    const findPreferred = (predicate) => bases.filter((base, index) => predicate(base, normalizedBases[index] ?? base.toLowerCase()));
-    if (TALL_PLANT_SEEDS.has(seedKey)) {
-      const tallExact = findPreferred((_, norm3) => norm3 === "tallplants");
-      if (tallExact.length) return tallExact;
-      const tallAny = findPreferred((base, norm3) => /tall/.test(base) || /tall/.test(norm3));
-      if (tallAny.length) return tallAny;
-    } else {
-      const plantsExact = findPreferred((_, norm3) => norm3 === "plants");
-      if (plantsExact.length) return plantsExact;
-      const nonTall = findPreferred((base, norm3) => !/tall/.test(base) && !/tall/.test(norm3));
-      if (nonTall.length) return nonTall;
-    }
-    return bases;
-  }
-  function toTileIndex2(tileRef, bases = []) {
-    const value = typeof tileRef === "number" && Number.isFinite(tileRef) ? tileRef : Number(tileRef);
-    if (!Number.isFinite(value)) return null;
-    if (value <= 0) return value;
-    const normalizedBases = bases.map((base) => base.toLowerCase());
-    if (normalizedBases.some((base) => base.includes("tall"))) {
-      return value - 1;
-    }
-    if (normalizedBases.some((base) => base.includes("plants"))) {
-      return value - 1;
-    }
-    return value - 1;
-  }
-  async function fetchPlantSprite(seedKey) {
-    await ensureSpritesReady();
-    const entry = plantCatalog[seedKey];
-    if (!entry) return null;
-    const tileRef = entry?.crop?.tileRef ?? entry?.plant?.tileRef ?? entry?.seed?.tileRef;
-    const bases = plantSheetBases(seedKey);
-    const index = toTileIndex2(tileRef, bases);
-    if (index == null) return null;
-    for (const base of bases) {
-      try {
-        const tiles = await loadTileSheet(base);
-        const tile = tiles.find((t) => t.index === index);
-        if (!tile) continue;
-        const canvas = Sprites.toCanvas(tile);
-        if (canvas && canvas.width > 0 && canvas.height > 0) {
-          const copy2 = document.createElement("canvas");
-          copy2.width = canvas.width;
-          copy2.height = canvas.height;
-          const ctx = copy2.getContext("2d");
-          if (!ctx) continue;
-          ctx.imageSmoothingEnabled = false;
-          ctx.drawImage(canvas, 0, 0);
-          return copy2.toDataURL();
-        }
-      } catch {
-      }
-    }
-    return null;
-  }
-  function applySprite2(el2, src) {
-    const cfg = spriteConfig2.get(el2);
-    if (!cfg) return;
-    const { size, fallback } = cfg;
-    el2.innerHTML = "";
-    el2.style.display = "inline-flex";
-    el2.style.alignItems = "center";
-    el2.style.justifyContent = "center";
-    el2.style.width = `${size}px`;
-    el2.style.height = `${size}px`;
-    el2.style.flexShrink = "0";
-    el2.style.position = "relative";
-    if (src) {
-      const img = document.createElement("img");
-      img.src = src;
-      img.alt = "";
-      img.decoding = "async";
-      img.loading = "lazy";
-      img.draggable = false;
-      img.style.width = "100%";
-      img.style.height = "100%";
-      img.style.objectFit = "contain";
-      img.style.imageRendering = "pixelated";
-      el2.appendChild(img);
-    } else {
-      el2.textContent = fallback;
-      el2.style.fontSize = `${Math.max(10, Math.round(size * 0.8))}px`;
-    }
-  }
-  function loadPlantSprite(seedKey) {
-    const cached = plantSpriteCache.get(seedKey);
-    if (cached !== void 0) {
-      notifyPlantSpriteSubscribers(seedKey, cached);
-      return Promise.resolve(cached);
-    }
-    const inflight = plantSpritePromises.get(seedKey);
-    if (inflight) return inflight;
-    const promise = fetchPlantSprite(seedKey).then((src) => {
-      plantSpriteCache.set(seedKey, src);
-      plantSpritePromises.delete(seedKey);
-      notifyPlantSpriteSubscribers(seedKey, src);
-      return src;
-    }).catch(() => {
-      plantSpritePromises.delete(seedKey);
-      return null;
-    });
-    plantSpritePromises.set(seedKey, promise);
-    return promise;
-  }
-  function createPlantSprite(seedKey, options = {}) {
-    ensurePlantSpriteListener();
+  function createSeedIcon(seedKey, options = {}) {
     const size = Math.max(12, options.size ?? 24);
-    const fallback = options.fallback ?? "\u{1F331}";
-    const el2 = document.createElement("span");
-    subscribePlantSprite(seedKey, el2, { size, fallback });
-    const cached = plantSpriteCache.get(seedKey);
-    applySprite2(el2, cached ?? null);
-    loadPlantSprite(seedKey);
-    return el2;
-  }
-  var mutationSpriteCache = /* @__PURE__ */ new Map();
-  var mutationSpritePromises = /* @__PURE__ */ new Map();
-  var mutationSpriteSubscribers = /* @__PURE__ */ new Map();
-  var mutationSpriteListenerAttached = false;
-  var mutationSpriteBases = null;
-  function ensureMutationSpriteListener() {
-    if (mutationSpriteListenerAttached) return;
-    mutationSpriteListenerAttached = true;
-    window.addEventListener("mg:sprite-detected", () => {
-      mutationSpriteCache.clear();
-      mutationSpritePromises.clear();
-      mutationSpriteBases = null;
-      const keys = Array.from(mutationSpriteSubscribers.keys());
-      keys.forEach((key2) => {
-        loadMutationSprite(key2);
-      });
+    const fallback = options.fallback ?? getLockerSeedEmojiForKey(seedKey) ?? getLockerSeedEmojiForSeedName(seedKey) ?? "\u{1F331}";
+    const wrap = applyStyles(document.createElement("span"), {
+      width: `${size}px`,
+      height: `${size}px`,
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center"
     });
+    wrap.appendChild(createEmojiIcon(fallback, size));
+    attachSpriteIcon(wrap, ["plant", "tallplant", "crop"], seedKey, size, "plant");
+    return wrap;
   }
-  function mutationSheetBases() {
-    if (mutationSpriteBases) return mutationSpriteBases;
-    const urls = /* @__PURE__ */ new Set();
-    try {
-      Sprites.listTilesByCategory(/mutations/i).forEach((url) => urls.add(url));
-    } catch {
-    }
-    const bases = Array.from(urls, (url) => {
-      const clean = url.split(/[?#]/)[0] ?? url;
-      const file = clean.split("/").pop() ?? clean;
-      return file.replace(/\.[^.]+$/, "");
+  function createEggIcon(eggId, label2, size = 32) {
+    const fallback = "\u{1F95A}";
+    const wrap = applyStyles(document.createElement("span"), {
+      width: `${size}px`,
+      height: `${size}px`,
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center"
     });
-    if (!bases.length) {
-      bases.push("mutations");
-    }
-    mutationSpriteBases = bases;
-    return mutationSpriteBases;
-  }
-  function subscribeMutationSprite(tag, el2, config) {
-    let subs = mutationSpriteSubscribers.get(tag);
-    if (!subs) {
-      subs = /* @__PURE__ */ new Set();
-      mutationSpriteSubscribers.set(tag, subs);
-    }
-    subs.add(el2);
-    spriteConfig2.set(el2, config);
-  }
-  function notifyMutationSpriteSubscribers(tag, src) {
-    const subs = mutationSpriteSubscribers.get(tag);
-    if (!subs) return;
-    subs.forEach((el2) => {
-      if (!el2.isConnected) {
-        subs.delete(el2);
-        spriteConfig2.delete(el2);
-        return;
+    wrap.appendChild(createEmojiIcon(fallback, size));
+    const candidates = /* @__PURE__ */ new Set();
+    const add = (value) => {
+      if (!value) return;
+      const trimmed = value.trim();
+      if (!trimmed) return;
+      candidates.add(trimmed);
+      candidates.add(trimmed.replace(/\s+/g, ""));
+      const last = trimmed.split(/[./]/).pop();
+      if (last && last !== trimmed) {
+        candidates.add(last);
+        candidates.add(last.replace(/\s+/g, ""));
       }
-      applySprite2(el2, src);
-    });
-    if (subs.size === 0) {
-      mutationSpriteSubscribers.delete(tag);
+    };
+    add(eggId);
+    add(label2);
+    if (candidates.size) {
+      attachSpriteIcon(wrap, ["pet"], Array.from(candidates), size, "locker-eggs");
     }
+    return wrap;
   }
-  async function fetchMutationSprite(tag) {
-    await ensureSpritesReady();
-    const entry = WEATHER_MUTATIONS.find((info) => info.key === tag);
-    if (!entry || entry.tileRef == null) return null;
-    const [base] = mutationSheetBases();
-    const index = toTileIndex2(entry.tileRef, base ? [base] : []);
-    if (index == null || !base) return null;
-    try {
-      const tiles = await loadTileSheet(base);
-      const tile = tiles.find((t) => t.index === index);
-      if (!tile) return null;
-      const canvas = Sprites.toCanvas(tile);
-      if (canvas && canvas.width > 0 && canvas.height > 0) {
-        const copy2 = document.createElement("canvas");
-        copy2.width = canvas.width;
-        copy2.height = canvas.height;
-        const ctx = copy2.getContext("2d");
-        if (!ctx) return null;
-        ctx.imageSmoothingEnabled = false;
-        ctx.drawImage(canvas, 0, 0);
-        return copy2.toDataURL();
-      }
-    } catch {
+  function createWeatherBadge(tag, options = {}) {
+    if (tag === NO_WEATHER_TAG) {
+      return createNoWeatherIcon(options);
     }
-    return null;
-  }
-  function loadMutationSprite(tag) {
-    const cached = mutationSpriteCache.get(tag);
-    if (cached !== void 0) {
-      notifyMutationSpriteSubscribers(tag, cached);
-      return Promise.resolve(cached);
-    }
-    const inflight = mutationSpritePromises.get(tag);
-    if (inflight) return inflight;
-    const promise = fetchMutationSprite(tag).then((src) => {
-      mutationSpriteCache.set(tag, src);
-      mutationSpritePromises.delete(tag);
-      notifyMutationSpriteSubscribers(tag, src);
-      return src;
-    }).catch(() => {
-      mutationSpritePromises.delete(tag);
-      return null;
+    const size = Math.max(16, options.size ?? 32);
+    const wrap = applyStyles(document.createElement("span"), {
+      width: `${size}px`,
+      height: `${size}px`,
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center",
+      borderRadius: "999px",
+      background: "rgba(17,20,24,0.85)",
+      border: "1px solid rgba(255,255,255,0.08)",
+      fontSize: `${Math.round(size * 0.55)}px`,
+      color: "#e7eef7",
+      lineHeight: "1"
     });
-    mutationSpritePromises.set(tag, promise);
-    return promise;
-  }
-  function createMutationSprite(tag, options = {}) {
-    ensureMutationSpriteListener();
-    const size = Math.max(12, options.size ?? 36);
-    const fallback = options.fallback ?? "?";
-    const el2 = document.createElement("span");
-    subscribeMutationSprite(tag, el2, { size, fallback });
-    const cached = mutationSpriteCache.get(tag);
-    applySprite2(el2, cached ?? null);
-    loadMutationSprite(tag);
-    return el2;
-  }
-  function preloadLockerSprites() {
-    if (lockerSpritesPreloaded || lockerSpritesLoading || typeof window === "undefined") {
-      return;
-    }
-    lockerSpritesLoading = true;
-    (async () => {
-      try {
-        await ensureSpritesReady();
-        if (!hasLockerSpriteSources()) {
-          scheduleLockerSpritePreload(200);
-          return;
-        }
-        lockerSpritesPreloaded = true;
-        ensurePlantSpriteListener();
-        ensureMutationSpriteListener();
-        try {
-          const catalog = plantCatalog;
-          Object.keys(catalog).forEach((seedKey) => {
-            if (seedKey) {
-              loadPlantSprite(seedKey);
-            }
-          });
-        } catch {
-        }
-        WEATHER_MUTATIONS.forEach((info) => {
-          if (info.tileRef != null) {
-            loadMutationSprite(info.key);
-          }
-        });
-      } finally {
-        lockerSpritesLoading = false;
-      }
-    })().catch((error) => {
-      console.warn("[LockerSprites]", "preload failed", error);
-      scheduleLockerSpritePreload(500);
-    });
-  }
-  if (typeof window !== "undefined") {
-    scheduleLockerSpritePreload();
-    window.addEventListener("mg:sprite-detected", () => {
-      if (!lockerSpritesPreloaded) {
-        scheduleLockerSpritePreload(100);
-      }
-    });
+    const label2 = WEATHER_MUTATION_LABELS[tag] ?? formatMutationLabel(tag);
+    const fallback = options.fallback ?? label2.charAt(0);
+    wrap.textContent = fallback || "?";
+    wrap.title = label2;
+    wrap.setAttribute("aria-label", label2);
+    return wrap;
   }
   function createDefaultSettings() {
     return {
@@ -31280,12 +27603,12 @@ next: ${next}`;
       target.weatherRecipes.push(set2);
     });
   }
-  function serializeSettingsState(state2) {
-    normalizeWeatherSelection(state2.weatherSelected);
-    state2.weatherRecipes.forEach((set2) => normalizeRecipeSelection(set2));
-    const mode = state2.scaleLockMode === "MINIMUM" ? "MINIMUM" : state2.scaleLockMode === "MAXIMUM" ? "MAXIMUM" : state2.scaleLockMode === "NONE" ? "NONE" : "RANGE";
-    let minScale = Math.max(50, Math.min(100, Math.round(state2.minScalePct || 50)));
-    let maxScale = Math.max(50, Math.min(100, Math.round(state2.maxScalePct || 100)));
+  function serializeSettingsState(state3) {
+    normalizeWeatherSelection(state3.weatherSelected);
+    state3.weatherRecipes.forEach((set2) => normalizeRecipeSelection(set2));
+    const mode = state3.scaleLockMode === "MINIMUM" ? "MINIMUM" : state3.scaleLockMode === "MAXIMUM" ? "MAXIMUM" : state3.scaleLockMode === "NONE" ? "NONE" : "RANGE";
+    let minScale = Math.max(50, Math.min(100, Math.round(state3.minScalePct || 50)));
+    let maxScale = Math.max(50, Math.min(100, Math.round(state3.maxScalePct || 100)));
     if (mode === "RANGE") {
       maxScale = Math.max(51, Math.min(100, maxScale));
       if (maxScale <= minScale) {
@@ -31305,14 +27628,14 @@ next: ${next}`;
       minScalePct: minScale,
       maxScalePct: maxScale,
       scaleLockMode: mode,
-      lockMode: state2.lockMode === "ALLOW" ? "ALLOW" : "LOCK",
-      minInventory: Math.max(0, Math.min(999, Math.round(state2.minInventory || 91))),
-      avoidNormal: !!state2.avoidNormal,
-      includeNormal: !state2.avoidNormal,
-      visualMutations: Array.from(state2.visualMutations),
-      weatherMode: state2.weatherMode,
-      weatherSelected: Array.from(state2.weatherSelected),
-      weatherRecipes: state2.weatherRecipes.map((set2) => Array.from(set2))
+      lockMode: state3.lockMode === "ALLOW" ? "ALLOW" : "LOCK",
+      minInventory: Math.max(0, Math.min(999, Math.round(state3.minInventory || 91))),
+      avoidNormal: !!state3.avoidNormal,
+      includeNormal: !state3.avoidNormal,
+      visualMutations: Array.from(state3.visualMutations),
+      weatherMode: state3.weatherMode,
+      weatherSelected: Array.from(state3.weatherSelected),
+      weatherRecipes: state3.weatherRecipes.map((set2) => Array.from(set2))
     };
   }
   var LockerMenuStore = class {
@@ -31324,12 +27647,12 @@ next: ${next}`;
       this.global = { enabled: false, settings: createDefaultSettings(), hasPersistedSettings: true };
       this.syncFromService(initial);
     }
-    applyPersisted(state2) {
-      this.global.enabled = !!state2.enabled;
-      hydrateSettingsFromPersisted(this.global.settings, state2.settings);
+    applyPersisted(state3) {
+      this.global.enabled = !!state3.enabled;
+      hydrateSettingsFromPersisted(this.global.settings, state3.settings);
       this.global.hasPersistedSettings = true;
       const seen = /* @__PURE__ */ new Set();
-      Object.entries(state2.overrides ?? {}).forEach(([key2, value]) => {
+      Object.entries(state3.overrides ?? {}).forEach(([key2, value]) => {
         const entry = this.ensureOverride(key2, { silent: true });
         entry.enabled = !!value?.enabled;
         hydrateSettingsFromPersisted(entry.settings, value?.settings);
@@ -31354,9 +27677,9 @@ next: ${next}`;
         }
       }
     }
-    syncFromService(state2) {
+    syncFromService(state3) {
       this.syncing = true;
-      this.applyPersisted(state2);
+      this.applyPersisted(state3);
       this.emit();
       this.syncing = false;
     }
@@ -31434,7 +27757,7 @@ next: ${next}`;
   function createWeatherMutationToggle({
     key: key2,
     label: label2,
-    spriteSize,
+    iconSize,
     dense,
     kind = "main",
     iconFactory
@@ -31475,15 +27798,22 @@ next: ${next}`;
     input.dataset.weatherToggle = kind;
     wrap.appendChild(input);
     wrap.dataset.weatherToggle = kind;
-    const iconSize = Math.max(24, spriteSize ?? (dense ? 36 : isMain ? 52 : 72));
-    const icon = iconFactory ? iconFactory({ size: iconSize, fallback: label2.charAt(0) || "?" }) : createMutationSprite(key2, {
-      size: iconSize,
+    const computedIconSize = Math.max(24, iconSize ?? (dense ? 36 : isMain ? 52 : 72));
+    const iconWrap = applyStyles(document.createElement("span"), {
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center"
+    });
+    const fallbackIcon = iconFactory ? iconFactory({ size: computedIconSize, fallback: label2.charAt(0) || "?" }) : createWeatherBadge(key2, {
+      size: computedIconSize,
       fallback: label2.charAt(0) || "?"
     });
-    applyStyles(icon, {
+    applyStyles(iconWrap, {
       filter: "drop-shadow(0 1px 1px rgba(0, 0, 0, 0.45))"
     });
-    wrap.appendChild(icon);
+    iconWrap.appendChild(fallbackIcon);
+    wrap.appendChild(iconWrap);
+    attachWeatherSpriteIcon(iconWrap, key2, computedIconSize);
     const caption = applyStyles(document.createElement("div"), {
       fontSize: dense ? "11px" : "11.5px",
       fontWeight: dense ? "500" : "600",
@@ -31560,7 +27890,7 @@ next: ${next}`;
     button.onmouseenter = () => button.style.borderColor = "#6aa1";
     button.onmouseleave = () => button.style.borderColor = "#4445";
   }
-  function createLockerSettingsCard(ui, state2, opts = {}) {
+  function createLockerSettingsCard(ui, state3, opts = {}) {
     const card = document.createElement("div");
     card.dataset.lockerSettingsCard = "1";
     card.style.border = "1px solid #4445";
@@ -31576,7 +27906,7 @@ next: ${next}`;
     let recipesTitleElement = null;
     const updateRecipeTitleText = () => {
       if (!recipesTitleElement) return;
-      const prefix = state2.lockMode === "ALLOW" ? "Allow" : "Lock";
+      const prefix = state3.lockMode === "ALLOW" ? "Allow" : "Lock";
       recipesTitleElement.textContent = `${prefix} when any recipe row matches (OR between rows)`;
     };
     const makeSection = (titleText, content) => {
@@ -31623,10 +27953,10 @@ next: ${next}`;
         { value: "lock", label: "Lock" },
         { value: "allow", label: "Allow" }
       ],
-      fromLockMode(state2.lockMode),
+      fromLockMode(state3.lockMode),
       (value) => {
         if (isProgrammaticLockMode) return;
-        state2.lockMode = toLockMode(value);
+        state3.lockMode = toLockMode(value);
         updateLockModeUI();
         opts.onChange?.();
       },
@@ -31634,7 +27964,7 @@ next: ${next}`;
     );
     lockModeRow.append(lockModeSegmented, lockModeHint);
     const updateLockModeUI = () => {
-      const value = fromLockMode(state2.lockMode);
+      const value = fromLockMode(state3.lockMode);
       const current = lockModeSegmented.get?.();
       if (current !== value) {
         isProgrammaticLockMode = true;
@@ -31656,9 +27986,9 @@ next: ${next}`;
     scaleModeRow.style.flexWrap = "wrap";
     scaleModeRow.style.justifyContent = "center";
     scaleModeRow.style.gap = "12px";
-    const minSlider = ui.slider(50, 100, 1, state2.minScalePct);
+    const minSlider = ui.slider(50, 100, 1, state3.minScalePct);
     applyStyles(minSlider, { width: "min(420px, 100%)" });
-    const maxSlider = ui.slider(50, 100, 1, state2.maxScalePct);
+    const maxSlider = ui.slider(50, 100, 1, state3.maxScalePct);
     applyStyles(maxSlider, { width: "min(420px, 100%)" });
     const toMode = (value) => {
       switch (value) {
@@ -31685,7 +28015,7 @@ next: ${next}`;
       }
     };
     let isProgrammaticScaleMode = false;
-    const initialScaleMode = fromMode(state2.scaleLockMode);
+    const initialScaleMode = fromMode(state3.scaleLockMode);
     const scaleModeSegmented = ui.segmented(
       [
         { value: "none", label: "None" },
@@ -31701,7 +28031,7 @@ next: ${next}`;
       { ariaLabel: "Scale lock mode" }
     );
     scaleModeRow.append(scaleModeSegmented);
-    const scaleSlider = ui.rangeDual(50, 100, 1, state2.minScalePct, state2.maxScalePct);
+    const scaleSlider = ui.rangeDual(50, 100, 1, state3.minScalePct, state3.maxScalePct);
     applyStyles(scaleSlider.root, {
       width: "min(420px, 100%)",
       marginLeft: "auto",
@@ -31765,8 +28095,8 @@ next: ${next}`;
     const applyScaleRange = (commit, notify2 = commit) => {
       let minValue = parseInt(scaleMinSlider.value, 10);
       let maxValue = parseInt(scaleMaxSlider.value, 10);
-      if (!Number.isFinite(minValue)) minValue = state2.minScalePct;
-      if (!Number.isFinite(maxValue)) maxValue = state2.maxScalePct;
+      if (!Number.isFinite(minValue)) minValue = state3.minScalePct;
+      if (!Number.isFinite(maxValue)) maxValue = state3.maxScalePct;
       minValue = Math.max(50, Math.min(99, minValue));
       maxValue = Math.max(51, Math.min(100, maxValue));
       if (maxValue <= minValue) {
@@ -31781,41 +28111,41 @@ next: ${next}`;
       scaleMinValue.textContent = `${minValue}%`;
       scaleMaxValue.textContent = `${maxValue}%`;
       if (commit) {
-        state2.minScalePct = minValue;
-        state2.maxScalePct = maxValue;
+        state3.minScalePct = minValue;
+        state3.maxScalePct = maxValue;
         if (notify2) opts.onChange?.();
       }
     };
     const applyScaleMinimum = (commit, notify2 = commit) => {
       let minValue = parseInt(minSlider.value, 10);
-      if (!Number.isFinite(minValue)) minValue = state2.minScalePct;
+      if (!Number.isFinite(minValue)) minValue = state3.minScalePct;
       minValue = Math.max(50, Math.min(100, minValue));
       minSlider.value = String(minValue);
       scaleMinimumValue.textContent = `${minValue}%`;
       if (commit) {
-        state2.minScalePct = minValue;
+        state3.minScalePct = minValue;
         if (notify2) opts.onChange?.();
       }
     };
     const applyScaleMaximum = (commit, notify2 = commit) => {
       let maxValue = parseInt(maxSlider.value, 10);
-      if (!Number.isFinite(maxValue)) maxValue = state2.maxScalePct;
+      if (!Number.isFinite(maxValue)) maxValue = state3.maxScalePct;
       maxValue = Math.max(50, Math.min(100, maxValue));
       maxSlider.value = String(maxValue);
       scaleMaximumValue.textContent = `${maxValue}%`;
       if (commit) {
-        state2.maxScalePct = maxValue;
+        state3.maxScalePct = maxValue;
         if (notify2) opts.onChange?.();
       }
     };
     const updateScaleModeUI = () => {
-      const isRange = state2.scaleLockMode === "RANGE";
-      const isMin = state2.scaleLockMode === "MINIMUM";
-      const isMax = state2.scaleLockMode === "MAXIMUM";
+      const isRange = state3.scaleLockMode === "RANGE";
+      const isMin = state3.scaleLockMode === "MINIMUM";
+      const isMax = state3.scaleLockMode === "MAXIMUM";
       rangeControls.style.display = isRange ? "" : "none";
       minControls.style.display = isMin ? "" : "none";
       maxControls.style.display = isMax ? "" : "none";
-      const segValue = fromMode(state2.scaleLockMode);
+      const segValue = fromMode(state3.scaleLockMode);
       if (scaleModeSegmented.get?.() !== segValue) {
         isProgrammaticScaleMode = true;
         try {
@@ -31826,16 +28156,16 @@ next: ${next}`;
       }
     };
     const applyScaleMode = (mode, notify2) => {
-      const prevMode = state2.scaleLockMode;
-      state2.scaleLockMode = mode;
+      const prevMode = state3.scaleLockMode;
+      state3.scaleLockMode = mode;
       if (mode === "RANGE") {
-        scaleSlider.setValues(state2.minScalePct, state2.maxScalePct);
+        scaleSlider.setValues(state3.minScalePct, state3.maxScalePct);
         applyScaleRange(prevMode !== mode, false);
       } else if (mode === "MINIMUM") {
-        minSlider.value = String(state2.minScalePct);
+        minSlider.value = String(state3.minScalePct);
         applyScaleMinimum(prevMode !== mode, false);
       } else if (mode === "MAXIMUM") {
-        maxSlider.value = String(state2.maxScalePct);
+        maxSlider.value = String(state3.maxScalePct);
         applyScaleMaximum(prevMode !== mode, false);
       }
       updateScaleModeUI();
@@ -31854,7 +28184,7 @@ next: ${next}`;
     applyScaleRange(false);
     applyScaleMinimum(false);
     applyScaleMaximum(false);
-    applyScaleMode(state2.scaleLockMode, false);
+    applyScaleMode(state3.scaleLockMode, false);
     const colorsRow = centerRow();
     colorsRow.style.flexWrap = "wrap";
     colorsRow.style.gap = "8px";
@@ -31920,24 +28250,24 @@ next: ${next}`;
       button.style.cursor = button.disabled ? "default" : "pointer";
     };
     const updateColorButtons = () => {
-      updateColorButtonVisual(btnNormal, state2.avoidNormal);
-      updateColorButtonVisual(btnGold, state2.visualMutations.has("Gold"));
-      updateColorButtonVisual(btnRainbow, state2.visualMutations.has("Rainbow"));
+      updateColorButtonVisual(btnNormal, state3.avoidNormal);
+      updateColorButtonVisual(btnGold, state3.visualMutations.has("Gold"));
+      updateColorButtonVisual(btnRainbow, state3.visualMutations.has("Rainbow"));
     };
     btnNormal.addEventListener("click", () => {
-      state2.avoidNormal = !state2.avoidNormal;
+      state3.avoidNormal = !state3.avoidNormal;
       updateColorButtons();
       opts.onChange?.();
     });
     btnGold.addEventListener("click", () => {
-      if (state2.visualMutations.has("Gold")) state2.visualMutations.delete("Gold");
-      else state2.visualMutations.add("Gold");
+      if (state3.visualMutations.has("Gold")) state3.visualMutations.delete("Gold");
+      else state3.visualMutations.add("Gold");
       updateColorButtons();
       opts.onChange?.();
     });
     btnRainbow.addEventListener("click", () => {
-      if (state2.visualMutations.has("Rainbow")) state2.visualMutations.delete("Rainbow");
-      else state2.visualMutations.add("Rainbow");
+      if (state3.visualMutations.has("Rainbow")) state3.visualMutations.delete("Rainbow");
+      else state3.visualMutations.add("Rainbow");
       updateColorButtons();
       opts.onChange?.();
     });
@@ -31959,7 +28289,7 @@ next: ${next}`;
       }
       opts.onChange?.();
     };
-    const updateMainWeatherSelection = applyWeatherSelection(state2.weatherSelected);
+    const updateMainWeatherSelection = applyWeatherSelection(state3.weatherSelected);
     const weatherToggles = WEATHER_MUTATIONS.map((info) => {
       const toggle = createWeatherMutationToggle({
         key: info.key,
@@ -31975,7 +28305,7 @@ next: ${next}`;
       return toggle;
     });
     const updateWeatherMutationsDisabled = () => {
-      const disabled = card.dataset.disabled === "1" || state2.weatherMode === "RECIPES";
+      const disabled = card.dataset.disabled === "1" || state3.weatherMode === "RECIPES";
       weatherGrid.style.opacity = disabled ? "0.55" : "";
       weatherGrid.style.pointerEvents = disabled ? "none" : "";
       weatherToggles.forEach((toggle) => toggle.setDisabled(disabled));
@@ -31993,7 +28323,7 @@ next: ${next}`;
       wrap.append(input, span);
       input.addEventListener("change", () => {
         if (!input.checked) return;
-        state2.weatherMode = value;
+        state3.weatherMode = value;
         recipesWrap.style.display = value === "RECIPES" ? "" : "none";
         updateWeatherMutationsDisabled();
         opts.onChange?.();
@@ -32055,10 +28385,10 @@ next: ${next}`;
       if (editingRecipeIndex === null) return;
       const draft = new Set(editingRecipeDraft);
       normalizeRecipeSelection(draft);
-      if (editingRecipeIndex === state2.weatherRecipes.length) {
-        state2.weatherRecipes.push(draft);
-      } else if (editingRecipeIndex >= 0 && editingRecipeIndex < state2.weatherRecipes.length) {
-        state2.weatherRecipes[editingRecipeIndex] = draft;
+      if (editingRecipeIndex === state3.weatherRecipes.length) {
+        state3.weatherRecipes.push(draft);
+      } else if (editingRecipeIndex >= 0 && editingRecipeIndex < state3.weatherRecipes.length) {
+        state3.weatherRecipes[editingRecipeIndex] = draft;
       }
       editingRecipeIndex = null;
       editingRecipeDraft = /* @__PURE__ */ new Set();
@@ -32067,8 +28397,8 @@ next: ${next}`;
     };
     const deleteRecipeAt = (index) => {
       if (index < 0) return;
-      if (index < state2.weatherRecipes.length) {
-        state2.weatherRecipes.splice(index, 1);
+      if (index < state3.weatherRecipes.length) {
+        state3.weatherRecipes.splice(index, 1);
       }
       if (editingRecipeIndex !== null) {
         if (index === editingRecipeIndex) {
@@ -32097,16 +28427,23 @@ next: ${next}`;
         fontWeight: "600",
         letterSpacing: "0.2px"
       });
-      const sprite = info.iconFactory ? info.iconFactory({ size: 20, fallback: label2.charAt(0) || "?" }) : createMutationSprite(tag, {
+      const iconWrap = applyStyles(document.createElement("span"), {
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center"
+      });
+      const fallbackIcon = info.iconFactory ? info.iconFactory({ size: 20, fallback: label2.charAt(0) || "?" }) : createWeatherBadge(tag, {
         size: 20,
         fallback: label2.charAt(0) || "?"
       });
-      applyStyles(sprite, {
+      applyStyles(iconWrap, {
         filter: "drop-shadow(0 1px 1px rgba(0, 0, 0, 0.45))"
       });
+      iconWrap.appendChild(fallbackIcon);
+      attachWeatherSpriteIcon(iconWrap, tag, 20);
       const text = document.createElement("span");
       text.textContent = label2;
-      badge.append(sprite, text);
+      badge.append(iconWrap, text);
       return badge;
     };
     const renderRecipeSummary = (container, selection) => {
@@ -32162,7 +28499,7 @@ next: ${next}`;
         const toggle = createWeatherMutationToggle({
           key: info.key,
           label: info.label,
-          spriteSize: 40,
+          iconSize: 40,
           dense: true,
           kind: "recipe",
           iconFactory: info.iconFactory
@@ -32193,14 +28530,14 @@ next: ${next}`;
     }
     function repaintRecipes() {
       recipesList.innerHTML = "";
-      const hasDraftNew = editingRecipeIndex !== null && editingRecipeIndex === state2.weatherRecipes.length;
-      const totalRows = state2.weatherRecipes.length + (hasDraftNew ? 1 : 0);
+      const hasDraftNew = editingRecipeIndex !== null && editingRecipeIndex === state3.weatherRecipes.length;
+      const totalRows = state3.weatherRecipes.length + (hasDraftNew ? 1 : 0);
       if (totalRows === 0) {
         recipesList.appendChild(emptyRecipes);
         applyDisabled();
         return;
       }
-      state2.weatherRecipes.forEach((set2, index) => {
+      state3.weatherRecipes.forEach((set2, index) => {
         normalizeRecipeSelection(set2);
         const isEditing = editingRecipeIndex === index;
         const selection = isEditing ? editingRecipeDraft : set2;
@@ -32244,7 +28581,7 @@ next: ${next}`;
           styleBtnFullWidth(btnValidate, "\u2714\uFE0F");
           btnValidate.onclick = commitEditingRecipe;
           actions.append(btnCancel, btnValidate);
-          if (editingRecipeIndex !== null && editingRecipeIndex < state2.weatherRecipes.length) {
+          if (editingRecipeIndex !== null && editingRecipeIndex < state3.weatherRecipes.length) {
             const btnDelete = document.createElement("button");
             styleBtnFullWidth(btnDelete, "\u{1F5D1}\uFE0F");
             btnDelete.title = "Delete";
@@ -32313,7 +28650,7 @@ next: ${next}`;
       applyDisabled();
     }
     btnAddRecipe.onclick = () => {
-      startEditingRecipe(state2.weatherRecipes.length);
+      startEditingRecipe(state3.weatherRecipes.length);
     };
     recipesWrap.append(recipesHeader, recipesList);
     card.append(
@@ -32326,19 +28663,19 @@ next: ${next}`;
     );
     const refresh = () => {
       updateLockModeUI();
-      scaleSlider.setValues(state2.minScalePct, state2.maxScalePct);
-      minSlider.value = String(state2.minScalePct);
-      maxSlider.value = String(state2.maxScalePct);
+      scaleSlider.setValues(state3.minScalePct, state3.maxScalePct);
+      minSlider.value = String(state3.minScalePct);
+      maxSlider.value = String(state3.maxScalePct);
       applyScaleRange(false);
       applyScaleMinimum(false);
       applyScaleMaximum(false);
-      applyScaleMode(state2.scaleLockMode, false);
+      applyScaleMode(state3.scaleLockMode, false);
       updateColorButtons();
-      weatherToggles.forEach((toggle) => toggle.setChecked(state2.weatherSelected.has(toggle.key)));
-      radioAny.input.checked = state2.weatherMode === "ANY";
-      radioAll.input.checked = state2.weatherMode === "ALL";
-      radioRecipes.input.checked = state2.weatherMode === "RECIPES";
-      recipesWrap.style.display = state2.weatherMode === "RECIPES" ? "" : "none";
+      weatherToggles.forEach((toggle) => toggle.setChecked(state3.weatherSelected.has(toggle.key)));
+      radioAny.input.checked = state3.weatherMode === "ANY";
+      radioAll.input.checked = state3.weatherMode === "ALL";
+      radioRecipes.input.checked = state3.weatherMode === "RECIPES";
+      recipesWrap.style.display = state3.weatherMode === "RECIPES" ? "" : "none";
       updateWeatherMutationsDisabled();
       repaintRecipes();
     };
@@ -32350,7 +28687,7 @@ next: ${next}`;
     return { root: card, refresh, setDisabled };
   }
   function createRestrictionsTabRenderer(ui) {
-    let state2 = lockerRestrictionsService.getState();
+    let state3 = lockerRestrictionsService.getState();
     let bonusFromMultiplier = null;
     let bonusFromPlayers = friendBonusPercentFromPlayers(1);
     let eggOptions = [];
@@ -32386,7 +28723,7 @@ next: ${next}`;
       textShadow: "0 1px 1px rgba(0, 0, 0, 0.5)"
     });
     sliderHeader.append(sliderTitle, sliderValue);
-    const initialRequiredPct = friendBonusPercentFromPlayers(state2.minRequiredPlayers) ?? 0;
+    const initialRequiredPct = friendBonusPercentFromPlayers(state3.minRequiredPlayers) ?? 0;
     const slider = ui.slider(0, FRIEND_BONUS_MAX, FRIEND_BONUS_STEP, initialRequiredPct);
     slider.style.width = "100%";
     sliderWrap.append(sliderHeader, slider);
@@ -32427,10 +28764,10 @@ next: ${next}`;
     decorSubtitle.style.fontSize = "12.5px";
     decorSubtitle.style.opacity = "0.85";
     decorText.append(decorSubtitle);
-    const decorToggle = ui.switch(state2.decorPickupLocked);
+    const decorToggle = ui.switch(state3.decorPickupLocked);
     decorToggle.addEventListener("change", () => {
       const locked = !!decorToggle.checked;
-      state2.decorPickupLocked = locked;
+      state3.decorPickupLocked = locked;
       lockerRestrictionsService.setDecorPickupLocked(locked);
     });
     decorRow.append(decorText, decorToggle);
@@ -32478,17 +28815,16 @@ next: ${next}`;
       toggle.style.fontSize = "14px";
       toggle.style.fontWeight = "700";
       toggle.addEventListener("click", () => {
-        const next = !Boolean(state2.eggLocks?.[opt.id]);
-        state2.eggLocks = { ...state2.eggLocks || {}, [opt.id]: next };
+        const next = !Boolean(state3.eggLocks?.[opt.id]);
+        state3.eggLocks = { ...state3.eggLocks || {}, [opt.id]: next };
         lockerRestrictionsService.setEggLock(opt.id, next);
         renderEggList();
       });
-      const sprite = createShopSprite("Egg", opt.id, { size: 32, fallback: "\u{1F95A}" });
-      sprite.style.filter = "drop-shadow(0 1px 1px rgba(0,0,0,0.45))";
       const name = document.createElement("div");
       name.style.fontWeight = "600";
       name.style.color = "#e7eef7";
-      row.append(toggle, sprite, name);
+      const icon = createEggIcon(opt.id, opt.name, 32);
+      row.append(toggle, icon, name);
       return { row, toggle, name };
     };
     renderEggList = () => {
@@ -32508,7 +28844,7 @@ next: ${next}`;
           eggRowCache.set(id, entry);
         }
         entry.name.textContent = opt.name || id;
-        const locked = !!state2.eggLocks?.[id];
+        const locked = !!state3.eggLocks?.[id];
         updateEggToggleAppearance(entry.toggle, locked);
         fragment.appendChild(entry.row);
       });
@@ -32533,9 +28869,9 @@ next: ${next}`;
       statusBadge.style.color = palette.color;
     };
     const updateStatus = () => {
-      const requiredPct = clampPercent4(friendBonusPercentFromPlayers(state2.minRequiredPlayers) ?? 0);
+      const requiredPct = clampPercent4(friendBonusPercentFromPlayers(state3.minRequiredPlayers) ?? 0);
       const currentPct = resolveCurrentBonus();
-      const requiredPlayers = state2.minRequiredPlayers;
+      const requiredPlayers = state3.minRequiredPlayers;
       const currentPlayers = currentPct != null ? percentToRequiredFriendCount(currentPct) : null;
       const allowed = requiredPct <= 0 || currentPct != null && currentPct + 1e-4 >= requiredPct;
       if (requiredPct <= 0) {
@@ -32552,18 +28888,18 @@ next: ${next}`;
       const raw = Number(slider.value);
       const pct = clampPercent4(Number.isFinite(raw) ? raw : 0);
       updateSliderValue(pct);
-      state2.minRequiredPlayers = percentToRequiredFriendCount(pct);
+      state3.minRequiredPlayers = percentToRequiredFriendCount(pct);
       updateStatus();
       if (commit) {
-        lockerRestrictionsService.setMinRequiredPlayers(state2.minRequiredPlayers);
+        lockerRestrictionsService.setMinRequiredPlayers(state3.minRequiredPlayers);
       }
     };
     slider.addEventListener("input", () => handleSliderInput(false));
     slider.addEventListener("change", () => handleSliderInput(true));
     const syncFromService = (next) => {
-      state2 = { ...next };
-      setCheck(decorToggle, state2.decorPickupLocked);
-      updateSliderValue(friendBonusPercentFromPlayers(state2.minRequiredPlayers) ?? 0);
+      state3 = { ...next };
+      setCheck(decorToggle, state3.decorPickupLocked);
+      updateSliderValue(friendBonusPercentFromPlayers(state3.minRequiredPlayers) ?? 0);
       updateStatus();
       renderEggList();
     };
@@ -32784,6 +29120,7 @@ next: ${next}`;
     let selectedKey = null;
     let renderedDetailKey = null;
     const detailScrollMemory = /* @__PURE__ */ new Map();
+    const listButtons = /* @__PURE__ */ new Map();
     const getClampedScrollTop = (element) => {
       const max = Math.max(0, element.scrollHeight - element.clientHeight);
       return Math.max(0, Math.min(element.scrollTop, max));
@@ -32809,6 +29146,13 @@ next: ${next}`;
       memory.detail = getClampedScrollTop(detail);
       detailScrollMemory.set(renderedDetailKey, memory);
     });
+    const refreshListStyles = () => {
+      listButtons.forEach(({ button, dot }, key2) => {
+        const isSelected = selectedKey === key2;
+        button.style.background = isSelected ? "#2b8a3e" : "#1f2328";
+        dot.style.background = store.getOverride(key2)?.enabled ? "#2ecc71" : "#e74c3c";
+      });
+    };
     const renderList = () => {
       const previousScrollTop = getClampedScrollTop(list);
       list.innerHTML = "";
@@ -32825,10 +29169,10 @@ next: ${next}`;
         selectedKey = null;
         return;
       }
-      scheduleLockerSpritePreload();
       if (selectedKey && !seeds.some((opt) => opt.key === selectedKey)) {
         selectedKey = null;
       }
+      listButtons.clear();
       const fragment = document.createDocumentFragment();
       seeds.forEach((opt) => {
         const button = document.createElement("button");
@@ -32849,23 +29193,21 @@ next: ${next}`;
         const label2 = document.createElement("span");
         label2.className = "label";
         label2.textContent = opt.cropName || opt.key;
-        const fallbackEmoji = getLockerSeedEmojiForKey(opt.key) || getLockerSeedEmojiForSeedName(opt.seedName) || "\u{1F331}";
-        const sprite = createPlantSprite(opt.key, {
-          size: 24,
-          fallback: fallbackEmoji
-        });
-        button.append(dot, label2, sprite);
+        const icon = createSeedIcon(opt.key, { size: 24 });
+        button.append(dot, label2, icon);
+        listButtons.set(opt.key, { button, dot });
         button.onmouseenter = () => button.style.borderColor = "#6aa1";
         button.onmouseleave = () => button.style.borderColor = "#4445";
         button.onclick = () => {
           if (selectedKey === opt.key) return;
           selectedKey = opt.key;
-          renderList();
+          refreshListStyles();
           renderDetail();
         };
         fragment.appendChild(button);
       });
       list.appendChild(fragment);
+      refreshListStyles();
       restoreScrollTop(list, previousScrollTop);
     };
     const renderDetail = () => {
@@ -32905,13 +29247,12 @@ next: ${next}`;
       header.style.width = "min(760px, 100%)";
       const titleWrap = ui.flexRow({ gap: 10, align: "center" });
       titleWrap.style.flexWrap = "nowrap";
-      const fallbackEmoji = getLockerSeedEmojiForKey(seed.key) || getLockerSeedEmojiForSeedName(seed.seedName) || "\u{1F331}";
-      const sprite = createPlantSprite(seed.key, { size: 32, fallback: fallbackEmoji });
       const title = document.createElement("div");
       title.textContent = seed.cropName || seed.key;
       title.style.fontWeight = "600";
       title.style.fontSize = "15px";
-      titleWrap.append(sprite, title);
+      const icon = createSeedIcon(seed.key, { size: 32 });
+      titleWrap.append(icon, title);
       const toggleWrap = ui.flexRow({ gap: 8, align: "center" });
       toggleWrap.style.flexWrap = "nowrap";
       const toggleLabel = ui.label("Override");
@@ -32968,8 +29309,10 @@ next: ${next}`;
         renderedDetailKey = activeKey;
       }
     };
+    renderList();
+    renderDetail();
     const refresh = () => {
-      renderList();
+      refreshListStyles();
       renderDetail();
     };
     const unsubscribe2 = store.subscribe(refresh);
@@ -33043,6 +29386,12 @@ next: ${next}`;
     Amberlit: { mgLighting: "amberlit" },
     Amberbound: { mgLighting: "amberbound" }
   };
+  var MUTATION_SPRITE_OVERRIDES = {
+    dawnlit: "Dawnlit",
+    dawnbound: "Dawncharged",
+    amberlit: "Ambershine",
+    amberbound: "Ambercharged"
+  };
   var segmentedUi = new Menu({ compact: true });
   var ensureMenuStyles = segmentedUi.ensureStyles;
   ensureMenuStyles?.call(segmentedUi);
@@ -33059,172 +29408,17 @@ next: ${next}`;
     friendPlayers: FRIEND_BONUS_MIN_PLAYERS
   };
   var BASE_SPRITE_SIZE_PX = 96;
-  var WEATHER_EFFECT_PRIORITY = ["wet", "chilled", "frozen"];
-  var LIGHTING_EFFECT_PRIORITY_GROUPS = [
-    ["dawnlit"],
-    ["dawnbound", "dawncharged", "dawn radiant", "dawnradiant", "dawn-radiant"],
-    ["ambershine", "amberlit"],
-    ["amberbound", "ambercharged", "amber radiant", "amberradiant", "amber-radiant"]
-  ];
-  var EFFECTS_CONFIG = {
-    Wet: {
-      blendMode: "source-atop",
-      colors: ["rgb(128, 128, 255)"],
-      alpha: 0.2
-    },
-    Chilled: {
-      blendMode: "source-atop",
-      colors: ["rgb(183, 183, 236)"],
-      alpha: 0.5
-    },
-    Frozen: {
-      blendMode: "source-atop",
-      colors: ["rgb(128, 128, 255)"],
-      alpha: 0.6
-    },
-    Dawnlit: {
-      blendMode: "source-atop",
-      colors: ["rgb(120, 100, 180)"],
-      alpha: 0.4
-    },
-    Ambershine: {
-      blendMode: "source-atop",
-      colors: ["rgb(255, 140, 26)", "rgb(230, 92, 26)", "rgb(178, 58, 26)"],
-      alpha: 0.5
-    },
-    Dawncharged: {
-      blendMode: "source-atop",
-      colors: ["rgb(100, 80, 160)", "rgb(110, 90, 170)", "rgb(120, 100, 180)"],
-      alpha: 0.5
-    },
-    Ambercharged: {
-      blendMode: "source-atop",
-      colors: ["rgb(167, 50, 30)", "rgb(177, 60, 40)", "rgb(187, 70, 50)"],
-      alpha: 0.5
-    }
-  };
-  var EFFECT_PRIORITY_BY_LOWER_NAME = (() => {
-    const map2 = /* @__PURE__ */ new Map();
-    WEATHER_EFFECT_PRIORITY.forEach((name, index) => {
-      map2.set(name.toLowerCase(), index);
-    });
-    let offset = WEATHER_EFFECT_PRIORITY.length;
-    LIGHTING_EFFECT_PRIORITY_GROUPS.forEach((group) => {
-      group.forEach((name) => {
-        map2.set(name.toLowerCase(), offset);
-      });
-      offset += 1;
-    });
-    return map2;
-  })();
-  var LIGHTING_EFFECT_NAMES_LOWER = /* @__PURE__ */ new Set([
-    "dawnlit",
-    "dawncharged",
-    "ambershine",
-    "ambercharged"
+  var DEFAULT_SPRITE_CATEGORIES = ["tallplant", "plant", "crop"];
+  var PLANT_PRIORITY_IDENTIFIERS = /* @__PURE__ */ new Set([
+    "dawncelestial",
+    "mooncelestial",
+    "dawnbinder",
+    "moonbinder",
+    "dawnbinderbulb",
+    "moonbinderbulb",
+    "dawnbinderpod",
+    "moonbinderpod"
   ]);
-  var EFFECT_TOKEN_ALIASES = /* @__PURE__ */ new Map([
-    ["wet", "Wet"],
-    ["damp", "Wet"],
-    ["moist", "Wet"],
-    ["chilled", "Chilled"],
-    ["cold", "Chilled"],
-    ["frozen", "Frozen"],
-    ["ice", "Frozen"],
-    ["icy", "Frozen"],
-    ["dawnlit", "Dawnlit"],
-    ["dawn-lit", "Dawnlit"],
-    ["dawnbound", "Dawnlit"],
-    ["dawn-bound", "Dawnlit"],
-    ["dawncharged", "Dawncharged"],
-    ["dawn-charged", "Dawncharged"],
-    ["dawn radiant", "Dawncharged"],
-    ["dawnradiant", "Dawncharged"],
-    ["dawn-radiant", "Dawncharged"],
-    ["ambershine", "Ambershine"],
-    ["amber-shine", "Ambershine"],
-    ["amberlit", "Ambershine"],
-    ["amber-lit", "Ambershine"],
-    ["amberbound", "Ambercharged"],
-    ["amber-bound", "Ambercharged"],
-    ["ambercharged", "Ambercharged"],
-    ["amber-charged", "Ambercharged"],
-    ["amber radiant", "Ambercharged"],
-    ["amberradiant", "Ambercharged"],
-    ["amber-radiant", "Ambercharged"]
-  ]);
-  var EFFECT_NAME_BY_TOKEN = (() => {
-    const map2 = /* @__PURE__ */ new Map();
-    Object.keys(EFFECTS_CONFIG).forEach((key2) => {
-      map2.set(key2.toLowerCase(), key2);
-    });
-    EFFECT_TOKEN_ALIASES.forEach((value, key2) => {
-      map2.set(key2, value);
-    });
-    return map2;
-  })();
-  var WEATHER_LABEL_NORMALIZATION = (() => {
-    const map2 = /* @__PURE__ */ new Map();
-    const entries = tileRefsMutationLabels;
-    for (const [key2, value] of Object.entries(entries)) {
-      if (typeof key2 !== "string" || typeof value !== "string") continue;
-      map2.set(key2.toLowerCase(), value);
-      map2.set(value.toLowerCase(), value);
-    }
-    return map2;
-  })();
-  var TALL_PLANT_SEEDS2 = /* @__PURE__ */ new Set(["Bamboo", "Cactus"]);
-  var mutationMetadataByNormalizedName = (() => {
-    const map2 = /* @__PURE__ */ new Map();
-    const catalog = mutationCatalog;
-    for (const [key2, value] of Object.entries(catalog)) {
-      if (typeof key2 !== "string" || !key2.trim()) continue;
-      const label2 = typeof value?.name === "string" && value.name.trim().length > 0 ? value.name : key2;
-      const tileRef = typeof value?.tileRef === "number" ? value.tileRef : null;
-      const category = tileRef != null ? "weather" : "color";
-      const info = {
-        id: key2,
-        label: label2,
-        tileRef,
-        category
-      };
-      map2.set(key2.toLowerCase(), info);
-      map2.set(label2.toLowerCase(), info);
-    }
-    const tileRefLabels = tileRefsMutationLabels;
-    for (const [key2, value] of Object.entries(tileRefLabels)) {
-      if (typeof key2 !== "string" || typeof value !== "string") continue;
-      const info = map2.get(key2.toLowerCase());
-      if (!info) continue;
-      const normalizedLabel = value.toLowerCase();
-      if (!map2.has(normalizedLabel)) {
-        map2.set(normalizedLabel, info);
-      }
-    }
-    const goldInfo = map2.get("gold");
-    if (goldInfo) {
-      map2.set("golden", goldInfo);
-    }
-    const normalInfo = {
-      id: "Normal",
-      label: "Normal",
-      tileRef: null,
-      category: "color"
-    };
-    map2.set("normal", normalInfo);
-    return map2;
-  })();
-  var plantSpriteCache2 = /* @__PURE__ */ new Map();
-  var plantSpritePromises2 = /* @__PURE__ */ new Map();
-  var plantSpriteCanvasCache = /* @__PURE__ */ new Map();
-  var plantSpriteCanvasPromises = /* @__PURE__ */ new Map();
-  var plantSpriteVariantCache = /* @__PURE__ */ new Map();
-  var plantSpriteVariantPromises = /* @__PURE__ */ new Map();
-  var plantSpriteEffectVariantCache = /* @__PURE__ */ new Map();
-  var plantSpriteEffectVariantPromises = /* @__PURE__ */ new Map();
-  var mutationSpriteCache2 = /* @__PURE__ */ new Map();
-  var mutationSpritePromises2 = /* @__PURE__ */ new Map();
-  var spriteUpdateSeq = 0;
   var CROP_SIMULATION_CSS = `
 .${ROOT_CLASS} {
   display: none;
@@ -33307,6 +29501,9 @@ next: ${next}`;
 .${ROOT_CLASS} .mg-crop-simulation__sprite-fallback {
   z-index: 0;
   font-size: 42px;
+}
+.${ROOT_CLASS} .mg-crop-simulation__sprite[data-mg-has-sprite="1"] .mg-crop-simulation__sprite-fallback {
+  opacity: 0;
 }
 .${ROOT_CLASS} .mg-crop-simulation__slider-container {
   display: flex;
@@ -33537,463 +29734,104 @@ next: ${next}`;
     if (cropSimulationStyleEl) return;
     cropSimulationStyleEl = addStyle(CROP_SIMULATION_CSS);
   }
-  function resolveEffectNameToken(value) {
-    if (typeof value !== "string") return null;
-    const normalized = value.trim().toLowerCase();
-    if (!normalized) return null;
-    return EFFECT_NAME_BY_TOKEN.get(normalized) ?? null;
-  }
-  function getMutationEffectName(mutation) {
-    return resolveEffectNameToken(mutation.id) ?? resolveEffectNameToken(mutation.label);
-  }
-  function getEffectPriority(effectName) {
-    const lower = effectName.toLowerCase();
-    return EFFECT_PRIORITY_BY_LOWER_NAME.get(lower) ?? Number.MAX_SAFE_INTEGER;
-  }
-  function isLightingEffect(effectName) {
-    return LIGHTING_EFFECT_NAMES_LOWER.has(effectName.toLowerCase());
-  }
-  function normalizeEffectNames(effectNames) {
-    const seen = /* @__PURE__ */ new Set();
-    const order = /* @__PURE__ */ new Map();
-    const normalized = [];
-    effectNames.forEach((name, index) => {
-      if (seen.has(name)) return;
-      seen.add(name);
-      normalized.push(name);
-      order.set(name, index);
-    });
-    normalized.sort((a, b) => {
-      const priorityDiff = getEffectPriority(a) - getEffectPriority(b);
-      if (priorityDiff !== 0) return priorityDiff;
-      return (order.get(a) ?? 0) - (order.get(b) ?? 0);
-    });
-    return normalized;
-  }
-  function getApplicableEffectNames(weatherMutations) {
-    const effectNames = weatherMutations.map((mutation) => getMutationEffectName(mutation)).filter((value) => value != null);
-    return normalizeEffectNames(effectNames);
-  }
-  function makeEffectCacheKey(seedKey, variant, effectNames) {
-    return `${seedKey}::variant::${variant}::effects::${effectNames.join("+")}`;
-  }
-  function getMutationSheetBases() {
-    const urls = /* @__PURE__ */ new Set();
-    try {
-      Sprites.listTilesByCategory(/mutations/i).forEach((url) => urls.add(url));
-    } catch {
-    }
-    const bases = Array.from(urls, (url) => {
-      const clean = url.split(/[?#]/)[0] ?? url;
-      const file = clean.split("/").pop() ?? clean;
-      return file.replace(/\.[^.]+$/, "");
-    });
-    return bases.length ? bases : ["mutations"];
-  }
-  async function fetchPlantSpriteCanvas(seedKey) {
-    await ensureSpritesReady();
-    if (typeof window === "undefined") return null;
-    const entry = plantCatalog[seedKey];
-    if (!entry) return null;
-    const tileRef = entry?.crop?.tileRef ?? entry?.plant?.tileRef ?? entry?.seed?.tileRef;
-    const bases = plantSheetBases2(seedKey);
-    const index = toTileIndex3(tileRef, bases);
-    if (index == null) return null;
-    for (const base of bases) {
-      try {
-        const tiles = await loadTileSheet(base);
-        const tile = tiles.find((t) => t.index === index);
-        if (!tile) continue;
-        const canvas = Sprites.toCanvas(tile);
-        if (canvas && canvas.width > 0 && canvas.height > 0) {
-          const copy2 = document.createElement("canvas");
-          copy2.width = canvas.width;
-          copy2.height = canvas.height;
-          const ctx = copy2.getContext("2d");
-          if (!ctx) continue;
-          ctx.imageSmoothingEnabled = false;
-          ctx.drawImage(canvas, 0, 0);
-          return copy2;
-        }
-      } catch {
-      }
-    }
-    return null;
-  }
-  function loadPlantSpriteCanvas(seedKey) {
-    const cached = plantSpriteCanvasCache.get(seedKey);
-    if (cached !== void 0) return Promise.resolve(cached);
-    const inFlight = plantSpriteCanvasPromises.get(seedKey);
-    if (inFlight) return inFlight;
-    const promise = fetchPlantSpriteCanvas(seedKey).then((canvas) => {
-      plantSpriteCanvasCache.set(seedKey, canvas);
-      plantSpriteCanvasPromises.delete(seedKey);
-      return canvas;
-    }).catch(() => {
-      plantSpriteCanvasCache.set(seedKey, null);
-      plantSpriteCanvasPromises.delete(seedKey);
-      return null;
-    });
-    plantSpriteCanvasPromises.set(seedKey, promise);
-    return promise;
-  }
-  async function loadPlantSpriteCanvasForVariant(seedKey, variant) {
-    const canvas = await loadPlantSpriteCanvas(seedKey);
-    if (!canvas) return null;
-    if (variant === "normal") return canvas;
-    const tileInfo = {
-      sheet: "",
-      url: "",
-      index: 0,
-      col: 0,
-      row: 0,
-      size: canvas.width,
-      data: canvas
+  function buildSpriteCandidates2(primary, option) {
+    const candidates = /* @__PURE__ */ new Set();
+    const addCandidate = (value) => {
+      if (!value) return;
+      const trimmed = String(value).trim();
+      if (!trimmed) return;
+      candidates.add(trimmed);
+      candidates.add(trimmed.replace(/\W+/g, ""));
     };
-    return Sprites.toCanvas(tileInfo);
-  }
-  function loadPlantSpriteVariant(seedKey, variant) {
-    if (variant === "normal") {
-      return loadPlantSprite2(seedKey);
+    addCandidate(primary);
+    if (option) {
+      addCandidate(option.seedName);
+      addCandidate(option.cropName);
     }
-    const cacheKey = `${seedKey}::${variant}`;
-    const cached = plantSpriteVariantCache.get(cacheKey);
-    if (cached !== void 0) return Promise.resolve(cached);
-    const inFlight = plantSpriteVariantPromises.get(cacheKey);
-    if (inFlight) return inFlight;
-    const promise = loadPlantSpriteCanvasForVariant(seedKey, variant).then((canvas) => {
-      if (!canvas) return null;
-      return canvas.toDataURL();
-    }).then((src) => {
-      plantSpriteVariantCache.set(cacheKey, src ?? null);
-      plantSpriteVariantPromises.delete(cacheKey);
-      return src ?? null;
-    }).catch(() => {
-      plantSpriteVariantCache.set(cacheKey, null);
-      plantSpriteVariantPromises.delete(cacheKey);
-      return null;
-    });
-    plantSpriteVariantPromises.set(cacheKey, promise);
-    return promise;
+    const baseCandidates = Array.from(candidates).map((value) => value.replace(/icon$/i, "")).filter(Boolean);
+    const expanded = Array.from(
+      /* @__PURE__ */ new Set([
+        ...baseCandidates.map((value) => `${value}Icon`),
+        ...Array.from(candidates)
+      ])
+    ).filter(Boolean);
+    return expanded.length ? expanded : [primary];
   }
-  function loadMutationSprite2(mutation) {
-    const tileRef = mutation.tileRef;
-    if (tileRef == null) return Promise.resolve(null);
-    const cacheKey = mutation.id.toLowerCase();
-    const cached = mutationSpriteCache2.get(cacheKey);
-    if (cached !== void 0) return Promise.resolve(cached);
-    const inFlight = mutationSpritePromises2.get(cacheKey);
-    if (inFlight) return inFlight;
-    const promise = (async () => {
-      await ensureSpritesReady();
-      const bases = getMutationSheetBases();
-      const index = tileRef > 0 ? tileRef - 1 : tileRef;
-      for (const base of bases) {
-        try {
-          const tiles = await loadTileSheet(base);
-          const tile = tiles.find((t) => t.index === index);
-          if (!tile) continue;
-          const canvas = Sprites.toCanvas(tile);
-          if (canvas && canvas.width > 0 && canvas.height > 0) {
-            const copy2 = document.createElement("canvas");
-            copy2.width = canvas.width;
-            copy2.height = canvas.height;
-            const ctx = copy2.getContext("2d");
-            if (!ctx) continue;
-            ctx.imageSmoothingEnabled = false;
-            ctx.drawImage(canvas, 0, 0);
-            return copy2.toDataURL();
-          }
-        } catch {
-        }
+  function getSpriteCategoriesForKey(key2, ...alts) {
+    const candidates = [key2, ...alts];
+    for (const candidate of candidates) {
+      const normalized = typeof candidate === "string" ? candidate.trim().toLowerCase() : "";
+      if (normalized && PLANT_PRIORITY_IDENTIFIERS.has(normalized)) {
+        return ["plant", "tallplant", "crop"];
       }
-      return null;
-    })().then((src) => {
-      mutationSpriteCache2.set(cacheKey, src);
-      mutationSpritePromises2.delete(cacheKey);
-      return src;
-    }).catch(() => {
-      mutationSpriteCache2.set(cacheKey, null);
-      mutationSpritePromises2.delete(cacheKey);
-      return null;
-    });
-    mutationSpritePromises2.set(cacheKey, promise);
-    return promise;
-  }
-  function plantSheetBases2(seedKey) {
-    const urls = /* @__PURE__ */ new Set();
-    try {
-      Sprites.listPlants().forEach((url) => urls.add(url));
-    } catch {
     }
-    try {
-      Sprites.listAllPlants().forEach((url) => urls.add(url));
-    } catch {
-    }
-    const bases = Array.from(urls, (url) => {
-      const clean = url.split(/[?#]/)[0] ?? url;
-      const file = clean.split("/").pop() ?? clean;
-      return file.replace(/\.[^.]+$/, "");
-    });
-    if (!seedKey) return bases.length ? bases : ["plants"];
-    const normalizedBases = bases.map((base) => base.toLowerCase());
-    const findPreferred = (predicate) => bases.filter((base, index) => predicate(base, normalizedBases[index] ?? base.toLowerCase()));
-    if (TALL_PLANT_SEEDS2.has(seedKey)) {
-      const tallExact = findPreferred((_, norm3) => norm3 === "tallplants");
-      if (tallExact.length) return tallExact;
-      const tallAny = findPreferred((base, norm3) => /tall/.test(base) || /tall/.test(norm3));
-      if (tallAny.length) return tallAny;
-    } else {
-      const plantsExact = findPreferred((_, norm3) => norm3 === "plants");
-      if (plantsExact.length) return plantsExact;
-      const nonTall = findPreferred((base, norm3) => !/tall/.test(base) && !/tall/.test(norm3));
-      if (nonTall.length) return nonTall;
-    }
-    return bases.length ? bases : ["plants"];
+    return [...DEFAULT_SPRITE_CATEGORIES];
   }
-  function toTileIndex3(tileRef, bases = []) {
-    const value = typeof tileRef === "number" && Number.isFinite(tileRef) ? tileRef : Number(tileRef);
-    if (!Number.isFinite(value)) return null;
-    if (value <= 0) return value;
-    const normalizedBases = bases.map((base) => base.toLowerCase());
-    if (normalizedBases.some((base) => base.includes("tall"))) {
-      return value - 1;
-    }
-    if (normalizedBases.some((base) => base.includes("plants"))) {
-      return value - 1;
-    }
-    return value - 1;
-  }
-  function loadPlantSprite2(seedKey) {
-    const cached = plantSpriteCache2.get(seedKey);
-    if (cached !== void 0) return Promise.resolve(cached);
-    const inFlight = plantSpritePromises2.get(seedKey);
-    if (inFlight) return inFlight;
-    const promise = loadPlantSpriteCanvas(seedKey).then((canvas) => {
-      const src = canvas ? canvas.toDataURL() : null;
-      plantSpriteCache2.set(seedKey, src);
-      plantSpritePromises2.delete(seedKey);
-      return src;
-    }).catch(() => {
-      plantSpriteCache2.set(seedKey, null);
-      plantSpritePromises2.delete(seedKey);
-      return null;
-    });
-    plantSpritePromises2.set(seedKey, promise);
-    return promise;
-  }
-  function sortMutationsForRendering(mutations) {
-    const entries = mutations.map((mutation, index) => ({ mutation, index }));
-    entries.sort((a, b) => {
-      const effectA = getMutationEffectName(a.mutation);
-      const effectB = getMutationEffectName(b.mutation);
-      const priorityA = effectA ? getEffectPriority(effectA) : Number.MAX_SAFE_INTEGER;
-      const priorityB = effectB ? getEffectPriority(effectB) : Number.MAX_SAFE_INTEGER;
-      if (priorityA !== priorityB) {
-        return priorityA - priorityB;
-      }
-      return a.index - b.index;
-    });
-    return entries.map((entry) => entry.mutation);
-  }
-  function applyEffectToCanvas(canvas, effect) {
-    if (!effect.colors.length) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-    ctx.save();
-    ctx.imageSmoothingEnabled = false;
-    ctx.globalCompositeOperation = effect.blendMode;
-    ctx.globalAlpha = effect.alpha;
-    if (effect.colors.length === 1) {
-      ctx.fillStyle = effect.colors[0] ?? "transparent";
-    } else {
-      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-      const stops = effect.colors.length - 1;
-      effect.colors.forEach((color, index) => {
-        const stop2 = stops === 0 ? 0 : index / stops;
-        gradient.addColorStop(stop2, color);
-      });
-      ctx.fillStyle = gradient;
-    }
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.restore();
-  }
-  function loadPlantSpriteWithEffects(seedKey, variant, effectNames) {
-    const normalizedEffects = normalizeEffectNames(effectNames);
-    if (!normalizedEffects.length) {
-      return loadPlantSpriteVariant(seedKey, variant);
-    }
-    const cacheKey = makeEffectCacheKey(seedKey, variant, normalizedEffects);
-    const cached = plantSpriteEffectVariantCache.get(cacheKey);
-    if (cached !== void 0) return Promise.resolve(cached);
-    const inFlight = plantSpriteEffectVariantPromises.get(cacheKey);
-    if (inFlight) return inFlight;
-    const promise = loadPlantSpriteCanvasForVariant(seedKey, variant).then((canvas) => {
-      if (!canvas) return null;
-      const copy2 = document.createElement("canvas");
-      copy2.width = canvas.width;
-      copy2.height = canvas.height;
-      const ctx = copy2.getContext("2d");
-      if (!ctx) return null;
-      ctx.imageSmoothingEnabled = false;
-      ctx.drawImage(canvas, 0, 0);
-      normalizedEffects.forEach((effectName) => {
-        const effect = EFFECTS_CONFIG[effectName];
-        if (effect) {
-          applyEffectToCanvas(copy2, effect);
-        }
-      });
-      return copy2.toDataURL();
-    }).then((src) => {
-      plantSpriteEffectVariantCache.set(cacheKey, src ?? null);
-      plantSpriteEffectVariantPromises.delete(cacheKey);
-      return src ?? null;
-    }).catch(() => {
-      plantSpriteEffectVariantCache.set(cacheKey, null);
-      plantSpriteEffectVariantPromises.delete(cacheKey);
-      return null;
-    });
-    plantSpriteEffectVariantPromises.set(cacheKey, promise);
-    return promise;
-  }
-  function getCachedPlantSpriteSource(seedKey, variant, effectNames) {
-    const normalizedEffects = normalizeEffectNames(effectNames);
-    if (normalizedEffects.length === 0) {
-      if (variant === "normal") {
-        return plantSpriteCache2.get(seedKey);
-      }
-      const variantCacheKey = `${seedKey}::${variant}`;
-      return plantSpriteVariantCache.get(variantCacheKey);
-    }
-    const cacheKey = makeEffectCacheKey(seedKey, variant, normalizedEffects);
-    return plantSpriteEffectVariantCache.get(cacheKey);
-  }
-  function isLightingOverlay(mutation) {
-    const effectName = getMutationEffectName(mutation);
-    if (!effectName) return false;
-    return isLightingEffect(effectName);
-  }
-  function applySpriteElement(el2, baseSrc, overlayLayers, fallbackText) {
-    el2.innerHTML = "";
-    if (baseSrc) {
-      const baseLayer = document.createElement("span");
-      baseLayer.className = "mg-crop-simulation__sprite-layer mg-crop-simulation__sprite-layer--base";
-      const img = document.createElement("img");
-      img.src = baseSrc;
-      img.alt = "";
-      img.decoding = "async";
-      img.loading = "lazy";
-      img.draggable = false;
-      baseLayer.appendChild(img);
-      el2.appendChild(baseLayer);
-    }
-    overlayLayers.forEach(({ src, mutation }, index) => {
-      const layer = document.createElement("span");
-      layer.className = "mg-crop-simulation__sprite-layer mg-crop-simulation__sprite-layer--overlay";
-      layer.style.setProperty("--mg-crop-simulation-layer", String(index + 1));
-      if (isLightingOverlay(mutation)) {
-        layer.classList.add("mg-crop-simulation__sprite-layer--overlay-lighting");
-      }
-      const img = document.createElement("img");
-      img.src = src;
-      img.alt = "";
-      img.decoding = "async";
-      img.loading = "lazy";
-      img.draggable = false;
-      layer.appendChild(img);
-      el2.appendChild(layer);
-    });
-    if (!baseSrc && overlayLayers.length === 0) {
-      const fallback = document.createElement("span");
+  function ensureCropSpriteLayers(el2) {
+    let fallback = el2.querySelector(".mg-crop-simulation__sprite-fallback");
+    if (!fallback) {
+      fallback = document.createElement("span");
       fallback.className = "mg-crop-simulation__sprite-fallback";
-      const content = typeof fallbackText === "string" && fallbackText.trim().length > 0 ? fallbackText : "\u{1F331}";
-      fallback.textContent = content;
       el2.appendChild(fallback);
     }
-  }
-  function setSpriteElement(el2, speciesKey, options) {
-    spriteUpdateSeq += 1;
-    const seq = spriteUpdateSeq;
-    el2.dataset.spriteSeq = String(seq);
-    if (!speciesKey) {
-      applySpriteElement(el2, null, [], options.fallback ?? null);
-      return;
+    let layer = el2.querySelector(".mg-crop-simulation__sprite-layer--base");
+    if (!layer) {
+      layer = document.createElement("span");
+      layer.className = "mg-crop-simulation__sprite-layer mg-crop-simulation__sprite-layer--base";
+      el2.appendChild(layer);
     }
-    const { colorVariant, weatherMutations } = options;
-    const sortedMutations = sortMutationsForRendering(weatherMutations);
-    const effectNames = colorVariant === "normal" ? getApplicableEffectNames(sortedMutations) : [];
-    const cachedBase = getCachedPlantSpriteSource(speciesKey, colorVariant, effectNames);
-    const cachedOverlays = sortedMutations.map((mutation) => {
-      const src = mutationSpriteCache2.get(mutation.id.toLowerCase());
-      return typeof src === "string" && src.length > 0 ? { mutation, src } : null;
-    }).filter((value) => value != null);
-    const baseSrcCached = typeof cachedBase === "string" ? cachedBase : null;
-    applySpriteElement(el2, baseSrcCached, cachedOverlays, options.fallback ?? null);
-    const basePromise = loadPlantSpriteWithEffects(speciesKey, colorVariant, effectNames);
-    const overlayPromises = sortedMutations.map(async (mutation) => ({
-      mutation,
-      src: await loadMutationSprite2(mutation)
-    }));
-    Promise.all([basePromise, Promise.all(overlayPromises)]).then(([baseSrc, overlays]) => {
-      if (el2.dataset.spriteSeq !== String(seq)) return;
-      const overlaySources = overlays.filter(
-        (entry) => typeof entry.src === "string" && entry.src.length > 0
-      );
-      applySpriteElement(el2, baseSrc ?? null, overlaySources, options.fallback ?? null);
-    }).catch(() => {
-      if (el2.dataset.spriteSeq !== String(seq)) return;
-      applySpriteElement(el2, null, [], options.fallback ?? null);
+    return { fallback, layer };
+  }
+  function syncCropSpriteLoadedState(el2, layer) {
+    if (layer.childElementCount > 0) {
+      el2.dataset.mgHasSprite = "1";
+    } else {
+      delete el2.dataset.mgHasSprite;
+    }
+  }
+  function resetCropSimulationSprite(el2) {
+    el2.innerHTML = "";
+    delete el2.dataset.mgHasSprite;
+  }
+  function createSeedSpriteIcon(option, fallback, size, logTag) {
+    const wrap = applyStyles2(document.createElement("span"), {
+      width: `${size}px`,
+      height: `${size}px`,
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center"
     });
-  }
-  function labelToVariant(label2) {
-    const normalized = typeof label2 === "string" ? label2.trim().toLowerCase() : "";
-    if (normalized === "gold") return "gold";
-    if (normalized === "rainbow") return "rainbow";
-    return "normal";
-  }
-  function normalizeMutationName2(name) {
-    if (typeof name !== "string") return null;
-    const trimmed = name.trim();
-    if (!trimmed) return null;
-    const normalized = trimmed.toLowerCase();
-    const info = mutationMetadataByNormalizedName.get(normalized);
-    if (info) {
-      return info;
-    }
-    const normalizedLabel = WEATHER_LABEL_NORMALIZATION.get(normalized);
-    if (normalizedLabel) {
-      const fallback = mutationMetadataByNormalizedName.get(normalizedLabel.toLowerCase());
-      if (fallback) {
-        return fallback;
-      }
-    }
-    return {
-      id: trimmed,
-      label: trimmed,
-      tileRef: null,
-      category: "weather"
-    };
+    wrap.textContent = fallback && fallback.trim().length > 0 ? fallback : "??";
+    const candidates = buildSpriteCandidates2(option.key, option);
+    const categories = getSpriteCategoriesForKey(option?.key, option?.seedName, option?.cropName);
+    attachSpriteIcon(wrap, categories, candidates, size, logTag);
+    return wrap;
   }
   function applyCropSimulationSprite(el2, speciesKey, options = {}) {
-    const colorLabel = options.colorLabel ?? "None";
-    const colorVariant = labelToVariant(colorLabel);
-    const weatherLabels = Array.isArray(options.weatherLabels) ? options.weatherLabels : [];
-    const seen = /* @__PURE__ */ new Set();
-    const weatherMutations = [];
-    for (const label2 of weatherLabels) {
-      if (!label2 || typeof label2 !== "string") continue;
-      const info = normalizeMutationName2(label2);
-      if (!info || info.category !== "weather") continue;
-      const key2 = info.id.toLowerCase();
-      if (seen.has(key2)) continue;
-      seen.add(key2);
-      weatherMutations.push(info);
+    const { fallback, layer } = ensureCropSpriteLayers(el2);
+    const fallbackText = typeof options.fallback === "string" && options.fallback.trim().length > 0 ? options.fallback : "??";
+    fallback.textContent = fallbackText;
+    if (!speciesKey) {
+      layer.replaceChildren();
+      syncCropSpriteLoadedState(el2, layer);
+      return;
     }
-    setSpriteElement(el2, speciesKey, {
-      colorVariant,
-      weatherMutations,
-      fallback: options.fallback ?? null
-    });
+    const candidates = options.candidates && options.candidates.length ? options.candidates : buildSpriteCandidates2(speciesKey);
+    const mutations = Array.isArray(options.mutations) && options.mutations.length ? options.mutations : void 0;
+    const categories = options.categories && options.categories.length ? options.categories : getSpriteCategoriesForKey(speciesKey);
+    const updateLoadedState = () => syncCropSpriteLoadedState(el2, layer);
+    updateLoadedState();
+    attachSpriteIcon(
+      layer,
+      categories,
+      candidates,
+      BASE_SPRITE_SIZE_PX,
+      "calculator",
+      {
+        mutations,
+        onSpriteApplied: updateLoadedState
+      }
+    );
   }
   var applyStyles2 = (el2, styles) => {
     const toKebab = (s) => s.startsWith("--") ? s : s.replace(/[A-Z]/g, (m) => "-" + m.toLowerCase());
@@ -34027,6 +29865,17 @@ next: ${next}`;
       text-align: center;
       opacity: 0.7;
       padding: 24px 12px;
+    }
+    .mg-crop-calculator__source-hint {
+      font-size: 11px;
+      color: rgba(226, 232, 240, 0.7);
+      text-align: center;
+      margin-top: 20px;
+      padding-bottom: 4px;
+    }
+    .mg-crop-calculator__source-hint a {
+      color: #38bdf8;
+      text-decoration: underline;
     }
   `);
   }
@@ -34157,24 +30006,24 @@ next: ${next}`;
       });
     });
   }
-  function getMutationsForState(state2) {
+  function getMutationsForState(state3) {
     const mutations = [];
-    if (state2.color !== "None") mutations.push(state2.color);
-    if (state2.weatherCondition !== "None") mutations.push(state2.weatherCondition);
-    if (state2.weatherLighting !== "None") mutations.push(state2.weatherLighting);
-    return mutations;
+    if (state3.color !== "None") mutations.push(state3.color);
+    if (state3.weatherCondition !== "None") mutations.push(state3.weatherCondition);
+    if (state3.weatherLighting !== "None") mutations.push(state3.weatherLighting);
+    return mutations.map((label2) => normalizeMutationLabelForSprite(label2));
   }
-  function getWeatherLabelsForState(state2) {
-    const labels = [];
-    if (state2.weatherCondition !== "None") labels.push(state2.weatherCondition);
-    if (state2.weatherLighting !== "None") labels.push(state2.weatherLighting);
-    return labels;
+  function normalizeMutationLabelForSprite(label2) {
+    const normalized = label2.trim();
+    if (!normalized) return normalized;
+    const overridden = MUTATION_SPRITE_OVERRIDES[normalized.toLowerCase()];
+    return overridden ?? normalized;
   }
-  function computePrice(speciesKey, state2, percent, maxScale) {
+  function computePrice(speciesKey, state3, percent, maxScale) {
     const scale = sizePercentToScale(percent, maxScale);
     if (!Number.isFinite(scale) || scale <= 0) return null;
-    const mutations = getMutationsForState(state2);
-    const friendPlayers = clampFriendPlayers(state2.friendPlayers);
+    const mutations = getMutationsForState(state3);
+    const friendPlayers = clampFriendPlayers(state3.friendPlayers);
     const pricingOptions = { ...DefaultPricing, friendPlayers };
     const value = estimateProduceValue(speciesKey, scale, mutations, pricingOptions);
     return Number.isFinite(value) && value > 0 ? value : null;
@@ -34208,13 +30057,12 @@ next: ${next}`;
   }
   async function renderCalculatorMenu(container) {
     ensureCalculatorStyles();
-    scheduleLockerSpritePreload();
     const ui = new Menu({ id: "calculator", compact: true });
     ui.addTab("crops", "Crops", (root) => {
       root.innerHTML = "";
       root.style.padding = "8px";
       root.style.boxSizing = "border-box";
-      root.style.height = "61vh";
+      root.style.height = "66vh";
       root.style.overflow = "auto";
       root.style.display = "grid";
       const layout = applyStyles2(document.createElement("div"), {
@@ -34346,6 +30194,15 @@ next: ${next}`;
       );
       simulationRoot.appendChild(detailLayout);
       detailScroll.appendChild(simulationRoot);
+      const sourceHint = document.createElement("div");
+      sourceHint.className = "mg-crop-calculator__source-hint";
+      sourceHint.innerHTML = `
+      Based on
+      <a href="https://daserix.github.io/magic-garden-calculator" target="_blank" rel="noreferrer noopener">
+        Daserix&apos; Magic Garden Calculators
+      </a>
+    `;
+      root.appendChild(sourceHint);
       const refs = {
         root: simulationRoot,
         sprite,
@@ -34365,15 +30222,23 @@ next: ${next}`;
       const getStateForKey = (key2) => {
         const existing = states.get(key2);
         if (existing) return existing;
-        const state2 = { ...DEFAULT_STATE2 };
-        states.set(key2, state2);
-        return state2;
+        const state3 = { ...DEFAULT_STATE2 };
+        states.set(key2, state3);
+        return state3;
       };
       let selectedKey = null;
       let currentMaxScale = null;
       let currentBaseWeight = null;
-      function renderColorSegment(state2, interactive) {
-        const active = state2?.color ?? COLOR_MUTATION_LABELS[0];
+      const listButtons = /* @__PURE__ */ new Map();
+      const refreshListStyles = () => {
+        listButtons.forEach(({ button, dot }, key2) => {
+          const isSelected = selectedKey === key2;
+          button.style.background = isSelected ? "#2b8a3e" : "#1f2328";
+          dot.style.background = isSelected ? "#2ecc71" : "#4c566a";
+        });
+      };
+      function renderColorSegment(state3, interactive) {
+        const active = state3?.color ?? COLOR_MUTATION_LABELS[0];
         const segmented = createSegmentedControl(
           COLOR_MUTATION_LABELS,
           active,
@@ -34394,8 +30259,8 @@ next: ${next}`;
         refs.colorMutations.innerHTML = "";
         refs.colorMutations.appendChild(segmented);
       }
-      function renderWeatherConditions(state2, interactive) {
-        const active = state2?.weatherCondition ?? WEATHER_CONDITION_LABELS[0];
+      function renderWeatherConditions(state3, interactive) {
+        const active = state3?.weatherCondition ?? WEATHER_CONDITION_LABELS[0];
         const segmented = createSegmentedControl(
           WEATHER_CONDITION_LABELS,
           active,
@@ -34414,8 +30279,8 @@ next: ${next}`;
         refs.weatherConditions.innerHTML = "";
         refs.weatherConditions.appendChild(segmented);
       }
-      function renderWeatherLighting(state2, interactive) {
-        const active = state2?.weatherLighting ?? WEATHER_LIGHTING_LABELS[0];
+      function renderWeatherLighting(state3, interactive) {
+        const active = state3?.weatherLighting ?? WEATHER_LIGHTING_LABELS[0];
         const segmented = createSegmentedControl(
           WEATHER_LIGHTING_LABELS,
           active,
@@ -34434,8 +30299,8 @@ next: ${next}`;
         refs.weatherLighting.innerHTML = "";
         refs.weatherLighting.appendChild(segmented);
       }
-      function renderFriendBonus(state2, interactive) {
-        const active = friendPlayersToLabel(state2?.friendPlayers ?? FRIEND_BONUS_MIN_PLAYERS);
+      function renderFriendBonus(state3, interactive) {
+        const active = friendPlayersToLabel(state3?.friendPlayers ?? FRIEND_BONUS_MIN_PLAYERS);
         const segmented = createSegmentedControl(
           FRIEND_BONUS_LABELS,
           active,
@@ -34458,31 +30323,35 @@ next: ${next}`;
           refs.priceValue.textContent = "\u2014";
           return;
         }
-        const state2 = getStateForKey(key2);
-        const min = computePrice(key2, state2, state2.sizePercent, currentMaxScale);
-        const maxPercent = Math.min(SIZE_MAX, state2.sizePercent + 1);
-        const max = computePrice(key2, state2, maxPercent, currentMaxScale);
+        const state3 = getStateForKey(key2);
+        const min = computePrice(key2, state3, state3.sizePercent, currentMaxScale);
+        const maxPercent = Math.min(SIZE_MAX, state3.sizePercent + 1);
+        const max = computePrice(key2, state3, maxPercent, currentMaxScale);
         refs.priceValue.textContent = formatCoinRange(min, max);
       }
       function updateSprite() {
         const key2 = selectedKey;
         if (!key2) {
-          refs.sprite.innerHTML = "";
+          resetCropSimulationSprite(refs.sprite);
           return;
         }
-        const state2 = getStateForKey(key2);
+        const state3 = getStateForKey(key2);
         const option = optionByKey.get(key2);
         const fallbackEmoji = getLockerSeedEmojiForKey(key2) || (option?.seedName ? getLockerSeedEmojiForSeedName(option.seedName) : void 0) || "\u{1F331}";
+        const mutations = getMutationsForState(state3);
+        const candidates = buildSpriteCandidates2(key2, option);
+        const categories = getSpriteCategoriesForKey(key2, option?.seedName, option?.cropName);
         applyCropSimulationSprite(refs.sprite, key2, {
-          colorLabel: state2.color,
-          weatherLabels: getWeatherLabelsForState(state2),
-          fallback: fallbackEmoji
+          fallback: fallbackEmoji,
+          candidates,
+          mutations,
+          categories
         });
       }
       function renderDetail() {
         const key2 = selectedKey;
         if (!key2) {
-          refs.sprite.innerHTML = "";
+          resetCropSimulationSprite(refs.sprite);
           refs.sizeSlider.disabled = true;
           currentBaseWeight = null;
           applySizePercent(refs, SIZE_MIN, null, currentBaseWeight);
@@ -34495,28 +30364,29 @@ next: ${next}`;
         }
         currentMaxScale = getMaxScaleForSpecies(key2);
         currentBaseWeight = getBaseWeightForSpecies(key2);
-        const state2 = getStateForKey(key2);
+        const state3 = getStateForKey(key2);
         refs.sizeSlider.disabled = false;
-        applySizePercent(refs, state2.sizePercent, currentMaxScale, currentBaseWeight);
-        renderColorSegment(state2, true);
-        renderWeatherConditions(state2, true);
-        renderWeatherLighting(state2, true);
-        renderFriendBonus(state2, true);
+        applySizePercent(refs, state3.sizePercent, currentMaxScale, currentBaseWeight);
+        renderColorSegment(state3, true);
+        renderWeatherConditions(state3, true);
+        renderWeatherLighting(state3, true);
+        renderFriendBonus(state3, true);
         updateSprite();
         updateOutputs();
       }
       slider.addEventListener("input", () => {
         if (!selectedKey) return;
-        const state2 = getStateForKey(selectedKey);
+        const state3 = getStateForKey(selectedKey);
         const raw = Number(slider.value);
         const value = clamp3(Math.round(raw), SIZE_MIN, SIZE_MAX);
-        state2.sizePercent = value;
+        state3.sizePercent = value;
         applySizePercent(refs, value, currentMaxScale, currentBaseWeight);
         updateOutputs();
       });
       function renderList() {
         const previous = list.scrollTop;
         list.innerHTML = "";
+        listButtons.clear();
         if (!options.length) {
           const empty = document.createElement("div");
           empty.className = "mg-crop-calculator__placeholder";
@@ -34536,7 +30406,6 @@ next: ${next}`;
           currentMaxScale = getMaxScaleForSpecies(selectedKey);
         }
         const fragment = document.createDocumentFragment();
-        scheduleLockerSpritePreload();
         options.forEach((opt) => {
           const button = document.createElement("button");
           button.className = "qmm-vtab";
@@ -34558,10 +30427,7 @@ next: ${next}`;
           label2.className = "label";
           label2.textContent = opt.cropName || opt.key;
           const fallbackEmoji = getLockerSeedEmojiForKey(opt.key) || getLockerSeedEmojiForSeedName(opt.seedName) || "\u{1F331}";
-          const sprite2 = createPlantSprite(opt.key, {
-            size: 24,
-            fallback: fallbackEmoji
-          });
+          const sprite2 = createSeedSpriteIcon(opt, fallbackEmoji, 24, "calculator-list");
           button.append(dot, label2, sprite2);
           button.onmouseenter = () => button.style.borderColor = "#6aa1";
           button.onmouseleave = () => button.style.borderColor = "#4445";
@@ -34569,12 +30435,16 @@ next: ${next}`;
             if (selectedKey === opt.key) return;
             selectedKey = opt.key;
             currentMaxScale = getMaxScaleForSpecies(opt.key);
-            renderList();
+            refreshListStyles();
+            renderDetail();
+            updateOutputs();
           };
+          listButtons.set(opt.key, { button, dot });
           fragment.appendChild(button);
         });
         list.appendChild(fragment);
         list.scrollTop = previous;
+        refreshListStyles();
         renderDetail();
       }
       renderList();
@@ -35753,9 +31623,9 @@ next: ${next}`;
       }
       const all = Array.from(document.querySelectorAll("select[data-sound-select]"));
       for (const sel of all) {
-        const ctx = sel.dataset.soundSelect || "shops";
-        if (contextControls[ctx]?.select === sel) continue;
-        applyOptions(sel, ctx);
+        const ctx2 = sel.dataset.soundSelect || "shops";
+        if (contextControls[ctx2]?.select === sel) continue;
+        applyOptions(sel, ctx2);
       }
     };
     const renderLibList = () => {
@@ -36191,7 +32061,7 @@ next: ${next}`;
     const onResize = () => syncHeaderToScrollbar();
     window.addEventListener("resize", onResize);
     const lastSeenRefs = /* @__PURE__ */ new Map();
-    let state2 = null;
+    let state3 = null;
     let renderedIds = /* @__PURE__ */ new Set();
     const getFilters = () => ({
       type: selType.value || "all",
@@ -36221,18 +32091,38 @@ next: ${next}`;
         marginRight: "6px",
         aspectRatio: "1 / 1"
       });
-      const afterColon = (s) => {
-        const i = s.indexOf(":");
-        return i >= 0 ? s.slice(i + 1) : s;
-      };
-      const spriteFallback = row.type === "Seed" ? "\u{1F331}" : row.type === "Egg" ? "\u{1F95A}" : row.type === "Tool" ? "\u{1F9F0}" : "\u{1F3E0}";
-      const spriteKey2 = afterColon(row.id);
-      const sprite = createShopSprite(row.type, spriteKey2, {
-        size: ICON - 6,
-        fallback: spriteFallback,
-        alt: row.name
-      });
-      iconWrap.appendChild(sprite);
+      const iconFallback = row.type === "Seed" ? "\u{1F331}" : row.type === "Egg" ? "\u{1F95A}" : row.type === "Tool" ? "\u{1F9F0}" : "\u{1F3E0}";
+      const icon = document.createElement("span");
+      icon.textContent = iconFallback;
+      icon.style.fontSize = `${ICON - 10}px`;
+      icon.setAttribute("aria-hidden", "true");
+      iconWrap.appendChild(icon);
+      const spriteCategories = row.type === "Seed" ? ["seed"] : row.type === "Egg" ? ["pet"] : row.type === "Tool" ? ["item"] : row.type === "Decor" ? ["decor"] : null;
+      if (spriteCategories) {
+        const baseId = row.id.split(":")[1] ?? row.name ?? row.id;
+        const candidatesSet = /* @__PURE__ */ new Set();
+        const addCandidate = (value) => {
+          if (!value) return;
+          const trimmed = value.trim();
+          if (!trimmed) return;
+          candidatesSet.add(trimmed);
+          candidatesSet.add(trimmed.replace(/\s+/g, ""));
+          if (row.type === "Seed" || row.type === "Egg") {
+            const stripped = trimmed.replace(/(?:seed|egg)$/i, "").trim();
+            if (stripped) {
+              candidatesSet.add(stripped);
+              candidatesSet.add(stripped.replace(/\s+/g, ""));
+            }
+          }
+        };
+        addCandidate(baseId);
+        addCandidate(row.id);
+        addCandidate(row.name);
+        const candidates = Array.from(candidatesSet).filter(Boolean);
+        if (candidates.length) {
+          attachSpriteIcon(iconWrap, spriteCategories, candidates, ICON, "alerts");
+        }
+      }
       const col = document.createElement("div");
       Object.assign(col.style, {
         display: "flex",
@@ -36332,11 +32222,11 @@ next: ${next}`;
     }
     function rebuildGrid() {
       clearBody();
-      if (!state2) {
+      if (!state3) {
         renderEmpty();
         return;
       }
-      const rows = passesFilters(state2.rows);
+      const rows = passesFilters(state3.rows);
       if (!rows.length) {
         renderEmpty();
       } else {
@@ -36346,7 +32236,7 @@ next: ${next}`;
         });
       }
       refreshRulesUI();
-      followedBadge.textContent = `Followed: ${state2.counts.followed}`;
+      followedBadge.textContent = `Followed: ${state3.counts.followed}`;
       syncHeaderToScrollbar();
     }
     function softUpdateBadge(next) {
@@ -36365,11 +32255,11 @@ next: ${next}`;
       } catch {
       }
       unsub = await NotifierService.onChangeNow((s) => {
-        const prev = state2;
-        state2 = s;
+        const prev = state3;
+        state3 = s;
         if (!prev) {
           rebuildGrid();
-          softUpdateRenderedRows(state2);
+          softUpdateRenderedRows(state3);
           return;
         }
         const prevIds = renderedIds;
@@ -36395,7 +32285,7 @@ next: ${next}`;
       }
     })();
     const onFilterChange = () => {
-      if (state2) rebuildGrid();
+      if (state3) rebuildGrid();
     };
     selType.onchange = onFilterChange;
     selRarity.onchange = onFilterChange;
@@ -36549,43 +32439,25 @@ next: ${next}`;
           span.setAttribute("aria-hidden", "true");
           avatar.appendChild(span);
         };
-        let iconRequestId = 0;
-        const setIcon = (species2, mutation) => {
-          iconRequestId += 1;
-          const requestId = iconRequestId;
+        const setIcon = (species2, mutations2) => {
           const speciesLabel = String(species2 ?? "").trim();
+          avatar.replaceChildren();
           if (!speciesLabel) {
             useEmojiFallback();
             return;
           }
-          useEmojiFallback();
-          loadPetSpriteFromMutations(speciesLabel, mutation).then((src) => {
-            if (requestId !== iconRequestId) return;
-            if (!src) {
-              useEmojiFallback();
-              return;
-            }
-            const img = new Image();
-            img.src = src;
-            img.alt = speciesLabel || "pet";
-            img.decoding = "async";
-            img.loading = "lazy";
-            img.draggable = false;
-            Object.assign(img.style, {
-              width: "100%",
-              height: "100%",
-              imageRendering: "auto",
-              objectFit: "contain"
-            });
-            avatar.replaceChildren(img);
-          }).catch(() => {
-            if (requestId !== iconRequestId) return;
-            useEmojiFallback();
+          const span = document.createElement("span");
+          span.textContent = speciesLabel.charAt(0).toUpperCase() || "\u0110Y?\xF3";
+          span.style.fontSize = "28px";
+          span.setAttribute("aria-hidden", "true");
+          avatar.appendChild(span);
+          attachSpriteIcon(avatar, ["pet"], [speciesLabel], 36, "alerts-pet", {
+            mutations: Array.isArray(mutations2) ? mutations2 : void 0
           });
         };
         const species = String(slot?.petSpecies || "");
         const mutations = slot?.mutations ?? pet?.mutations;
-        setIcon(species, mutations);
+        setIcon(species, Array.isArray(mutations) ? mutations : void 0);
         const titleWrap = document.createElement("div");
         titleWrap.style.display = "flex";
         titleWrap.style.flexDirection = "column";
@@ -36726,12 +32598,33 @@ next: ${next}`;
         borderRadius: "8px",
         background: "#101820"
       });
-      const weatherSprite = createWeatherSprite(row.spriteKey ?? row.id, {
-        size: ICON - 4,
-        fallback: "\u{1F326}",
-        alt: row.name
-      });
-      iconWrap.appendChild(weatherSprite);
+      const weatherIcon = document.createElement("span");
+      weatherIcon.textContent = row.name.trim().charAt(0) || "\u{1F326}";
+      weatherIcon.style.fontSize = `${ICON - 8}px`;
+      weatherIcon.setAttribute("aria-hidden", "true");
+      iconWrap.appendChild(weatherIcon);
+      const weatherCategories = ["ui", "weather", "mutation"];
+      const candidateSet = /* @__PURE__ */ new Set();
+      const addCandidate = (value) => {
+        if (!value) return;
+        const trimmed = value.trim();
+        if (trimmed) {
+          candidateSet.add(trimmed);
+          candidateSet.add(trimmed.replace(/\s+/g, ""));
+        }
+      };
+      addCandidate(row.name);
+      addCandidate(row.atomValue);
+      addCandidate(row.id);
+      const bases = Array.from(candidateSet).map((value) => value.replace(/icon$/i, ""));
+      const candidates = Array.from(
+        new Set(
+          bases.map((base) => `${base}Icon`).concat(Array.from(candidateSet))
+        ).values()
+      ).filter(Boolean);
+      if (candidates.length) {
+        attachSpriteIcon(iconWrap, weatherCategories, candidates, ICON, "alerts-weather");
+      }
       const col = document.createElement("div");
       Object.assign(col.style, {
         display: "flex",
@@ -36886,11 +32779,11 @@ next: ${next}`;
       empty.style.padding = "8px";
       bodyGrid.appendChild(empty);
     };
-    let state2 = null;
+    let state3 = null;
     let stateSig = "";
     const updateDynamicWeatherStats = () => {
-      if (!state2) return;
-      for (const row of state2.rows) {
+      if (!state3) return;
+      for (const row of state3.rows) {
         const target = weatherLastSeenRefs.get(row.id);
         if (target) {
           const { label: label2, title } = formatLastSeen(row.lastSeen, row.isCurrent);
@@ -36902,10 +32795,10 @@ next: ${next}`;
     };
     const rebuildGrid = () => {
       clearGrid();
-      if (!state2 || !state2.rows.length) {
+      if (!state3 || !state3.rows.length) {
         renderEmpty();
       } else {
-        state2.rows.forEach(addRow);
+        state3.rows.forEach(addRow);
         refreshRulesUI();
       }
       syncHeaderToScrollbar();
@@ -36920,7 +32813,7 @@ next: ${next}`;
       }
       try {
         unsubWeather = await NotifierService.onWeatherChangeNow((next) => {
-          state2 = next;
+          state3 = next;
           stateSig = weatherStateSignature(next.rows);
           rebuildGrid();
         });
@@ -36936,7 +32829,7 @@ next: ${next}`;
         const next = await NotifierService.getWeatherState();
         const nextSig = weatherStateSignature(next.rows);
         const changed = nextSig !== stateSig;
-        state2 = next;
+        state3 = next;
         stateSig = nextSig;
         if (changed) rebuildGrid();
         else updateDynamicWeatherStats();
@@ -37070,16 +32963,16 @@ next: ${next}`;
   }
   async function initGarden(stats) {
     if (!isGardenStatsSectionEmpty(stats.garden)) return;
-    let state2;
+    let state3;
     try {
-      state2 = await garden.get();
+      state3 = await garden.get();
     } catch (error) {
       console.warn("[StatsMenu] Failed to read garden data", error);
       return;
     }
-    if (!state2 || !isPlainRecord(state2.tileObjects)) return;
+    if (!state3 || !isPlainRecord(state3.tileObjects)) return;
     let totalPlanted = 0;
-    for (const value of Object.values(state2.tileObjects)) {
+    for (const value of Object.values(state3.tileObjects)) {
       if (!isPlainRecord(value)) continue;
       const objectType = typeof value.objectType === "string" ? value.objectType.toLowerCase() : "";
       if (objectType === "plant") {
@@ -37094,9 +32987,9 @@ next: ${next}`;
   }
   async function initShops(stats) {
     if (!isShopStatsSectionEmpty(stats.shops)) return;
-    let state2 = null;
+    let state3 = null;
     try {
-      state2 = await garden.get();
+      state3 = await garden.get();
     } catch (error) {
       console.warn("[StatsMenu] Failed to read garden data", error);
     }
@@ -37104,8 +32997,8 @@ next: ${next}`;
     let eggsBought = 0;
     let decorBought = 0;
     let toolsBought = 0;
-    if (state2 && isPlainRecord(state2.tileObjects)) {
-      for (const value of Object.values(state2.tileObjects)) {
+    if (state3 && isPlainRecord(state3.tileObjects)) {
+      for (const value of Object.values(state3.tileObjects)) {
         if (!isPlainRecord(value)) continue;
         const objectType = typeof value.objectType === "string" ? value.objectType.toLowerCase() : "";
         if (objectType === "plant") {
@@ -37115,8 +33008,8 @@ next: ${next}`;
         }
       }
     }
-    if (state2 && isPlainRecord(state2.boardwalkTileObjects)) {
-      for (const value of Object.values(state2.boardwalkTileObjects)) {
+    if (state3 && isPlainRecord(state3.boardwalkTileObjects)) {
+      for (const value of Object.values(state3.boardwalkTileObjects)) {
         if (value != null) {
           decorBought += 1;
         }
@@ -37294,11 +33187,11 @@ next: ${next}`;
       return {};
     }
   }
-  function writeCollapseState(state2) {
+  function writeCollapseState(state3) {
     const storage = getStatsStorage();
     if (!storage) return;
     try {
-      storage.setItem(LS_STATS_COLLAPSE_KEY, JSON.stringify(state2));
+      storage.setItem(LS_STATS_COLLAPSE_KEY, JSON.stringify(state3));
     } catch (error) {
       console.warn("[StatsMenu] Failed to save collapse state", error);
     }
@@ -37310,8 +33203,8 @@ next: ${next}`;
     return collapseStateCache;
   }
   function getSectionCollapsed(id, fallback) {
-    const state2 = getCollapseState();
-    const value = state2[id];
+    const state3 = getCollapseState();
+    const value = state3[id];
     return typeof value === "boolean" ? value : fallback;
   }
   function setSectionCollapsed(id, collapsed) {
@@ -37490,12 +33383,34 @@ next: ${next}`;
     wrapper.className = "stats-weather__name";
     const iconWrap = document.createElement("span");
     iconWrap.className = "stats-weather__icon";
-    const sprite = createWeatherSprite(entry.spriteKey ?? entry.label, {
-      size: 32,
-      fallback: "\u{1F326}",
-      alt: entry.label
-    });
-    iconWrap.appendChild(sprite);
+    const initials = entry.label?.trim().charAt(0) || "\u2014";
+    iconWrap.textContent = initials.toUpperCase();
+    if (entry.label) {
+      iconWrap.setAttribute("aria-label", entry.label);
+      iconWrap.setAttribute("title", entry.label);
+    }
+    const categories = ["ui"];
+    const normalized = entry.lookupId.replace(/\s+/g, "");
+    const sanitize = (value) => value.replace(/[^a-zA-Z0-9]/g, "");
+    const bases = Array.from(
+      new Set(
+        [
+          sanitize(entry.lookupId),
+          normalized,
+          entry.lookupId.replace(/Icon$/i, ""),
+          normalized.replace(/Icon$/i, "")
+        ].filter(Boolean)
+      )
+    );
+    const candidates = Array.from(
+      new Set(
+        bases.map((base) => `${base}Icon`).filter((candidate) => candidate.includes("Icon"))
+      )
+    );
+    if (candidates.length === 0) {
+      candidates.push(`${normalized || sanitize(entry.lookupId)}Icon`);
+    }
+    attachSpriteIcon(iconWrap, categories, candidates, 28, "stats-weather");
     const label2 = document.createElement("span");
     label2.className = "stats-weather__label";
     label2.textContent = entry.label;
@@ -37661,182 +33576,18 @@ next: ${next}`;
     }
     return map2;
   }
-  var petSpriteCache2 = /* @__PURE__ */ new Map();
-  var petSpritePromises2 = /* @__PURE__ */ new Map();
-  var petSpriteSubscribers = /* @__PURE__ */ new Map();
-  var petSpriteConfig = /* @__PURE__ */ new WeakMap();
-  var petSpriteListenerAttached = false;
-  var petSheetBasesCache2 = null;
-  function resetPetSheetBases() {
-    petSheetBasesCache2 = null;
-  }
-  function getPetSheetBases2() {
-    if (petSheetBasesCache2) return petSheetBasesCache2;
-    const urls = /* @__PURE__ */ new Set();
-    try {
-      Sprites.listPets().forEach((url) => urls.add(url));
-    } catch {
-    }
-    const bases = Array.from(urls, (url) => {
-      const clean = url.split(/[?#]/)[0] ?? url;
-      const file = clean.split("/").pop() ?? clean;
-      return file.replace(/\.[^.]+$/, "");
-    });
-    petSheetBasesCache2 = bases;
-    return bases;
-  }
-  function toPetTileIndex2(tileRef) {
-    const value = typeof tileRef === "number" && Number.isFinite(tileRef) ? tileRef : Number(tileRef);
-    if (!Number.isFinite(value)) return null;
-    if (value <= 0) return value;
-    return value - 1;
-  }
-  async function fetchPetSprite2(species) {
-    await ensureSpritesReady();
-    const entry = petCatalog[species];
-    const tileRef = entry?.tileRef;
-    if (tileRef == null) return null;
-    const index = toPetTileIndex2(tileRef);
-    if (index == null) return null;
-    const baseCandidates = new Set(getPetSheetBases2());
-    if (baseCandidates.size === 0) {
-      baseCandidates.add("pets");
-      baseCandidates.add("Pets");
-    }
-    for (const base of baseCandidates) {
-      try {
-        const tiles = await loadTileSheet(base);
-        const tile = tiles.find((t) => t.index === index);
-        if (!tile) continue;
-        const canvas = Sprites.toCanvas(tile);
-        if (canvas && canvas.width > 0 && canvas.height > 0) {
-          const copy2 = document.createElement("canvas");
-          copy2.width = canvas.width;
-          copy2.height = canvas.height;
-          const ctx = copy2.getContext("2d");
-          if (!ctx) continue;
-          ctx.imageSmoothingEnabled = false;
-          ctx.drawImage(canvas, 0, 0);
-          return copy2.toDataURL();
-        }
-      } catch {
-      }
-    }
-    return null;
-  }
-  function applyPetSprite(el2, src) {
-    const cfg = petSpriteConfig.get(el2);
-    if (!cfg) return;
-    const { size, fallback } = cfg;
-    el2.classList.add("stats-pet__sprite-icon");
-    el2.style.setProperty("--stats-pet-sprite-size", `${size}px`);
-    el2.innerHTML = "";
-    if (src) {
-      el2.style.fontSize = "";
-      const img = document.createElement("img");
-      img.src = src;
-      img.alt = "";
-      img.decoding = "async";
-      img.loading = "lazy";
-      img.draggable = false;
-      el2.appendChild(img);
-    } else {
-      el2.textContent = fallback;
-      el2.style.fontSize = `${Math.max(10, Math.round(size * 0.7))}px`;
-    }
-  }
-  function subscribePetSprite(species, el2, config) {
-    let subs = petSpriteSubscribers.get(species);
-    if (!subs) {
-      subs = /* @__PURE__ */ new Set();
-      petSpriteSubscribers.set(species, subs);
-    }
-    subs.add(el2);
-    petSpriteConfig.set(el2, config);
-  }
-  function notifyPetSpriteSubscribers(species, src) {
-    const subs = petSpriteSubscribers.get(species);
-    if (!subs) return;
-    subs.forEach((el2) => {
-      if (!el2.isConnected) {
-        subs.delete(el2);
-        petSpriteConfig.delete(el2);
-        return;
-      }
-      applyPetSprite(el2, src);
-    });
-    if (subs.size === 0) {
-      petSpriteSubscribers.delete(species);
-    }
-  }
-  function loadPetSprite2(species) {
-    if (typeof window === "undefined") {
-      return Promise.resolve(null);
-    }
-    const cached = petSpriteCache2.get(species);
-    if (cached !== void 0) {
-      notifyPetSpriteSubscribers(species, cached);
-      return Promise.resolve(cached);
-    }
-    const inflight = petSpritePromises2.get(species);
-    if (inflight) return inflight;
-    const promise = fetchPetSprite2(species).then((src) => {
-      petSpriteCache2.set(species, src);
-      petSpritePromises2.delete(species);
-      notifyPetSpriteSubscribers(species, src);
-      return src;
-    }).catch(() => {
-      petSpritePromises2.delete(species);
-      return null;
-    });
-    petSpritePromises2.set(species, promise);
-    return promise;
-  }
-  function ensurePetSpriteListener() {
-    if (petSpriteListenerAttached || typeof window === "undefined") return;
-    petSpriteListenerAttached = true;
-    window.addEventListener("mg:sprite-detected", () => {
-      petSpriteCache2.clear();
-      petSpritePromises2.clear();
-      resetPetSheetBases();
-      const keys = Array.from(petSpriteSubscribers.keys());
-      keys.forEach((key2) => {
-        void loadPetSprite2(key2);
-      });
-    });
-  }
-  function createPetSprite(species, options = {}) {
-    const size = Math.max(12, options.size ?? 28);
-    const defaultFallback2 = species.trim().charAt(0) || "\u{1F43E}";
-    const fallbackSource = options.fallback ?? defaultFallback2;
-    const fallback = fallbackSource.toString();
-    const el2 = document.createElement("span");
-    if (typeof window === "undefined") {
-      el2.classList.add("stats-pet__sprite-icon");
-      el2.style.setProperty("--stats-pet-sprite-size", `${size}px`);
-      el2.textContent = fallback;
-      el2.style.fontSize = `${Math.max(10, Math.round(size * 0.7))}px`;
-      return el2;
-    }
-    ensurePetSpriteListener();
-    subscribePetSprite(species, el2, { size, fallback });
-    const cached = petSpriteCache2.get(species);
-    applyPetSprite(el2, cached ?? null);
-    void loadPetSprite2(species);
-    return el2;
-  }
   function createPetSpeciesCell(species) {
     const wrapper = document.createElement("span");
     wrapper.className = "stats-pet__species";
-    const sprite = createPetSprite(species, {
-      size: 28,
-      fallback: species.trim().charAt(0).toUpperCase() || "\u{1F43E}"
-    });
+    const iconWrap = document.createElement("span");
+    iconWrap.className = "stats-pet__icon";
+    iconWrap.textContent = species?.trim().charAt(0).toUpperCase() || "?";
+    iconWrap.setAttribute("aria-hidden", "true");
+    attachSpriteIcon(iconWrap, ["pet"], species, 28, "stats-pet");
     const label2 = document.createElement("span");
     label2.className = "stats-pet__label";
     label2.textContent = species;
-    wrapper.appendChild(sprite);
-    wrapper.appendChild(label2);
+    wrapper.append(iconWrap, label2);
     return { content: wrapper };
   }
   function createPetTotalValueCell(total) {
@@ -37941,12 +33692,17 @@ next: ${next}`;
       const label2 = info?.atomValue ?? key2;
       const lower = key2.toLowerCase();
       const entry = stats.weather[lower] ?? { triggers: 0 };
-      const spriteKey2 = getWeatherSpriteKey(key2) ?? getWeatherSpriteKey(info?.atomValue) ?? getWeatherSpriteKey(info?.displayName) ?? null;
-      return { key: lower, label: label2, triggers: entry.triggers, spriteKey: spriteKey2 };
+      const lookupId = label2 && label2.trim() || key2;
+      return {
+        key: lower,
+        label: label2,
+        triggers: entry.triggers,
+        lookupId
+      };
     }).sort((a, b) => a.label.localeCompare(b.label));
     for (const entry of weatherEntries) {
       rows.push([
-        createWeatherNameCell({ label: entry.label, spriteKey: entry.spriteKey }),
+        createWeatherNameCell({ label: entry.label, lookupId: entry.lookupId }),
         { text: formatInt(entry.triggers) }
       ]);
     }
@@ -38044,23 +33800,78 @@ next: ${next}`;
     const key2 = String(id || "");
     const base = (PetsService.getAbilityNameWithoutLevel?.(key2) || "").replace(/[\s\-_]+/g, "").toLowerCase();
     const is = (prefix) => key2.startsWith(prefix) || base === prefix.toLowerCase();
-    if (is("ProduceScaleBoost")) return { bg: "rgba(34,139,34,0.9)", hover: "rgba(34,139,34,1)" };
-    if (is("PlantGrowthBoost")) return { bg: "rgba(0,128,128,0.9)", hover: "rgba(0,128,128,1)" };
-    if (is("EggGrowthBoost")) return { bg: "rgba(180,90,240,0.9)", hover: "rgba(180,90,240,1)" };
-    if (is("PetAgeBoost")) return { bg: "rgba(147,112,219,0.9)", hover: "rgba(147,112,219,1)" };
-    if (is("PetHatchSizeBoost")) return { bg: "rgba(128,0,128,0.9)", hover: "rgba(128,0,128,1)" };
-    if (is("PetXpBoost")) return { bg: "rgba(30,144,255,0.9)", hover: "rgba(30,144,255,1)" };
-    if (is("HungerBoost")) return { bg: "rgba(255,20,147,0.9)", hover: "rgba(255,20,147,1)" };
-    if (is("SellBoost")) return { bg: "rgba(220,20,60,0.9)", hover: "rgba(220,20,60,1)" };
-    if (is("CoinFinder")) return { bg: "rgba(180,150,0,0.9)", hover: "rgba(180,150,0,1)" };
-    if (is("ProduceMutationBoost")) return { bg: "rgba(138,43,226,0.9)", hover: "rgba(138,43,226,1)" };
-    if (is("DoubleHarvest")) return { bg: "rgba(0,120,180,0.9)", hover: "rgba(0,120,180,1)" };
-    if (is("ProduceEater")) return { bg: "rgba(255,69,0,0.9)", hover: "rgba(255,69,0,1)" };
-    if (is("ProduceRefund")) return { bg: "rgba(255,99,71,0.9)", hover: "rgba(255,99,71,1)" };
-    if (is("PetMutationBoost")) return { bg: "rgba(156,65,181,0.9)", hover: "rgba(156,65,181,1)" };
-    if (is("HungerRestore")) return { bg: "rgba(255,105,180,0.9)", hover: "rgba(255,105,180,1)" };
-    if (is("PetRefund")) return { bg: "rgba(0,80,120,0.9)", hover: "rgba(0,80,120,1)" };
-    if (is("Copycat")) return { bg: "rgba(255,140,0,0.9)", hover: "rgba(255,140,0,1)" };
+    if (is("MoonKisser")) {
+      return {
+        bg: "rgba(250,166,35,0.9)",
+        hover: "rgba(250,166,35,1)"
+      };
+    }
+    if (is("DawnKisser")) {
+      return {
+        bg: "rgba(162,92,242,0.9)",
+        hover: "rgba(162,92,242,1)"
+      };
+    }
+    if (is("ProduceScaleBoost")) {
+      return { bg: "rgba(34,139,34,0.9)", hover: "rgba(34,139,34,1)" };
+    }
+    if (is("PlantGrowthBoost")) {
+      return { bg: "rgba(0,128,128,0.9)", hover: "rgba(0,128,128,1)" };
+    }
+    if (is("EggGrowthBoost")) {
+      return { bg: "rgba(180,90,240,0.9)", hover: "rgba(180,90,240,1)" };
+    }
+    if (is("PetAgeBoost")) {
+      return { bg: "rgba(147,112,219,0.9)", hover: "rgba(147,112,219,1)" };
+    }
+    if (is("PetHatchSizeBoost")) {
+      return { bg: "rgba(128,0,128,0.9)", hover: "rgba(128,0,128,1)" };
+    }
+    if (is("PetXpBoost")) {
+      return { bg: "rgba(30,144,255,0.9)", hover: "rgba(30,144,255,1)" };
+    }
+    if (is("HungerBoost")) {
+      return { bg: "rgba(255,20,147,0.9)", hover: "rgba(255,20,147,1)" };
+    }
+    if (is("HungerRestore")) {
+      return { bg: "rgba(255,105,180,0.9)", hover: "rgba(255,105,180,1)" };
+    }
+    if (is("SellBoost")) {
+      return { bg: "rgba(220,20,60,0.9)", hover: "rgba(220,20,60,1)" };
+    }
+    if (is("CoinFinder")) {
+      return { bg: "rgba(180,150,0,0.9)", hover: "rgba(180,150,0,1)" };
+    }
+    if (is("SeedFinder")) {
+      return {
+        bg: "rgba(168,102,38,0.9)",
+        hover: "rgba(168,102,38,1)"
+      };
+    }
+    if (is("ProduceMutationBoost")) {
+      return { bg: "rgba(140,15,70,0.9)", hover: "rgba(140,15,70,1)" };
+    }
+    if (is("PetMutationBoost")) {
+      return { bg: "rgba(160,50,100,0.9)", hover: "rgba(160,50,100,1)" };
+    }
+    if (is("DoubleHarvest")) {
+      return { bg: "rgba(0,120,180,0.9)", hover: "rgba(0,120,180,1)" };
+    }
+    if (is("DoubleHatch")) {
+      return { bg: "rgba(60,90,180,0.9)", hover: "rgba(60,90,180,1)" };
+    }
+    if (is("ProduceEater")) {
+      return { bg: "rgba(255,69,0,0.9)", hover: "rgba(255,69,0,1)" };
+    }
+    if (is("ProduceRefund")) {
+      return { bg: "rgba(255,99,71,0.9)", hover: "rgba(255,99,71,1)" };
+    }
+    if (is("PetRefund")) {
+      return { bg: "rgba(0,80,120,0.9)", hover: "rgba(0,80,120,1)" };
+    }
+    if (is("Copycat")) {
+      return { bg: "rgba(255,140,0,0.9)", hover: "rgba(255,140,0,1)" };
+    }
     if (is("GoldGranter")) {
       return {
         bg: "linear-gradient(135deg, rgba(225,200,55,0.9) 0%, rgba(225,180,10,0.9) 40%, rgba(215,185,45,0.9) 70%, rgba(210,185,45,0.9) 100%)",
@@ -38073,19 +33884,16 @@ next: ${next}`;
         hover: "linear-gradient(45deg, rgba(200,0,0,1), rgba(200,120,0,1), rgba(160,170,30,1), rgba(60,170,60,1), rgba(50,170,170,1), rgba(40,150,180,1), rgba(20,90,180,1), rgba(70,30,150,1))"
       };
     }
-    if (is("SeedFinderIV")) {
+    if (is("RainDance")) {
       return {
-        bg: "linear-gradient(130deg, rgba(0,180,216,0.9) 0%, rgba(124,42,232,0.9) 40%, rgba(160,0,126,0.9) 60%, rgba(255,215,0,0.9) 100%)",
-        hover: "linear-gradient(130deg, rgba(0,180,216,1) 0%, rgba(124,42,232,1) 40%, rgba(160,0,126,1) 60%, rgba(255,215,0,1) 100%)"
+        bg: "rgba(102,204,216,0.9)",
+        hover: "rgba(102,204,216,1)"
       };
     }
-    if (is("SeedFinder")) {
-      const lv = key2.replace(/.*?([IVX]+)$/, "$1");
-      if (lv === "II") return { bg: "rgba(183,121,31,0.9)", hover: "rgba(183,121,31,1)" };
-      if (lv === "III") return { bg: "rgba(139,62,152,0.9)", hover: "rgba(139,62,152,1)" };
-      return { bg: "rgba(94,172,70,0.9)", hover: "rgba(94,172,70,1)" };
-    }
-    return { bg: "rgba(100,100,100,0.9)", hover: "rgba(150,150,150,1)" };
+    return {
+      bg: "rgba(100,100,100,0.9)",
+      hover: "rgba(150,150,150,1)"
+    };
   }
   function renderManagerTab(view, ui) {
     view.innerHTML = "";
@@ -38682,38 +34490,20 @@ next: ${next}`;
           span.setAttribute("aria-hidden", "true");
           iconWrap.appendChild(span);
         };
-        let iconRequestId = 0;
-        const setIcon = (species, mutation) => {
-          iconRequestId += 1;
-          const requestId = iconRequestId;
+        const setIcon = (species, mutations) => {
           const speciesLabel = String(species ?? "").trim();
+          iconWrap.replaceChildren();
           if (!speciesLabel) {
             useEmojiFallback();
             return;
           }
-          useEmojiFallback();
-          loadPetSpriteFromMutations(speciesLabel, mutation).then((src) => {
-            if (requestId !== iconRequestId) return;
-            if (!src) {
-              useEmojiFallback();
-              return;
-            }
-            const img = new Image();
-            img.src = src;
-            img.alt = speciesLabel || "pet";
-            img.decoding = "async";
-            img.loading = "lazy";
-            img.draggable = false;
-            Object.assign(img.style, {
-              width: "100%",
-              height: "100%",
-              imageRendering: "auto",
-              objectFit: "contain"
-            });
-            iconWrap.replaceChildren(img);
-          }).catch(() => {
-            if (requestId !== iconRequestId) return;
-            useEmojiFallback();
+          const span = document.createElement("span");
+          span.textContent = speciesLabel.charAt(0).toUpperCase() || "\u0110Y?\xF3";
+          span.style.fontSize = `${Math.max(ICON - 6, 12)}px`;
+          span.setAttribute("aria-hidden", "true");
+          iconWrap.appendChild(span);
+          attachSpriteIcon(iconWrap, ["pet"], speciesLabel, ICON, "pet-slot", {
+            mutations
           });
         };
         const left2 = document.createElement("div");
@@ -38766,7 +34556,7 @@ next: ${next}`;
         function update(p) {
           if (!p) {
             nameEl.textContent = "None";
-            setIcon(void 0, void 0);
+            setIcon(void 0);
             const fresh2 = abilitiesBadge([]);
             fresh2.style.display = "inline-block";
             left2.replaceChild(fresh2, left2.children[1]);
@@ -39593,6 +35383,10 @@ next: ${next}`;
         }
       }
       btnSelect.onclick = async () => {
+        try {
+          await Atoms.inventory.myPossiblyNoLongerValidSelectedItemIndex.set(null);
+        } catch {
+        }
         await MiscService.openSeedSelectorFlow(ui.setWindowVisible.bind(ui));
         updateSummaryUI();
       };
@@ -39783,6 +35577,10 @@ next: ${next}`;
         }
       }
       btnSelect.onclick = async () => {
+        try {
+          await Atoms.inventory.myPossiblyNoLongerValidSelectedItemIndex.set(null);
+        } catch {
+        }
         await MiscService.openDecorSelectorFlow(ui.setWindowVisible.bind(ui));
         updateSummaryUI();
       };
@@ -39834,6 +35632,30 @@ next: ${next}`;
       } catch {
       }
     };
+  }
+
+  // src/utils/gameVersion.ts
+  var gameVersion = null;
+  function initGameVersion(doc) {
+    if (gameVersion !== null) {
+      return;
+    }
+    const d = doc ?? (typeof document !== "undefined" ? document : null);
+    if (!d) {
+      return;
+    }
+    const scripts = d.scripts;
+    for (let i = 0; i < scripts.length; i++) {
+      const script = scripts.item(i);
+      if (!script) continue;
+      const src = script.src;
+      if (!src) continue;
+      const match = src.match(/\/(?:r\/\d+\/)?version\/([^/]+)/);
+      if (match && match[1]) {
+        gameVersion = match[1];
+        return;
+      }
+    }
   }
 
   // src/services/settings.ts
@@ -40742,6 +36564,205 @@ next: ${next}`;
     view.appendChild(wrapper);
   }
 
+  // src/utils/tileObjectSystemApi.ts
+  var state2 = {
+    engine: null,
+    tos: null,
+    origBind: Function.prototype.bind,
+    bindPatched: false
+  };
+  function looksLikeEngine(o) {
+    return !!(o && typeof o === "object" && typeof o.start === "function" && typeof o.destroy === "function" && o.app && o.app.stage && o.app.renderer && o.systems && typeof o.systems.values === "function");
+  }
+  function findTileObjectSystem(engine) {
+    try {
+      for (const e of engine.systems.values()) {
+        const s = e?.system;
+        if (s?.name === "tileObject") return s;
+      }
+    } catch {
+    }
+    return null;
+  }
+  function tryCaptureFromKnownGlobals() {
+    const w = window;
+    if (!state2.engine && w.__QUINOA_ENGINE__) state2.engine = w.__QUINOA_ENGINE__;
+    if (!state2.tos && w.__TILE_OBJECT_SYSTEM__) state2.tos = w.__TILE_OBJECT_SYSTEM__;
+    if (state2.engine && !state2.tos) state2.tos = findTileObjectSystem(state2.engine);
+  }
+  function armCapture() {
+    if (state2.engine && state2.tos) return;
+    if (state2.bindPatched) return;
+    state2.bindPatched = true;
+    Function.prototype.bind = function(thisArg, ...args) {
+      const bound = state2.origBind.call(this, thisArg, ...args);
+      try {
+        if (!state2.engine && looksLikeEngine(thisArg)) {
+          state2.engine = thisArg;
+          state2.tos = findTileObjectSystem(thisArg);
+          Function.prototype.bind = state2.origBind;
+          state2.bindPatched = false;
+        }
+      } catch {
+      }
+      return bound;
+    };
+  }
+  function deepClone(v) {
+    try {
+      if (typeof structuredClone === "function") return structuredClone(v);
+    } catch {
+    }
+    try {
+      return JSON.parse(JSON.stringify(v));
+    } catch {
+    }
+    return v;
+  }
+  function globalIndexFromXY(tx, ty) {
+    const cols = state2.tos?.map?.cols;
+    if (!Number.isFinite(cols) || cols <= 0) return null;
+    return ty * cols + tx | 0;
+  }
+  function getTileViewAt(tx, ty, ensureView) {
+    const gidx = globalIndexFromXY(tx, ty);
+    if (!state2.tos || gidx == null) return { gidx: null, tv: null };
+    let tv = state2.tos.tileViews?.get?.(gidx) ?? null;
+    if (!tv && ensureView && typeof state2.tos.getOrCreateTileView === "function") {
+      try {
+        tv = state2.tos.getOrCreateTileView(gidx);
+      } catch {
+      }
+    }
+    return { gidx, tv };
+  }
+  function assertReady() {
+    if (!state2.engine || !state2.tos) {
+      throw new Error("Quinoa engine/TOS not captured. Call tos.init() early (main entry) and ensure it runs before engine initializes.");
+    }
+  }
+  function applyTileObject(tx, ty, nextObj, opts = {}) {
+    assertReady();
+    const ensureView = opts.ensureView !== false;
+    const forceUpdate = opts.forceUpdate !== false;
+    const { gidx, tv } = getTileViewAt(tx, ty, ensureView);
+    if (gidx == null) throw new Error("TOS/map cols not available");
+    if (!tv) throw new Error("TileView not available");
+    const before = tv.tileObject;
+    tv.onDataChanged(nextObj);
+    if (forceUpdate && state2.engine?.reusableContext) {
+      try {
+        tv.update(state2.engine.reusableContext);
+      } catch {
+      }
+    }
+    return { tx, ty, gidx, ok: true, before, after: tv.tileObject };
+  }
+  function assertType(obj, type) {
+    if (!obj) throw new Error("No tileObject on this tile");
+    if (obj.objectType !== type) throw new Error(`Wrong objectType: expected "${type}", got "${obj.objectType}"`);
+  }
+  function patchPlantSlot(slot, slotPatch) {
+    const p = slotPatch || {};
+    if ("startTime" in p) slot.startTime = Number(p.startTime);
+    if ("endTime" in p) slot.endTime = Number(p.endTime);
+    if ("targetScale" in p) slot.targetScale = Number(p.targetScale);
+    if ("mutations" in p) {
+      if (!Array.isArray(p.mutations)) throw new Error("mutations must be an array of strings");
+      if (!p.mutations.every((x) => typeof x === "string")) throw new Error("mutations must contain only strings");
+      slot.mutations = p.mutations.slice();
+    }
+  }
+  var tos = {
+    /** À appeler une fois dans le main, le plus tôt possible */
+    init() {
+      tryCaptureFromKnownGlobals();
+      armCapture();
+      tryCaptureFromKnownGlobals();
+      return { ok: !!(state2.engine && state2.tos), engine: state2.engine, tos: state2.tos };
+    },
+    isReady() {
+      return !!(state2.engine && state2.tos);
+    },
+    getStatus() {
+      return { ok: !!(state2.engine && state2.tos), engine: state2.engine, tos: state2.tos };
+    },
+    getTileObject(tx, ty, opts = {}) {
+      assertReady();
+      const ensureView = opts.ensureView !== false;
+      const { gidx, tv } = getTileViewAt(Number(tx), Number(ty), ensureView);
+      if (gidx == null) throw new Error("TOS/map cols not available");
+      return {
+        tx: Number(tx),
+        ty: Number(ty),
+        gidx,
+        tileView: tv,
+        tileObject: tv?.tileObject
+      };
+    },
+    /** Met la tile à vide (tileObject = null) */
+    setTileEmpty(tx, ty, opts = {}) {
+      return applyTileObject(Number(tx), Number(ty), null, opts);
+    },
+    setTilePlant(tx, ty, patch, opts = {}) {
+      const info = this.getTileObject(tx, ty, opts);
+      const cur = info.tileObject;
+      assertType(cur, "plant");
+      const next = deepClone(cur);
+      if (!Array.isArray(next.slots)) next.slots = [];
+      const p = patch || {};
+      if ("plantedAt" in p) next.plantedAt = Number(p.plantedAt);
+      if ("maturedAt" in p) next.maturedAt = Number(p.maturedAt);
+      if ("species" in p) next.species = String(p.species);
+      if ("slotIdx" in p && "slotPatch" in p) {
+        const i = Number(p.slotIdx) | 0;
+        if (!next.slots[i]) throw new Error(`Plant slot ${i} does not exist`);
+        patchPlantSlot(next.slots[i], p.slotPatch);
+        return applyTileObject(Number(tx), Number(ty), next, opts);
+      }
+      if ("slots" in p) {
+        const s = p.slots;
+        if (Array.isArray(s)) {
+          for (let i = 0; i < s.length; i++) {
+            if (s[i] == null) continue;
+            if (!next.slots[i]) throw new Error(`Plant slot ${i} does not exist`);
+            patchPlantSlot(next.slots[i], s[i]);
+          }
+        } else if (s && typeof s === "object") {
+          for (const k of Object.keys(s)) {
+            const i = Number(k) | 0;
+            if (!Number.isFinite(i)) continue;
+            if (!next.slots[i]) throw new Error(`Plant slot ${i} does not exist`);
+            patchPlantSlot(next.slots[i], s[k]);
+          }
+        } else {
+          throw new Error("patch.slots must be an array or object map");
+        }
+        return applyTileObject(Number(tx), Number(ty), next, opts);
+      }
+      return applyTileObject(Number(tx), Number(ty), next, opts);
+    },
+    setTileDecor(tx, ty, patch, opts = {}) {
+      const info = this.getTileObject(tx, ty, opts);
+      const cur = info.tileObject;
+      assertType(cur, "decor");
+      const next = deepClone(cur);
+      const p = patch || {};
+      if ("rotation" in p) next.rotation = Number(p.rotation);
+      return applyTileObject(Number(tx), Number(ty), next, opts);
+    },
+    setTileEgg(tx, ty, patch, opts = {}) {
+      const info = this.getTileObject(tx, ty, opts);
+      const cur = info.tileObject;
+      assertType(cur, "egg");
+      const next = deepClone(cur);
+      const p = patch || {};
+      if ("plantedAt" in p) next.plantedAt = Number(p.plantedAt);
+      if ("maturedAt" in p) next.maturedAt = Number(p.maturedAt);
+      return applyTileObject(Number(tx), Number(ty), next, opts);
+    }
+  };
+
   // src/services/editor.ts
   var ARIES_SAVED_GARDENS_PATH = "editor.savedGardens";
   var FIXED_SLOT_START = 1760866288723;
@@ -40758,9 +36779,28 @@ next: ${next}`;
     Dawncharged: "rgba(160, 140, 220, 1)",
     Ambercharged: "rgba(240, 110, 80, 1)"
   };
+  function buildSpriteCandidates3(rawId, label2) {
+    const set2 = /* @__PURE__ */ new Set();
+    const add = (value) => {
+      if (!value) return;
+      const trimmed = String(value).trim();
+      if (!trimmed) return;
+      set2.add(trimmed);
+      set2.add(trimmed.replace(/\s+/g, ""));
+      const last = trimmed.split(/[./]/).pop();
+      if (last && last !== trimmed) {
+        set2.add(last);
+        set2.add(last.replace(/\s+/g, ""));
+      }
+    };
+    add(rawId);
+    add(label2);
+    return Array.from(set2).filter(Boolean);
+  }
   var overlayEl = null;
   var currentEnabled = false;
   var listeners4 = /* @__PURE__ */ new Set();
+  var savedGardensListeners = /* @__PURE__ */ new Set();
   var sideOverlayEl = null;
   var sideListWrap = null;
   var sideSelect = null;
@@ -40800,6 +36840,40 @@ next: ${next}`;
   var statePatch = null;
   var stateOriginalValue = null;
   var friendGardenPreviewActive = false;
+  var friendGardenBackup = null;
+  function createSelectionIcon(kind, label2, size = 32, rawId) {
+    const wrap = document.createElement("span");
+    Object.assign(wrap.style, {
+      width: `${size}px`,
+      height: `${size}px`,
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontSize: `${Math.max(14, size - 10)}px`,
+      lineHeight: "1"
+    });
+    const fallback = label2?.trim().charAt(0).toUpperCase() || (kind === "decor" ? "D" : "P");
+    wrap.textContent = "";
+    wrap.setAttribute("aria-hidden", "true");
+    const applyFallback = () => {
+      if (!wrap.querySelector("img")) {
+        wrap.textContent = fallback;
+      }
+    };
+    const candidates = buildSpriteCandidates3(rawId, label2);
+    let categories = kind === "decor" ? ["decor"] : ["plant"];
+    if (kind !== "decor" && /bamboo|cactus/i.test(String(rawId ?? label2 ?? ""))) {
+      categories = ["tallplant", "tallPlant", "plant"];
+    }
+    if (candidates.length) {
+      attachSpriteIcon(wrap, categories, candidates, size, "editor", {
+        onNoSpriteFound: applyFallback
+      });
+    } else {
+      applyFallback();
+    }
+    return wrap;
+  }
   function persist(enabled) {
   }
   function ensureOverlay() {
@@ -40834,6 +36908,16 @@ next: ${next}`;
     if (overlayEl) {
       overlayEl.remove();
       overlayEl = null;
+    }
+  }
+  function notifySavedGardensChanged() {
+    if (!savedGardensListeners.size) return;
+    for (const listener of savedGardensListeners) {
+      try {
+        listener();
+      } catch (error) {
+        console.error("[EditorService] saved gardens listener failed", error);
+      }
     }
   }
   function getSelectedId() {
@@ -40871,8 +36955,6 @@ next: ${next}`;
   }
   function ensureSideOverlay() {
     if (sideOverlayEl && document.contains(sideOverlayEl)) return sideOverlayEl;
-    void ensureSpritesReady().catch(() => {
-    });
     const root = document.createElement("div");
     root.id = "qws-editor-side";
     Object.assign(root.style, {
@@ -41148,12 +37230,6 @@ next: ${next}`;
             infoRow.style.flexDirection = "column";
             infoRow.style.alignItems = "center";
             infoRow.style.gap = "6px";
-            const sprite2 = createShopSprite(
-              selected.itemType === "Decor" ? "Decor" : "Crop",
-              selected.itemType === "Decor" ? selected.decorId : selected.species,
-              { size: 40, fallback: "?" }
-            );
-            sprite2.style.display = "inline-block";
             const nameEl2 = document.createElement("div");
             nameEl2.textContent = getInventoryItemLabel(selected);
             nameEl2.style.fontWeight = "700";
@@ -41162,7 +37238,13 @@ next: ${next}`;
             nameEl2.style.textOverflow = "ellipsis";
             nameEl2.style.whiteSpace = "nowrap";
             nameEl2.style.textAlign = "center";
-            infoRow.append(sprite2, nameEl2);
+            const icon2 = createSelectionIcon(
+              selected.itemType === "Decor" ? "decor" : "plants",
+              getInventoryItemLabel(selected),
+              40,
+              selected.itemType === "Decor" ? selected?.decorId : selected?.species
+            );
+            infoRow.append(icon2, nameEl2);
             content.appendChild(infoRow);
             if (selected.itemType === "Plant") {
               const slotsArr = Array.isArray(selected.slots) ? selected.slots : [];
@@ -41233,12 +37315,6 @@ next: ${next}`;
         return;
       }
       const name = getGardenObjectLabel(tileObject);
-      const sprite = createShopSprite(
-        tileObject.objectType === "decor" ? "Decor" : "Crop",
-        tileObject.objectType === "decor" ? tileObject.decorId : tileObject.species,
-        { size: 48, fallback: "?" }
-      );
-      sprite.style.display = "inline-block";
       const header = document.createElement("div");
       header.style.display = "flex";
       header.style.flexDirection = "column";
@@ -41252,7 +37328,13 @@ next: ${next}`;
       nameEl.style.textOverflow = "ellipsis";
       nameEl.style.whiteSpace = "nowrap";
       nameEl.style.textAlign = "center";
-      header.append(sprite, nameEl);
+      const icon = createSelectionIcon(
+        tileObject.objectType === "decor" ? "decor" : "plants",
+        name,
+        48,
+        tileObject.objectType === "decor" ? tileObject.decorId || tileKey || name : tileObject.species || tileKey || name
+      );
+      header.append(icon, nameEl);
       content.appendChild(header);
       if (tileObject.objectType === "plant") {
         renderCurrentPlantEditor(content, tileObject, tileKey || "");
@@ -41889,13 +37971,31 @@ next: ${next}`;
   }
   function renderSideList() {
     if (!sideListWrap) return;
+    const applySelectionStyle = (btn, selected) => {
+      btn.style.border = "1px solid " + (selected ? "#4a6fa5" : "#2b3441");
+      btn.style.background = selected ? "rgba(74,111,165,0.18)" : "rgba(24,30,39,0.9)";
+      btn.style.fontWeight = selected ? "700" : "600";
+    };
+    const selectedId = getSelectedId();
+    const entries = getSideEntries();
+    const sig = `${currentSideMode}:${JSON.stringify(entries)}`;
+    const existingList = sideListWrap.querySelector('[data-editor-side-list="list"]');
+    if (existingList && existingList.dataset.sig === sig) {
+      existingList.querySelectorAll("button[data-id]").forEach((btn) => {
+        applySelectionStyle(btn, btn.dataset.id === selectedId);
+      });
+      return;
+    }
     sideListWrap.innerHTML = "";
     const list = document.createElement("div");
+    list.dataset.editorSideList = "list";
+    list.dataset.sig = sig;
     list.style.display = "grid";
     list.style.gap = "4px";
     const makeItem = (key2, label2, selected) => {
       const btn = document.createElement("button");
       btn.type = "button";
+      btn.dataset.id = key2;
       Object.assign(btn.style, {
         width: "100%",
         display: "grid",
@@ -41904,14 +38004,16 @@ next: ${next}`;
         gap: "8px",
         padding: "8px",
         borderRadius: "8px",
-        border: "1px solid " + (selected ? "#4a6fa5" : "#2b3441"),
-        background: selected ? "rgba(74,111,165,0.18)" : "rgba(24,30,39,0.9)",
         color: "#e7eef7",
-        cursor: "pointer",
-        fontWeight: selected ? "700" : "600"
+        cursor: "pointer"
       });
-      const sprite = createShopSprite(getSideSpriteKind(), key2, { size: 26, fallback: "\u2753" });
-      sprite.style.display = "inline-block";
+      applySelectionStyle(btn, selected);
+      const icon = createSelectionIcon(
+        getSideSpriteKind() === "Decor" ? "decor" : "plants",
+        label2,
+        26,
+        key2
+      );
       const labelEl = document.createElement("span");
       labelEl.textContent = label2;
       labelEl.style.textAlign = "left";
@@ -41923,11 +38025,9 @@ next: ${next}`;
         renderSideList();
         renderSideDetails();
       };
-      btn.append(sprite, labelEl);
+      btn.append(icon, labelEl);
       return btn;
     };
-    const selectedId = getSelectedId();
-    const entries = getSideEntries();
     for (const it of entries) {
       const isSelected = selectedId === it.id;
       list.appendChild(makeItem(it.id, it.label, isSelected));
@@ -41973,20 +38073,33 @@ next: ${next}`;
     infoRow.style.gridTemplateColumns = "auto 1fr";
     infoRow.style.alignItems = "center";
     infoRow.style.gap = "10px";
-    const sprite = createShopSprite(getSideSpriteKind(), selId, {
-      size: 48,
-      fallback: "\u2753",
-      alt: label2
-    });
-    sprite.style.display = "inline-block";
-    const nameEl = document.createElement("div");
+    infoRow.dataset.editorInfoRow = "true";
+    infoRow.dataset.selId = selId;
+    const existingInfo = sideRightWrap.querySelector("[data-editor-info-row]");
+    const existingIcon = existingInfo?.querySelector("[data-editor-info-icon]");
+    const existingLabel = existingInfo?.querySelector("[data-editor-info-label]");
+    const icon = existingIcon && existingInfo?.dataset.selId === selId ? existingIcon : (() => {
+      const el2 = createSelectionIcon(
+        getSideSpriteKind() === "Decor" ? "decor" : "plants",
+        label2,
+        48,
+        selId
+      );
+      el2.dataset.editorInfoIcon = "true";
+      return el2;
+    })();
+    const nameEl = existingLabel && existingInfo?.dataset.selId === selId ? existingLabel : (() => {
+      const el2 = document.createElement("div");
+      el2.dataset.editorInfoLabel = "true";
+      el2.style.fontWeight = "700";
+      el2.style.fontSize = "15px";
+      el2.style.whiteSpace = "nowrap";
+      el2.style.overflow = "hidden";
+      el2.style.textOverflow = "ellipsis";
+      return el2;
+    })();
     nameEl.textContent = label2;
-    nameEl.style.fontWeight = "700";
-    nameEl.style.fontSize = "15px";
-    nameEl.style.whiteSpace = "nowrap";
-    nameEl.style.overflow = "hidden";
-    nameEl.style.textOverflow = "ellipsis";
-    infoRow.append(sprite, nameEl);
+    infoRow.append(icon, nameEl);
     content.appendChild(infoRow);
     if (currentSideMode === "plants") {
       const maxSlots = getMaxSlotsForSpecies(selId);
@@ -42028,12 +38141,12 @@ next: ${next}`;
           fontWeight: "600"
         });
         btnAdd.onclick = () => {
-          const state2 = ensureEditorStateForSpecies(selId);
-          const current = state2.slots;
+          const state3 = ensureEditorStateForSpecies(selId);
+          const current = state3.slots;
           if (current.length >= maxSlots) return;
           const defaultScale = computeTargetScaleFromPercent(selId, 100);
           editorPlantSlotsState = {
-            ...state2,
+            ...state3,
             species: selId,
             slots: [
               ...current,
@@ -42050,7 +38163,7 @@ next: ${next}`;
         };
         const btnRemove = document.createElement("button");
         btnRemove.type = "button";
-        btnRemove.textContent = "\u2212";
+        btnRemove.textContent = "-";
         Object.assign(btnRemove.style, {
           width: "28px",
           height: "28px",
@@ -42063,11 +38176,11 @@ next: ${next}`;
           fontWeight: "600"
         });
         btnRemove.onclick = () => {
-          const state2 = ensureEditorStateForSpecies(selId);
-          const current = state2.slots;
+          const state3 = ensureEditorStateForSpecies(selId);
+          const current = state3.slots;
           if (current.length <= 1) return;
           editorPlantSlotsState = {
-            ...state2,
+            ...state3,
             species: selId,
             slots: current.slice(0, current.length - 1)
           };
@@ -42556,6 +38669,13 @@ next: ${next}`;
     }
     return null;
   }
+  function slotMatchToIndex(meta) {
+    if (meta.isArray) return meta.matchIndex;
+    const entry = meta.entries?.[meta.matchIndex];
+    const k = entry ? entry[0] : null;
+    const n = Number(k);
+    return Number.isFinite(n) ? n : 0;
+  }
   function rebuildUserSlots(meta, buildSlot) {
     if (meta.isArray) {
       const nextSlots = (meta.slotsArray || []).slice();
@@ -42877,10 +38997,13 @@ next: ${next}`;
     else hideSideOverlay();
     if (next && overlaysVisible) showCurrentItemOverlay();
     else hideCurrentItemOverlay();
-    if (next) {
+    if (next && !currentEnabled) {
+      void logGardenTilesForEditor();
+      void snapshotAndClearGardenForEditor();
       void freezeStateAtom();
-    } else {
-      unfreezeStateAtom();
+    } else if (!next && currentEnabled) {
+      void restoreGardenSnapshotForEditor();
+      void unfreezeStateAtom();
     }
     currentEnabled = next;
     if (opts.persist !== false) persist(next);
@@ -42900,6 +39023,10 @@ next: ${next}`;
     onChange(listener) {
       listeners4.add(listener);
       return () => listeners4.delete(listener);
+    },
+    onSavedGardensChange(listener) {
+      savedGardensListeners.add(listener);
+      return () => savedGardensListeners.delete(listener);
     }
   };
   var EMPTY_GARDEN = { tileObjects: {}, boardwalkTileObjects: {} };
@@ -42938,7 +39065,9 @@ next: ${next}`;
     try {
       writeAriesPath(ARIES_SAVED_GARDENS_PATH, list || []);
     } catch {
+      return;
     }
+    notifySavedGardensChanged();
   }
   async function getGardenForPlayer(playerId2) {
     try {
@@ -42961,6 +39090,7 @@ next: ${next}`;
       const slots = cur?.child?.data?.userSlots;
       const slotMatch = findPlayerSlot(slots, pid, { sortObject: true });
       if (!slotMatch || !slotMatch.matchSlot) return false;
+      const userSlotIdx = slotMatchToIndex(slotMatch);
       const updatedSlot = {
         ...slotMatch.matchSlot,
         data: {
@@ -42973,6 +39103,10 @@ next: ${next}`;
       stateFrozenValue = nextState;
       stateOriginalValue = nextState;
       await setStateAtom(nextState);
+      try {
+        await applyGardenToTos(nextGarden, userSlotIdx);
+      } catch {
+      }
       return true;
     } catch (err) {
       console.log("[EditorService] setCurrentGarden failed", err);
@@ -42982,14 +39116,16 @@ next: ${next}`;
   async function applyFriendGardenPreview(garden2) {
     if (!garden2 || typeof garden2 !== "object") return false;
     try {
-      await freezeStateAtom();
       const pid = await getPlayerId();
       if (!pid) return false;
-      const cur = stateFrozenValue ?? await Atoms.root.state.get();
+      const cur = await Atoms.root.state.get().catch(() => null);
       if (!cur) return false;
       const slots = cur?.child?.data?.userSlots;
       const slotMatch = findPlayerSlot(slots, pid, { sortObject: true });
       if (!slotMatch || !slotMatch.matchSlot) return false;
+      const userSlotIdx = slotMatchToIndex(slotMatch);
+      const prevGarden = slotMatch.matchSlot?.data?.garden ? sanitizeGarden(slotMatch.matchSlot.data.garden) : makeEmptyGarden();
+      friendGardenBackup = { garden: prevGarden, userSlotIdx };
       const updatedSlot = {
         ...slotMatch.matchSlot,
         data: {
@@ -43000,7 +39136,10 @@ next: ${next}`;
       const nextUserSlots = rebuildUserSlots(slotMatch, () => updatedSlot);
       const nextState = buildStateWithUserSlots(cur, nextUserSlots);
       await setStateAtom(nextState);
-      stateFrozenValue = nextState;
+      try {
+        await applyGardenToTos(garden2, userSlotIdx);
+      } catch {
+      }
       friendGardenPreviewActive = true;
       return true;
     } catch (error) {
@@ -43013,7 +39152,32 @@ next: ${next}`;
     if (!friendGardenPreviewActive) return false;
     friendGardenPreviewActive = false;
     try {
-      await unfreezeStateAtom();
+      const backup = friendGardenBackup;
+      friendGardenBackup = null;
+      if (backup) {
+        const pid = await getPlayerId();
+        if (pid) {
+          const cur = await Atoms.root.state.get().catch(() => null);
+          const slots = cur?.child?.data?.userSlots;
+          const slotMatch = findPlayerSlot(slots, pid, { sortObject: true });
+          if (slotMatch && slotMatch.matchSlot) {
+            const updatedSlot = {
+              ...slotMatch.matchSlot,
+              data: {
+                ...slotMatch.matchSlot?.data || {},
+                garden: sanitizeGarden(backup.garden)
+              }
+            };
+            const nextUserSlots = rebuildUserSlots(slotMatch, () => updatedSlot);
+            const nextState = buildStateWithUserSlots(cur, nextUserSlots);
+            await setStateAtom(nextState);
+            try {
+              await applyGardenToTos(backup.garden, backup.userSlotIdx);
+            } catch {
+            }
+          }
+        }
+      }
       return true;
     } catch (error) {
       console.error("[EditorService] clearFriendGardenPreview failed", error);
@@ -43119,18 +39283,18 @@ next: ${next}`;
       return null;
     }
   }
-  function buildClearedState(state2, playerId2) {
-    const slots = state2?.child?.data?.userSlots;
+  function buildClearedState(state3, playerId2) {
+    const slots = state3?.child?.data?.userSlots;
     const slotMatch = findPlayerSlot(slots, playerId2, { sortObject: true });
     if (!slotMatch || !slotMatch.matchSlot || typeof slotMatch.matchSlot !== "object") {
-      return { next: state2, changed: false };
+      return { next: state3, changed: false };
     }
     const garden2 = slotMatch.matchSlot?.data?.garden;
     const inventory = slotMatch.matchSlot?.data?.inventory;
     const hasInventory = inventory && typeof inventory === "object";
     const gardenChanged = !isGardenEmpty(garden2);
     const invChanged = hasInventory && (Array.isArray(inventory.items) ? inventory.items.length > 0 : true ? inventory?.inventory?.items?.length > 0 : false);
-    if (!gardenChanged && !invChanged) return { next: state2, changed: false };
+    if (!gardenChanged && !invChanged) return { next: state3, changed: false };
     const updatedSlot = {
       ...slotMatch.matchSlot,
       data: {
@@ -43141,7 +39305,7 @@ next: ${next}`;
       }
     };
     const nextUserSlots = rebuildUserSlots(slotMatch, () => updatedSlot);
-    const nextState = buildStateWithUserSlots(state2, nextUserSlots);
+    const nextState = buildStateWithUserSlots(state3, nextUserSlots);
     return { next: nextState, changed: true };
   }
   async function buildClearedStateSnapshot(playerId2) {
@@ -43151,6 +39315,235 @@ next: ${next}`;
       return next;
     } catch {
       return null;
+    }
+  }
+  var savedGardenSnapshot = null;
+  async function readUserSlotIdx() {
+    try {
+      const store = await ensureStore().catch(() => null);
+      const atom = store ? getAtomByLabel("myUserSlotIdxAtom") : null;
+      const raw = atom ? store?.get(atom) : null;
+      if (typeof raw === "number" && Number.isFinite(raw)) return raw;
+    } catch {
+    }
+    return 0;
+  }
+  async function collectCurrentUserGardenTiles() {
+    const [mapData, userSlotIdx] = await Promise.all([
+      Atoms.root.map.get().catch(() => null),
+      readUserSlotIdx()
+    ]);
+    const cols = Number(mapData?.cols);
+    if (!mapData || !Number.isFinite(cols)) return null;
+    const clone = (v) => {
+      try {
+        return JSON.parse(JSON.stringify(v));
+      } catch {
+        return v;
+      }
+    };
+    const toPos = (gidx) => ({
+      x: gidx % cols,
+      y: Math.floor(gidx / cols)
+    });
+    const stateVal = await Atoms.root.state.get().catch(() => null);
+    const slots = stateVal?.child?.data?.userSlots;
+    const garden2 = Array.isArray(slots) ? slots?.[userSlotIdx]?.data?.garden : slots?.[String(userSlotIdx)]?.data?.garden;
+    const dirtObjs = garden2?.tileObjects || {};
+    const boardObjs = garden2?.boardwalkTileObjects || {};
+    const dirt = Object.entries(mapData?.globalTileIdxToDirtTile || {}).filter(([, v]) => v && typeof v === "object" && v.userSlotIdx === userSlotIdx).map(([k, v]) => {
+      const gidx = Number(k);
+      const pos = toPos(gidx);
+      const localIdx = Number(v?.dirtTileIdx ?? -1);
+      return {
+        type: "dirt",
+        globalIdx: gidx,
+        localIdx,
+        obj: clone(dirtObjs?.[String(localIdx)] ?? null),
+        ...pos
+      };
+    });
+    const boardwalk = Object.entries(mapData?.globalTileIdxToBoardwalk || {}).filter(([, v]) => v && typeof v === "object" && v.userSlotIdx === userSlotIdx).map(([k, v]) => {
+      const gidx = Number(k);
+      const pos = toPos(gidx);
+      const localIdx = Number(v?.boardwalkTileIdx ?? -1);
+      return {
+        type: "boardwalk",
+        globalIdx: gidx,
+        localIdx,
+        obj: clone(boardObjs?.[String(localIdx)] ?? null),
+        ...pos
+      };
+    });
+    const tiles = [...dirt, ...boardwalk].sort((a, b) => a.globalIdx - b.globalIdx);
+    return { userSlotIdx, dirt, boardwalk, tiles };
+  }
+  async function resolveTileCoords(tileType, userSlotIdx, localTileIndex) {
+    const mapData = await Atoms.root.map.get().catch(() => null);
+    const cols = Number(mapData?.cols);
+    if (!mapData || !Number.isFinite(cols)) return null;
+    const entries = tileType === "Dirt" ? Object.entries(mapData?.globalTileIdxToDirtTile || {}) : Object.entries(mapData?.globalTileIdxToBoardwalk || {});
+    for (const [gidxStr, v] of entries) {
+      const info = v;
+      if (!info || typeof info !== "object") continue;
+      const slotOk = Number(info.userSlotIdx) === userSlotIdx;
+      const localOk = tileType === "Dirt" ? Number(info.dirtTileIdx) === localTileIndex : Number(info.boardwalkTileIdx) === localTileIndex;
+      if (slotOk && localOk) {
+        const gidx = Number(gidxStr);
+        if (!Number.isFinite(gidx)) continue;
+        return { x: gidx % cols, y: Math.floor(gidx / cols) };
+      }
+    }
+    return null;
+  }
+  function injectTileObjectRaw(tx, ty, obj) {
+    try {
+      const info = tos.getTileObject(tx, ty, { ensureView: true });
+      const tv = info?.tileView;
+      if (!tv || typeof tv.onDataChanged !== "function") return false;
+      const cloned = (() => {
+        try {
+          return JSON.parse(JSON.stringify(obj));
+        } catch {
+          return obj;
+        }
+      })();
+      tv.onDataChanged(cloned);
+      const status = tos.getStatus();
+      const ctx2 = status.engine?.reusableContext;
+      if (ctx2 && typeof tv.update === "function") {
+        try {
+          tv.update(ctx2);
+        } catch {
+        }
+      }
+      return true;
+    } catch {
+      return false;
+    }
+  }
+  async function applyGardenToTos(garden2, userSlotIdx) {
+    if (!tos.isReady()) return;
+    const mapData = await Atoms.root.map.get().catch(() => null);
+    const cols = Number(mapData?.cols);
+    if (!mapData || !Number.isFinite(cols)) return;
+    const dirtEntries = Object.entries(mapData?.globalTileIdxToDirtTile || {}).filter(
+      ([, v]) => v?.userSlotIdx === userSlotIdx
+    );
+    const boardEntries = Object.entries(mapData?.globalTileIdxToBoardwalk || {}).filter(
+      ([, v]) => v?.userSlotIdx === userSlotIdx
+    );
+    const applyEntry = (entry, type) => {
+      const [gidxStr, v] = entry;
+      const gidx = Number(gidxStr);
+      if (!Number.isFinite(gidx)) return;
+      const x = gidx % cols;
+      const y = Math.floor(gidx / cols);
+      const localIdx = type === "Dirt" ? Number(v?.dirtTileIdx ?? -1) : Number(v?.boardwalkTileIdx ?? -1);
+      const obj = type === "Dirt" ? (garden2.tileObjects || {})[String(localIdx)] : (garden2.boardwalkTileObjects || {})[String(localIdx)];
+      if (!obj) {
+        tos.setTileEmpty(x, y, { ensureView: true, forceUpdate: true });
+        return;
+      }
+      injectTileObjectRaw(x, y, obj);
+      const typ = obj.objectType;
+      if (typ === "plant") {
+        tos.setTilePlant(x, y, {
+          species: obj.species,
+          plantedAt: obj.plantedAt,
+          maturedAt: obj.maturedAt,
+          slots: obj.slots
+        }, { ensureView: true, forceUpdate: true });
+      } else if (typ === "decor") {
+        tos.setTileDecor(x, y, { rotation: obj.rotation }, { ensureView: true, forceUpdate: true });
+      } else if (typ === "egg") {
+        tos.setTileEgg(x, y, { plantedAt: obj.plantedAt, maturedAt: obj.maturedAt }, { ensureView: true, forceUpdate: true });
+      } else {
+        tos.setTileEmpty(x, y, { ensureView: true, forceUpdate: true });
+      }
+    };
+    dirtEntries.forEach((e) => applyEntry(e, "Dirt"));
+    boardEntries.forEach((e) => applyEntry(e, "Boardwalk"));
+  }
+  async function snapshotAndClearGardenForEditor() {
+    if (!tos.isReady()) {
+      console.log("[EditorService] snapshot skipped: tos not ready");
+      return;
+    }
+    const info = await collectCurrentUserGardenTiles();
+    if (!info) {
+      console.log("[EditorService] snapshot skipped: map/user slot not ready");
+      return;
+    }
+    savedGardenSnapshot = info.tiles.map((t) => ({ x: t.x, y: t.y, obj: t.obj }));
+    for (const t of savedGardenSnapshot) {
+      try {
+        tos.setTileEmpty(t.x, t.y, { ensureView: true, forceUpdate: true });
+      } catch (err) {
+        console.log("[EditorService] clear tile failed", { x: t.x, y: t.y, err });
+      }
+    }
+  }
+  async function restoreGardenSnapshotForEditor() {
+    if (!tos.isReady()) {
+      console.log("[EditorService] restore skipped: tos not ready");
+      return;
+    }
+    const snapshot = savedGardenSnapshot;
+    if (!snapshot) return;
+    for (const t of snapshot) {
+      const obj = t.obj;
+      try {
+        if (!obj) {
+          tos.setTileEmpty(t.x, t.y, { ensureView: true, forceUpdate: true });
+          continue;
+        }
+        const typ = obj?.objectType;
+        if (typ === "plant") {
+          const patch = {
+            species: obj.species,
+            plantedAt: obj.plantedAt,
+            maturedAt: obj.maturedAt,
+            slots: obj.slots
+          };
+          injectTileObjectRaw(t.x, t.y, obj);
+          tos.setTilePlant(t.x, t.y, patch, { ensureView: true, forceUpdate: true });
+        } else if (typ === "decor") {
+          const patch = { rotation: obj.rotation };
+          injectTileObjectRaw(t.x, t.y, obj);
+          tos.setTileDecor(t.x, t.y, patch, { ensureView: true, forceUpdate: true });
+        } else if (typ === "egg") {
+          const patch = { plantedAt: obj.plantedAt, maturedAt: obj.maturedAt };
+          injectTileObjectRaw(t.x, t.y, obj);
+          tos.setTileEgg(t.x, t.y, patch, { ensureView: true, forceUpdate: true });
+        } else {
+          tos.setTileEmpty(t.x, t.y, { ensureView: true, forceUpdate: true });
+        }
+      } catch (err) {
+        const ok = obj ? injectTileObjectRaw(t.x, t.y, obj) : false;
+        if (!ok) {
+          console.log("[EditorService] restore tile failed", { x: t.x, y: t.y, err });
+        }
+      }
+    }
+    savedGardenSnapshot = null;
+  }
+  async function logGardenTilesForEditor() {
+    try {
+      const info = await collectCurrentUserGardenTiles();
+      if (!info) {
+        console.log("[EditorService] garden tiles: map/user slot not ready");
+        return;
+      }
+      console.log("[EditorService] garden tiles (for setTileEmpty)", {
+        userSlotIdx: info.userSlotIdx,
+        total: info.tiles.length,
+        dirtCount: info.dirt.length,
+        boardwalkCount: info.boardwalk.length,
+        tiles: info.tiles
+      });
+    } catch (err) {
+      console.log("[EditorService] garden tiles log failed", err);
     }
   }
   async function logSelectedInventoryItemWithTile() {
@@ -43238,35 +39631,6 @@ next: ${next}`;
         });
         return;
       }
-      const cur = stateFrozenValue ?? await Atoms.root.state.get();
-      const userSlots = cur?.child?.data?.userSlots;
-      if (!userSlots || typeof userSlots !== "object") {
-        console.log("[EditorService] placeSelectedItemInGardenAtCurrentTile: no userSlots in state");
-        return;
-      }
-      const isArray = Array.isArray(userSlots);
-      let matchSlot;
-      if (isArray) {
-        matchSlot = userSlots[userSlotIdx];
-      } else {
-        const key2 = String(userSlotIdx);
-        matchSlot = userSlots[key2];
-      }
-      if (!matchSlot) {
-        console.log("[EditorService] placeSelectedItemInGardenAtCurrentTile: slot not found", {
-          userSlotIdx,
-          isArray
-        });
-        return;
-      }
-      const slotData = matchSlot.data || {};
-      const prevGarden = slotData.garden && typeof slotData.garden === "object" ? slotData.garden : makeEmptyGarden();
-      const garden2 = {
-        tileObjects: { ...prevGarden.tileObjects || {} },
-        boardwalkTileObjects: { ...prevGarden.boardwalkTileObjects || {} }
-      };
-      const targetKey = tileType === "Dirt" ? "tileObjects" : "boardwalkTileObjects";
-      const tileKey = String(localTileIndex);
       let tileObject;
       if (selectedItem.itemType === "Plant") {
         tileObject = {
@@ -43280,7 +39644,7 @@ next: ${next}`;
         tileObject = {
           objectType: "decor",
           decorId: selectedItem.decorId,
-          // rotation depuis l’atom, fallback sur ce qu’aurait déjà l’item (au cas où)
+          // rotation depuis lâatom, fallback sur ce quâaurait dÃ©jÃ  lâitem (au cas oÃ¹)
           rotation: typeof rotation === "number" ? rotation : selectedItem.rotation ?? 0
         };
       }
@@ -43288,38 +39652,74 @@ next: ${next}`;
         console.log("[EditorService] placeSelectedItemInGardenAtCurrentTile: failed to build tileObject");
         return;
       }
-      const nextTargetMap = {
-        ...garden2[targetKey],
-        [tileKey]: tileObject
-      };
-      const nextGarden = {
-        tileObjects: targetKey === "tileObjects" ? nextTargetMap : garden2.tileObjects,
-        boardwalkTileObjects: targetKey === "boardwalkTileObjects" ? nextTargetMap : garden2.boardwalkTileObjects
-      };
-      const updatedSlot = {
-        ...matchSlot,
-        data: {
-          ...slotData,
-          garden: nextGarden
-        }
-      };
-      const nextUserSlots = isArray ? (() => {
-        const nextSlots = userSlots.slice();
-        nextSlots[userSlotIdx] = updatedSlot;
-        return nextSlots;
-      })() : {
-        ...userSlots,
-        [String(userSlotIdx)]: updatedSlot
-      };
-      const nextState = buildStateWithUserSlots(cur, nextUserSlots);
-      stateFrozenValue = nextState;
-      stateOriginalValue = nextState;
-      try {
-        await setStateAtom(nextState);
-      } catch (err) {
-        console.log("[EditorService] stateAtom set failed (placeSelectedItemInGardenAtCurrentTile)", err);
+      const coords = await resolveTileCoords(tileType, userSlotIdx, localTileIndex);
+      if (!coords) {
+        console.log("[EditorService] placeSelectedItemInGardenAtCurrentTile: cannot resolve coords", {
+          tileType,
+          localTileIndex,
+          userSlotIdx
+        });
+        return;
       }
-      console.log("[EditorService] placed item in garden", {
+      if (!tos.isReady()) {
+        console.log("[EditorService] placeSelectedItemInGardenAtCurrentTile: tos not ready");
+        return;
+      }
+      injectTileObjectRaw(coords.x, coords.y, tileObject);
+      if (tileObject.objectType === "plant") {
+        tos.setTilePlant(coords.x, coords.y, {
+          species: tileObject.species,
+          plantedAt: tileObject.plantedAt,
+          maturedAt: tileObject.maturedAt,
+          slots: tileObject.slots
+        }, { ensureView: true, forceUpdate: true });
+      } else if (tileObject.objectType === "decor") {
+        tos.setTileDecor(coords.x, coords.y, { rotation: tileObject.rotation }, { ensureView: true, forceUpdate: true });
+      }
+      const cur = stateFrozenValue ?? await Atoms.root.state.get();
+      const userSlots = cur?.child?.data?.userSlots;
+      if (userSlots && typeof userSlots === "object") {
+        const isArray = Array.isArray(userSlots);
+        const matchSlot = isArray ? userSlots[userSlotIdx] : userSlots[String(userSlotIdx)];
+        if (matchSlot) {
+          const slotData = matchSlot.data || {};
+          const prevGarden = slotData.garden && typeof slotData.garden === "object" ? slotData.garden : makeEmptyGarden();
+          const garden2 = {
+            tileObjects: { ...prevGarden.tileObjects || {} },
+            boardwalkTileObjects: { ...prevGarden.boardwalkTileObjects || {} }
+          };
+          const targetKey = tileType === "Dirt" ? "tileObjects" : "boardwalkTileObjects";
+          const tileKey = String(localTileIndex);
+          const nextTargetMap = { ...garden2[targetKey], [tileKey]: tileObject };
+          const nextGarden = {
+            tileObjects: targetKey === "tileObjects" ? nextTargetMap : garden2.tileObjects,
+            boardwalkTileObjects: targetKey === "boardwalkTileObjects" ? nextTargetMap : garden2.boardwalkTileObjects
+          };
+          const updatedSlot = {
+            ...matchSlot,
+            data: {
+              ...slotData,
+              garden: nextGarden
+            }
+          };
+          const nextUserSlots = isArray ? (() => {
+            const nextSlots = userSlots.slice();
+            nextSlots[userSlotIdx] = updatedSlot;
+            return nextSlots;
+          })() : {
+            ...userSlots,
+            [String(userSlotIdx)]: updatedSlot
+          };
+          const nextState = buildStateWithUserSlots(cur, nextUserSlots);
+          stateFrozenValue = nextState;
+          stateOriginalValue = nextState;
+          try {
+            await setStateAtom(nextState);
+          } catch {
+          }
+        }
+      }
+      console.log("[EditorService] placed item in garden (tos)", {
         tileType,
         localTileIndex,
         userSlotIdx,
@@ -43327,7 +39727,8 @@ next: ${next}`;
         itemType: selectedItem.itemType,
         species: selectedItem.species,
         decorId: selectedItem.decorId,
-        rotation
+        rotation,
+        coords
       });
     } catch (err) {
       console.log("[EditorService] placeSelectedItemInGardenAtCurrentTile failed", err);
@@ -43360,69 +39761,70 @@ next: ${next}`;
         });
         return false;
       }
-      const cur = stateFrozenValue ?? await Atoms.root.state.get();
-      const userSlots = cur?.child?.data?.userSlots;
-      if (!userSlots || typeof userSlots !== "object") {
-        console.log("[EditorService] removeItemFromGardenAtCurrentTile: no userSlots in state");
-        return false;
-      }
-      const isArray = Array.isArray(userSlots);
-      let matchSlot;
-      if (isArray) {
-        matchSlot = userSlots[userSlotIdx];
-      } else {
-        const key2 = String(userSlotIdx);
-        matchSlot = userSlots[key2];
-      }
-      if (!matchSlot) {
-        console.log("[EditorService] removeItemFromGardenAtCurrentTile: slot not found", {
-          userSlotIdx,
-          isArray
+      const coords = await resolveTileCoords(tileType, userSlotIdx, localTileIndex);
+      if (!coords) {
+        console.log("[EditorService] removeItemFromGardenAtCurrentTile: cannot resolve coords", {
+          tileType,
+          localTileIndex,
+          userSlotIdx
         });
         return false;
       }
-      const slotData = matchSlot.data || {};
-      const prevGarden = slotData.garden && typeof slotData.garden === "object" ? slotData.garden : makeEmptyGarden();
-      const garden2 = {
-        tileObjects: { ...prevGarden.tileObjects || {} },
-        boardwalkTileObjects: { ...prevGarden.boardwalkTileObjects || {} }
-      };
-      const targetKey = tileType === "Dirt" ? "tileObjects" : "boardwalkTileObjects";
-      const tileKey = String(localTileIndex);
-      const currentTargetMap = garden2[targetKey] || {};
-      const nextTargetMap = { ...currentTargetMap };
-      delete nextTargetMap[tileKey];
-      const nextGarden = {
-        tileObjects: targetKey === "tileObjects" ? nextTargetMap : garden2.tileObjects,
-        boardwalkTileObjects: targetKey === "boardwalkTileObjects" ? nextTargetMap : garden2.boardwalkTileObjects
-      };
-      const updatedSlot = {
-        ...matchSlot,
-        data: {
-          ...slotData,
-          garden: nextGarden
-        }
-      };
-      const nextUserSlots = isArray ? (() => {
-        const nextSlots = userSlots.slice();
-        nextSlots[userSlotIdx] = updatedSlot;
-        return nextSlots;
-      })() : {
-        ...userSlots,
-        [String(userSlotIdx)]: updatedSlot
-      };
-      const nextState = buildStateWithUserSlots(cur, nextUserSlots);
-      stateFrozenValue = nextState;
-      stateOriginalValue = nextState;
-      try {
-        await setStateAtom(nextState);
-      } catch (err) {
-        console.log("[EditorService] stateAtom set failed (removeItemFromGardenAtCurrentTile)", err);
+      if (!tos.isReady()) {
+        console.log("[EditorService] removeItemFromGardenAtCurrentTile: tos not ready");
+        return false;
       }
-      console.log("[EditorService] removed item from garden", {
+      tos.setTileEmpty(coords.x, coords.y, { ensureView: true, forceUpdate: true });
+      const cur = stateFrozenValue ?? await Atoms.root.state.get();
+      const userSlots = cur?.child?.data?.userSlots;
+      if (userSlots && typeof userSlots === "object") {
+        const isArray = Array.isArray(userSlots);
+        const matchSlot = isArray ? userSlots[userSlotIdx] : userSlots[String(userSlotIdx)];
+        if (matchSlot) {
+          const slotData = matchSlot.data || {};
+          const prevGarden = slotData.garden && typeof slotData.garden === "object" ? slotData.garden : makeEmptyGarden();
+          const garden2 = {
+            tileObjects: { ...prevGarden.tileObjects || {} },
+            boardwalkTileObjects: { ...prevGarden.boardwalkTileObjects || {} }
+          };
+          const targetKey = tileType === "Dirt" ? "tileObjects" : "boardwalkTileObjects";
+          const tileKey = String(localTileIndex);
+          const currentTargetMap = garden2[targetKey] || {};
+          const nextTargetMap = { ...currentTargetMap };
+          delete nextTargetMap[tileKey];
+          const nextGarden = {
+            tileObjects: targetKey === "tileObjects" ? nextTargetMap : garden2.tileObjects,
+            boardwalkTileObjects: targetKey === "boardwalkTileObjects" ? nextTargetMap : garden2.boardwalkTileObjects
+          };
+          const updatedSlot = {
+            ...matchSlot,
+            data: {
+              ...slotData,
+              garden: nextGarden
+            }
+          };
+          const nextUserSlots = isArray ? (() => {
+            const nextSlots = userSlots.slice();
+            nextSlots[userSlotIdx] = updatedSlot;
+            return nextSlots;
+          })() : {
+            ...userSlots,
+            [String(userSlotIdx)]: updatedSlot
+          };
+          const nextState = buildStateWithUserSlots(cur, nextUserSlots);
+          stateFrozenValue = nextState;
+          stateOriginalValue = nextState;
+          try {
+            await setStateAtom(nextState);
+          } catch {
+          }
+        }
+      }
+      console.log("[EditorService] removed item from garden (tos + state)", {
         tileType,
         localTileIndex,
-        userSlotIdx
+        userSlotIdx,
+        coords
       });
       return true;
     } catch (err) {
@@ -43497,6 +39899,28 @@ next: ${next}`;
       stateFrozenValue = nextState;
       stateOriginalValue = nextState;
       await setStateAtom(nextState);
+      try {
+        const coords = await resolveTileCoords(tileType, userSlotIdx, localTileIndex);
+        if (coords && tos.isReady()) {
+          injectTileObjectRaw(coords.x, coords.y, nextObj);
+          if (nextObj.objectType === "plant") {
+            tos.setTilePlant(coords.x, coords.y, {
+              species: nextObj.species,
+              plantedAt: nextObj.plantedAt,
+              maturedAt: nextObj.maturedAt,
+              slots: nextObj.slots
+            }, { ensureView: true, forceUpdate: true });
+          } else if (nextObj.objectType === "decor") {
+            tos.setTileDecor(coords.x, coords.y, { rotation: nextObj.rotation }, { ensureView: true, forceUpdate: true });
+          } else if (nextObj.objectType === "egg") {
+            tos.setTileEgg(coords.x, coords.y, {
+              plantedAt: nextObj.plantedAt,
+              maturedAt: nextObj.maturedAt
+            }, { ensureView: true, forceUpdate: true });
+          }
+        }
+      } catch {
+      }
       return true;
     } catch {
       return false;
@@ -43870,12 +40294,28 @@ next: ${next}`;
     ui.mount(container);
     const view = ui.root.querySelector(".qmm-views");
     view.innerHTML = "";
-    view.style.display = "grid";
+    view.style.display = "flex";
+    view.style.flexDirection = "column";
     view.style.gap = "8px";
-    view.style.justifyItems = "center";
+    view.style.justifyContent = "flex-start";
+    view.style.alignItems = "stretch";
+    view.style.height = "100%";
+    view.style.minHeight = "0";
+    view.style.overflow = "hidden";
+    view.style.flex = "1";
+    ui.root.style.display = "flex";
+    ui.root.style.flexDirection = "column";
+    ui.root.style.height = "100%";
+    ui.root.style.maxHeight = "100%";
+    ui.root.style.minHeight = "0";
+    ui.root.style.overflow = "hidden";
+    ui.root.style.flex = "1 1 auto";
     const card = ui.card("Editor mode", { tone: "muted", align: "center" });
     card.header.style.display = "none";
     card.root.style.maxWidth = "420px";
+    card.root.style.alignSelf = "stretch";
+    card.root.style.flex = "0 0 auto";
+    card.root.style.flexShrink = "0";
     card.body.style.display = "grid";
     card.body.style.gap = "10px";
     const row = ui.flexRow({ align: "center", justify: "between", fullWidth: true });
@@ -43925,18 +40365,25 @@ next: ${next}`;
       toggle.checked = enabled;
       renderSavedList();
     });
+    let savedListCleanup;
     view.__cleanup__ = () => {
       try {
         cleanup2();
       } catch {
       }
+      try {
+        savedListCleanup?.();
+      } catch {
+      }
     };
-    const sectionCard = (title, content) => {
+    const sectionCard = (title, content2) => {
       const card2 = ui.card(title, { tone: "muted", align: "center" });
       card2.root.style.maxWidth = "520px";
       card2.body.style.display = "grid";
       card2.body.style.gap = "8px";
-      card2.body.append(content);
+      card2.body.style.width = "100%";
+      card2.body.style.minHeight = "0";
+      card2.body.append(content2);
       return card2;
     };
     const status = document.createElement("div");
@@ -44012,8 +40459,14 @@ next: ${next}`;
     importBtn.style.width = "100%";
     importWrap.append(importArea, importBtn);
     const listWrap = document.createElement("div");
-    listWrap.style.display = "grid";
+    listWrap.style.display = "flex";
+    listWrap.style.flexDirection = "column";
     listWrap.style.gap = "8px";
+    listWrap.style.flex = "1";
+    listWrap.style.overflowY = "auto";
+    listWrap.style.width = "100%";
+    listWrap.style.boxSizing = "border-box";
+    listWrap.style.minHeight = "0";
     const renderSavedList = () => {
       const listFn = window.qwsEditorListSavedGardens;
       const loadFn = window.qwsEditorLoadGarden;
@@ -44102,19 +40555,51 @@ next: ${next}`;
       }
     };
     renderSavedList();
+    savedListCleanup = EditorService.onSavedGardensChange(renderSavedList);
     const currentCard = sectionCard("\u{1F331} Current garden", currentWrap);
+    currentCard.root.style.alignSelf = "stretch";
+    currentCard.root.style.flex = "0 0 auto";
+    currentCard.root.style.flexShrink = "0";
     const importCard = sectionCard("\u{1F4E5} Import", importWrap);
+    importCard.root.style.alignSelf = "stretch";
+    importCard.root.style.flex = "0 0 auto";
+    importCard.root.style.flexShrink = "0";
     const savedCard = sectionCard("\u{1F4BE} Saved gardens", listWrap);
-    savedCard.body.append(status);
-    view.append(card.root, currentCard.root, importCard.root, savedCard.root);
+    savedCard.root.style.display = "flex";
+    savedCard.root.style.flexDirection = "column";
+    savedCard.root.style.flex = "1 1 0";
+    savedCard.root.style.minHeight = "220px";
+    savedCard.root.style.overflow = "hidden";
+    savedCard.body.style.display = "flex";
+    savedCard.body.style.flexDirection = "column";
+    savedCard.body.style.alignItems = "stretch";
+    savedCard.body.style.justifyContent = "stretch";
+    savedCard.body.style.overflow = "hidden";
+    savedCard.body.style.flex = "1 1 auto";
+    savedCard.body.style.minHeight = "0";
+    savedCard.body.innerHTML = "";
+    status.style.flex = "0 0 auto";
+    status.style.alignSelf = "stretch";
+    status.style.margin = "0";
+    status.style.height = "18px";
+    savedCard.body.append(status, listWrap);
+    const content = document.createElement("div");
+    content.style.display = "flex";
+    content.style.flexDirection = "column";
+    content.style.gap = "8px";
+    content.style.flex = "1";
+    content.style.minHeight = "0";
+    content.style.overflow = "hidden";
+    content.append(currentCard.root, importCard.root, savedCard.root);
+    view.append(card.root, content);
   }
 
   // src/services/players.ts
-  function findPlayersDeep(state2) {
-    if (!state2 || typeof state2 !== "object") return [];
+  function findPlayersDeep(state3) {
+    if (!state3 || typeof state3 !== "object") return [];
     const out = [];
     const seen = /* @__PURE__ */ new Set();
-    const stack = [state2];
+    const stack = [state3];
     while (stack.length) {
       const cur = stack.pop();
       if (!cur || typeof cur !== "object" || seen.has(cur)) continue;
@@ -44577,6 +41062,7 @@ next: ${next}`;
           await toastSimple("Activity log", "No activity logs for this player.", "info");
           return;
         }
+        skipNextActivityLogHistoryReopen();
         await fakeActivityLogShow(logs, { open: true });
         if (playerName) await toastSimple("Activity log", `${playerName}'s activity log displayed.`, "info");
       } catch (e) {
@@ -44778,8 +41264,7 @@ next: ${next}`;
   };
 
   // src/utils/supabase.ts
-  var SUPABASE_FUNCTION_BASE = "https://pquktqrngyxkvrgtfygp.supabase.co/functions/v1/";
-  var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBxdWt0cXJuZ3l4a3ZyZ3RmeWdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk2MTQzMDMsImV4cCI6MjA3NTE5MDMwM30.-d45t6qyEO54iz2SrjaoTUQjeNb6tngDx6pOQL7-Ubg";
+  var API_BASE_URL = "https://ariesmod-api.ariedam.fr/";
   var cachedFriendsView = null;
   var cachedIncomingRequests = null;
   function getCachedFriendsWithViews() {
@@ -44789,7 +41274,7 @@ next: ${next}`;
     return cachedIncomingRequests ? [...cachedIncomingRequests] : [];
   }
   function buildUrl(path, query) {
-    const url = new URL(path, SUPABASE_FUNCTION_BASE);
+    const url = new URL(path, API_BASE_URL);
     if (query) {
       for (const [key2, value] of Object.entries(query)) {
         if (value === void 0) continue;
@@ -44804,26 +41289,23 @@ next: ${next}`;
       GM_xmlhttpRequest({
         method: "GET",
         url,
-        headers: {
-          apikey: SUPABASE_ANON_KEY,
-          Authorization: `Bearer ${SUPABASE_ANON_KEY}`
-        },
+        headers: {},
         onload: (res) => {
           if (res.status >= 200 && res.status < 300) {
             try {
               const parsed = res.responseText ? JSON.parse(res.responseText) : null;
               resolve2({ status: res.status, data: parsed });
             } catch (e) {
-              console.error("[supabase] GET parse error:", e, res.responseText);
+              console.error("[api] GET parse error:", e, res.responseText);
               resolve2({ status: res.status, data: null });
             }
           } else {
-            console.error("[supabase] GET error:", res.status, res.responseText);
+            console.error("[api] GET error:", res.status, res.responseText);
             resolve2({ status: res.status, data: null });
           }
         },
         onerror: (err) => {
-          console.error("[supabase] GET request failed:", err);
+          console.error("[api] GET request failed:", err);
           resolve2({ status: 0, data: null });
         }
       });
@@ -44836,9 +41318,7 @@ next: ${next}`;
         method: "POST",
         url,
         headers: {
-          "Content-Type": "application/json",
-          apikey: SUPABASE_ANON_KEY,
-          Authorization: `Bearer ${SUPABASE_ANON_KEY}`
+          "Content-Type": "application/json"
         },
         data: JSON.stringify(body),
         onload: (res) => {
@@ -44847,40 +41327,39 @@ next: ${next}`;
               const parsed = res.responseText ? JSON.parse(res.responseText) : null;
               resolve2({ status: res.status, data: parsed });
             } catch (e) {
-              console.error("[supabase] POST parse error:", e, res.responseText);
+              console.error("[api] POST parse error:", e, res.responseText);
               resolve2({ status: res.status, data: null });
             }
           } else {
-            console.error(
-              "[supabase] POST error:",
-              res.status,
-              res.responseText
-            );
+            console.error("[api] POST error:", res.status, res.responseText);
             resolve2({ status: res.status, data: null });
           }
         },
         onerror: (err) => {
-          console.error("[supabase] POST request failed:", err);
+          console.error("[api] POST request failed:", err);
           resolve2({ status: 0, data: null });
         }
       });
     });
   }
   async function sendPlayerState(payload) {
+    if (!payload) {
+      return false;
+    }
     const { status } = await httpPost("collect-state", payload);
     if (status === 204) return true;
     if (status === 429) {
-      console.warn("[supabase] sendPlayerState rate-limited");
+      console.warn("[api] sendPlayerState rate-limited");
     }
     return false;
   }
   async function fetchAvailableRooms(limit = 50) {
-    const { data } = await httpGet("list-rooms", { limit });
+    const { data } = await httpGet("rooms", { limit });
     if (!data || !Array.isArray(data)) return [];
     return data.map((r) => ({
       id: r.id,
       isPrivate: r.is_private,
-      playersCount: r.players_count,
+      playersCount: r.players_count ?? 0,
       lastUpdatedAt: r.last_updated_at,
       lastUpdatedByPlayerId: r.last_updated_by_player_id,
       userSlots: Array.isArray(r.user_slots) ? r.user_slots.map((slot) => ({
@@ -44917,7 +41396,7 @@ next: ${next}`;
     });
     if (status === 204) return true;
     if (status === 409) {
-      console.warn("[supabase] friend-request conflict (already exists)");
+      console.warn("[api] friend-request conflict (already exists)");
     }
     return false;
   }
@@ -44946,7 +41425,9 @@ next: ${next}`;
       cachedFriendsView = [];
       return [];
     }
-    const result = await fetchPlayersView(friendIds, { sections: ["profile", "room"] });
+    const result = await fetchPlayersView(friendIds, {
+      sections: ["profile", "room"]
+    });
     cachedFriendsView = result;
     return [...result];
   }
@@ -45011,7 +41492,6 @@ next: ${next}`;
         });
       }
     }
-    console.log(results);
     return results;
   }
 
@@ -45115,10 +41595,10 @@ next: ${next}`;
       categoryOrder: deriveCategoryOrder(cloned, preferredOrder)
     };
   }
-  function cloneState2(state2) {
+  function cloneState2(state3) {
     return {
-      definitions: state2.definitions.map((room) => ({ ...room })),
-      categoryOrder: [...state2.categoryOrder]
+      definitions: state3.definitions.map((room) => ({ ...room })),
+      categoryOrder: [...state3.categoryOrder]
     };
   }
   var INITIAL_PUBLIC_ROOMS_STATE = createStateFromDefinitions([]);
@@ -45607,8 +42087,6 @@ next: ${next}`;
       switch (selectedPlayerFilter) {
         case "any":
           return true;
-        case "empty":
-          return room.players === 0;
         case "few":
           return room.players > 0 && room.players <= 3;
         case "crowded":
@@ -45669,7 +42147,6 @@ next: ${next}`;
     playerFilterSelect.style.minWidth = "130px";
     const playerFilters = [
       { value: "any", label: "Any players" },
-      { value: "empty", label: "Empty rooms" },
       { value: "few", label: "1 - 3 players" },
       { value: "crowded", label: "4 - 5 players" },
       { value: "full", label: "Full rooms" }
@@ -46769,7 +43246,7 @@ next: ${next}`;
       (hk) => setKeybind(action2.id, hk),
       {
         emptyLabel: "Unassigned",
-        listeningLabel: "Press a key\u2026",
+        listeningLabel: "Press a key\xE2\u20AC\xA6",
         clearable: true,
         allowModifierOnly: action2.allowModifierOnly
       }
@@ -46871,7 +43348,7 @@ next: ${next}`;
     actionsWrap.style.alignItems = "center";
     actionsWrap.style.gap = "4px";
     actionsWrap.style.marginLeft = "auto";
-    const clearBtn = action2.sectionId === "game" ? null : ui.btn("", {
+    const clearBtn = action2.sectionId === "game" && !action2.allowClear ? null : ui.btn("", {
       icon: "\u{1F5D1}\uFE0F",
       variant: "danger",
       size: "sm",
@@ -47047,6 +43524,97 @@ next: ${next}`;
   }
 
   // src/ui/menus/friends.ts
+  var FRIENDS_MENU_REFRESH_STYLE_ID = "friends-menu-refresh-style";
+  function ensureFriendsMenuRefreshStyle() {
+    if (document.getElementById(FRIENDS_MENU_REFRESH_STYLE_ID)) return;
+    const style2 = document.createElement("style");
+    style2.id = FRIENDS_MENU_REFRESH_STYLE_ID;
+    style2.textContent = `
+@keyframes friends-menu-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+`;
+    document.head.appendChild(style2);
+  }
+  function createRefreshIndicator(scrollTarget, container, offsetY = 14) {
+    ensureFriendsMenuRefreshStyle();
+    const computedPosition = container.style.position || "";
+    if (!computedPosition || computedPosition === "static") {
+      container.style.position = "relative";
+    }
+    const indicator = document.createElement("div");
+    Object.assign(indicator.style, {
+      position: "absolute",
+      top: `${offsetY}px`,
+      right: "14px",
+      width: "28px",
+      height: "28px",
+      borderRadius: "999px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      background: "rgba(14, 16, 25, 0.9)",
+      border: "1px solid rgba(255, 255, 255, 0.08)",
+      boxShadow: "0 10px 24px rgba(0, 0, 0, 0.45)",
+      opacity: "0",
+      visibility: "hidden",
+      pointerEvents: "none",
+      transition: "opacity 160ms ease, transform 160ms ease",
+      zIndex: "3"
+    });
+    const spinner = document.createElement("div");
+    Object.assign(spinner.style, {
+      width: "16px",
+      height: "16px",
+      borderRadius: "999px",
+      border: "2px solid rgba(248, 250, 252, 0.16)",
+      borderTopColor: "#f8fafc",
+      animation: "friends-menu-spin 1s linear infinite"
+    });
+    indicator.appendChild(spinner);
+    container.appendChild(indicator);
+    let isVisible3 = false;
+    let hideTimeout = null;
+    const hide = () => {
+      if (hideTimeout) {
+        window.clearTimeout(hideTimeout);
+        hideTimeout = null;
+      }
+      indicator.style.opacity = "0";
+      const onTransitionEnd = () => {
+        if (!isVisible3) {
+          indicator.style.visibility = "hidden";
+        }
+      };
+      indicator.addEventListener("transitionend", onTransitionEnd, { once: true });
+      hideTimeout = window.setTimeout(() => {
+        if (!isVisible3) {
+          indicator.style.visibility = "hidden";
+        }
+        hideTimeout = null;
+      }, 220);
+    };
+    const setVisible = (next) => {
+      if (next) {
+        if (hideTimeout) {
+          window.clearTimeout(hideTimeout);
+          hideTimeout = null;
+        }
+        isVisible3 = true;
+        indicator.style.visibility = "visible";
+        indicator.style.opacity = "1";
+      } else if (isVisible3) {
+        isVisible3 = false;
+        hide();
+      }
+    };
+    return { setVisible };
+  }
   var activeGardenPreview = null;
   async function stopActiveGardenPreview(keepButton) {
     if (!activeGardenPreview) return;
@@ -47066,6 +43634,7 @@ next: ${next}`;
     activeGardenPreview = null;
   }
   var refreshAllFriends = null;
+  var refreshIncomingRequests = null;
   function formatLastSeen2(timestamp) {
     if (!timestamp) return null;
     const parsed = Date.parse(timestamp);
@@ -47086,8 +43655,9 @@ next: ${next}`;
     return `${days}d`;
   }
   function formatCoinAmount(value) {
-    if (value == null || !Number.isFinite(value)) return null;
-    const abs = Math.abs(value);
+    const numeric = typeof value === "string" ? Number(value) : value;
+    if (numeric == null || !Number.isFinite(numeric)) return null;
+    const abs = Math.abs(numeric);
     const units = [
       { threshold: 1e12, suffix: "T" },
       { threshold: 1e9, suffix: "B" },
@@ -47096,11 +43666,11 @@ next: ${next}`;
     ];
     for (const { threshold, suffix } of units) {
       if (abs >= threshold) {
-        const normalized = value / threshold;
+        const normalized = numeric / threshold;
         return `${normalized.toFixed(2)}${suffix}`;
       }
     }
-    return value.toLocaleString("en-US");
+    return numeric.toLocaleString("en-US");
   }
   function createPrivacyBadge(label2, enabled) {
     const badge = document.createElement("span");
@@ -47129,14 +43699,16 @@ next: ${next}`;
     card.style.boxShadow = "0 1px 0 rgba(0, 0, 0, 0.35) inset";
     card.style.cursor = "default";
     const roomInfo = friend.room ?? {};
+    const roomIsPrivate = Boolean(roomInfo.isPrivate) || Boolean(roomInfo.is_private) || Boolean(friend.privacy?.hideRoomFromPublicList);
     const joinRoomId = typeof roomInfo.id === "string" ? roomInfo.id.trim() : typeof roomInfo.roomId === "string" ? roomInfo.roomId.trim() : null;
     const rawPlayerCount = roomInfo.playersCount ?? roomInfo.players_count ?? roomInfo.players ?? null;
     const playersCount = Number.isFinite(Number(rawPlayerCount)) && rawPlayerCount !== null ? Math.floor(Number(rawPlayerCount)) : null;
+    const isFriendOnline = Boolean(friend.isOnline);
     const isDiscordTarget = RoomService.isDiscordActivity();
     const ROOM_CAPACITY = 6;
     const seatsLeft = typeof playersCount === "number" ? Math.max(0, ROOM_CAPACITY - playersCount) : null;
-    const canJoinRoom = Boolean(joinRoomId) && typeof playersCount === "number" && seatsLeft !== null && seatsLeft > 0 && !isDiscordTarget;
-    const joinButtonTitle = canJoinRoom ? "Join this room" : isDiscordTarget ? "Joining rooms is disabled on Discord" : playersCount !== null && playersCount >= 6 ? "Room is full" : "Unable to join this room";
+    const canJoinRoom = Boolean(joinRoomId) && typeof playersCount === "number" && seatsLeft !== null && seatsLeft > 0 && !isDiscordTarget && !roomIsPrivate && isFriendOnline;
+    const joinButtonTitle = roomIsPrivate ? "Room is private" : !isFriendOnline ? "Player is offline" : isDiscordTarget ? "Joining rooms is disabled on Discord" : playersCount !== null && playersCount >= 6 ? "Room is full" : "Unable to join this room";
     const avatar = document.createElement("div");
     avatar.style.width = "48px";
     avatar.style.height = "48px";
@@ -47193,14 +43765,13 @@ next: ${next}`;
     statusRow.style.alignItems = "center";
     statusRow.style.gap = "6px";
     const statusIndicator = document.createElement("span");
-    const isOnline = Boolean(friend.isOnline);
     statusIndicator.style.width = "10px";
     statusIndicator.style.height = "10px";
     statusIndicator.style.borderRadius = "50%";
-    statusIndicator.style.background = isOnline ? "#34d399" : "#f87171";
+    statusIndicator.style.background = isFriendOnline ? "#34d399" : "#f87171";
     statusIndicator.style.display = "inline-block";
     const statusText = document.createElement("span");
-    statusText.textContent = isOnline ? "Online" : "Offline";
+    statusText.textContent = isFriendOnline ? "Online" : "Offline";
     statusText.style.fontSize = "11px";
     statusText.style.opacity = "0.7";
     statusRow.append(statusIndicator, statusText);
@@ -47265,10 +43836,14 @@ next: ${next}`;
     seatsInfo.style.whiteSpace = "nowrap";
     seatsInfo.style.textAlign = "center";
     seatsInfo.style.margin = "0";
-    if (seatsLeft !== null) {
+    if (roomIsPrivate) {
+      seatsInfo.textContent = "Private";
+    } else if (!isFriendOnline) {
+      seatsInfo.textContent = "";
+    } else if (seatsLeft !== null) {
       seatsInfo.textContent = seatsLeft > 0 ? `${seatsLeft} slot${seatsLeft === 1 ? "" : "s"} left` : "Room full";
     } else {
-      seatsInfo.textContent = "Room size unknown";
+      seatsInfo.textContent = "";
     }
     joinControl.appendChild(seatsInfo);
     actionBlock.append(detailsBtn, joinControl);
@@ -47312,16 +43887,48 @@ next: ${next}`;
     if (coinsText) {
       const coinsRow = document.createElement("div");
       coinsRow.style.display = "flex";
-      coinsRow.style.justifyContent = "flex-end";
-      coinsRow.style.paddingRight = "16px";
+      coinsRow.style.justifyContent = "flex-start";
       const coinsEl = document.createElement("div");
       coinsEl.textContent = `${coinsText} coins`;
       coinsEl.style.fontSize = "12px";
       coinsEl.style.opacity = "0.8";
       coinsEl.style.whiteSpace = "nowrap";
-      coinsEl.style.justifySelf = "end";
+      coinsEl.style.justifySelf = "start";
       coinsRow.append(coinsEl);
       detailsContent.append(coinsRow);
+    }
+    if (joinRoomId && isFriendOnline) {
+      const roomRow = document.createElement("div");
+      roomRow.style.display = "flex";
+      roomRow.style.alignItems = "center";
+      roomRow.style.gap = "8px";
+      roomRow.style.paddingRight = "16px";
+      const roomLabel = document.createElement("span");
+      roomLabel.textContent = "Room";
+      roomLabel.style.fontSize = "12px";
+      roomLabel.style.fontWeight = "600";
+      roomLabel.style.opacity = "0.8";
+      const roomValue = document.createElement("span");
+      roomValue.textContent = joinRoomId;
+      roomValue.style.fontSize = "12px";
+      roomValue.style.opacity = "0.9";
+      roomValue.style.whiteSpace = "nowrap";
+      roomRow.append(roomLabel);
+      if (roomIsPrivate) {
+        const lockIcon = document.createElement("span");
+        lockIcon.textContent = "\u{1F512}";
+        lockIcon.style.fontSize = "12px";
+        lockIcon.style.opacity = "0.8";
+        lockIcon.style.display = "inline-flex";
+        lockIcon.style.alignItems = "center";
+        lockIcon.style.justifyContent = "center";
+        lockIcon.style.lineHeight = "1";
+        lockIcon.title = "Room is private";
+        roomRow.append(lockIcon);
+      } else {
+        roomRow.append(roomValue);
+      }
+      detailsContent.append(roomRow);
     }
     const privacyRow = document.createElement("div");
     privacyRow.style.display = "flex";
@@ -47450,7 +44057,10 @@ next: ${next}`;
         "Activity Log",
         "activityLog",
         (view) => view?.state?.activityLog ?? view?.state?.activityLogs ?? null,
-        (payload) => fakeActivityLogShow(payload, { open: true })
+        (payload) => {
+          skipNextActivityLogHistoryReopen();
+          return fakeActivityLogShow(payload, { open: true });
+        }
       )
     );
     buttonRow.appendChild(
@@ -47536,8 +44146,12 @@ next: ${next}`;
   function renderAllTab(view, ui) {
     view.innerHTML = "";
     const wrap = document.createElement("div");
-    wrap.style.display = "grid";
+    wrap.style.display = "flex";
+    wrap.style.flexDirection = "column";
     wrap.style.gap = "10px";
+    wrap.style.position = wrap.style.position || "relative";
+    wrap.style.height = "100%";
+    wrap.style.minHeight = "0";
     const controls = ui.flexRow({ align: "center", gap: 8 });
     const search = ui.inputText("Search for a friend...");
     search.style.flex = "1";
@@ -47552,6 +44166,12 @@ next: ${next}`;
     statusMessage.style.fontSize = "12px";
     statusMessage.style.opacity = "0.7";
     statusMessage.textContent = "Loading friends...";
+    const listContainer = document.createElement("div");
+    listContainer.style.display = "flex";
+    listContainer.style.flexDirection = "column";
+    listContainer.style.flex = "1";
+    listContainer.style.minHeight = "0";
+    listContainer.style.position = "relative";
     const list = document.createElement("div");
     list.style.display = "grid";
     list.style.gap = "8px";
@@ -47559,13 +44179,17 @@ next: ${next}`;
     list.style.borderRadius = "10px";
     list.style.border = "1px solid rgba(255, 255, 255, 0.08)";
     list.style.background = "rgba(255, 255, 255, 0.02)";
-    list.style.maxHeight = "36vh";
+    list.style.flex = "1";
+    list.style.minHeight = "0";
     list.style.overflow = "auto";
-    wrap.append(controls, statusMessage, list);
+    listContainer.appendChild(list);
+    wrap.append(controls, statusMessage, listContainer);
     view.appendChild(wrap);
     let friends = [];
     let isLoading = false;
     let destroyed = false;
+    list.style.position = list.style.position || "relative";
+    const refreshIndicator = createRefreshIndicator(list, listContainer);
     const renderPlaceholder = (text) => {
       list.innerHTML = "";
       const placeholder = document.createElement("div");
@@ -47576,8 +44200,12 @@ next: ${next}`;
       list.appendChild(placeholder);
     };
     const normalizeQuery = (term) => term.trim().toLowerCase();
-    const renderList = () => {
+    const renderList = (options = {}) => {
       if (destroyed) return;
+      const shouldForce = options.force ?? true;
+      if (isLoading && friends.length && !shouldForce) {
+        return;
+      }
       list.innerHTML = "";
       if (isLoading) {
         renderPlaceholder("Loading friends...");
@@ -47612,15 +44240,21 @@ next: ${next}`;
       if (showOnlineOnly) {
         statusMessage.textContent = `${filtered.length} online friend${filtered.length !== 1 ? "s" : ""} shown.`;
       } else {
-        statusMessage.textContent = `${friends.length} friends loaded.`;
+        statusMessage.textContent = `${filtered.length} friend${filtered.length !== 1 ? "s" : ""} shown.`;
       }
+    };
+    const updateRefreshControls = () => {
+      const enabled = !destroyed && !isLoading;
+      ui.setButtonEnabled(refresh, enabled);
+      refresh.setAttribute("aria-busy", isLoading ? "true" : "false");
     };
     const loadFriends = async (options) => {
       if (destroyed) return;
       isLoading = true;
-      statusMessage.textContent = "Loading friends...";
-      refresh.disabled = true;
-      renderList();
+      statusMessage.textContent = friends.length ? "Refreshing friends..." : "Loading friends...";
+      refreshIndicator.setVisible(true);
+      updateRefreshControls();
+      renderList({ force: friends.length === 0 });
       try {
         const player2 = await playerDatabaseUserId.get();
         if (!player2) {
@@ -47647,19 +44281,20 @@ next: ${next}`;
         return;
       } finally {
         isLoading = false;
-        refresh.disabled = false;
-        renderList();
+        refreshIndicator.setVisible(false);
+        updateRefreshControls();
+        renderList({ force: true });
       }
     };
     search.addEventListener("input", () => {
-      renderList();
+      renderList({ force: true });
     });
     refresh.addEventListener("click", () => {
       void loadFriends({ force: true });
     });
     const unsubscribeSettings = onFriendSettingsChange(() => {
       if (!destroyed) {
-        renderList();
+        renderList({ force: true });
       }
     });
     refreshAllFriends = loadFriends;
@@ -47675,8 +44310,12 @@ next: ${next}`;
   function renderAddFriendTab(view, ui) {
     view.innerHTML = "";
     const layout = document.createElement("div");
-    layout.style.display = "grid";
+    layout.style.display = "flex";
+    layout.style.flexDirection = "column";
     layout.style.gap = "12px";
+    layout.style.height = "100%";
+    layout.style.minHeight = "0";
+    layout.style.flex = "1";
     const profileCard = ui.card("My profile");
     profileCard.body.style.display = "grid";
     profileCard.body.style.gap = "12px";
@@ -47800,8 +44439,15 @@ next: ${next}`;
   function renderFriendRequestsTab(view, ui) {
     view.innerHTML = "";
     const card = ui.card("Incoming requests");
-    card.body.style.display = "grid";
+    card.root.style.display = "flex";
+    card.root.style.flexDirection = "column";
+    card.root.style.height = "100%";
+    card.root.style.minHeight = "0";
+    card.body.style.display = "flex";
+    card.body.style.flexDirection = "column";
     card.body.style.gap = "10px";
+    card.body.style.flex = "1";
+    card.body.style.minHeight = "0";
     const controls = ui.flexRow({ justify: "end", align: "center" });
     const requestsRefresh = ui.btn("Refresh", { size: "sm", variant: "ghost" });
     requestsRefresh.style.background = "rgba(248, 250, 252, 0.08)";
@@ -47819,38 +44465,75 @@ next: ${next}`;
     requestsStatus.style.opacity = "0.8";
     requestsStatus.textContent = "";
     card.body.appendChild(requestsStatus);
+    const requestsListWrapper = document.createElement("div");
+    requestsListWrapper.style.position = requestsListWrapper.style.position || "relative";
+    requestsListWrapper.style.flex = "1";
+    requestsListWrapper.style.display = "flex";
+    requestsListWrapper.style.flexDirection = "column";
+    requestsListWrapper.style.minHeight = "0";
     const requestsList = document.createElement("div");
     requestsList.style.display = "grid";
     requestsList.style.gap = "8px";
-    requestsList.style.maxHeight = "26vh";
+    requestsList.style.flex = "1";
+    requestsList.style.minHeight = "0";
     requestsList.style.overflow = "auto";
-    card.body.appendChild(requestsList);
+    requestsListWrapper.appendChild(requestsList);
+    card.body.appendChild(requestsListWrapper);
+    requestsList.style.position = requestsList.style.position || "relative";
+    const requestsIndicator = createRefreshIndicator(requestsList, requestsListWrapper);
     view.appendChild(card.root);
     let myId = null;
     let requests = [];
     let loadingRequests = false;
     let destroyedRequests = false;
     const requestActionInProgress = /* @__PURE__ */ new Set();
-    const renderRequests = () => {
-      if (destroyedRequests) return;
-      requestsList.innerHTML = "";
+    const updateRequestsRefreshControls = () => {
+      const enabled = !destroyedRequests && !loadingRequests;
+      ui.setButtonEnabled(requestsRefresh, enabled);
+      requestsRefresh.setAttribute("aria-busy", loadingRequests ? "true" : "false");
+    };
+    updateRequestsRefreshControls();
+    const getRequestsStatusText = () => {
       if (loadingRequests) {
-        const placeholder = document.createElement("div");
-        placeholder.textContent = "Loading friend requests...";
-        placeholder.style.opacity = "0.6";
-        placeholder.style.fontSize = "12px";
-        placeholder.style.textAlign = "center";
-        requestsList.appendChild(placeholder);
+        return requests.length ? "Refreshing friend requests..." : "Loading incoming friend requests...";
+      }
+      if (!requests.length) {
+        return "No incoming friend requests.";
+      }
+      return `${requests.length} pending request${requests.length > 1 ? "s" : ""}.`;
+    };
+    const renderRequestsPlaceholder = (message) => {
+      const placeholder = document.createElement("div");
+      placeholder.textContent = message;
+      placeholder.style.opacity = "0.6";
+      placeholder.style.fontSize = "12px";
+      placeholder.style.textAlign = "center";
+      placeholder.style.minHeight = "48px";
+      requestsList.appendChild(placeholder);
+    };
+    const updateRequestsStatusText = () => {
+      if (!requests.length) {
         requestsStatus.textContent = "";
         return;
       }
+      requestsStatus.textContent = loadingRequests ? "Refreshing friend requests..." : `${requests.length} pending request${requests.length > 1 ? "s" : ""}.`;
+    };
+    const renderRequests = (options = {}) => {
+      if (destroyedRequests) return;
+      const shouldForce = options.force ?? true;
+      if (loadingRequests && requests.length && !shouldForce) {
+        updateRequestsStatusText();
+        return;
+      }
+      requestsList.innerHTML = "";
+      if (loadingRequests && !requests.length) {
+        renderRequestsPlaceholder(getRequestsStatusText());
+        updateRequestsStatusText();
+        return;
+      }
       if (!requests.length) {
-        const placeholder = document.createElement("div");
-        placeholder.textContent = "No incoming friend requests.";
-        placeholder.style.opacity = "0.6";
-        placeholder.style.fontSize = "12px";
-        placeholder.style.textAlign = "center";
-        requestsList.appendChild(placeholder);
+        renderRequestsPlaceholder(getRequestsStatusText());
+        updateRequestsStatusText();
         return;
       }
       for (const request of requests) {
@@ -47932,7 +44615,7 @@ next: ${next}`;
         row.append(avatar, info, actions);
         requestsList.appendChild(row);
       }
-      requestsStatus.textContent = `${requests.length} pending request${requests.length > 1 ? "s" : ""}.`;
+      updateRequestsStatusText();
     };
     async function loadRequests(options) {
       if (destroyedRequests) return;
@@ -47948,7 +44631,9 @@ next: ${next}`;
         return;
       }
       loadingRequests = true;
-      renderRequests();
+      requestsIndicator.setVisible(true);
+      updateRequestsRefreshControls();
+      renderRequests({ force: requests.length === 0 });
       try {
         if (!options?.force) {
           const cached = getCachedIncomingRequestsWithViews();
@@ -47963,9 +44648,12 @@ next: ${next}`;
         requests = [];
       } finally {
         loadingRequests = false;
-        renderRequests();
+        requestsIndicator.setVisible(false);
+        updateRequestsRefreshControls();
+        renderRequests({ force: true });
       }
     }
+    refreshIncomingRequests = loadRequests;
     const refreshPlayerId = async () => {
       const resolved = await playerDatabaseUserId.get();
       myId = resolved;
@@ -47985,14 +44673,21 @@ next: ${next}`;
     void refreshPlayerId();
     view.__cleanup__ = () => {
       destroyedRequests = true;
+      if (refreshIncomingRequests === loadRequests) {
+        refreshIncomingRequests = null;
+      }
     };
   }
   function renderSettingsTab2(view, ui) {
     view.innerHTML = "";
     const settings = getFriendSettings();
     const layout = document.createElement("div");
-    layout.style.display = "grid";
+    layout.style.display = "flex";
+    layout.style.flexDirection = "column";
     layout.style.gap = "12px";
+    layout.style.height = "100%";
+    layout.style.minHeight = "0";
+    layout.style.flex = "1";
     const globalCard = ui.card("Global settings");
     globalCard.body.style.display = "grid";
     globalCard.body.style.gap = "12px";
@@ -48037,15 +44732,9 @@ next: ${next}`;
         (next) => applyPatch({ showOnlineFriendsOnly: next })
       ),
       buildToggleRow(
-        "Auto-accept incoming requests",
-        settings.autoAcceptIncomingRequests,
-        void 0,
-        (next) => applyPatch({ autoAcceptIncomingRequests: next })
-      ),
-      buildToggleRow(
-        "Hide my room from the public list",
+        "Make my room private",
         settings.hideRoomFromPublicList,
-        "If another player in your room keeps this option disabled, the room will still appear in the public list.",
+        "Prevents friends from joining and hides your room from the public list.",
         (next) => applyPatch({ hideRoomFromPublicList: next })
       )
     );
@@ -48093,9 +44782,18 @@ next: ${next}`;
   function renderFriendsMenu(root) {
     const ui = new Menu({ id: "friends", compact: true });
     ui.mount(root);
-    ui.root.style.width = "420px";
-    ui.root.style.maxWidth = "420px";
-    ui.root.style.minWidth = "340px";
+    ui.root.style.width = "480px";
+    ui.root.style.maxWidth = "520px";
+    ui.root.style.minWidth = "380px";
+    ui.root.style.height = "640px";
+    ui.root.style.maxHeight = "90vh";
+    ui.root.style.flexDirection = "column";
+    const views = ui.root.querySelector(".qmm-views");
+    if (views) {
+      views.style.flex = "1";
+      views.style.maxHeight = "none";
+      views.style.minHeight = "0";
+    }
     ui.addTabs([
       { id: "friends-all", title: "Friend list", render: (view) => renderAllTab(view, ui) },
       { id: "friends-add", title: "Add friend", render: (view) => renderAddFriendTab(view, ui) },
@@ -48103,6 +44801,33 @@ next: ${next}`;
       { id: "friends-settings", title: "Settings", render: (view) => renderSettingsTab2(view, ui) }
     ]);
     ui.switchTo("friends-all");
+    ui.on("tab:change", (id) => {
+      if (id === "friends-all" && refreshAllFriends) {
+        void refreshAllFriends({ force: true });
+      }
+      if (id === "friends-requests" && refreshIncomingRequests) {
+        void refreshIncomingRequests({ force: true });
+      }
+    });
+    const windowEl = ui.root.closest(".qws-win");
+    if (windowEl) {
+      let lastVisible = windowEl.style.display !== "none";
+      const observer2 = new MutationObserver(() => {
+        const isVisible3 = windowEl.style.display !== "none";
+        if (isVisible3 && !lastVisible) {
+          void refreshAllFriends?.({ force: true });
+        }
+        lastVisible = isVisible3;
+      });
+      observer2.observe(windowEl, { attributes: true, attributeFilter: ["style"] });
+      const previousCleanup = root.__cleanup__;
+      root.__cleanup__ = () => {
+        observer2.disconnect();
+        if (typeof previousCleanup === "function") {
+          previousCleanup.call(root);
+        }
+      };
+    }
   }
 
   // src/store/auto-buy.ts
@@ -49294,11 +46019,11 @@ next: ${next}`;
     if (!Number.isFinite(value)) return 1;
     return Math.max(1, Math.min(6, value));
   }
-  function findPlayersDeep2(state2) {
-    if (!state2 || typeof state2 !== "object") return [];
+  function findPlayersDeep2(state3) {
+    if (!state3 || typeof state3 !== "object") return [];
     const out = [];
     const seen = /* @__PURE__ */ new Set();
-    const stack = [state2];
+    const stack = [state3];
     while (stack.length) {
       const cur = stack.pop();
       if (!cur || typeof cur !== "object" || seen.has(cur)) continue;
@@ -49326,12 +46051,12 @@ next: ${next}`;
     }
     return [...byId.values()];
   }
-  function getPlayersArray2(state2) {
-    const direct = state2?.fullState?.data?.players ?? state2?.data?.players ?? state2?.players;
-    return Array.isArray(direct) ? direct : findPlayersDeep2(state2);
+  function getPlayersArray2(state3) {
+    const direct = state3?.fullState?.data?.players ?? state3?.data?.players ?? state3?.players;
+    return Array.isArray(direct) ? direct : findPlayersDeep2(state3);
   }
-  function getSlotsArray2(state2) {
-    const raw = state2?.child?.data?.userSlots ?? state2?.fullState?.child?.data?.userSlots ?? state2?.data?.userSlots;
+  function getSlotsArray2(state3) {
+    const raw = state3?.child?.data?.userSlots ?? state3?.fullState?.child?.data?.userSlots ?? state3?.data?.userSlots;
     if (Array.isArray(raw)) return raw;
     if (raw && typeof raw === "object") {
       const entries = Object.entries(raw);
@@ -49387,8 +46112,8 @@ next: ${next}`;
   }
   async function buildPlayerStatePayload(options = {}) {
     try {
-      const state2 = await Atoms.root.state.get();
-      if (!state2 || typeof state2 !== "object") return null;
+      const state3 = await Atoms.root.state.get();
+      if (!state3 || typeof state3 !== "object") return null;
       const settings = getFriendSettings();
       const privacy = {
         showProfile: DEFAULT_PRIVACY.showProfile,
@@ -49400,19 +46125,31 @@ next: ${next}`;
         showStats: settings.showStats,
         hideRoomFromPublicList: settings.hideRoomFromPublicList
       };
-      const players = getPlayersArray2(state2);
+      const players = getPlayersArray2(state3);
       const normalizedPlayers = Array.isArray(players) ? players : [];
-      const slots = getSlotsArray2(state2).filter((slot2) => !!slot2);
-      const userSlots = slots.map((slot2, idx) => {
+      const slots = getSlotsArray2(state3).filter((slot2) => !!slot2);
+      const coinsById = /* @__PURE__ */ new Map();
+      for (const slot2 of slots) {
         const slotData2 = slot2?.data ?? slot2;
-        const coinCandidate2 = slotData2?.coinsCount ?? slotData2?.data?.coinsCount ?? slot2?.coinsCount ?? slot2?.data?.coinsCount ?? null;
+        const candidateId = slotData2?.databaseUserId ?? slot2?.databaseUserId ?? slotData2?.playerId ?? slot2?.playerId ?? null;
+        if (candidateId == null) continue;
+        const normalizedSlotId = String(candidateId);
+        const coinCandidate2 = slotData2?.coinsCount ?? slotData2?.data?.coinsCount ?? slot2?.coinsCount ?? slot2?.data?.coinsCount ?? slotData2?.coins ?? slot2?.coins ?? null;
         const coinValue2 = Number(coinCandidate2);
-        const coins = Number.isFinite(coinValue2) ? coinValue2 : null;
-        const playerEntry = normalizedPlayers[idx] ?? null;
+        coinsById.set(
+          normalizedSlotId,
+          Number.isFinite(coinValue2) ? coinValue2 : null
+        );
+      }
+      const userSlots = normalizedPlayers.map((player2) => {
+        const playerDatabaseId = player2?.databaseUserId ?? player2?.playerId ?? player2?.id ?? null;
+        const normalizedPlayerId = playerDatabaseId != null ? String(playerDatabaseId) : null;
+        const slotId = normalizedPlayerId ?? (typeof player2?.id === "string" || typeof player2?.id === "number" ? String(player2.id) : null);
+        const coins = slotId ? coinsById.get(slotId) ?? null : null;
         return {
-          name: typeof playerEntry?.name === "string" ? playerEntry.name : typeof slotData2?.name === "string" ? slotData2.name : null,
-          discordAvatarUrl: typeof playerEntry?.discordAvatarUrl === "string" ? playerEntry.discordAvatarUrl : typeof slotData2?.discordAvatarUrl === "string" ? slotData2.discordAvatarUrl : null,
-          playerId: slotData2?.databaseUserId ?? slot2?.databaseUserId ?? (slotData2?.playerId ?? null),
+          name: typeof player2?.name === "string" ? player2.name : null,
+          discordAvatarUrl: typeof player2?.discordAvatarUrl === "string" ? player2.discordAvatarUrl : null,
+          playerId: slotId,
           coins
         };
       });
@@ -49432,7 +46169,7 @@ next: ${next}`;
       const coinCandidate = slotData?.coinsCount ?? slot?.coinsCount ?? slotData?.coins ?? slot?.coins ?? null;
       const coinValue = Number(coinCandidate);
       const coinsRaw = Number.isFinite(coinValue) ? coinValue : null;
-      const roomId = state2?.data?.roomId ?? state2?.fullState?.data?.roomId ?? state2?.roomId ?? null;
+      const roomId = state3?.data?.roomId ?? state3?.fullState?.data?.roomId ?? state3?.roomId ?? null;
       let playersCount = normalizedPlayers.length > 0 ? normalizedPlayers.length : slots.length;
       try {
         const atomValue = await Atoms.server.numPlayers.get();
@@ -49442,7 +46179,7 @@ next: ${next}`;
       const persistedActivityLog = readAriesPath("activityLog.history");
       const activityLog = Array.isArray(persistedActivityLog) ? persistedActivityLog : normalizeActivityLog(slotData);
       const journalEntry = slotData?.journal ?? slotData?.data?.journal ?? slot?.journal ?? slot?.data?.journal ?? null;
-      return {
+      const payload = {
         playerId: playerId2 != null ? String(playerId2) : null,
         playerName: privacy.showProfile ? playerName : null,
         avatarUrl: privacy.showProfile ? avatarUrl : null,
@@ -49462,21 +46199,52 @@ next: ${next}`;
           journal: privacy.showJournal ? journalEntry : null
         }
       };
-    } catch {
+      return payload;
+    } catch (error) {
+      console.error("[PlayerPayload] buildPlayerStatePayload failed", error);
+      return null;
+    }
+  }
+  function sanitizeActivityLogForCompare(log2) {
+    if (!Array.isArray(log2)) return null;
+    return log2.filter((entry) => entry?.action !== "feedPet");
+  }
+  function sanitizeStateForComparison(state3) {
+    const sanitizedActivityLog = sanitizeActivityLogForCompare(
+      state3.activityLog ?? null
+    );
+    if (sanitizedActivityLog === state3.activityLog) {
+      return state3;
+    }
+    return {
+      ...state3,
+      activityLog: sanitizedActivityLog
+    };
+  }
+  function snapshotPayloadForComparison(payload) {
+    try {
+      const sanitizedState = sanitizeStateForComparison(payload.state);
+      const clone = {
+        ...payload,
+        state: sanitizedState
+      };
+      return JSON.stringify(clone);
+    } catch (error) {
+      console.error(
+        "[PlayerPayload] Failed to snapshot payload for comparison",
+        error
+      );
       return null;
     }
   }
   async function logPlayerStatePayload(options) {
-    const payload = await buildPlayerStatePayload(options);
-    return payload;
+    return buildPlayerStatePayload(options);
   }
   shareGlobal("buildPlayerStatePayload", buildPlayerStatePayload);
   shareGlobal("logPlayerStatePayload", logPlayerStatePayload);
   var gameReadyWatcherInitialized = false;
   var gameReadyTriggered = false;
   var preferredReportingIntervalMs;
-  var FRIEND_REFRESH_INTERVAL_MS = 6e4;
-  var AUTO_ACCEPT_INTERVAL_MS = 6e4;
   var friendRefreshLoopStarted = false;
   var autoAcceptedRequestIds = /* @__PURE__ */ new Set();
   var autoAcceptTimer = null;
@@ -49487,13 +46255,19 @@ next: ${next}`;
       const dbId = await playerDatabaseUserId.get();
       if (!dbId) return;
       const requests = await fetchIncomingRequestsWithViews(dbId);
-      const acceptedCount = await maybeAutoAcceptIncomingRequests(dbId, requests);
+      const acceptedCount = await maybeAutoAcceptIncomingRequests(
+        dbId,
+        requests
+      );
       if (acceptedCount > 0) {
         await fetchIncomingRequestsWithViews(dbId);
       }
       await fetchFriendsWithViews(dbId);
     } catch (error) {
-      console.error("[PlayerPayload] Failed to prefetch friends data", error);
+      console.error(
+        "[PlayerPayload] Failed to prefetch friends data",
+        error
+      );
     }
   }
   async function maybeAutoAcceptIncomingRequests(playerId2, requests) {
@@ -49526,14 +46300,10 @@ next: ${next}`;
     }
     return acceptedCount;
   }
-  function startFriendDataRefreshLoop(intervalMs = FRIEND_REFRESH_INTERVAL_MS) {
+  function startFriendDataRefreshLoop() {
     if (friendRefreshLoopStarted) return;
     friendRefreshLoopStarted = true;
-    const normalizedMs = Number.isFinite(intervalMs) && intervalMs > 0 ? intervalMs : FRIEND_REFRESH_INTERVAL_MS;
     void warmSupabaseInitialFetch();
-    setInterval(() => {
-      void warmSupabaseInitialFetch();
-    }, normalizedMs);
   }
   async function pollIncomingRequestsForAutoAccept() {
     try {
@@ -49560,7 +46330,7 @@ next: ${next}`;
     void pollIncomingRequestsForAutoAccept();
     autoAcceptTimer = setInterval(() => {
       void pollIncomingRequestsForAutoAccept();
-    }, AUTO_ACCEPT_INTERVAL_MS);
+    }, 6e4);
   }
   function startAutoAcceptWatcher() {
     if (autoAcceptWatcherInitialized) return;
@@ -49570,9 +46340,9 @@ next: ${next}`;
       startAutoAcceptLoopIfEnabled();
     });
   }
-  async function tryInitializeReporting(state2) {
+  async function tryInitializeReporting(state3) {
     if (gameReadyTriggered) return;
-    const snapshot = state2 ?? await Atoms.root.state.get();
+    const snapshot = state3 ?? await Atoms.root.state.get();
     const players = Array.isArray(snapshot?.data?.players) ? snapshot.data.players : [];
     if (players.length === 0) return;
     gameReadyTriggered = true;
@@ -49591,13 +46361,44 @@ next: ${next}`;
   }
   var payloadReportingTimer = null;
   var isPayloadReporting = false;
+  var lastSentPayloadSnapshot = null;
+  var unchangedSnapshotCount = 0;
+  var MAX_UNCHANGED_TICKS_BEFORE_FORCE_SEND = 5;
   async function buildAndSendPlayerState() {
     if (isPayloadReporting) return;
     isPayloadReporting = true;
     try {
       const payload = await buildPlayerStatePayload();
-      if (payload) {
-        await sendPlayerState(payload);
+      if (!payload) {
+        return;
+      }
+      if (!payload.playerId || payload.playerId.length < 3) {
+        return;
+      }
+      const snapshot = snapshotPayloadForComparison(payload);
+      let mustSend = false;
+      if (snapshot === null) {
+        mustSend = true;
+      } else if (lastSentPayloadSnapshot === null) {
+        mustSend = true;
+      } else if (snapshot !== lastSentPayloadSnapshot) {
+        mustSend = true;
+      } else if (unchangedSnapshotCount + 1 >= MAX_UNCHANGED_TICKS_BEFORE_FORCE_SEND) {
+        mustSend = true;
+      }
+      if (!mustSend) {
+        if (snapshot !== null) {
+          unchangedSnapshotCount += 1;
+        }
+        return;
+      }
+      const ok = await sendPlayerState(payload);
+      if (ok) {
+        if (snapshot !== null) {
+          lastSentPayloadSnapshot = snapshot;
+          unchangedSnapshotCount = 0;
+        }
+      } else {
       }
     } catch (error) {
       console.error("[PlayerPayload] Failed to send payload:", error);
@@ -49614,36 +46415,943 @@ next: ${next}`;
     }, normalizedMs);
   }
 
-  // src/main.ts
-  var ariesMod = installAriesModApi();
-  var TILE_SHEETS_TO_PRELOAD = ["plants", "mutations", "pets", "animations", "items", "decor"];
-  async function preloadAllTiles() {
-    const tasks = TILE_SHEETS_TO_PRELOAD.map(async (base) => {
-      const result = await loadTileSheet(base);
-      return result;
-    });
-    await Promise.all(tasks);
+  // src/sprite/state.ts
+  init_settings();
+  function createInitialState() {
+    return {
+      started: false,
+      open: false,
+      loaded: false,
+      version: null,
+      base: null,
+      ctors: null,
+      app: null,
+      renderer: null,
+      cat: "__all__",
+      q: "",
+      f: "",
+      mutOn: false,
+      mutations: [],
+      scroll: 0,
+      items: [],
+      filtered: [],
+      cats: /* @__PURE__ */ new Map(),
+      tex: /* @__PURE__ */ new Map(),
+      lru: /* @__PURE__ */ new Map(),
+      cost: 0,
+      jobs: [],
+      jobMap: /* @__PURE__ */ new Set(),
+      srcCan: /* @__PURE__ */ new Map(),
+      atlasBases: /* @__PURE__ */ new Set(),
+      dbgCount: {},
+      sig: "",
+      changedAt: 0,
+      needsLayout: false,
+      overlay: null,
+      bg: null,
+      grid: null,
+      dom: null,
+      selCat: null,
+      count: null,
+      pool: [],
+      active: /* @__PURE__ */ new Map(),
+      anim: /* @__PURE__ */ new Set()
+    };
   }
-  (async function() {
-    "use strict";
-    migrateLocalStorageToAries();
-    installPageWebSocketHook();
-    initGameVersion();
-    void prefetchManifest({ registerSprites: true, waitForVersionMs: 3e3 });
-    initSprites({
-      config: {
-        blackBelow: 10,
-        skipAlphaBelow: 1,
-        tolerance: 5e-3
-      },
-      onAsset: (url) => {
-        recordAssetUrlHint(url);
-        void prefetchManifest({ registerSprites: true });
+  function createSpriteContext() {
+    return {
+      cfg: { ...DEFAULT_CFG },
+      state: createInitialState()
+    };
+  }
+
+  // src/sprite/utils/async.ts
+  var sleep3 = (ms) => new Promise((resolve2) => setTimeout(resolve2, ms));
+  async function waitWithTimeout(p, ms, label2) {
+    const t0 = performance.now();
+    while (performance.now() - t0 < ms) {
+      const result = await Promise.race([p, sleep3(50).then(() => null)]);
+      if (result !== null) return result;
+    }
+    throw new Error(`${label2} timeout`);
+  }
+
+  // src/sprite/pixi/hooks.ts
+  function createPixiHooks() {
+    let appResolver;
+    let rdrResolver;
+    const appReady = new Promise((resolve2) => appResolver = resolve2);
+    const rendererReady = new Promise((resolve2) => rdrResolver = resolve2);
+    let APP = null;
+    let RDR = null;
+    let PIXI_VER = null;
+    const hook = (name, cb) => {
+      const root = globalThis.unsafeWindow || globalThis;
+      const prev = root[name];
+      root[name] = function() {
+        try {
+          cb.apply(this, arguments);
+        } finally {
+          if (typeof prev === "function") {
+            try {
+              prev.apply(this, arguments);
+            } catch {
+            }
+          }
+        }
+      };
+    };
+    hook("__PIXI_APP_INIT__", (a, v) => {
+      if (!APP) {
+        APP = a;
+        PIXI_VER = v;
+        appResolver(a);
       }
     });
-    await ensureSpritesReady();
-    await preloadAllTiles();
-    await warmUpAllSprites();
+    hook("__PIXI_RENDERER_INIT__", (r, v) => {
+      if (!RDR) {
+        RDR = r;
+        PIXI_VER = v;
+        rdrResolver(r);
+      }
+    });
+    const tryResolveExisting = () => {
+      const root = globalThis.unsafeWindow || globalThis;
+      if (!APP) {
+        const maybeApp = root.__PIXI_APP__ || root.PIXI_APP || root.app;
+        if (maybeApp) {
+          APP = maybeApp;
+          appResolver(APP);
+        }
+      }
+      if (!RDR) {
+        const maybeRdr = root.__PIXI_RENDERER__ || root.PIXI_RENDERER__ || root.renderer || APP?.renderer;
+        if (maybeRdr) {
+          RDR = maybeRdr;
+          rdrResolver(RDR);
+        }
+      }
+    };
+    tryResolveExisting();
+    let fallbackPolls = 0;
+    const fallbackInterval = setInterval(() => {
+      if (APP && RDR) {
+        clearInterval(fallbackInterval);
+        return;
+      }
+      tryResolveExisting();
+      fallbackPolls += 1;
+      if (fallbackPolls >= 50) {
+        clearInterval(fallbackInterval);
+      }
+    }, 100);
+    return {
+      get app() {
+        return APP;
+      },
+      get renderer() {
+        return RDR;
+      },
+      get pixiVersion() {
+        return PIXI_VER;
+      },
+      appReady,
+      rendererReady
+    };
+  }
+  async function waitForPixi(handles, timeoutMs = 15e3) {
+    const app = await waitWithTimeout(handles.appReady, timeoutMs, "PIXI app");
+    const renderer = await waitWithTimeout(handles.rendererReady, timeoutMs, "PIXI renderer");
+    return { app, renderer, version: handles.pixiVersion };
+  }
+
+  // src/sprite/utils/pixi.ts
+  function findAny(root, pred, lim = 25e3) {
+    const stack = [root];
+    const seen = /* @__PURE__ */ new Set();
+    let n = 0;
+    while (stack.length && n++ < lim) {
+      const node = stack.pop();
+      if (!node || seen.has(node)) continue;
+      seen.add(node);
+      if (pred(node)) return node;
+      const children = node.children;
+      if (Array.isArray(children)) {
+        for (let i = children.length - 1; i >= 0; i -= 1) stack.push(children[i]);
+      }
+    }
+    return null;
+  }
+  function getCtors(app) {
+    const P = globalThis.PIXI || globalThis.unsafeWindow?.PIXI;
+    if (P?.Texture && P?.Sprite && P?.Container && P?.Rectangle) {
+      return { Container: P.Container, Sprite: P.Sprite, Texture: P.Texture, Rectangle: P.Rectangle, Text: P.Text || null };
+    }
+    const stage = app?.stage;
+    const anySpr = findAny(stage, (x) => x?.texture?.frame && x?.constructor && x?.texture?.constructor && x?.texture?.frame?.constructor);
+    if (!anySpr) throw new Error("No Sprite found (ctors).");
+    const anyTxt = findAny(stage, (x) => (typeof x?.text === "string" || typeof x?.text === "number") && x?.style);
+    return {
+      Container: stage.constructor,
+      Sprite: anySpr.constructor,
+      Texture: anySpr.texture.constructor,
+      Rectangle: anySpr.texture.frame.constructor,
+      Text: anyTxt?.constructor || null
+    };
+  }
+  var baseTexOf = (tex) => tex?.baseTexture ?? tex?.source?.baseTexture ?? tex?.source ?? tex?._baseTexture ?? null;
+  function rememberBaseTex(tex, atlasBases) {
+    const base = baseTexOf(tex);
+    if (base) atlasBases.add(base);
+  }
+
+  // src/sprite/utils/path.ts
+  var splitKey = (key2) => String(key2 || "").split("/").filter(Boolean);
+  var joinPath = (base, path) => base.replace(/\/?$/, "/") + String(path || "").replace(/^\//, "");
+  var dirOf = (path) => path.lastIndexOf("/") >= 0 ? path.slice(0, path.lastIndexOf("/") + 1) : "";
+  var relPath = (base, path) => typeof path === "string" ? path.startsWith("/") ? path.slice(1) : dirOf(base) + path : path;
+  function categoryOf(key2, cfg) {
+    const parts = splitKey(key2);
+    const start2 = parts[0] === "sprite" || parts[0] === "sprites" ? 1 : 0;
+    const width = Math.max(1, cfg.catLevels | 0);
+    return parts.slice(start2, start2 + width).join("/") || "misc";
+  }
+  function animParse(key2) {
+    const parts = splitKey(key2);
+    const last = parts[parts.length - 1];
+    const match = last && last.match(/^(.*?)(?:[_-])(\d{1,6})(\.[a-z0-9]+)?$/i);
+    if (!match) return null;
+    const baseName = (match[1] || "") + (match[3] || "");
+    const idx = Number(match[2]);
+    if (!baseName || !Number.isFinite(idx)) return null;
+    return { baseKey: parts.slice(0, -1).concat(baseName).join("/"), idx, frameKey: key2 };
+  }
+
+  // src/sprite/data/assetFetcher.ts
+  function fetchFallback(url, type) {
+    return fetch(url).then(async (res) => {
+      if (!res.ok) throw new Error(`HTTP ${res.status} (${url})`);
+      if (type === "blob") return { status: res.status, response: await res.blob(), responseText: "" };
+      const text = await res.text();
+      return {
+        status: res.status,
+        response: type === "json" ? JSON.parse(text) : text,
+        responseText: text
+      };
+    }).catch((err) => {
+      throw new Error(`Network (${url}): ${err instanceof Error ? err.message : String(err)}`);
+    });
+  }
+  function gm(url, type = "text") {
+    if (typeof GM_xmlhttpRequest === "function") {
+      return new Promise(
+        (resolve2, reject) => GM_xmlhttpRequest({
+          method: "GET",
+          url,
+          responseType: type,
+          onload: (r) => r.status >= 200 && r.status < 300 ? resolve2(r) : reject(new Error(`HTTP ${r.status} (${url})`)),
+          onerror: () => reject(new Error(`Network (${url})`)),
+          ontimeout: () => reject(new Error(`Timeout (${url})`))
+        })
+      );
+    }
+    return fetchFallback(url, type);
+  }
+  var getJSON = async (url) => JSON.parse((await gm(url, "text")).responseText);
+  var getBlob = async (url) => (await gm(url, "blob")).response;
+  function blobToImage(blob) {
+    return new Promise((resolve2, reject) => {
+      const url = URL.createObjectURL(blob);
+      const img = new Image();
+      img.decoding = "async";
+      img.onload = () => {
+        URL.revokeObjectURL(url);
+        resolve2(img);
+      };
+      img.onerror = () => {
+        URL.revokeObjectURL(url);
+        reject(new Error("decode fail"));
+      };
+      img.src = url;
+    });
+  }
+  function extractAtlasJsons(manifest) {
+    const jsons = /* @__PURE__ */ new Set();
+    for (const bundle of manifest.bundles || []) {
+      for (const asset of bundle.assets || []) {
+        for (const src of asset.src || []) {
+          if (typeof src !== "string") continue;
+          if (!src.endsWith(".json")) continue;
+          if (src === "manifest.json") continue;
+          if (src.startsWith("audio/")) continue;
+          jsons.add(src);
+        }
+      }
+    }
+    return jsons;
+  }
+  async function loadAtlasJsons(base, manifest) {
+    const jsons = extractAtlasJsons(manifest);
+    const seen = /* @__PURE__ */ new Set();
+    const data = {};
+    const loadOne = async (path) => {
+      if (seen.has(path)) return;
+      seen.add(path);
+      const json = await getJSON(joinPath(base, path));
+      data[path] = json;
+      if (json?.meta?.related_multi_packs) {
+        for (const rel of json.meta.related_multi_packs) {
+          await loadOne(relPath(path, rel));
+        }
+      }
+    };
+    for (const p of jsons) {
+      await loadOne(p);
+    }
+    return data;
+  }
+
+  // src/sprite/pixi/atlasToTextures.ts
+  var isAtlas = (j) => j && typeof j === "object" && j.frames && j.meta && typeof j.meta.image === "string";
+  function mkRect(Rectangle, x, y, w, h) {
+    return new Rectangle(x, y, w, h);
+  }
+  function mkSubTex(Texture, baseTex, frame, orig, trim, rotate, anchor) {
+    let t;
+    try {
+      t = new Texture({ source: baseTex.source, frame, orig, trim: trim || void 0, rotate: rotate || 0 });
+    } catch {
+      t = new Texture(baseTex.baseTexture ?? baseTex, frame, orig, trim || void 0, rotate || 0);
+    }
+    try {
+      if (t && !t.label) t.label = frame?.width && frame?.height ? `sub:${frame.width}x${frame.height}` : "subtex";
+    } catch {
+    }
+    if (anchor) {
+      const target = t;
+      if (target.defaultAnchor?.set) {
+        try {
+          target.defaultAnchor.set(anchor.x, anchor.y);
+        } catch {
+        }
+      }
+      if (target.defaultAnchor && !target.defaultAnchor.set) {
+        target.defaultAnchor.x = anchor.x;
+        target.defaultAnchor.y = anchor.y;
+      }
+      if (!target.defaultAnchor) {
+        target.defaultAnchor = { x: anchor.x, y: anchor.y };
+      }
+    }
+    try {
+      t?.updateUvs?.();
+    } catch {
+    }
+    return t;
+  }
+  function buildAtlasTextures(data, baseTex, texMap, atlasBases, ctors) {
+    const { Texture, Rectangle } = ctors;
+    try {
+      if (baseTex && !baseTex.label) baseTex.label = data?.meta?.image || "atlasBase";
+    } catch {
+    }
+    rememberBaseTex(baseTex, atlasBases);
+    for (const [k, fd] of Object.entries(data.frames)) {
+      const fr = fd.frame;
+      const rot = fd.rotated ? 2 : 0;
+      const w = fd.rotated ? fr.h : fr.w;
+      const h = fd.rotated ? fr.w : fr.h;
+      const frame = mkRect(Rectangle, fr.x, fr.y, w, h);
+      const ss = fd.sourceSize || { w: fr.w, h: fr.h };
+      const orig = mkRect(Rectangle, 0, 0, ss.w, ss.h);
+      let trim = null;
+      if (fd.trimmed && fd.spriteSourceSize) {
+        const s = fd.spriteSourceSize;
+        trim = mkRect(Rectangle, s.x, s.y, s.w, s.h);
+      }
+      const t = mkSubTex(Texture, baseTex, frame, orig, trim, rot, fd.anchor || null);
+      try {
+        t.label = k;
+      } catch {
+      }
+      rememberBaseTex(t, atlasBases);
+      texMap.set(k, t);
+    }
+  }
+
+  // src/sprite/data/catalogIndexer.ts
+  function buildItemsFromTextures(tex, cfg) {
+    const keys = [...tex.keys()].sort((a, b) => a.localeCompare(b));
+    const used = /* @__PURE__ */ new Set();
+    const items = [];
+    const cats = /* @__PURE__ */ new Map();
+    const addToCat = (key2, item) => {
+      const cat = categoryOf(key2, cfg);
+      if (!cats.has(cat)) cats.set(cat, []);
+      cats.get(cat).push(item);
+    };
+    for (const key2 of keys) {
+      const texEntry = tex.get(key2);
+      if (!texEntry || used.has(key2)) continue;
+      const anim = animParse(key2);
+      if (!anim) {
+        const item = { key: key2, isAnim: false, first: texEntry };
+        items.push(item);
+        addToCat(key2, item);
+        continue;
+      }
+      const frames = [];
+      for (const candidate of keys) {
+        const maybe = animParse(candidate);
+        if (!maybe || maybe.baseKey !== anim.baseKey) continue;
+        const t = tex.get(candidate);
+        if (!t) continue;
+        frames.push({ idx: maybe.idx, tex: t });
+        used.add(candidate);
+      }
+      frames.sort((a, b) => a.idx - b.idx);
+      const ordered = frames.map((f) => f.tex);
+      if (ordered.length === 1) {
+        const item = { key: anim.baseKey, isAnim: false, first: ordered[0] };
+        items.push(item);
+        addToCat(anim.baseKey, item);
+      } else if (ordered.length > 1) {
+        const item = {
+          key: anim.baseKey,
+          isAnim: true,
+          frames: ordered,
+          first: ordered[0],
+          count: ordered.length
+        };
+        items.push(item);
+        addToCat(anim.baseKey, item);
+      }
+    }
+    return { items, cats };
+  }
+
+  // src/sprite/api/expose.ts
+  init_variantBuilder();
+  function exposeApi(state3, hud) {
+    const root = globalThis.unsafeWindow || globalThis;
+    const api = {
+      open() {
+        hud.root?.style && (hud.root.style.display = "block");
+        state3.open = true;
+      },
+      close() {
+        hud.root?.style && (hud.root.style.display = "none");
+        state3.open = false;
+      },
+      toggle() {
+        state3.open ? api.close() : api.open();
+      },
+      setCategory(cat) {
+        state3.cat = cat || "__all__";
+      },
+      setFilterText(text) {
+        state3.q = String(text || "").trim();
+      },
+      setSpriteFilter(name) {
+        state3.f = name;
+        state3.mutOn = false;
+      },
+      setMutation(on, ...muts) {
+        state3.mutOn = !!on;
+        state3.f = "";
+        state3.mutations = state3.mutOn ? muts.filter(Boolean).map((name) => name) : [];
+      },
+      filters() {
+        return [];
+      },
+      categories() {
+        return [...state3.cats.keys()].sort((a, b) => a.localeCompare(b));
+      },
+      cacheStats() {
+        return { entries: state3.lru.size, cost: state3.cost };
+      },
+      clearCache() {
+        clearVariantCache(state3);
+      },
+      curVariant: () => curVariant(state3)
+    };
+    root.MGSpriteCatalog = api;
+    return api;
+  }
+
+  // src/sprite/index.ts
+  init_variantBuilder();
+  var ctx = createSpriteContext();
+  var hooks = createPixiHooks();
+  var parseFrameCategory = (key2) => {
+    const parts = String(key2 || "").split("/").filter(Boolean);
+    if (!parts.length) return null;
+    const start2 = parts[0] === "sprite" || parts[0] === "sprites" ? 1 : 0;
+    const category = parts[start2] ?? "";
+    const id = parts.slice(start2 + 1).join("/") || parts[parts.length - 1] || "";
+    if (!category || !id) return null;
+    return { category, id };
+  };
+  var yieldToBrowser = () => {
+    return new Promise((resolve2) => {
+      const win = typeof window !== "undefined" ? window : null;
+      if (win?.requestIdleCallback) {
+        win.requestIdleCallback(() => resolve2(), { timeout: 32 });
+      } else if (typeof requestAnimationFrame === "function") {
+        requestAnimationFrame(() => resolve2());
+      } else {
+        setTimeout(resolve2, 0);
+      }
+    });
+  };
+  var delay4 = (ms) => new Promise((resolve2) => setTimeout(resolve2, ms));
+  async function warmupSpritesFromAtlases(atlasJsons, blobs) {
+    const FRAME_YIELD_EVERY = 6;
+    const MAX_CHUNK_MS = 10;
+    let framesSinceYield = 0;
+    let chunkStart = typeof performance !== "undefined" ? performance.now() : Date.now();
+    const resetChunk = () => {
+      chunkStart = typeof performance !== "undefined" ? performance.now() : Date.now();
+    };
+    const yieldIfNeeded = async () => {
+      const now2 = typeof performance !== "undefined" ? performance.now() : Date.now();
+      const elapsed = now2 - chunkStart;
+      if (framesSinceYield >= FRAME_YIELD_EVERY || elapsed >= MAX_CHUNK_MS) {
+        framesSinceYield = 0;
+        await yieldToBrowser();
+        resetChunk();
+      }
+    };
+    for (const [path, data] of Object.entries(atlasJsons)) {
+      if (!isAtlas(data)) continue;
+      const frames = data.frames || {};
+      if (!frames || !Object.keys(frames).length) continue;
+      const imgPath = relPath(path, data.meta.image);
+      const blob = blobs.get(imgPath);
+      if (!blob) continue;
+      let img;
+      try {
+        img = await blobToImage(blob);
+      } catch (error) {
+        console.warn("[MG SpriteCatalog] warmup decode failed", { imgPath, error });
+        continue;
+      }
+      for (const [frameKey, frameData] of Object.entries(frames)) {
+        const parsed = parseFrameCategory(frameKey);
+        if (!parsed) continue;
+        try {
+          const dataUrl = drawFrameToDataURL(img, frameKey, frameData);
+          if (!dataUrl) continue;
+          primeSpriteData(parsed.category, parsed.id, dataUrl);
+        } catch (error) {
+          console.warn("[MG SpriteCatalog] warmup frame failed", { frameKey, error });
+        }
+        framesSinceYield += 1;
+        await yieldIfNeeded();
+      }
+      framesSinceYield = 0;
+      await yieldToBrowser();
+      resetChunk();
+    }
+  }
+  var prefetchPromise = null;
+  function detectGameVersion() {
+    try {
+      initGameVersion();
+      if (gameVersion) return gameVersion;
+    } catch {
+    }
+    const root = globalThis.unsafeWindow || globalThis;
+    const gv = root.gameVersion || root.MG_gameVersion || root.__MG_GAME_VERSION__;
+    if (gv) {
+      if (typeof gv.getVersion === "function") return gv.getVersion();
+      if (typeof gv.get === "function") return gv.get();
+      if (typeof gv === "string") return gv;
+    }
+    const scriptUrls = Array.from(document.scripts || []).map((s) => s.src).filter(Boolean);
+    const linkUrls = Array.from(document.querySelectorAll("link[href]") || []).map(
+      (l) => l.href
+    );
+    const urls = [...scriptUrls, ...linkUrls];
+    for (const u of urls) {
+      const m = u.match(/\/version\/([^/]+)\//);
+      if (m?.[1]) return m[1];
+    }
+    throw new Error("Version not found.");
+  }
+  async function resolveGameVersionWithRetry(timeoutMs = 6e3) {
+    const deadline = Date.now() + timeoutMs;
+    let lastError = null;
+    while (Date.now() < deadline) {
+      try {
+        const v = detectGameVersion();
+        if (v) return v;
+      } catch (err) {
+        lastError = err;
+      }
+      await delay4(120);
+    }
+    throw lastError ?? new Error("Version not found.");
+  }
+  function drawFrameToDataURL(img, frameKey, data) {
+    try {
+      const fr = data.frame;
+      const trimmed = data.trimmed && data.spriteSourceSize;
+      const sourceSize = data.sourceSize || { w: fr.w, h: fr.h };
+      const canvas = document.createElement("canvas");
+      canvas.width = sourceSize.w;
+      canvas.height = sourceSize.h;
+      const ctx2 = canvas.getContext("2d");
+      if (!ctx2) return null;
+      ctx2.imageSmoothingEnabled = false;
+      if (data.rotated) {
+        ctx2.save();
+        ctx2.translate(sourceSize.w / 2, sourceSize.h / 2);
+        ctx2.rotate(-Math.PI / 2);
+        ctx2.drawImage(
+          img,
+          fr.x,
+          fr.y,
+          fr.h,
+          fr.w,
+          -fr.h / 2,
+          -fr.w / 2,
+          fr.h,
+          fr.w
+        );
+        ctx2.restore();
+      } else {
+        const dx = trimmed ? data.spriteSourceSize.x : 0;
+        const dy = trimmed ? data.spriteSourceSize.y : 0;
+        ctx2.drawImage(img, fr.x, fr.y, fr.w, fr.h, dx, dy, fr.w, fr.h);
+      }
+      return canvas.toDataURL("image/png");
+    } catch {
+      return null;
+    }
+  }
+  async function prefetchAtlas(base) {
+    try {
+      const manifest = await getJSON(joinPath(base, "manifest.json"));
+      const atlasJsons = await loadAtlasJsons(base, manifest);
+      const blobs = /* @__PURE__ */ new Map();
+      for (const [path, data] of Object.entries(atlasJsons)) {
+        if (!isAtlas(data)) continue;
+        const imgPath = relPath(path, data.meta.image);
+        try {
+          const blob = await getBlob(joinPath(base, imgPath));
+          blobs.set(imgPath, blob);
+        } catch {
+        }
+      }
+      const warmupKeys = [];
+      Object.entries(atlasJsons).forEach(([, data]) => {
+        if (!isAtlas(data)) return;
+        Object.keys(data.frames || {}).forEach((frameKey) => warmupKeys.push(frameKey));
+      });
+      if (warmupKeys.length) {
+        try {
+          primeWarmupKeys(warmupKeys);
+        } catch {
+        }
+      }
+      try {
+        warmupSpriteCache();
+      } catch {
+      }
+      if (warmupKeys.length) {
+        warmupSpritesFromAtlases(atlasJsons, blobs).catch(() => {
+        });
+      }
+      return { base, atlasJsons, blobs };
+    } catch {
+      return null;
+    }
+  }
+  async function loadTextures(base, prefetched) {
+    const usePrefetched = prefetched && prefetched.base === base ? prefetched : null;
+    const atlasJsons = usePrefetched?.atlasJsons ?? await loadAtlasJsons(base, await getJSON(joinPath(base, "manifest.json")));
+    const ctors = ctx.state.ctors;
+    if (!ctors?.Texture || !ctors?.Rectangle) throw new Error("PIXI constructors missing");
+    for (const [path, data] of Object.entries(atlasJsons)) {
+      if (!isAtlas(data)) continue;
+      const imgPath = relPath(path, data.meta.image);
+      const blob = usePrefetched?.blobs.get(imgPath) ?? usePrefetched?.blobs.get(relPath(path, data.meta.image)) ?? await getBlob(joinPath(base, imgPath));
+      const img = await blobToImage(blob);
+      const baseTex = ctors.Texture.from(img);
+      buildAtlasTextures(data, baseTex, ctx.state.tex, ctx.state.atlasBases, {
+        Texture: ctors.Texture,
+        Rectangle: ctors.Rectangle
+      });
+    }
+    const { items, cats } = buildItemsFromTextures(ctx.state.tex, ctx.cfg);
+    ctx.state.items = items;
+    ctx.state.filtered = items.slice();
+    ctx.state.cats = cats;
+    ctx.state.loaded = true;
+  }
+  function ensureDocumentReady() {
+    if (document.readyState !== "loading") return Promise.resolve();
+    return new Promise((resolve2) => {
+      const onReady = () => {
+        document.removeEventListener("DOMContentLoaded", onReady);
+        resolve2();
+      };
+      document.addEventListener("DOMContentLoaded", onReady);
+    });
+  }
+  async function resolvePixiFast() {
+    const root = globalThis.unsafeWindow || globalThis;
+    const check = () => {
+      const app = root.__PIXI_APP__ || root.PIXI_APP || root.app || null;
+      const renderer = root.__PIXI_RENDERER__ || root.PIXI_RENDERER__ || root.renderer || app?.renderer || null;
+      if (app && renderer) {
+        return { app, renderer, version: root.__PIXI_VERSION__ || null };
+      }
+      return null;
+    };
+    const hit = check();
+    if (hit) return hit;
+    const maxMs = 5e3;
+    const start2 = performance.now();
+    while (performance.now() - start2 < maxMs) {
+      await new Promise((r) => setTimeout(r, 50));
+      const retry = check();
+      if (retry) return retry;
+    }
+    const waited = await waitForPixi(hooks);
+    return { app: waited.app, renderer: waited.renderer, version: waited.version };
+  }
+  async function start() {
+    if (ctx.state.started) return;
+    ctx.state.started = true;
+    let version;
+    const retryDeadline = typeof performance !== "undefined" ? performance.now() + 8e3 : Date.now() + 8e3;
+    for (; ; ) {
+      try {
+        version = await resolveGameVersionWithRetry();
+        console.info("[MG SpriteCatalog] game version resolved", version);
+        break;
+      } catch (err) {
+        const now2 = typeof performance !== "undefined" ? performance.now() : Date.now();
+        if (now2 >= retryDeadline) {
+          console.error("[MG SpriteCatalog] failed to resolve game version", err);
+          throw err;
+        }
+        console.warn("[MG SpriteCatalog] retrying game version detection...");
+        await delay4(200);
+      }
+    }
+    const base = `${ctx.cfg.origin.replace(/\/$/, "")}/version/${version}/assets/`;
+    if (!prefetchPromise) {
+      prefetchPromise = prefetchAtlas(base);
+    }
+    const { app, renderer: _renderer, version: pixiVersion } = await resolvePixiFast();
+    await ensureDocumentReady();
+    ctx.state.ctors = getCtors(app);
+    const renderer = _renderer || app?.renderer || app?.render || null;
+    ctx.state.app = app;
+    ctx.state.renderer = renderer;
+    ctx.state.version = pixiVersion || version || version === "" ? pixiVersion ?? version : detectGameVersion();
+    ctx.state.base = base;
+    ctx.state.sig = curVariant(ctx.state).sig;
+    const prefetched = await (prefetchPromise ?? Promise.resolve(null));
+    await loadTextures(ctx.state.base, prefetched);
+    const hud = {
+      open() {
+        ctx.state.open = true;
+      },
+      close() {
+        ctx.state.open = false;
+      },
+      toggle() {
+        ctx.state.open ? this.close() : this.open();
+      },
+      layout() {
+      },
+      root: void 0
+    };
+    ctx.state.open = true;
+    app.ticker?.add?.(() => {
+      processJobs(ctx.state, ctx.cfg);
+    });
+    exposeApi(ctx.state, hud);
+    const g = globalThis;
+    const uw = g.unsafeWindow || g;
+    const spriteApi = await Promise.resolve().then(() => (init_spriteApi(), spriteApi_exports));
+    const ensureOverlayHost = () => {
+      const id = "mg-sprite-overlay";
+      let host = document.getElementById(id);
+      if (!host) {
+        host = document.createElement("div");
+        host.id = id;
+        host.style.cssText = "position:fixed;top:8px;left:8px;z-index:2147480000;display:flex;flex-wrap:wrap;gap:8px;pointer-events:auto;background:transparent;align-items:flex-start;";
+        document.body.appendChild(host);
+      }
+      return host;
+    };
+    const getSpriteDim = (tex, key2) => {
+      const sources = [
+        tex?.orig,
+        tex?._orig,
+        tex?.frame,
+        tex?._frame,
+        tex
+      ];
+      for (const src of sources) {
+        const value = src?.[key2];
+        if (typeof value === "number" && Number.isFinite(value) && value > 0) {
+          return value;
+        }
+      }
+      return null;
+    };
+    const padCanvasToSpriteBounds = (source, tex) => {
+      const rawW = source.width || 1;
+      const rawH = source.height || 1;
+      const baseW = Math.max(rawW, Math.round(getSpriteDim(tex, "width") ?? rawW) || rawW);
+      const baseH = Math.max(rawH, Math.round(getSpriteDim(tex, "height") ?? rawH) || rawH);
+      const trim = tex?.trim ?? tex?._trim ?? null;
+      let offsetX = trim && typeof trim.x === "number" ? Math.round(trim.x) : Math.round((baseW - rawW) / 2);
+      let offsetY = trim && typeof trim.y === "number" ? Math.round(trim.y) : Math.round((baseH - rawH) / 2);
+      offsetX = Math.max(0, Math.min(baseW - rawW, offsetX));
+      offsetY = Math.max(0, Math.min(baseH - rawH, offsetY));
+      if (baseW === rawW && baseH === rawH && offsetX === 0 && offsetY === 0) {
+        return source;
+      }
+      const canvas = document.createElement("canvas");
+      canvas.width = baseW;
+      canvas.height = baseH;
+      const ctx2 = canvas.getContext("2d");
+      if (!ctx2) return source;
+      ctx2.imageSmoothingEnabled = false;
+      ctx2.clearRect(0, 0, baseW, baseH);
+      ctx2.drawImage(source, offsetX, offsetY);
+      return canvas;
+    };
+    const renderTextureToCanvas = (tex) => {
+      try {
+        const spr = new ctx.state.ctors.Sprite(tex);
+        const extracted = ctx.state.renderer.extract.canvas(spr, { resolution: 1 });
+        spr.destroy?.({ children: true, texture: false, baseTexture: false });
+        return padCanvasToSpriteBounds(extracted, tex);
+      } catch {
+        return null;
+      }
+    };
+    const service = {
+      ready: Promise.resolve(),
+      // overwritten below
+      state: ctx.state,
+      cfg: ctx.cfg,
+      list(category = "any") {
+        return spriteApi.listItemsByCategory(ctx.state, category);
+      },
+      getBaseSprite(params) {
+        return spriteApi.getBaseSprite(params, ctx.state);
+      },
+      getSpriteWithMutations(params) {
+        return spriteApi.getSpriteWithMutations(params, ctx.state, ctx.cfg);
+      },
+      buildVariant(mutations) {
+        return spriteApi.buildVariant(mutations);
+      },
+      renderToCanvas(arg) {
+        const tex = arg?.isTexture || arg?.frame ? arg : service.getSpriteWithMutations(arg);
+        if (!tex) return null;
+        return renderTextureToCanvas(tex);
+      },
+      async renderToDataURL(arg, type = "image/png", quality) {
+        const c = service.renderToCanvas(arg);
+        if (!c) return null;
+        return c.toDataURL(type, quality);
+      },
+      // Render and append to a fixed overlay; each sprite gets its own wrapper.
+      renderOnCanvas(arg, opts = {}) {
+        const c = service.renderToCanvas(arg);
+        if (!c) return null;
+        c.style.background = "transparent";
+        c.style.display = "block";
+        let mutW = c.width || c.clientWidth;
+        let mutH = c.height || c.clientHeight;
+        let baseW = mutW;
+        let baseH = mutH;
+        if (arg && !arg.isTexture && !arg.frame) {
+          const baseTex = service.getBaseSprite(arg);
+          if (baseTex) {
+            baseW = baseTex?.orig?.width ?? baseTex?._orig?.width ?? baseTex?.frame?.width ?? baseTex?._frame?.width ?? baseTex?.width ?? baseW;
+            baseH = baseTex?.orig?.height ?? baseTex?._orig?.height ?? baseTex?.frame?.height ?? baseTex?._frame?.height ?? baseTex?.height ?? baseH;
+          }
+        }
+        const scaleToBase = Math.min(baseW / mutW, baseH / mutH, 1);
+        let logicalW = mutW * scaleToBase;
+        let logicalH = mutH * scaleToBase;
+        const { maxWidth, maxHeight, allowScaleUp } = opts;
+        if (maxWidth || maxHeight) {
+          const scaleW = maxWidth ? maxWidth / logicalW : 1;
+          const scaleH = maxHeight ? maxHeight / logicalH : 1;
+          let scale = Math.min(scaleW || 1, scaleH || 1);
+          if (!allowScaleUp) scale = Math.min(scale, 1);
+          logicalW = Math.floor(logicalW * scale);
+          logicalH = Math.floor(logicalH * scale);
+        }
+        if (logicalW) c.style.width = `${logicalW}px`;
+        if (logicalH) c.style.height = `${logicalH}px`;
+        const wrap = document.createElement("div");
+        wrap.style.cssText = "display:inline-flex;align-items:flex-start;justify-content:flex-start;padding:0;margin:0;background:transparent;border:none;flex:0 0 auto;";
+        wrap.appendChild(c);
+        ensureOverlayHost().appendChild(wrap);
+        return { wrap, canvas: c };
+      },
+      clearOverlay() {
+        const host = document.getElementById("mg-sprite-overlay");
+        if (host) host.remove();
+      },
+      renderAnimToCanvases(params) {
+        const item = ctx.state.items.find((it) => it.key === `sprite/${params.category}/${params.id}` || it.key === params.id);
+        if (!item) return [];
+        if (item.isAnim && item.frames?.length) {
+          const texes = params?.mutations?.length ? [service.getSpriteWithMutations(params)] : item.frames;
+          return texes.map((t2) => renderTextureToCanvas(t2)).filter(Boolean);
+        }
+        const t = service.getSpriteWithMutations(params);
+        return t ? [renderTextureToCanvas(t)] : [];
+      }
+    };
+    service.ready = Promise.resolve();
+    uw.__MG_SPRITE_STATE__ = ctx.state;
+    uw.__MG_SPRITE_CFG__ = ctx.cfg;
+    uw.__MG_SPRITE_API__ = spriteApi;
+    uw.__MG_SPRITE_SERVICE__ = service;
+    uw.getSpriteWithMutations = service.getSpriteWithMutations;
+    uw.getBaseSprite = service.getBaseSprite;
+    uw.buildSpriteVariant = service.buildVariant;
+    uw.listSpritesByCategory = service.list;
+    uw.renderSpriteToCanvas = service.renderToCanvas;
+    uw.renderSpriteToDataURL = service.renderToDataURL;
+    uw.MG_SPRITE_HELPERS = service;
+    console.log("[MG SpriteCatalog] ready", {
+      version: ctx.state.version,
+      pixi: version,
+      textures: ctx.state.tex.size,
+      items: ctx.state.items.length,
+      cats: ctx.state.cats.size
+    });
+  }
+  var __mg_ready = start();
+  __mg_ready.catch((err) => console.error("[MG SpriteCatalog] failed", err));
+
+  // src/main.ts
+  (async function() {
+    "use strict";
+    installPageWebSocketHook();
+    initGameVersion();
+    const ariesMod = installAriesModApi();
+    try {
+      warmupSpriteCache();
+    } catch {
+    }
+    tos.init();
     EditorService.init();
     mountHUD({
       onRegister(register) {

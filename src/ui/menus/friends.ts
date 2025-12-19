@@ -25,11 +25,121 @@ import {
   fakeStatsShow,
   fakeJournalShow,
 } from "../../services/fakeModal";
+import { skipNextActivityLogHistoryReopen } from "../../services/activityLogHistory";
 import { toastSimple } from "../../ui/toast";
 
 type LoadFriendsOptions = {
   force?: boolean;
 };
+
+const FRIENDS_MENU_REFRESH_STYLE_ID = "friends-menu-refresh-style";
+
+function ensureFriendsMenuRefreshStyle(): void {
+  if (document.getElementById(FRIENDS_MENU_REFRESH_STYLE_ID)) return;
+  const style = document.createElement("style");
+  style.id = FRIENDS_MENU_REFRESH_STYLE_ID;
+  style.textContent = `
+@keyframes friends-menu-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+`;
+  document.head.appendChild(style);
+}
+
+type RefreshIndicatorHandle = {
+  setVisible: (visible: boolean) => void;
+};
+
+function createRefreshIndicator(
+  scrollTarget: HTMLElement,
+  container: HTMLElement,
+  offsetY = 14
+): RefreshIndicatorHandle {
+  ensureFriendsMenuRefreshStyle();
+  const computedPosition = container.style.position || "";
+  if (!computedPosition || computedPosition === "static") {
+    container.style.position = "relative";
+  }
+
+  const indicator = document.createElement("div");
+  Object.assign(indicator.style, {
+    position: "absolute",
+    top: `${offsetY}px`,
+    right: "14px",
+    width: "28px",
+    height: "28px",
+    borderRadius: "999px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    background: "rgba(14, 16, 25, 0.9)",
+    border: "1px solid rgba(255, 255, 255, 0.08)",
+    boxShadow: "0 10px 24px rgba(0, 0, 0, 0.45)",
+    opacity: "0",
+    visibility: "hidden",
+    pointerEvents: "none",
+    transition: "opacity 160ms ease, transform 160ms ease",
+    zIndex: "3",
+  } as CSSStyleDeclaration);
+
+  const spinner = document.createElement("div");
+  Object.assign(spinner.style, {
+    width: "16px",
+    height: "16px",
+    borderRadius: "999px",
+    border: "2px solid rgba(248, 250, 252, 0.16)",
+    borderTopColor: "#f8fafc",
+    animation: "friends-menu-spin 1s linear infinite",
+  } as CSSStyleDeclaration);
+  indicator.appendChild(spinner);
+
+  container.appendChild(indicator);
+
+  let isVisible = false;
+  let hideTimeout: number | null = null;
+
+  const hide = () => {
+    if (hideTimeout) {
+      window.clearTimeout(hideTimeout);
+      hideTimeout = null;
+    }
+    indicator.style.opacity = "0";
+    const onTransitionEnd = () => {
+      if (!isVisible) {
+        indicator.style.visibility = "hidden";
+      }
+    };
+    indicator.addEventListener("transitionend", onTransitionEnd, { once: true });
+    hideTimeout = window.setTimeout(() => {
+      if (!isVisible) {
+        indicator.style.visibility = "hidden";
+      }
+      hideTimeout = null;
+    }, 220);
+  };
+
+  const setVisible = (next: boolean) => {
+    if (next) {
+      if (hideTimeout) {
+        window.clearTimeout(hideTimeout);
+        hideTimeout = null;
+      }
+      isVisible = true;
+      indicator.style.visibility = "visible";
+      indicator.style.opacity = "1";
+    } else if (isVisible) {
+      isVisible = false;
+      hide();
+    }
+  };
+
+  return { setVisible };
+}
 
 type GardenPreviewState = {
   button: HTMLButtonElement;
@@ -58,6 +168,8 @@ async function stopActiveGardenPreview(keepButton?: HTMLButtonElement): Promise<
 
 let refreshAllFriends: ((options?: LoadFriendsOptions) => Promise<void>) | null =
   null;
+let refreshIncomingRequests: ((options?: { force?: boolean }) => Promise<void>) | null =
+  null;
 
 function formatLastSeen(timestamp?: string | null): string | null {
   if (!timestamp) return null;
@@ -79,9 +191,10 @@ function formatLastSeen(timestamp?: string | null): string | null {
   return `${days}d`;
 }
 
-function formatCoinAmount(value: number | null): string | null {
-  if (value == null || !Number.isFinite(value)) return null;
-  const abs = Math.abs(value);
+function formatCoinAmount(value: number | string | null): string | null {
+  const numeric = typeof value === "string" ? Number(value) : value;
+  if (numeric == null || !Number.isFinite(numeric)) return null;
+  const abs = Math.abs(numeric);
   const units: Array<{ threshold: number; suffix: string }> = [
     { threshold: 1_000_000_000_000, suffix: "T" },
     { threshold: 1_000_000_000, suffix: "B" },
@@ -90,11 +203,11 @@ function formatCoinAmount(value: number | null): string | null {
   ];
   for (const { threshold, suffix } of units) {
     if (abs >= threshold) {
-      const normalized = value / threshold;
+      const normalized = numeric / threshold;
       return `${normalized.toFixed(2)}${suffix}`;
     }
   }
-  return value.toLocaleString("en-US");
+  return numeric.toLocaleString("en-US");
 }
 
 function createPrivacyBadge(label: string, enabled: boolean): HTMLElement {
@@ -127,6 +240,10 @@ function createFriendRow(ui: Menu, friend: PlayerView) {
   card.style.cursor = "default";
 
   const roomInfo = friend.room ?? {};
+  const roomIsPrivate =
+    Boolean(roomInfo.isPrivate) ||
+    Boolean(roomInfo.is_private) ||
+    Boolean(friend.privacy?.hideRoomFromPublicList);
   const joinRoomId =
     typeof roomInfo.id === "string"
       ? roomInfo.id.trim()
@@ -139,6 +256,7 @@ function createFriendRow(ui: Menu, friend: PlayerView) {
     Number.isFinite(Number(rawPlayerCount)) && rawPlayerCount !== null
       ? Math.floor(Number(rawPlayerCount))
       : null;
+  const isFriendOnline = Boolean(friend.isOnline);
   const isDiscordTarget = RoomService.isDiscordActivity();
   const ROOM_CAPACITY = 6;
   const seatsLeft =
@@ -150,9 +268,13 @@ function createFriendRow(ui: Menu, friend: PlayerView) {
     typeof playersCount === "number" &&
     seatsLeft !== null &&
     seatsLeft > 0 &&
-    !isDiscordTarget;
-  const joinButtonTitle = canJoinRoom
-    ? "Join this room"
+    !isDiscordTarget &&
+    !roomIsPrivate &&
+    isFriendOnline;
+  const joinButtonTitle = roomIsPrivate
+    ? "Room is private"
+    : !isFriendOnline
+    ? "Player is offline"
     : isDiscordTarget
     ? "Joining rooms is disabled on Discord"
     : playersCount !== null && playersCount >= 6
@@ -222,15 +344,14 @@ function createFriendRow(ui: Menu, friend: PlayerView) {
   statusRow.style.gap = "6px";
 
   const statusIndicator = document.createElement("span");
-  const isOnline = Boolean(friend.isOnline);
   statusIndicator.style.width = "10px";
   statusIndicator.style.height = "10px";
   statusIndicator.style.borderRadius = "50%";
-  statusIndicator.style.background = isOnline ? "#34d399" : "#f87171";
+  statusIndicator.style.background = isFriendOnline ? "#34d399" : "#f87171";
   statusIndicator.style.display = "inline-block";
 
   const statusText = document.createElement("span");
-  statusText.textContent = isOnline ? "Online" : "Offline";
+  statusText.textContent = isFriendOnline ? "Online" : "Offline";
   statusText.style.fontSize = "11px";
   statusText.style.opacity = "0.7";
 
@@ -304,11 +425,15 @@ function createFriendRow(ui: Menu, friend: PlayerView) {
   seatsInfo.style.whiteSpace = "nowrap";
   seatsInfo.style.textAlign = "center";
   seatsInfo.style.margin = "0";
-  if (seatsLeft !== null) {
+  if (roomIsPrivate) {
+    seatsInfo.textContent = "Private";
+  } else if (!isFriendOnline) {
+    seatsInfo.textContent = "";
+  } else if (seatsLeft !== null) {
     seatsInfo.textContent =
       seatsLeft > 0 ? `${seatsLeft} slot${seatsLeft === 1 ? "" : "s"} left` : "Room full";
   } else {
-    seatsInfo.textContent = "Room size unknown";
+    seatsInfo.textContent = "";
   }
   joinControl.appendChild(seatsInfo);
   actionBlock.append(detailsBtn, joinControl);
@@ -357,16 +482,48 @@ function createFriendRow(ui: Menu, friend: PlayerView) {
   if (coinsText) {
     const coinsRow = document.createElement("div");
     coinsRow.style.display = "flex";
-    coinsRow.style.justifyContent = "flex-end";
-    coinsRow.style.paddingRight = "16px";
+    coinsRow.style.justifyContent = "flex-start";
     const coinsEl = document.createElement("div");
     coinsEl.textContent = `${coinsText} coins`;
     coinsEl.style.fontSize = "12px";
     coinsEl.style.opacity = "0.8";
     coinsEl.style.whiteSpace = "nowrap";
-    coinsEl.style.justifySelf = "end";
+    coinsEl.style.justifySelf = "start";
     coinsRow.append(coinsEl);
     detailsContent.append(coinsRow);
+  }
+  if (joinRoomId && isFriendOnline) {
+    const roomRow = document.createElement("div");
+    roomRow.style.display = "flex";
+    roomRow.style.alignItems = "center";
+    roomRow.style.gap = "8px";
+    roomRow.style.paddingRight = "16px";
+    const roomLabel = document.createElement("span");
+    roomLabel.textContent = "Room";
+    roomLabel.style.fontSize = "12px";
+    roomLabel.style.fontWeight = "600";
+    roomLabel.style.opacity = "0.8";
+    const roomValue = document.createElement("span");
+    roomValue.textContent = joinRoomId;
+    roomValue.style.fontSize = "12px";
+    roomValue.style.opacity = "0.9";
+    roomValue.style.whiteSpace = "nowrap";
+    roomRow.append(roomLabel);
+    if (roomIsPrivate) {
+      const lockIcon = document.createElement("span");
+      lockIcon.textContent = "🔒";
+      lockIcon.style.fontSize = "12px";
+      lockIcon.style.opacity = "0.8";
+      lockIcon.style.display = "inline-flex";
+      lockIcon.style.alignItems = "center";
+      lockIcon.style.justifyContent = "center";
+      lockIcon.style.lineHeight = "1";
+      lockIcon.title = "Room is private";
+      roomRow.append(lockIcon);
+    } else {
+      roomRow.append(roomValue);
+    }
+    detailsContent.append(roomRow);
   }
   const privacyRow = document.createElement("div");
   privacyRow.style.display = "flex";
@@ -506,7 +663,10 @@ function createFriendRow(ui: Menu, friend: PlayerView) {
       "Activity Log",
       "activityLog",
       (view) => view?.state?.activityLog ?? view?.state?.activityLogs ?? null,
-      (payload) => fakeActivityLogShow(payload, { open: true }),
+      (payload) => {
+        skipNextActivityLogHistoryReopen();
+        return fakeActivityLogShow(payload, { open: true });
+      },
     ),
   );
   buttonRow.appendChild(
@@ -598,8 +758,12 @@ function createFriendRow(ui: Menu, friend: PlayerView) {
 function renderAllTab(view: HTMLElement, ui: Menu) {
   view.innerHTML = "";
   const wrap = document.createElement("div");
-  wrap.style.display = "grid";
+  wrap.style.display = "flex";
+  wrap.style.flexDirection = "column";
   wrap.style.gap = "10px";
+  wrap.style.position = wrap.style.position || "relative";
+  wrap.style.height = "100%";
+  wrap.style.minHeight = "0";
 
   const controls = ui.flexRow({ align: "center", gap: 8 });
   const search = ui.inputText("Search for a friend...");
@@ -617,6 +781,13 @@ function renderAllTab(view: HTMLElement, ui: Menu) {
   statusMessage.style.opacity = "0.7";
   statusMessage.textContent = "Loading friends...";
 
+  const listContainer = document.createElement("div");
+  listContainer.style.display = "flex";
+  listContainer.style.flexDirection = "column";
+  listContainer.style.flex = "1";
+  listContainer.style.minHeight = "0";
+  listContainer.style.position = "relative";
+
   const list = document.createElement("div");
   list.style.display = "grid";
   list.style.gap = "8px";
@@ -624,15 +795,19 @@ function renderAllTab(view: HTMLElement, ui: Menu) {
   list.style.borderRadius = "10px";
   list.style.border = "1px solid rgba(255, 255, 255, 0.08)";
   list.style.background = "rgba(255, 255, 255, 0.02)";
-  list.style.maxHeight = "36vh";
+  list.style.flex = "1";
+  list.style.minHeight = "0";
   list.style.overflow = "auto";
 
-  wrap.append(controls, statusMessage, list);
+  listContainer.appendChild(list);
+  wrap.append(controls, statusMessage, listContainer);
   view.appendChild(wrap);
 
   let friends: PlayerView[] = [];
   let isLoading = false;
   let destroyed = false;
+  list.style.position = list.style.position || "relative";
+  const refreshIndicator = createRefreshIndicator(list, listContainer);
 
   const renderPlaceholder = (text: string) => {
     list.innerHTML = "";
@@ -646,8 +821,12 @@ function renderAllTab(view: HTMLElement, ui: Menu) {
 
   const normalizeQuery = (term: string) => term.trim().toLowerCase();
 
-  const renderList = () => {
+  const renderList = (options: { force?: boolean } = {}) => {
     if (destroyed) return;
+    const shouldForce = options.force ?? true;
+    if (isLoading && friends.length && !shouldForce) {
+      return;
+    }
     list.innerHTML = "";
     if (isLoading) {
       renderPlaceholder("Loading friends...");
@@ -684,16 +863,23 @@ function renderAllTab(view: HTMLElement, ui: Menu) {
     if (showOnlineOnly) {
       statusMessage.textContent = `${filtered.length} online friend${filtered.length !== 1 ? "s" : ""} shown.`;
     } else {
-      statusMessage.textContent = `${friends.length} friends loaded.`;
+      statusMessage.textContent = `${filtered.length} friend${filtered.length !== 1 ? "s" : ""} shown.`;
     }
+  };
+
+  const updateRefreshControls = () => {
+    const enabled = !destroyed && !isLoading;
+    ui.setButtonEnabled(refresh, enabled);
+    refresh.setAttribute("aria-busy", isLoading ? "true" : "false");
   };
 
   const loadFriends = async (options?: LoadFriendsOptions) => {
     if (destroyed) return;
     isLoading = true;
-    statusMessage.textContent = "Loading friends...";
-    refresh.disabled = true;
-    renderList();
+    statusMessage.textContent = friends.length ? "Refreshing friends..." : "Loading friends...";
+    refreshIndicator.setVisible(true);
+    updateRefreshControls();
+    renderList({ force: friends.length === 0 });
 
     try {
       const player = await playerDatabaseUserId.get();
@@ -707,29 +893,30 @@ function renderAllTab(view: HTMLElement, ui: Menu) {
         const cached = getCachedFriendsWithViews();
         if (cached.length) {
           friends = cached;
-          statusMessage.textContent = `${friends.length} friends loaded.`;
-          return;
-        }
+        statusMessage.textContent = `${friends.length} friends loaded.`;
+        return;
       }
-      friends = await fetchFriendsWithViews(player);
-      statusMessage.textContent = friends.length
-        ? `${friends.length} friends loaded.`
-        : "You have no friends yet.";
-    } catch (error) {
-      console.error("[FriendsMenu] Failed to load friends", error);
-      friends = [];
-      statusMessage.textContent = "Failed to load friends.";
-      renderPlaceholder("Unable to load friends.");
-      return;
-    } finally {
-      isLoading = false;
-      refresh.disabled = false;
-      renderList();
     }
-  };
+    friends = await fetchFriendsWithViews(player);
+    statusMessage.textContent = friends.length
+      ? `${friends.length} friends loaded.`
+      : "You have no friends yet.";
+  } catch (error) {
+    console.error("[FriendsMenu] Failed to load friends", error);
+    friends = [];
+    statusMessage.textContent = "Failed to load friends.";
+    renderPlaceholder("Unable to load friends.");
+    return;
+  } finally {
+    isLoading = false;
+    refreshIndicator.setVisible(false);
+    updateRefreshControls();
+    renderList({ force: true });
+  }
+};
 
   search.addEventListener("input", () => {
-    renderList();
+    renderList({ force: true });
   });
 
   refresh.addEventListener("click", () => {
@@ -738,7 +925,7 @@ function renderAllTab(view: HTMLElement, ui: Menu) {
 
   const unsubscribeSettings = onFriendSettingsChange(() => {
     if (!destroyed) {
-      renderList();
+      renderList({ force: true });
     }
   });
 
@@ -757,8 +944,12 @@ function renderAllTab(view: HTMLElement, ui: Menu) {
 function renderAddFriendTab(view: HTMLElement, ui: Menu) {
   view.innerHTML = "";
   const layout = document.createElement("div");
-  layout.style.display = "grid";
+  layout.style.display = "flex";
+  layout.style.flexDirection = "column";
   layout.style.gap = "12px";
+  layout.style.height = "100%";
+  layout.style.minHeight = "0";
+  layout.style.flex = "1";
 
   const profileCard = ui.card("My profile");
   profileCard.body.style.display = "grid";
@@ -913,8 +1104,15 @@ function renderAddFriendTab(view: HTMLElement, ui: Menu) {
 function renderFriendRequestsTab(view: HTMLElement, ui: Menu) {
   view.innerHTML = "";
   const card = ui.card("Incoming requests");
-  card.body.style.display = "grid";
+  card.root.style.display = "flex";
+  card.root.style.flexDirection = "column";
+  card.root.style.height = "100%";
+  card.root.style.minHeight = "0";
+  card.body.style.display = "flex";
+  card.body.style.flexDirection = "column";
   card.body.style.gap = "10px";
+  card.body.style.flex = "1";
+  card.body.style.minHeight = "0";
 
   const controls = ui.flexRow({ justify: "end", align: "center" });
   const requestsRefresh = ui.btn("Refresh", { size: "sm", variant: "ghost" });
@@ -935,12 +1133,24 @@ function renderFriendRequestsTab(view: HTMLElement, ui: Menu) {
   requestsStatus.textContent = "";
   card.body.appendChild(requestsStatus);
 
+  const requestsListWrapper = document.createElement("div");
+  requestsListWrapper.style.position = requestsListWrapper.style.position || "relative";
+  requestsListWrapper.style.flex = "1";
+  requestsListWrapper.style.display = "flex";
+  requestsListWrapper.style.flexDirection = "column";
+  requestsListWrapper.style.minHeight = "0";
+
   const requestsList = document.createElement("div");
   requestsList.style.display = "grid";
   requestsList.style.gap = "8px";
-  requestsList.style.maxHeight = "26vh";
+  requestsList.style.flex = "1";
+  requestsList.style.minHeight = "0";
   requestsList.style.overflow = "auto";
-  card.body.appendChild(requestsList);
+  requestsListWrapper.appendChild(requestsList);
+  card.body.appendChild(requestsListWrapper);
+
+  requestsList.style.position = requestsList.style.position || "relative";
+  const requestsIndicator = createRefreshIndicator(requestsList, requestsListWrapper);
 
   view.appendChild(card.root);
 
@@ -949,28 +1159,61 @@ function renderFriendRequestsTab(view: HTMLElement, ui: Menu) {
   let loadingRequests = false;
   let destroyedRequests = false;
   const requestActionInProgress = new Set<string>();
+  const updateRequestsRefreshControls = () => {
+    const enabled = !destroyedRequests && !loadingRequests;
+    ui.setButtonEnabled(requestsRefresh, enabled);
+    requestsRefresh.setAttribute("aria-busy", loadingRequests ? "true" : "false");
+  };
+  updateRequestsRefreshControls();
 
-  const renderRequests = () => {
-    if (destroyedRequests) return;
-    requestsList.innerHTML = "";
+  const getRequestsStatusText = (): string => {
     if (loadingRequests) {
-      const placeholder = document.createElement("div");
-      placeholder.textContent = "Loading friend requests...";
-      placeholder.style.opacity = "0.6";
-      placeholder.style.fontSize = "12px";
-      placeholder.style.textAlign = "center";
-      requestsList.appendChild(placeholder);
+      return requests.length
+        ? "Refreshing friend requests..."
+        : "Loading incoming friend requests...";
+    }
+    if (!requests.length) {
+      return "No incoming friend requests.";
+    }
+    return `${requests.length} pending request${requests.length > 1 ? "s" : ""}.`;
+  };
+
+  const renderRequestsPlaceholder = (message: string) => {
+    const placeholder = document.createElement("div");
+    placeholder.textContent = message;
+    placeholder.style.opacity = "0.6";
+    placeholder.style.fontSize = "12px";
+    placeholder.style.textAlign = "center";
+    placeholder.style.minHeight = "48px";
+    requestsList.appendChild(placeholder);
+  };
+
+  const updateRequestsStatusText = () => {
+    if (!requests.length) {
       requestsStatus.textContent = "";
       return;
     }
+    requestsStatus.textContent = loadingRequests
+      ? "Refreshing friend requests..."
+      : `${requests.length} pending request${requests.length > 1 ? "s" : ""}.`;
+  };
 
+  const renderRequests = (options: { force?: boolean } = {}) => {
+    if (destroyedRequests) return;
+    const shouldForce = options.force ?? true;
+    if (loadingRequests && requests.length && !shouldForce) {
+      updateRequestsStatusText();
+      return;
+    }
+    requestsList.innerHTML = "";
+    if (loadingRequests && !requests.length) {
+      renderRequestsPlaceholder(getRequestsStatusText());
+      updateRequestsStatusText();
+      return;
+    }
     if (!requests.length) {
-      const placeholder = document.createElement("div");
-      placeholder.textContent = "No incoming friend requests.";
-      placeholder.style.opacity = "0.6";
-      placeholder.style.fontSize = "12px";
-      placeholder.style.textAlign = "center";
-      requestsList.appendChild(placeholder);
+      renderRequestsPlaceholder(getRequestsStatusText());
+      updateRequestsStatusText();
       return;
     }
 
@@ -1063,7 +1306,7 @@ function renderFriendRequestsTab(view: HTMLElement, ui: Menu) {
       row.append(avatar, info, actions);
       requestsList.appendChild(row);
     }
-    requestsStatus.textContent = `${requests.length} pending request${requests.length > 1 ? "s" : ""}.`;
+    updateRequestsStatusText();
   };
 
   async function loadRequests(options?: { force?: boolean }) {
@@ -1080,7 +1323,9 @@ function renderFriendRequestsTab(view: HTMLElement, ui: Menu) {
       return;
     }
     loadingRequests = true;
-    renderRequests();
+    requestsIndicator.setVisible(true);
+    updateRequestsRefreshControls();
+    renderRequests({ force: requests.length === 0 });
     try {
       if (!options?.force) {
         const cached = getCachedIncomingRequestsWithViews();
@@ -1095,9 +1340,13 @@ function renderFriendRequestsTab(view: HTMLElement, ui: Menu) {
       requests = [];
     } finally {
       loadingRequests = false;
-      renderRequests();
+      requestsIndicator.setVisible(false);
+      updateRequestsRefreshControls();
+      renderRequests({ force: true });
     }
   }
+
+  refreshIncomingRequests = loadRequests;
 
   const refreshPlayerId = async () => {
     const resolved = await playerDatabaseUserId.get();
@@ -1120,6 +1369,9 @@ function renderFriendRequestsTab(view: HTMLElement, ui: Menu) {
 
   (view as any).__cleanup__ = () => {
     destroyedRequests = true;
+    if (refreshIncomingRequests === loadRequests) {
+      refreshIncomingRequests = null;
+    }
   };
 }
 
@@ -1127,8 +1379,12 @@ function renderSettingsTab(view: HTMLElement, ui: Menu) {
   view.innerHTML = "";
   const settings = getFriendSettings();
   const layout = document.createElement("div");
-  layout.style.display = "grid";
+  layout.style.display = "flex";
+  layout.style.flexDirection = "column";
   layout.style.gap = "12px";
+  layout.style.height = "100%";
+  layout.style.minHeight = "0";
+  layout.style.flex = "1";
 
   const globalCard = ui.card("Global settings");
   globalCard.body.style.display = "grid";
@@ -1188,15 +1444,9 @@ function renderSettingsTab(view: HTMLElement, ui: Menu) {
       (next) => applyPatch({ showOnlineFriendsOnly: next }),
     ),
     buildToggleRow(
-      "Auto-accept incoming requests",
-      settings.autoAcceptIncomingRequests,
-      undefined,
-      (next) => applyPatch({ autoAcceptIncomingRequests: next }),
-    ),
-    buildToggleRow(
-      "Hide my room from the public list",
+      "Make my room private",
       settings.hideRoomFromPublicList,
-      "If another player in your room keeps this option disabled, the room will still appear in the public list.",
+      "Prevents friends from joining and hides your room from the public list.",
       (next) => applyPatch({ hideRoomFromPublicList: next }),
     ),
   );
@@ -1247,9 +1497,19 @@ function renderSettingsTab(view: HTMLElement, ui: Menu) {
 export function renderFriendsMenu(root: HTMLElement) {
   const ui = new Menu({ id: "friends", compact: true });
   ui.mount(root);
-  ui.root.style.width = "420px";
-  ui.root.style.maxWidth = "420px";
-  ui.root.style.minWidth = "340px";
+  ui.root.style.width = "480px";
+  ui.root.style.maxWidth = "520px";
+  ui.root.style.minWidth = "380px";
+  ui.root.style.height = "640px";
+  ui.root.style.maxHeight = "90vh";
+  ui.root.style.flexDirection = "column";
+
+  const views = ui.root.querySelector(".qmm-views") as HTMLElement | null;
+  if (views) {
+    views.style.flex = "1";
+    views.style.maxHeight = "none";
+    views.style.minHeight = "0";
+  }
   ui.addTabs([
     { id: "friends-all", title: "Friend list", render: (view) => renderAllTab(view, ui) },
     { id: "friends-add", title: "Add friend", render: (view) => renderAddFriendTab(view, ui) },
@@ -1257,4 +1517,32 @@ export function renderFriendsMenu(root: HTMLElement) {
     { id: "friends-settings", title: "Settings", render: (view) => renderSettingsTab(view, ui) },
   ]);
   ui.switchTo("friends-all");
+  ui.on("tab:change", (id) => {
+    if (id === "friends-all" && refreshAllFriends) {
+      void refreshAllFriends({ force: true });
+    }
+    if (id === "friends-requests" && refreshIncomingRequests) {
+      void refreshIncomingRequests({ force: true });
+    }
+  });
+
+  const windowEl = ui.root.closest<HTMLElement>(".qws-win");
+  if (windowEl) {
+    let lastVisible = windowEl.style.display !== "none";
+    const observer = new MutationObserver(() => {
+      const isVisible = windowEl.style.display !== "none";
+      if (isVisible && !lastVisible) {
+        void refreshAllFriends?.({ force: true });
+      }
+      lastVisible = isVisible;
+    });
+    observer.observe(windowEl, { attributes: true, attributeFilter: ["style"] });
+    const previousCleanup = (root as any).__cleanup__;
+    (root as any).__cleanup__ = () => {
+      observer.disconnect();
+      if (typeof previousCleanup === "function") {
+        previousCleanup.call(root);
+      }
+    };
+  }
 }
