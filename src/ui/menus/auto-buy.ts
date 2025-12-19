@@ -373,16 +373,16 @@ function createItemRow(
     flexShrink: "0",
   });
 
-  // Usar attachSpriteIcon para criar o sprite de forma assíncrona
+  // Use attachSpriteIcon to create sprite asynchronously
   attachSpriteIcon(
     iconContainer,
-    [itemType === 'seed' ? 'seed' : 'item'], // categorias de sprite
+    [itemType === 'seed' ? 'seed' : 'item'], // sprite categories
     itemId,
-    28, // tamanho
+    28, // size
     `auto-buy-${itemType}`, // log tag
     {
       onNoSpriteFound: () => {
-        // Fallback: mostrar emoji se sprite não for encontrado
+        // Fallback: show emoji if sprite is not found
         const fallback = document.createElement('span');
         fallback.textContent = itemType === 'seed' ? '🌱' : '🥚';
         fallback.style.fontSize = '24px';

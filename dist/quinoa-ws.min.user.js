@@ -5701,9 +5701,9 @@
     let selectedIdx = null;
     let lastInfo = emptySlotInfo();
     let curSig = gardenObjectSignature(cur);
-    const listeners5 = /* @__PURE__ */ new Set();
+    const listeners6 = /* @__PURE__ */ new Set();
     const notify2 = () => {
-      for (const fn of listeners5) {
+      for (const fn of listeners6) {
         try {
           fn(lastInfo);
         } catch {
@@ -5928,11 +5928,11 @@
         return lastInfo;
       },
       onChange(cb) {
-        listeners5.add(cb);
-        return () => listeners5.delete(cb);
+        listeners6.add(cb);
+        return () => listeners6.delete(cb);
       },
       stop() {
-        listeners5.clear();
+        listeners6.clear();
       },
       recompute() {
         recomputeAndNotify();
@@ -20253,9 +20253,9 @@
     let sortedIdx = null;
     let selectedIdx = null;
     let lastPrice = null;
-    const listeners5 = /* @__PURE__ */ new Set();
+    const listeners6 = /* @__PURE__ */ new Set();
     const notify2 = () => {
-      for (const fn of listeners5) try {
+      for (const fn of listeners6) try {
         fn();
       } catch {
       }
@@ -20354,11 +20354,11 @@
         return lastPrice;
       },
       onChange(cb) {
-        listeners5.add(cb);
-        return () => listeners5.delete(cb);
+        listeners6.add(cb);
+        return () => listeners6.delete(cb);
       },
       stop() {
-        listeners5.clear();
+        listeners6.clear();
       }
     };
   }
@@ -45146,7 +45146,7 @@ next: ${next}`;
   }
 
   // src/store/auto-buy.ts
-  var STORAGE_KEY = "mg_autobuy_settings";
+  var STORAGE_KEY2 = "mg_autobuy_settings";
   var DEFAULT_QUANTITY = 20;
   function getDefaultSettings() {
     return {
@@ -45158,7 +45158,7 @@ next: ${next}`;
   }
   function loadAutoBuySettings() {
     try {
-      const saved = localStorage.getItem(STORAGE_KEY);
+      const saved = localStorage.getItem(STORAGE_KEY2);
       if (saved) {
         const parsed = JSON.parse(saved);
         const migrateConfig = (config) => ({
@@ -45190,47 +45190,47 @@ next: ${next}`;
   }
   function saveAutoBuySettings(settings) {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+      localStorage.setItem(STORAGE_KEY2, JSON.stringify(settings));
     } catch (error) {
       console.error("[AutoBuy] Failed to save settings:", error);
     }
   }
-  var listeners4 = /* @__PURE__ */ new Set();
-  var currentSettings = loadAutoBuySettings();
+  var listeners5 = /* @__PURE__ */ new Set();
+  var currentSettings2 = loadAutoBuySettings();
   function getAutoBuySettings() {
-    return currentSettings;
+    return currentSettings2;
   }
   function updateAutoBuySettings(partial) {
-    currentSettings = { ...currentSettings, ...partial };
-    saveAutoBuySettings(currentSettings);
+    currentSettings2 = { ...currentSettings2, ...partial };
+    saveAutoBuySettings(currentSettings2);
     notifyListeners2();
   }
   function setSeedConfig(seedId, config) {
-    currentSettings = {
-      ...currentSettings,
+    currentSettings2 = {
+      ...currentSettings2,
       selectedSeeds: {
-        ...currentSettings.selectedSeeds,
+        ...currentSettings2.selectedSeeds,
         [seedId]: config
       }
     };
-    saveAutoBuySettings(currentSettings);
+    saveAutoBuySettings(currentSettings2);
     notifyListeners2();
   }
   function setEggConfig(eggId, config) {
-    currentSettings = {
-      ...currentSettings,
+    currentSettings2 = {
+      ...currentSettings2,
       selectedEggs: {
-        ...currentSettings.selectedEggs,
+        ...currentSettings2.selectedEggs,
         [eggId]: config
       }
     };
-    saveAutoBuySettings(currentSettings);
+    saveAutoBuySettings(currentSettings2);
     notifyListeners2();
   }
   function notifyListeners2() {
-    for (const listener of listeners4) {
+    for (const listener of listeners5) {
       try {
-        listener(currentSettings);
+        listener(currentSettings2);
       } catch (error) {
         console.error("[AutoBuy] Listener error:", error);
       }
@@ -45240,7 +45240,7 @@ next: ${next}`;
   // src/services/shop.ts
   var PURCHASE_DELAY_MS = 100;
   var DEFAULT_STOCK_FALLBACK = 999;
-  function sleep2(ms) {
+  function sleep4(ms) {
     return new Promise((resolve2) => setTimeout(resolve2, ms));
   }
   async function getShopStock() {
@@ -45306,7 +45306,7 @@ next: ${next}`;
           purchased++;
         }
         if (i < quantity - 1) {
-          await sleep2(PURCHASE_DELAY_MS);
+          await sleep4(PURCHASE_DELAY_MS);
         }
       }
       return purchased;
@@ -45322,7 +45322,7 @@ next: ${next}`;
           purchased++;
         }
         if (i < quantity - 1) {
-          await sleep2(PURCHASE_DELAY_MS);
+          await sleep4(PURCHASE_DELAY_MS);
         }
       }
       return purchased;
@@ -45358,7 +45358,7 @@ next: ${next}`;
           if (purchased > 0) {
             seedsPurchased[seedId] = purchased;
           }
-          await sleep2(PURCHASE_DELAY_MS);
+          await sleep4(PURCHASE_DELAY_MS);
         }
       }
       for (const [eggId, config] of Object.entries(autoBuySettings.selectedEggs)) {
@@ -45380,7 +45380,7 @@ next: ${next}`;
           if (purchased > 0) {
             eggsPurchased[eggId] = purchased;
           }
-          await sleep2(PURCHASE_DELAY_MS);
+          await sleep4(PURCHASE_DELAY_MS);
         }
       }
       console.log("[AutoBuy] Purchase complete:", { seedsPurchased, eggsPurchased });
@@ -45634,16 +45634,27 @@ next: ${next}`;
       border: "1px solid #ffffff12",
       flexShrink: "0"
     });
-    const sprite = createShopSprite(
-      itemType === "seed" ? "Seed" : "Egg",
+    attachSpriteIcon(
+      iconContainer,
+      [itemType === "seed" ? "seed" : "item"],
+      // sprite categories
       itemId,
+      28,
+      // size
+      `auto-buy-${itemType}`,
+      // log tag
       {
-        size: 28,
-        fallback: itemType === "seed" ? "\u{1F331}" : "\u{1F95A}",
-        alt: displayName
+        onNoSpriteFound: () => {
+          const fallback = document.createElement("span");
+          fallback.textContent = itemType === "seed" ? "\u{1F331}" : "\u{1F95A}";
+          fallback.style.fontSize = "24px";
+          fallback.style.display = "flex";
+          fallback.style.alignItems = "center";
+          fallback.style.justifyContent = "center";
+          iconContainer.replaceChildren(fallback);
+        }
       }
     );
-    iconContainer.appendChild(sprite);
     const label2 = document.createElement("label");
     label2.textContent = displayName;
     label2.style.fontWeight = "600";
@@ -46136,7 +46147,7 @@ next: ${next}`;
   // src/utils/antiafk.ts
   function createAntiAfkController(deps) {
     const STOP_EVENTS = ["visibilitychange", "blur", "focus", "focusout", "pagehide", "freeze", "resume"];
-    const listeners5 = [];
+    const listeners6 = [];
     function swallowAll() {
       const add = (target, t) => {
         const h = (e) => {
@@ -46144,7 +46155,7 @@ next: ${next}`;
           e.preventDefault?.();
         };
         target.addEventListener(t, h, { capture: true });
-        listeners5.push({ t, h, target });
+        listeners6.push({ t, h, target });
       };
       STOP_EVENTS.forEach((t) => {
         add(document, t);
@@ -46152,11 +46163,11 @@ next: ${next}`;
       });
     }
     function unswallowAll() {
-      for (const { t, h, target } of listeners5) try {
+      for (const { t, h, target } of listeners6) try {
         target.removeEventListener(t, h, { capture: true });
       } catch {
       }
-      listeners5.length = 0;
+      listeners6.length = 0;
     }
     const docProto = Object.getPrototypeOf(document);
     const saved = {
