@@ -45636,8 +45636,8 @@ next: ${next}`;
     });
     attachSpriteIcon(
       iconContainer,
-      [itemType === "seed" ? "seed" : "item"],
-      // sprite categories
+      [itemType === "seed" ? "seed" : "pet"],
+      // sprite categories: seed or pet (for eggs)
       itemId,
       28,
       // size
