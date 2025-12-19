@@ -14,7 +14,7 @@ import {
 import { ShopService } from "../../services/shop";
 import { NotifierService, type ShopsSnapshot, type NotifierState } from "../../services/notifier";
 import { audio } from "../../utils/audio";
-import { createShopSprite } from "../../utils/sprites";
+import { attachSpriteIcon } from "../spriteIconCache";
 
 // === Constants ===
 const DEFAULT_QUANTITY = 20;
@@ -373,16 +373,26 @@ function createItemRow(
     flexShrink: "0",
   });
 
-  const sprite = createShopSprite(
-    itemType === 'seed' ? 'Seed' : 'Egg',
+  // Use attachSpriteIcon to create sprite asynchronously
+  attachSpriteIcon(
+    iconContainer,
+    [itemType === 'seed' ? 'seed' : 'pet'], // sprite categories: seed or pet (for eggs)
     itemId,
+    28, // size
+    `auto-buy-${itemType}`, // log tag
     {
-      size: 28,
-      fallback: itemType === 'seed' ? '🌱' : '🥚',
-      alt: displayName,
+      onNoSpriteFound: () => {
+        // Fallback: show emoji if sprite is not found
+        const fallback = document.createElement('span');
+        fallback.textContent = itemType === 'seed' ? '🌱' : '🥚';
+        fallback.style.fontSize = '24px';
+        fallback.style.display = 'flex';
+        fallback.style.alignItems = 'center';
+        fallback.style.justifyContent = 'center';
+        iconContainer.replaceChildren(fallback);
+      }
     }
   );
-  iconContainer.appendChild(sprite);
 
   // Name label
   const label = document.createElement("label");
